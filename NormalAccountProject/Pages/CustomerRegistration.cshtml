@@ -202,10 +202,11 @@
 
         if (!gridData || gridData.length === 0) {
             container.innerHTML = '<p>No records found.</p>';
+            document.getElementById("TotalCustomersCount").textContent = "0";
             return;
         }
 
-        // Determine columns dynamically (skip 'Userid')
+        // Determine columns dynamically (skip 'Userid', 'Type', 'CustomerId')
         const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "CustomerId");
 
         // Table creation
@@ -222,7 +223,7 @@
         // Header Row
         const headerRow = document.createElement("tr");
 
-        // 🔹 First column for Actions
+        // Actions column
         const actionTh = document.createElement("th");
         actionTh.textContent = "";
         headerRow.appendChild(actionTh);
@@ -236,8 +237,6 @@
 
         // Filter Row
         const filterRow = document.createElement("tr");
-
-        // 🔹 Empty filter cell for Actions column
         const emptyTh = document.createElement("th");
         filterRow.appendChild(emptyTh);
 
@@ -263,10 +262,9 @@
         gridData.forEach(row => {
             const tr = document.createElement("tr");
 
-            // 🔹 Action buttons column
+            // Actions column
             const actionTd = document.createElement("td");
 
-            // Edit button
             const editBtn = document.createElement("button");
             editBtn.className = "btn btn-sm btn-primary me-1";
             editBtn.innerHTML = '<i class="fas fa-edit"></i>';
@@ -274,7 +272,6 @@
             editBtn.addEventListener("click", () => onEditRow(row));
             actionTd.appendChild(editBtn);
 
-            // Delete button
             const deleteBtn = document.createElement("button");
             deleteBtn.className = "btn btn-sm btn-danger";
             deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
@@ -300,6 +297,32 @@
 
         table.appendChild(tbody);
         container.appendChild(table);
+
+        // 🔹 Initial total customers count
+        document.getElementById("TotalCustomersCount").textContent = tbody.rows.length;
+    }
+    function filterTable(input, column) {
+        const table = input.closest("table");
+        const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.rows);
+        const filterValue = input.value.toLowerCase();
+
+        const colIndex = Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th => th.textContent === column);
+
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const cellText = row.cells[colIndex].textContent.toLowerCase();
+            if (cellText.includes(filterValue)) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        // 🔹 Update total customers count based on visible rows
+        document.getElementById("TotalCustomersCount").textContent = visibleCount;
     }
     function onEditRow(rowData) {
         IsUpdate = true;
@@ -390,19 +413,6 @@
 
             console.error("Delete Error:", xhr);
         }
-    }
-    function filterTable(input, column) {
-        const table = input.closest("table");
-        const tbody = table.querySelector("tbody");
-        const rows = Array.from(tbody.rows);
-        const filterValue = input.value.toLowerCase();
-
-        const colIndex = Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th => th.textContent === column);
-
-        rows.forEach(row => {
-            const cellText = row.cells[colIndex].textContent.toLowerCase();
-            row.style.display = cellText.includes(filterValue) ? "" : "none";
-        });
     }
     // Grid View
 
