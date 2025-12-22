@@ -27,7 +27,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapGet("/", async context =>
     {
         var baseUri = context.Request.PathBase.HasValue ? context.Request.PathBase.Value : "";
-        context.Response.Redirect($"{baseUri}/Login");
+        context.Response.Redirect($"{baseUri}/CustomerRegistration");
     });
 
 

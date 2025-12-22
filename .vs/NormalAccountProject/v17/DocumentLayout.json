@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\Developer\\Ecom\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{748B58BD-B70C-419F-B511-542FBA39249A}|NormalAccountProject\\NormalAccountProject.csproj|d:\\developer\\ecom\\normalaccountproject\\controllers\\customerregistrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{748B58BD-B70C-419F-B511-542FBA39249A}|NormalAccountProject\\NormalAccountProject.csproj|solutionrelative:normalaccountproject\\controllers\\customerregistrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{748B58BD-B70C-419F-B511-542FBA39249A}|NormalAccountProject\\NormalAccountProject.csproj|d:\\developer\\ecom\\normalaccountproject\\pages\\customerregistration.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{748B58BD-B70C-419F-B511-542FBA39249A}|NormalAccountProject\\NormalAccountProject.csproj|solutionrelative:normalaccountproject\\pages\\customerregistration.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{748B58BD-B70C-419F-B511-542FBA39249A}|NormalAccountProject\\NormalAccountProject.csproj|d:\\developer\\ecom\\normalaccountproject\\controllers\\customerregistrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{748B58BD-B70C-419F-B511-542FBA39249A}|NormalAccountProject\\NormalAccountProject.csproj|solutionrelative:normalaccountproject\\controllers\\customerregistrationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,30 +18,30 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "CustomerRegistrationController.cs",
               "DocumentMoniker": "D:\\Developer\\Ecom\\NormalAccountProject\\Controllers\\CustomerRegistrationController.cs",
               "RelativeDocumentMoniker": "NormalAccountProject\\Controllers\\CustomerRegistrationController.cs",
               "ToolTip": "D:\\Developer\\Ecom\\NormalAccountProject\\Controllers\\CustomerRegistrationController.cs",
               "RelativeToolTip": "NormalAccountProject\\Controllers\\CustomerRegistrationController.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAAowC8AAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAuwDYAAABuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-12-22T10:48:48.917Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "CustomerRegistration.cshtml",
               "DocumentMoniker": "D:\\Developer\\Ecom\\NormalAccountProject\\Pages\\CustomerRegistration.cshtml",
               "RelativeDocumentMoniker": "NormalAccountProject\\Pages\\CustomerRegistration.cshtml",
-              "ToolTip": "D:\\Developer\\Ecom\\NormalAccountProject\\Pages\\CustomerRegistration.cshtml",
-              "RelativeToolTip": "NormalAccountProject\\Pages\\CustomerRegistration.cshtml",
-              "ViewState": "AgIAAFoAAAAAAAAAAAAYwHQAAAAlAAAAAAAAAA==",
+              "ToolTip": "D:\\Developer\\Ecom\\NormalAccountProject\\Pages\\CustomerRegistration.cshtml*",
+              "RelativeToolTip": "NormalAccountProject\\Pages\\CustomerRegistration.cshtml*",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAswD8AAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-12-22T10:43:17.048Z",
               "EditorCaption": ""

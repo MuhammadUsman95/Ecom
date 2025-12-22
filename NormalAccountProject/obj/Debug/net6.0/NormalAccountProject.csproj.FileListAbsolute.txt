@@ -76,3 +76,4 @@ D:\Developer\Ecom\NormalAccountProject\obj\Debug\net6.0\refint\NormalAccountProj
 D:\Developer\Ecom\NormalAccountProject\obj\Debug\net6.0\NormalAccountProject.pdb
 D:\Developer\Ecom\NormalAccountProject\obj\Debug\net6.0\NormalAccountProject.genruntimeconfig.cache
 D:\Developer\Ecom\NormalAccountProject\obj\Debug\net6.0\ref\NormalAccountProject.dll
+D:\Developer\Ecom\NormalAccountProject\obj\Debug\net6.0\NormalAccountProject.sourcelink.json

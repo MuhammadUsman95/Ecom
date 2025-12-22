@@ -14,34 +14,65 @@
             </div>
         </div>
 
+        <hr>
+
         <div class="row mt-3">
             <div class="col-md-6">
-
-                <div class="form-group mb-3">
-                    <label for="Customer">Customer Name</label>
-                    <input type="text" id="Customer" class="form-control" placeholder="Enter Customer Name">
+                <!-- Row 1: Customer Name + Contact No -->
+                <div class="row mb-3">
+                    <input style="display:none;" type="text" id="CustomerId">
+                    <div class="col-md-6">
+                        <label for="Customer">Customer Name</label>
+                        <input type="text" id="Customer" class="form-control" placeholder="Enter Customer Name">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="ContactNo">Contact Number</label>
+                        <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number" inputmode="numeric" autocomplete="off">
+                    </div>
                 </div>
 
-                <div class="form-group mb-3">
-                    <label for="ContactNo">Contact Number</label>
-                    <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number">
+                <!-- Row 2: Type + IsActive + Buttons -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="TypeId">Type</label>
+                        <select id="TypeId" class="form-control">
+                            <option value="">-- Select Type --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center">
+                        <div class="form-check mt-4">
+                            <input type="checkbox" id="IsActive" class="form-check-input">
+                            <label class="form-check-label" for="IsActive">Is Active</label>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="form-group mb-3">
-                    <label for="Type">Type</label>
-                    <input type="text" id="Type" class="form-control" placeholder="Enter Type">
+                <div class="row mb-3">
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button class="btn btn-success me-2" id="saveBtn">Save</button>
+                        <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="form-check mb-3">
-                    <input type="checkbox" id="IsActive" class="form-check-input">
-                    <label class="form-check-label" for="IsActive">Is Active</label>
+        <hr>
+
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <div id="CustomerGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
+                <div class="mt-3" style="text-align:center;">
+                    <p>Total Customers (<span id="TotalCustomersCount">100</span>)</p>
                 </div>
+            </div>
+        </div>
 
-                <div class="form-group">
-                    <button class="btn btn-success me-2" id="saveBtn">Save</button>
-                    <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="copyright">
+                    <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">AV_Softs</span></p>
                 </div>
-
             </div>
         </div>
 
@@ -49,12 +80,46 @@
 </div>
 
 <script>
+    // Variable Declaration
     let userId = localStorage.getItem("userId") || "";
+    let GridViewDataList = [];
+    let IsUpdate = false;
+    // Variable Declaration
 
+
+
+    // Form Load
     document.addEventListener("DOMContentLoaded", async function () {
         await LoadData();
-    });
+        await LoadGridViewData();
 
+        const fields = [
+            document.getElementById("Customer"),
+            document.getElementById("ContactNo"),
+            document.getElementById("TypeId"),
+            document.getElementById("IsActive")
+        ];
+        fields.forEach((field, index) => {
+            field.addEventListener("keydown", function (e) {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+
+                    if (index < fields.length - 1) {
+                        fields[index + 1].focus();
+                    } else {
+                        // Last field → trigger save
+                        document.getElementById("saveBtn").click();
+                    }
+                }
+            });
+        });
+        document.getElementById("Customer").focus();
+    });
+    // Form Load
+
+
+
+    // Load Type DropDown
     async function LoadData() {
         const nInfoTab = { Userid: userId };
 
@@ -66,6 +131,8 @@
                 contentType: 'application/json',
                 success: function (response) {
                     if (response.statusId === 1) {
+
+                        TypeDropdown(response.TypeList);
                         resolve();
                     } else {
                         toastr.warning("No data found for CustomerRegistration.");
@@ -79,25 +146,351 @@
             });
         });
     }
+    function TypeDropdown(typeList) {
 
-    async function SaveData() {
+        const ddl = document.getElementById("TypeId");
+
+        // Clear existing options
+        ddl.innerHTML = '<option value="">-- Select Type --</option>';
+
+        typeList.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.TypeId;   // backend value
+            option.text = item.Type;      // display text
+            ddl.appendChild(option);
+        });
+    }
+    // Load Type DropDown
+
+    
+    
+    // Grid View
+    async function LoadGridViewData() {
+        const nInfoTab = { Userid: userId };
+
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: 'POST',
+                url: 'CustomerRegistration/nLoadGridViewData',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.statusId === 1) {
+
+                        console.log(response.GridViewDataList);
+                        GridViewDataList = response.GridViewDataList;
+                        // Render Grid
+                        renderCustomerGrid(GridViewDataList);
+                        resolve();
+                    } else {
+                        toastr.warning("No data found for CustomerRegistration.");
+                        reject();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error LoadData details: ", xhr, status, error);
+                    reject();
+                }
+            });
+        });
+    }
+    function renderCustomerGrid(gridData) {
+        const container = document.getElementById("CustomerGridContainer");
+
+        // Clear previous grid
+        container.innerHTML = "";
+
+        if (!gridData || gridData.length === 0) {
+            container.innerHTML = '<p>No records found.</p>';
+            return;
+        }
+
+        // Determine columns dynamically (skip 'Userid')
+        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "CustomerId");
+
+        // Table creation
+        const table = document.createElement("table");
+        table.className = "table table-bordered table-striped table-sm mb-0";
+
+        // Table Header
+        const thead = document.createElement("thead");
+        thead.style.position = "sticky";
+        thead.style.top = "0";
+        thead.style.backgroundColor = "#fff";
+        thead.style.zIndex = "10";
+
+        // Header Row
+        const headerRow = document.createElement("tr");
+
+        // 🔹 First column for Actions
+        const actionTh = document.createElement("th");
+        actionTh.textContent = "";
+        headerRow.appendChild(actionTh);
+
+        columns.forEach(col => {
+            const th = document.createElement("th");
+            th.textContent = col;
+            headerRow.appendChild(th);
+        });
+        thead.appendChild(headerRow);
+
+        // Filter Row
+        const filterRow = document.createElement("tr");
+
+        // 🔹 Empty filter cell for Actions column
+        const emptyTh = document.createElement("th");
+        filterRow.appendChild(emptyTh);
+
+        columns.forEach(col => {
+            const th = document.createElement("th");
+            const input = document.createElement("input");
+            input.type = "text";
+            input.placeholder = `Filter ${col}`;
+            input.className = "form-control form-control-sm";
+            input.addEventListener("input", function () {
+                filterTable(this, col);
+            });
+            th.appendChild(input);
+            filterRow.appendChild(th);
+        });
+        thead.appendChild(filterRow);
+
+        table.appendChild(thead);
+
+        // Table Body
+        const tbody = document.createElement("tbody");
+
+        gridData.forEach(row => {
+            const tr = document.createElement("tr");
+
+            // 🔹 Action buttons column
+            const actionTd = document.createElement("td");
+
+            // Edit button
+            const editBtn = document.createElement("button");
+            editBtn.className = "btn btn-sm btn-primary me-1";
+            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            editBtn.style.padding = "3px";
+            editBtn.addEventListener("click", () => onEditRow(row));
+            actionTd.appendChild(editBtn);
+
+            // Delete button
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "btn btn-sm btn-danger";
+            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteBtn.style.padding = "3px";
+            deleteBtn.addEventListener("click", () => onDeleteRow(row));
+            actionTd.appendChild(deleteBtn);
+
+            tr.appendChild(actionTd);
+
+            // Other columns
+            columns.forEach(col => {
+                const td = document.createElement("td");
+                if (col === "Is Active") {
+                    td.innerHTML = row[col] ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">In-Active</span>';
+                } else {
+                    td.textContent = row[col];
+                }
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        table.appendChild(tbody);
+        container.appendChild(table);
+    }
+    function onEditRow(rowData) {
+        IsUpdate = true;
+        document.getElementById("saveBtn").textContent = "Update";
+
+        // Set values to the form using bracket notation
+        document.getElementById("CustomerId").value = rowData["CustomerId"] || "";
+        document.getElementById("Customer").value = rowData["Customer Name"] || "";
+        document.getElementById("ContactNo").value = rowData["Contact #"] || "";
+        document.getElementById("TypeId").value = rowData["Type"] || ""; // Assuming TypeId is stored in Type
+        document.getElementById("IsActive").checked = rowData["Is Active"] || false;
+        document.getElementById("Customer").focus();
+    }
+    async function onDeleteRow(rowData) {
+        console.log("Delete clicked", rowData);
+
+        // 🔵 Step 1: Confirmation Swal
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you really want to delete this customer (${rowData["Customer Name"]}) ?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        });
+
+        if (!result.isConfirmed) {
+            // User clicked "No", exit function
+            return;
+        }
+
         const nInfoTab = {
-            Userid: userId,
-            Customer: document.getElementById("Customer").value.trim(),
-            ContactNo: document.getElementById("ContactNo").value.trim(),
-            Type: document.getElementById("Type").value.trim(),
-            IsActive: document.getElementById("IsActive").checked
+            Userid: userId.toString(),
+            CustomerId: rowData["CustomerId"].toString()
         };
 
-        // Show loader
+        // 🔵 Step 2: Loader Swal
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Customer Delete is in process...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            returnFocus: false,      // Prevent focus issues
+            didOpen: () => Swal.showLoading()
+        });
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: 'CustomerRegistration/nDeleteCustomerRegistrationData',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            Swal.close();
+
+            if (response.statusId === 1) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Customer Deleted',
+                    text: response.message || 'Customer deleted successfully',
+                    returnFocus: false,
+                    didClose: () => {
+                        document.getElementById("Customer").focus();
+                    }
+                });
+
+                // ✅ Clear Form
+                nClearForm();
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Customer Delete',
+                    text: response.message || 'Customer delete failed',
+                    returnFocus: false
+                });
+            }
+
+        } catch (xhr) {
+            Swal.close();
+
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while deleting customer',
+                returnFocus: false
+            });
+
+            console.error("Delete Error:", xhr);
+        }
+    }
+    function filterTable(input, column) {
+        const table = input.closest("table");
+        const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.rows);
+        const filterValue = input.value.toLowerCase();
+
+        const colIndex = Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th => th.textContent === column);
+
+        rows.forEach(row => {
+            const cellText = row.cells[colIndex].textContent.toLowerCase();
+            row.style.display = cellText.includes(filterValue) ? "" : "none";
+        });
+    }
+    // Grid View
+
+
+
+    // Save Button click
+    document.getElementById("saveBtn").addEventListener("click", async function () {
+        await SaveData();
+    });
+    async function SaveData() {
+        const customerid = document.getElementById("CustomerId").value.trim();
+        const customer = document.getElementById("Customer").value.trim();
+        const contactNo = document.getElementById("ContactNo").value.trim();
+        const type = document.getElementById("TypeId").value.trim();
+        const isActive = document.getElementById("IsActive").checked;
+
+        // 🔴 Customer Name Validation
+        if (!customer) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Customer name is required',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("Customer").focus();
+                }
+            });
+            return;
+        }
+
+        // 🔴 Contact No Validation
+        if (!contactNo) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Contact number is required',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("ContactNo").focus();
+                }
+            });
+            return;
+        }
+
+        if (contactNo.length < 10) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Contact number must be at least 10 digits',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("ContactNo").focus();
+                }
+            });
+            return;
+        }
+
+        // 🔴 Type Validation
+        if (!type) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please select customer type',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("TypeId").focus();
+                }
+            });
+            return;
+        }
+
+        const nInfoTab = {
+            Userid: userId,
+            CustomerId:customerid,
+            Customer: customer,
+            ContactNo: contactNo,
+            Type: type,
+            IsActive: isActive,
+            IsUpdate: IsUpdate
+        };
+
+        // 🔵 Loader
         Swal.fire({
             title: 'Please wait',
             text: 'Customer creation is in process...',
             allowOutsideClick: false,
             allowEscapeKey: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
+            didOpen: () => Swal.showLoading()
         });
 
         try {
@@ -108,26 +501,26 @@
                 contentType: 'application/json'
             });
 
-            // Close loader
             Swal.close();
 
             if (response.statusId === 1) {
                 await Swal.fire({
                     icon: 'success',
                     title: 'Customer Registration',
-                    text: response.message || 'Customer saved successfully'
+                    text: response.message || 'Customer saved successfully',
+                    returnFocus: false,
+                    didClose: () => {
+                        document.getElementById("Customer").focus();
+                    }
                 });
 
-                // Clear form
-                document.getElementById("Customer").value = "";
-                document.getElementById("ContactNo").value = "";
-                document.getElementById("Type").value = "";
-                document.getElementById("IsActive").checked = false;
-            }
-            else {
+                // ✅ Clear Form
+                nClearForm();
+
+            } else {
                 await Swal.fire({
                     icon: 'warning',
-                    title: 'Warning',
+                    title: 'Customer Registration',
                     text: response.message || 'Customer save failed'
                 });
             }
@@ -144,19 +537,52 @@
             console.error("SaveData Error:", xhr);
         }
     }
-
-
     // Save Button click
-    document.getElementById("saveBtn").addEventListener("click", async function () {
-        await SaveData();
-    });
+
 
 
     // Cancel Button click
     document.getElementById("cancelBtn").addEventListener("click", function () {
+        nClearForm();
+    });
+    async function nClearForm()
+    {
+        document.getElementById("CustomerId").value = "";
         document.getElementById("Customer").value = "";
         document.getElementById("ContactNo").value = "";
-        document.getElementById("Type").value = "";
+        document.getElementById("TypeId").value = "";
         document.getElementById("IsActive").checked = false;
+        IsUpdate = false;
+        document.getElementById("saveBtn").textContent = "Save";
+        document.getElementById("Customer").focus();
+        await LoadGridViewData();
+    }
+    // Cancel Button click
+
+
+
+    // Contact Input
+    const contactInput = document.getElementById("ContactNo");
+    contactInput.addEventListener("keydown", function (e) {
+        if (
+            e.ctrlKey || e.metaKey || // Ctrl / Cmd
+            (e.key >= '0' && e.key <= '9') ||
+            ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
+        ) {
+            return; // allow
+        }
+        e.preventDefault();
     });
+    contactInput.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, '');
+    });
+    // Contact Input
 </script>
+
+<style>
+    select.form-control {
+        appearance: auto;
+        -webkit-appearance: auto;
+        -moz-appearance: auto;
+    }
+</style>

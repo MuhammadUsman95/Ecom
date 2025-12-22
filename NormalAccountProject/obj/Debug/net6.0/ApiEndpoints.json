@@ -1,8 +1,40 @@
 [
   {
     "ContainingType": "NormalAccountProject.Controllers.CustomerRegistrationController",
+    "Method": "nDeleteCustomerRegistrationData",
+    "RelativePath": "CustomerRegistration/nDeleteCustomerRegistrationData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nCustomerTabObj",
+        "Type": "NormalAccountProject.Models.CustomerTab",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NormalAccountProject.Controllers.CustomerRegistrationController",
     "Method": "nLoadCustomerRegistrationData",
     "RelativePath": "CustomerRegistration/nLoadCustomerRegistrationData",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nInfoTabObj",
+        "Type": "NormalAccountProject.Controllers.DashboardController\u002BnInfoTab",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "NormalAccountProject.Controllers.CustomerRegistrationController",
+    "Method": "nLoadGridViewData",
+    "RelativePath": "CustomerRegistration/nLoadGridViewData",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
