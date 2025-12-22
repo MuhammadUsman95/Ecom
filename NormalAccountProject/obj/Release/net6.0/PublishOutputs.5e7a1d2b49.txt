@@ -1,0 +1,13 @@
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\NormalAccountProject.exe
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\appsettings.json
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\NormalAccountProject.dll
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\NormalAccountProject.deps.json
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\NormalAccountProject.runtimeconfig.json
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\NormalAccountProject.pdb
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\runtimes\win-arm64\native\sni.dll
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\runtimes\win-x64\native\sni.dll
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\runtimes\win-x86\native\sni.dll
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\net6.0\System.Data.SqlClient.dll
+D:\Developer\NormalAccountProject\NormalAccountProject\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\net6.0\System.Data.SqlClient.dll

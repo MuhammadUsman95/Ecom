@@ -1,0 +1,238 @@
+﻿@page
+@model NormalAccountProject.Pages.LoginModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Login Page</title>
+    @await Html.PartialAsync("_CommonScripts")  <!-- ✅ Common scripts included -->
+</head>
+<body>
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 15px;
+        background: #1abc9c;
+        overflow: hidden;
+    }
+
+    .wrapper {
+        max-width: 500px;
+        width: 100%;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    .wrapper .title {
+        height: 70px;
+        background: #16a085;
+        border-radius: 5px 5px 0 0;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .wrapper form {
+        padding: 25px 35px;
+    }
+
+    .wrapper form .row {
+        height: 60px;
+        margin-top: 15px;
+        position: relative;
+    }
+
+    .wrapper form .row input {
+        height: 100%;
+        width: 100%;
+        outline: none;
+        padding-left: 70px;
+        border-radius: 5px;
+        border: 1px solid lightgrey;
+        font-size: 18px;
+        transition: all 0.3s ease;
+    }
+
+    form .row input:focus {
+        border-color: #16a085;
+    }
+
+    form .row input::placeholder {
+        color: #999;
+    }
+
+    .wrapper form .row i {
+        position: absolute;
+        width: 55px;
+        height: 100%;
+        color: #fff;
+        font-size: 22px;
+        background: #16a085;
+        border: 1px solid #16a085;
+        border-radius: 5px 0 0 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .wrapper form .pass {
+        margin-top: 12px;
+    }
+
+    .wrapper form .pass a {
+        color: #16a085;
+        font-size: 17px;
+        text-decoration: none;
+    }
+
+    .wrapper form .pass a:hover {
+        text-decoration: underline;
+    }
+
+    .wrapper form .button input {
+        color: #fff;
+        font-size: 20px;
+        font-weight: 500;
+        padding-left: 0px;
+        background: #16a085;
+        border: 1px solid #16a085;
+        cursor: pointer;
+    }
+
+    form .button input:hover {
+        background: #12876f;
+    }
+
+    .wrapper form .signup-link {
+        text-align: center;
+        margin-top: 45px;
+        font-size: 17px;
+    }
+
+    .wrapper form .signup-link a {
+        color: #16a085;
+        text-decoration: none;
+    }
+
+    form .signup-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+    <div class="wrapper">
+        <div class="title"><span>Login Form</span></div>
+        <form id="loginForm">
+            <div class="row">
+                <i class="fas fa-user"></i>
+                <input type="text" id="userId" placeholder="Email or Phone" required />
+            </div>
+            <div class="row">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required />
+            </div>
+            <div class="mt-2" style="text-align: center;">
+                <p id="errorMsg" style="display: none;margin: 0;"></p>
+            </div>
+            <div class="row button">
+                <input type="submit" id="loginBtn" value="Login" />
+            </div>
+            <div class="mt-4" style="text-align: center;">
+                <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">AV_Softs</span></p>
+            </div>
+        </form>
+
+        <script>
+            function checkIfLoggedIn() {
+                const savedUserId = localStorage.getItem("userId");
+                const savedPassword = localStorage.getItem("password");
+
+                if (savedUserId && savedPassword) {
+                    // User already logged in → redirect to Home
+                    window.location.href = '/Home';
+                    return true;
+                }
+                return false;
+            }
+
+
+            $(document).ready(function() {
+                // Check if user is already logged in
+                if (checkIfLoggedIn()) return;
+
+                // Clear inputs and hide error message
+                $("#userId, #password").val("");
+                $("#errorMsg").hide();
+                $("#userId").focus();
+
+                $("#loginForm").submit(function (e) {
+                    e.preventDefault();
+
+                    // Disable inputs and button
+                    $("#userId, #password, #loginBtn").prop("disabled", true);
+
+                    // Show "Verifying..." message
+                    $("#errorMsg")
+                        .text("Verifying... Please wait")
+                        .css("color", "blue")
+                        .show();
+
+                    $.ajax({
+                        url: '/Login/Verify',
+                        type: 'POST',
+                        data: {
+                            userId: $("#userId").val(),
+                            password: $("#password").val()
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                // Save credentials returned from controller
+                                localStorage.setItem("userId", response.userId);
+                                localStorage.setItem("password", response.password);
+
+                                $("#errorMsg")
+                                    .text("Verified! Valid Credentials !")
+                                    .css("color", "green")
+                                    .show();
+
+                                setTimeout(function() {
+                                    window.location.href = '/Home';
+                                }, 1500);
+                            } else {
+                                // Invalid credentials → enable inputs and focus
+                                $("#userId, #password, #loginBtn").prop("disabled", false);
+                                $("#userId").focus();
+
+                                $("#errorMsg")
+                                    .text(response.message)
+                                    .css("color", "red")
+                                    .show();
+                            }
+                        },
+                        error: function () {
+                            $("#userId, #password, #loginBtn").prop("disabled", false);
+                            $("#userId").focus();
+
+                            $("#errorMsg")
+                                .text("Server error. Try again.")
+                                .css("color", "red")
+                                .show();
+                        }
+                    });
+                });
+            });
+        </script>
+    </div>
+</body>
+</html>

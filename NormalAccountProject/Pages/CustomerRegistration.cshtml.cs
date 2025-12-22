@@ -1,0 +1,12 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace NormalAccountProject.Pages
+{
+    public class CustomerRegistrationModel : PageModel
+    {
+        public void OnGet()
+        {
+        }
+    }
+}

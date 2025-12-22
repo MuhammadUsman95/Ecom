@@ -1,0 +1,162 @@
+﻿@page "/CustomerRegistration"
+@model NormalAccountProject.Pages.CustomerRegistrationModel
+@{
+    ViewData["Title"] = "Customer Registration";
+}
+
+<div class="section__content section__content--p30">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="overview-wrap">
+                    <h2 class="title-1">Customer Registration</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+
+                <div class="form-group mb-3">
+                    <label for="Customer">Customer Name</label>
+                    <input type="text" id="Customer" class="form-control" placeholder="Enter Customer Name">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="ContactNo">Contact Number</label>
+                    <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Type">Type</label>
+                    <input type="text" id="Type" class="form-control" placeholder="Enter Type">
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" id="IsActive" class="form-check-input">
+                    <label class="form-check-label" for="IsActive">Is Active</label>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-success me-2" id="saveBtn">Save</button>
+                    <button class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let userId = localStorage.getItem("userId") || "";
+
+    document.addEventListener("DOMContentLoaded", async function () {
+        await LoadData();
+    });
+
+    async function LoadData() {
+        const nInfoTab = { Userid: userId };
+
+        return new Promise((resolve, reject) => {
+            jQuery.ajax({
+                type: 'POST',
+                url: 'CustomerRegistration/nLoadCustomerRegistrationData',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.statusId === 1) {
+                        resolve();
+                    } else {
+                        toastr.warning("No data found for CustomerRegistration.");
+                        reject();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error LoadData details: ", xhr, status, error);
+                    reject();
+                }
+            });
+        });
+    }
+
+    async function SaveData() {
+        const nInfoTab = {
+            Userid: userId,
+            Customer: document.getElementById("Customer").value.trim(),
+            ContactNo: document.getElementById("ContactNo").value.trim(),
+            Type: document.getElementById("Type").value.trim(),
+            IsActive: document.getElementById("IsActive").checked
+        };
+
+        // Show loader
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Customer creation is in process...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: 'CustomerRegistration/nSaveCustomerRegistrationData',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            // Close loader
+            Swal.close();
+
+            if (response.statusId === 1) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Customer Registration',
+                    text: response.message || 'Customer saved successfully'
+                });
+
+                // Clear form
+                document.getElementById("Customer").value = "";
+                document.getElementById("ContactNo").value = "";
+                document.getElementById("Type").value = "";
+                document.getElementById("IsActive").checked = false;
+            }
+            else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: response.message || 'Customer save failed'
+                });
+            }
+
+        } catch (xhr) {
+            Swal.close();
+
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while saving customer'
+            });
+
+            console.error("SaveData Error:", xhr);
+        }
+    }
+
+
+    // Save Button click
+    document.getElementById("saveBtn").addEventListener("click", async function () {
+        await SaveData();
+    });
+
+
+    // Cancel Button click
+    document.getElementById("cancelBtn").addEventListener("click", function () {
+        document.getElementById("Customer").value = "";
+        document.getElementById("ContactNo").value = "";
+        document.getElementById("Type").value = "";
+        document.getElementById("IsActive").checked = false;
+    });
+</script>

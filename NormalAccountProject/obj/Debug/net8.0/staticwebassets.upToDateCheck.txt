@@ -1,0 +1,2 @@
+wwwroot\image\404-NotFound.png
+wwwroot\javascript\disable-devtool.js
