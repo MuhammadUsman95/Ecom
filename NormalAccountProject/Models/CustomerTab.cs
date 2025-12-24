@@ -10,6 +10,9 @@
         public string? Userid { get; set; }
         public bool IsUpdate { get; set; }
 
+        public string? CustomerImageAttachmentfilename { get; set; }
+        public string? CustomerImageAttachmentfilenameold { get; set; }
+        public string? CustomerImageAttachmentbase64 { get; set; }
     }
 
     public class CustomerTypedd

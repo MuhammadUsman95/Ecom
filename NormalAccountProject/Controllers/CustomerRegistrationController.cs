@@ -3,6 +3,7 @@ using NormalAccountProject.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
+using System.Net;
 using static NormalAccountProject.Controllers.DashboardController;
 
 namespace NormalAccountProject.Controllers
@@ -69,6 +70,7 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@Type", nCustomerTabObj.Type);
                     cmd.Parameters.AddWithValue("@UserId", nCustomerTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nCustomerTabObj.IsUpdate ? "1" : "0");
+                    cmd.Parameters.AddWithValue("@ImagePath", nCustomerTabObj.CustomerImageAttachmentfilename);
                     if (nCustomerTabObj.IsUpdate)
                     {
                         cmd.Parameters.AddWithValue("@CustomerId", nCustomerTabObj.CustomerId);
@@ -83,7 +85,8 @@ namespace NormalAccountProject.Controllers
                                       $"@IsActive='{(nCustomerTabObj.IsActive ? "1" : "0")}', " +
                                       $"@Type='{nCustomerTabObj.Type}', " +
                                       $"@UserId='{nCustomerTabObj.Userid}', " +
-                                      $"@IsUpdate='{(nCustomerTabObj.IsUpdate ? "1" : "0")}'";
+                                      $"@IsUpdate='{(nCustomerTabObj.IsUpdate ? "1" : "0")}'" +
+                                      $"@ImagePath='{(nCustomerTabObj.CustomerImageAttachmentfilename)}'";
 
                     if (nCustomerTabObj.IsUpdate)
                     {
@@ -99,10 +102,22 @@ namespace NormalAccountProject.Controllers
                     {
                         if (await dr.ReadAsync())
                         {
+                            int statusId = Convert.ToInt32(dr["StatusId"]);
+
+                            if (statusId == 1)
+                            {
+                                if (!string.IsNullOrEmpty(nCustomerTabObj.CustomerImageAttachmentfilename))
+                                {
+                                    string oldFileName = Path.GetFileName(nCustomerTabObj.CustomerImageAttachmentfilenameold);
+                                    await DeleteFromFtp(oldFileName);
+                                    await UploadToFtp(nCustomerTabObj.CustomerImageAttachmentfilename, nCustomerTabObj.CustomerImageAttachmentbase64);
+                                }
+                            }
+
                             return Ok(new
                             {
-                                statusId = dr["StatusId"],
-                                message = dr["MessageCaption"].ToString()
+                                statusId = statusId,
+                                message = dr["MessageCaption"]?.ToString()
                             });
                         }
                     }
@@ -175,9 +190,19 @@ namespace NormalAccountProject.Controllers
                     {
                         if (await dr.ReadAsync())
                         {
+                            int statusId = Convert.ToInt32(dr["StatusId"]);
+                            if (statusId == 1)
+                            {
+                                if (!string.IsNullOrEmpty(nCustomerTabObj.CustomerImageAttachmentfilenameold))
+                                {
+                                    string oldFileName = Path.GetFileName(nCustomerTabObj.CustomerImageAttachmentfilenameold);
+                                    await DeleteFromFtp(oldFileName);
+                                }
+                            }
+
                             return Ok(new
                             {
-                                statusId = dr["StatusId"],
+                                statusId = statusId,
                                 message = dr["MessageCaption"].ToString()
                             });
                         }
@@ -201,6 +226,80 @@ namespace NormalAccountProject.Controllers
         }
 
 
+        async Task DeleteFromFtp(string attachmentFileName)
+        {
+            if (string.IsNullOrEmpty(attachmentFileName))
+                return;
+
+            string ftpPath = _configuration["Config:ftpPath"];
+            string ftpServer = _configuration["Config:ftpServer"];
+            string ftpUser = _configuration["Config:ftpUser"];
+            string ftpPassword = _configuration["Config:ftpPassword"];
+            string ftpPort = _configuration["Config:ftpPort"];
+
+            string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+                request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+                request.UseBinary = true;
+                request.UsePassive = true;
+                request.KeepAlive = false;
+
+                using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+                {
+                    // Optional: log response.StatusDescription
+                }
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (response != null && response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+                    // File does not exist → ignore
+                }
+                else
+                {
+                    throw; // rethrow other exceptions
+                }
+            }
+        }
+        async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
+        {
+            string ftpPath = _configuration["Config:ftpPath"];
+            string ftpServer = _configuration["Config:ftpServer"];
+            string ftpUser = _configuration["Config:ftpUser"];
+            string ftpPassword = _configuration["Config:ftpPassword"];
+            string ftpPort = _configuration["Config:ftpPort"];
+
+            // Remove base64 header if exists
+            if (attachmentBase64.Contains(","))
+                attachmentBase64 = attachmentBase64.Split(',')[1];
+
+            byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
+
+            string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+            request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+            request.UseBinary = true;
+            request.UsePassive = true;
+            request.KeepAlive = false;
+            request.ContentLength = fileBytes.Length;
+
+            using (Stream requestStream = await request.GetRequestStreamAsync())
+            {
+                await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+            }
+
+            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+            {
+                // Optional: log response.StatusDescription
+            }
+        }
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
             List<T> list = new();
