@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Data.SqlClient;
+using System.Dynamic;
 
 namespace NormalAccountProject.Controllers
 {
@@ -82,18 +83,53 @@ namespace NormalAccountProject.Controllers
                             });
                         }
 
+                        // Move to Grid 1
+                        await dr.NextResultAsync();
+
+                        List<ExpandoObject> grid1Data = new List<ExpandoObject>();
+
+                        while (await dr.ReadAsync())
+                        {
+                            var expando = new ExpandoObject() as IDictionary<string, object>;
+                            for (int i = 0; i < dr.FieldCount; i++)
+                            {
+                                expando[dr.GetName(i)] = dr.IsDBNull(i) ? null : dr.GetValue(i);
+                            }
+                            grid1Data.Add((ExpandoObject)expando);
+                        }
+
+                        // Move to Grid 2
+                        await dr.NextResultAsync();
+
+                        List<ExpandoObject> grid2Data = new List<ExpandoObject>();
+
+                        while (await dr.ReadAsync())
+                        {
+                            var expando = new ExpandoObject() as IDictionary<string, object>;
+                            for (int i = 0; i < dr.FieldCount; i++)
+                            {
+                                expando[dr.GetName(i)] = dr.IsDBNull(i) ? null : dr.GetValue(i);
+                            }
+                            grid2Data.Add((ExpandoObject)expando);
+                        }
+
+
                         // Move to Captions
                         await dr.NextResultAsync();
 
                         string card2Caption = "";
                         string card3Caption = "";
                         string card4Caption = "";
+                        string grid1Caption = "";
+                        string grid2Caption = "";
 
                         if (await dr.ReadAsync())
                         {
                             card2Caption = dr["Card2Caption"].ToString();
                             card3Caption = dr["Card3Caption"].ToString();
                             card4Caption = dr["Card4Caption"].ToString();
+                            grid1Caption = dr["Grid1Caption"].ToString();
+                            grid2Caption = dr["Grid2Caption"].ToString();
                         }
 
                         var response = new
@@ -113,7 +149,13 @@ namespace NormalAccountProject.Controllers
 
                             chart4Data = chart4Data,
                             Card4TotalValue = chart4Data.Sum(x => x.Value),
-                            Card4Caption = card4Caption
+                            Card4Caption = card4Caption,
+
+                            Grid1Caption = grid1Caption,
+                            Grid1Data = grid1Data,
+
+                            Grid2Caption = grid2Caption,
+                            Grid2Data = grid2Data
                         };
 
                         return Ok(response);
@@ -133,7 +175,7 @@ namespace NormalAccountProject.Controllers
 
         public class ChartData
         {
-            public string Text { get; set; }
+            public string? Text { get; set; }
             public int Value { get; set; }
         }
         public class nInfoTab
