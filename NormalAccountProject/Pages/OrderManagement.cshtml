@@ -145,9 +145,9 @@
         const headerRow = document.createElement("tr");
 
         // Actions column
-        const actionTh = document.createElement("th");
-        actionTh.textContent = "";
-        headerRow.appendChild(actionTh);
+        // const actionTh = document.createElement("th");
+        // actionTh.textContent = "";
+        // headerRow.appendChild(actionTh);
 
         columns.forEach(col => {
             const th = document.createElement("th");
@@ -158,8 +158,8 @@
 
         // Filter Row
         const filterRow = document.createElement("tr");
-        const emptyTh = document.createElement("th");
-        filterRow.appendChild(emptyTh);
+        // const emptyTh = document.createElement("th");
+        // filterRow.appendChild(emptyTh);
 
         columns.forEach(col => {
             const th = document.createElement("th");
@@ -184,23 +184,23 @@
             const tr = document.createElement("tr");
 
             // Actions column
-            const actionTd = document.createElement("td");
+            // const actionTd = document.createElement("td");
 
-            const editBtn = document.createElement("button");
-            editBtn.className = "btn btn-sm btn-primary me-1";
-            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-            editBtn.style.padding = "3px";
-            editBtn.addEventListener("click", () => onEditRow(row));
-            actionTd.appendChild(editBtn);
+            // const editBtn = document.createElement("button");
+            // editBtn.className = "btn btn-sm btn-primary me-1";
+            // editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+            // editBtn.style.padding = "3px";
+            // editBtn.addEventListener("click", () => onEditRow(row));
+            // actionTd.appendChild(editBtn);
 
-            const deleteBtn = document.createElement("button");
-            deleteBtn.className = "btn btn-sm btn-danger";
-            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-            deleteBtn.style.padding = "3px";
-            deleteBtn.addEventListener("click", () => onDeleteRow(row));
-            actionTd.appendChild(deleteBtn);
+            // const deleteBtn = document.createElement("button");
+            // deleteBtn.className = "btn btn-sm btn-danger";
+            // deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+            // deleteBtn.style.padding = "3px";
+            // deleteBtn.addEventListener("click", () => onDeleteRow(row));
+            // actionTd.appendChild(deleteBtn);
 
-            tr.appendChild(actionTd);
+            // tr.appendChild(actionTd);
 
             // Other columns
             columns.forEach(col => {

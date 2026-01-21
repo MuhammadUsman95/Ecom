@@ -8,72 +8,83 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="overview-wrap">
+                <div class="overview-wrap d-flex justify-content-between align-items-center">
                     <h2 class="title-1">Customer Registration</h2>
+                    <div>
+                        <button class="btn btn-info" id="gridViewToggleBtn">
+                            <i class="fas fa-table me-2"></i>Grid View
+                        </button>
+                        <button class="btn btn-primary" id="formViewToggleBtn" style="display:none;">
+                            <i class="fas fa-form me-2"></i>Form View
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <hr>
 
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <!-- Row 1: Customer Name + Contact No -->
-                <div class="row mb-3">
-                    <input style="display:none;" type="text" id="CustomerId">
-                    <input style="display:none;" type="text" id="CustomerImageAttachmentOld">
+        <!-- FORM VIEW -->
+        <div id="formViewContainer">
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <!-- Row 1: Customer Name + Contact No -->
+                    <div class="row mb-3">
+                        <input style="display:none;" type="text" id="CustomerId">
+                        <input style="display:none;" type="text" id="CustomerImageAttachmentOld">
 
-                    <div class="col-md-6">
-                        <label for="Customer">Customer Name</label>
-                        <input type="text" id="Customer" class="form-control" placeholder="Enter Customer Name">
+                        <div class="col-md-6">
+                            <label for="Customer">Customer Name</label>
+                            <input type="text" id="Customer" class="form-control" placeholder="Enter Customer Name">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="ContactNo">Contact Number</label>
+                            <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number" inputmode="numeric" autocomplete="off">
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <label for="ContactNo">Contact Number</label>
-                        <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number" inputmode="numeric" autocomplete="off">
-                    </div>
-                </div>
 
-                <!-- Row 2: Type + IsActive + Buttons -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="TypeId">Type</label>
-                        <select id="TypeId" class="form-control">
-                            <option value="">-- Select Type --</option>
-                        </select>
+                    <!-- Row 2: Type + IsActive + Buttons -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="TypeId">Type</label>
+                            <select id="TypeId" class="form-control">
+                                <option value="">-- Select Type --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check mt-4">
+                                <input type="checkbox" id="IsActive" class="form-check-input">
+                                <label class="form-check-label" for="IsActive">Is Active</label>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-6 d-flex align-items-center">
-                        <div class="form-check mt-4">
-                            <input type="checkbox" id="IsActive" class="form-check-input">
-                            <label class="form-check-label" for="IsActive">Is Active</label>
+                    <div class="row mb-3">
+                        <div class="col-md-12" style="display: grid;">
+                            <label>Customer Image (Max Size 500KB)*</label>
+                            <input id="CustomerImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button class="btn btn-success me-2" id="saveBtn">Save</button>
+                            <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
+                            <a class="btn btn-warning" style="display:none;" id="ViewImageBtn" target="_blank">
+                                View Image
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-12" style="display: grid;">
-                        <label>Customer Image (Max Size 500KB)*</label>
-                        <input id="CustomerImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png" required>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 d-flex align-items-end">
-                        <button class="btn btn-success me-2" id="saveBtn">Save</button>
-                        <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
-                        <a class="btn btn-warning" style="display:none;" id="ViewImageBtn" target="_blank"> 
-                            View Image
-                        </a>
-
-                    </div>
-                </div>
             </div>
         </div>
 
-        <hr>
-
-        <div class="row mt-5">
-            <div class="col-md-12">
-                <div id="CustomerGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
-                <div class="mt-3" style="text-align:center;">
-                    <p>Total Customers (<span id="TotalCustomersCount">100</span>)</p>
+        <!-- GRID VIEW -->
+        <div id="gridViewContainer" style="display:none;">
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div id="CustomerGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
+                    <div class="mt-3" style="text-align:center;">
+                        <p>Total Customers (<span id="TotalCustomersCount">100</span>)</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,6 +109,26 @@
     let IsUpdate = false;
     // Variable Declaration
 
+    // VIEW TOGGLE FUNCTIONS
+    function showFormView() {
+        document.getElementById("formViewContainer").style.display = "block";
+        document.getElementById("gridViewContainer").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "none";
+        document.getElementById("gridViewToggleBtn").style.display = "inline-block";
+        document.getElementById("Customer").focus();
+    }
+
+    function showGridView() {
+        document.getElementById("formViewContainer").style.display = "none";
+        document.getElementById("gridViewContainer").style.display = "block";
+        document.getElementById("gridViewToggleBtn").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "inline-block";
+    }
+
+    // Toggle Button Click Events
+    document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
+    document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
+    // VIEW TOGGLE FUNCTIONS
 
 
     // Customer Image
@@ -245,8 +276,8 @@
     }
     // Load Type DropDown
 
-    
-    
+
+
     // Grid View
     async function LoadGridViewData() {
         const nInfoTab = { Userid: userId };
@@ -352,7 +383,10 @@
             editBtn.className = "btn btn-sm btn-primary me-1";
             editBtn.innerHTML = '<i class="fas fa-edit"></i>';
             editBtn.style.padding = "3px";
-            editBtn.addEventListener("click", () => onEditRow(row));
+            editBtn.addEventListener("click", () => {
+                onEditRow(row);
+                showFormView();
+            });
             actionTd.appendChild(editBtn);
 
             const deleteBtn = document.createElement("button");

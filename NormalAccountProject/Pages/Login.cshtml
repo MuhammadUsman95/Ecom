@@ -9,230 +9,388 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Login Page</title>
-    @await Html.PartialAsync("_CommonScripts")  <!-- ✅ Common scripts included -->
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @await Html.PartialAsync("_CommonScripts")
 </head>
 <body>
-<style>
-    body {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        padding: 15px;
-        background: #1abc9c;
-        overflow: hidden;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .wrapper {
-        max-width: 500px;
-        width: 100%;
-        background: #fff;
-        border-radius: 5px;
-        box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 0.1);
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #636363 0%, #1a1a1a 100%);
+            padding: 20px;
+        }
 
-    .wrapper .title {
-        height: 70px;
-        background: #16a085;
-        border-radius: 5px 5px 0 0;
-        color: #fff;
-        font-size: 30px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+        .login-container {
+            width: 100%;
+            max-width: 420px;
+        }
 
-    .wrapper form {
-        padding: 25px 35px;
-    }
+        .login-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
 
-    .wrapper form .row {
-        height: 60px;
-        margin-top: 15px;
-        position: relative;
-    }
+        .login-header {
+            background: #000000;
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 2px solid #333;
+        }
 
-    .wrapper form .row input {
-        height: 100%;
-        width: 100%;
-        outline: none;
-        padding-left: 70px;
-        border-radius: 5px;
-        border: 1px solid lightgrey;
-        font-size: 18px;
-        transition: all 0.3s ease;
-    }
-
-    form .row input:focus {
-        border-color: #16a085;
-    }
-
-    form .row input::placeholder {
-        color: #999;
-    }
-
-    .wrapper form .row i {
-        position: absolute;
-        width: 55px;
-        height: 100%;
-        color: #fff;
-        font-size: 22px;
-        background: #16a085;
-        border: 1px solid #16a085;
-        border-radius: 5px 0 0 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .wrapper form .pass {
-        margin-top: 12px;
-    }
-
-    .wrapper form .pass a {
-        color: #16a085;
-        font-size: 17px;
-        text-decoration: none;
-    }
-
-    .wrapper form .pass a:hover {
-        text-decoration: underline;
-    }
-
-    .wrapper form .button input {
-        color: #fff;
-        font-size: 20px;
-        font-weight: 500;
-        padding-left: 0px;
-        background: #16a085;
-        border: 1px solid #16a085;
-        cursor: pointer;
-    }
-
-    form .button input:hover {
-        background: #12876f;
-    }
-
-    .wrapper form .signup-link {
-        text-align: center;
-        margin-top: 45px;
-        font-size: 17px;
-    }
-
-    .wrapper form .signup-link a {
-        color: #16a085;
-        text-decoration: none;
-    }
-
-    form .signup-link a:hover {
-        text-decoration: underline;
-    }
-</style>
-
-    <div class="wrapper">
-        <div class="title"><span>Login Form</span></div>
-        <form id="loginForm">
-            <div class="row">
-                <i class="fas fa-user"></i>
-                <input type="text" id="userId" placeholder="Email or Phone" required />
-            </div>
-            <div class="row">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" placeholder="Password" required />
-            </div>
-            <div class="mt-2" style="text-align: center;">
-                <p id="errorMsg" style="display: none;margin: 0;"></p>
-            </div>
-            <div class="row button">
-                <input type="submit" id="loginBtn" value="Login" />
-            </div>
-            <div class="mt-4" style="text-align: center;">
-                <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">AV_Softs</span></p>
-            </div>
-        </form>
-
-        <script>
-            function checkIfLoggedIn() {
-                const savedUserId = localStorage.getItem("userId");
-                const savedPassword = localStorage.getItem("password");
-
-                if (savedUserId && savedPassword) {
-                    // User already logged in → redirect to Home
-                    window.location.href = '/Home';
-                    return true;
-                }
-                return false;
+            .login-header h1 {
+                color: #ffffff;
+                font-size: 28px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+                margin-bottom: 8px;
             }
 
+            .login-header p {
+                color: #999999;
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
 
-            $(document).ready(function() {
-                // Check if user is already logged in
-                if (checkIfLoggedIn()) return;
+        .login-form {
+            padding: 40px 30px;
+        }
 
-                // Clear inputs and hide error message
-                $("#userId, #password").val("");
-                $("#errorMsg").hide();
-                $("#userId").focus();
+        .form-group {
+            margin-bottom: 22px;
+            position: relative;
+        }
 
-                $("#loginForm").submit(function (e) {
-                    e.preventDefault();
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #333333;
+                font-size: 13px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+            }
 
-                    // Disable inputs and button
-                    $("#userId, #password, #loginBtn").prop("disabled", true);
+            .form-group input {
+                width: 100%;
+                padding: 14px 16px;
+                padding-left: 16px;
+                border: 1.5px solid #e0e0e0;
+                border-radius: 6px;
+                font-size: 15px;
+                transition: all 0.3s ease;
+                background: #f8f8f8;
+                color: #333;
+            }
 
-                    // Show "Verifying..." message
-                    $("#errorMsg")
-                        .text("Verifying... Please wait")
-                        .css("color", "blue")
-                        .show();
+                .form-group input::placeholder {
+                    color: #999999;
+                }
 
-                    $.ajax({
-                        url: '/Login/Verify',
-                        type: 'POST',
-                        data: {
-                            userId: $("#userId").val(),
-                            password: $("#password").val()
-                        },
-                        success: function (response) {
-                            if (response.success) {
-                                // Save credentials returned from controller
-                                localStorage.setItem("userId", response.userId);
-                                localStorage.setItem("password", response.password);
+                .form-group input:focus {
+                    outline: none;
+                    background: #ffffff;
+                    border-color: #000000;
+                    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+                }
 
-                                $("#errorMsg")
-                                    .text("Verified! Valid Credentials !")
-                                    .css("color", "green")
-                                    .show();
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 13px;
+        }
 
-                                setTimeout(function() {
-                                    window.location.href = '/Home';
-                                }, 1500);
-                            } else {
-                                // Invalid credentials → enable inputs and focus
-                                $("#userId, #password, #loginBtn").prop("disabled", false);
-                                $("#userId").focus();
+            .form-options a {
+                color: #666666;
+                text-decoration: none;
+                transition: color 0.3s;
+            }
 
-                                $("#errorMsg")
-                                    .text(response.message)
-                                    .css("color", "red")
-                                    .show();
-                            }
-                        },
-                        error: function () {
+                .form-options a:hover {
+                    color: #000000;
+                }
+
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+            .btn-login:hover:not(:disabled) {
+                background: #222222;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            }
+
+            .btn-login:active:not(:disabled) {
+                transform: scale(0.98);
+            }
+
+            .btn-login:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+
+        .message-box {
+            margin-bottom: 20px;
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+            animation: slideDown 0.3s ease;
+        }
+
+        @@keyframes slideDown {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .message-box.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .message-box.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .message-box.info {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #bbdefb;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 30px 0 20px;
+            position: relative;
+            color: #999999;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+            .divider::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 50%;
+                width: 100%;
+                height: 1px;
+                background: #e0e0e0;
+            }
+
+            .divider span {
+                background: #ffffff;
+                padding: 0 10px;
+                position: relative;
+            }
+
+        .signup-section {
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+            .signup-section p {
+                color: #666666;
+                font-size: 14px;
+                margin: 0;
+            }
+
+            .signup-section a {
+                color: #000000;
+                text-decoration: none;
+                font-weight: 600;
+                transition: color 0.3s;
+            }
+
+                .signup-section a:hover {
+                    color: #333333;
+                    text-decoration: underline;
+                }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 25px;
+            color: #999999;
+            font-size: 12px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+            .footer-text span {
+                color: #000000;
+                font-weight: 600;
+            }
+    </style>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to continue</p>
+            </div>
+
+            <div class="login-form">
+                <div id="messageBox" class="message-box"></div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="userId">Email or Phone</label>
+                        <input type="text"
+                               id="userId"
+                               placeholder="Enter your email or phone number"
+                               required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password"
+                               id="password"
+                               placeholder="Enter your password"
+                               required />
+                    </div>
+
+                    <div class="form-options">
+                        <label style="margin: 0;">
+                            <input type="checkbox" style="margin-right: 6px; cursor: pointer;">
+                            <span style="cursor: pointer;">Remember me</span>
+                        </label>
+                        <a href="#forgot-password">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" id="loginBtn" class="btn-login">Login</button>
+                </form>
+
+                <div class="footer-text">
+                    Software Developed By <span>AV_Softs</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showMessage(msg, type) {
+            const msgBox = $("#messageBox");
+            msgBox
+                .removeClass("success error info")
+                .addClass(type)
+                .text(msg)
+                .show();
+        }
+
+        function hideMessage() {
+            $("#messageBox").hide();
+        }
+
+        function checkIfLoggedIn() {
+            const savedUserId = localStorage.getItem("userId");
+            const savedPassword = localStorage.getItem("password");
+
+            if (savedUserId && savedPassword) {
+                window.location.href = '/Home';
+                return true;
+            }
+            return false;
+        }
+
+        $(document).ready(function() {
+            if (checkIfLoggedIn()) return;
+
+            $("#userId, #password").val("");
+            hideMessage();
+            $("#userId").focus();
+
+            $("#loginForm").submit(function (e) {
+                e.preventDefault();
+
+                const userId = $("#userId").val().trim();
+                const password = $("#password").val().trim();
+
+                if (!userId || !password) {
+                    showMessage("Please fill in all fields", "error");
+                    return;
+                }
+
+                $("#userId, #password, #loginBtn").prop("disabled", true);
+                showMessage("Verifying... Please wait", "info");
+
+                $.ajax({
+                    url: '/Login/Verify',
+                    type: 'POST',
+                    data: {
+                        userId: userId,
+                        password: password
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            localStorage.setItem("userId", response.userId);
+                            localStorage.setItem("password", response.password);
+
+                            showMessage("Login successful! Redirecting...", "success");
+
+                            setTimeout(function() {
+                                window.location.href = '/Home';
+                            }, 1500);
+                        } else {
                             $("#userId, #password, #loginBtn").prop("disabled", false);
                             $("#userId").focus();
-
-                            $("#errorMsg")
-                                .text("Server error. Try again.")
-                                .css("color", "red")
-                                .show();
+                            showMessage(response.message || "Invalid credentials", "error");
                         }
-                    });
+                    },
+                    error: function () {
+                        $("#userId, #password, #loginBtn").prop("disabled", false);
+                        $("#userId").focus();
+                        showMessage("Server error. Please try again.", "error");
+                    }
                 });
             });
-        </script>
-    </div>
+
+            // Hide message when user starts typing
+            $("#userId, #password").on("focus", function() {
+                hideMessage();
+            });
+        });
+    </script>
 </body>
 </html>
