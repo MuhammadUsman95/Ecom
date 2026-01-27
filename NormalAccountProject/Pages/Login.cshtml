@@ -356,7 +356,7 @@
                 showMessage("Verifying... Please wait", "info");
 
                 $.ajax({
-                    url: '/Login/Verify',
+                    url: '@Url.Action("Verify", "Login")',
                     type: 'POST',
                     data: {
                         userId: userId,
