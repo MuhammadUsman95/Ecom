@@ -13,6 +13,10 @@
         public string? CustomerImageAttachmentfilename { get; set; }
         public string? CustomerImageAttachmentfilenameold { get; set; }
         public string? CustomerImageAttachmentbase64 { get; set; }
+
+
+        public string? TimeIn { get; set; }
+        public string? TimeOut { get; set; }
     }
 
     public class CustomerTypedd

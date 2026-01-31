@@ -71,6 +71,10 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@UserId", nCustomerTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nCustomerTabObj.IsUpdate ? "1" : "0");
                     cmd.Parameters.AddWithValue("@ImagePath", nCustomerTabObj.CustomerImageAttachmentfilename);
+                    
+                    cmd.Parameters.AddWithValue("@TimeIn", nCustomerTabObj.TimeIn);
+                    cmd.Parameters.AddWithValue("@TimeOut", nCustomerTabObj.TimeOut);
+
                     if (nCustomerTabObj.IsUpdate)
                     {
                         cmd.Parameters.AddWithValue("@CustomerId", nCustomerTabObj.CustomerId);
@@ -86,7 +90,9 @@ namespace NormalAccountProject.Controllers
                                       $"@Type='{nCustomerTabObj.Type}', " +
                                       $"@UserId='{nCustomerTabObj.Userid}', " +
                                       $"@IsUpdate='{(nCustomerTabObj.IsUpdate ? "1" : "0")}'" +
-                                      $"@ImagePath='{(nCustomerTabObj.CustomerImageAttachmentfilename)}'";
+                                      $"@ImagePath='{(nCustomerTabObj.CustomerImageAttachmentfilename)}'" +
+                                      $"@TimeIn='{(nCustomerTabObj.TimeIn)}'" +
+                                      $"@TimeOut='{(nCustomerTabObj.TimeOut)}'";
 
                     if (nCustomerTabObj.IsUpdate)
                     {

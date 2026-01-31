@@ -43,6 +43,17 @@
                         </div>
                     </div>
 
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="TimeIn">Time In</label>
+                            <input type="time" id="TimeIn" class="form-control" placeholder="Enter Time In">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="TimeOut">Time Out</label>
+                            <input type="time" id="TimeOut" class="form-control" placeholder="Enter Time Out">
+                        </div>
+                    </div>
+
                     <!-- Row 2: Type + IsActive + Buttons -->
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -201,12 +212,66 @@
     // Customer Image
 
 
+    // Time In - Time Out Textbox
+    function setCurrentTime() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const currentTime = `${hours}:${minutes}`;
+
+        document.getElementById("TimeIn").value = currentTime;
+        document.getElementById("TimeOut").value = currentTime;
+
+        // initial store bhi karwa dete hain
+        storeTime("TimeIn");
+        storeTime("TimeOut");
+    }
+    function storeTime(inputId) {
+        const timeValue = document.getElementById(inputId).value;
+
+        if (!timeValue) return;
+
+        // format: 1900-01-01 HH:mm:00.000
+        const formattedTime = `1900-01-01 ${timeValue}:00.000`;
+
+        console.log(inputId + " => ", formattedTime);
+
+        // future ke liye variables
+        if (inputId === "TimeIn") {
+            window.TimeInValue = formattedTime;
+        } else if (inputId === "TimeOut") {
+            window.TimeOutValue = formattedTime;
+        }
+    }
+    function getTimeFromTextbox(inputId) {
+        const timeValue = document.getElementById(inputId).value;
+
+        if (!timeValue) {
+            console.log(inputId + " is empty");
+            return;
+        }
+
+        // Same backend-ready format
+        const formattedTime = `1900-01-01 ${timeValue}:00.000`;
+
+        return formattedTime;
+    }
+    function setTimeToTextbox(inputId, dateTimeValue) {
+        if (!dateTimeValue) return;
+
+        // "1900-01-01T18:30:00" → "18:30"
+        const time = dateTimeValue.split("T")[1].substring(0, 5);
+
+        document.getElementById(inputId).value = time;
+    }
+    // Time In - Time Out Textbox
+    
 
     // Form Load
     document.addEventListener("DOMContentLoaded", async function () {
         await LoadData();
         await LoadGridViewData();
-
+        setCurrentTime();
         const fields = [
             document.getElementById("Customer"),
             document.getElementById("ContactNo"),
@@ -321,7 +386,7 @@
         }
 
         // Determine columns dynamically (skip 'Userid', 'Type', 'CustomerId')
-        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "CustomerId" && col !== "ImagePath");
+        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "CustomerId" && col !== "ImagePath" && col !== "TimeIn" && col !== "TimeOut");
 
         // Table creation
         const table = document.createElement("table");
@@ -445,17 +510,25 @@
         IsUpdate = true;
         document.getElementById("saveBtn").textContent = "Update";
 
-        // Set values to the form using bracket notation
         document.getElementById("CustomerId").value = rowData["CustomerId"] || "";
         document.getElementById("CustomerImageAttachmentOld").value = rowData["ImagePath"] || "";
         document.getElementById("Customer").value = rowData["Customer Name"] || "";
         document.getElementById("ContactNo").value = rowData["Contact #"] || "";
-        document.getElementById("TypeId").value = rowData["Type"] || ""; // Assuming TypeId is stored in Type
+        document.getElementById("TypeId").value = rowData["Type"] || "";
         document.getElementById("IsActive").checked = rowData["Is Active"] || false;
+
+        // ✅ TIME SET ON EDIT
+        setTimeToTextbox("TimeIn", rowData["TimeIn"]);
+        setTimeToTextbox("TimeOut", rowData["TimeOut"]);
+
+        console.log("Edit TimeIn:", rowData["TimeIn"]);
+        console.log("Edit TimeOut:", rowData["TimeOut"]);
+
         document.getElementById("Customer").focus();
 
-        ViewImage(rowData["ImagePath"] || "")
+        ViewImage(rowData["ImagePath"] || "");
     }
+
     async function onDeleteRow(rowData) {
         console.log("Delete clicked", rowData);
 
@@ -548,6 +621,8 @@
 
     // Save Button click
     document.getElementById("saveBtn").addEventListener("click", async function () {
+        console.log(getTimeFromTextbox("TimeIn"));
+        console.log(getTimeFromTextbox("TimeOut"));
         await SaveData();
     });
     async function SaveData() {
@@ -558,6 +633,8 @@
         const isActive = document.getElementById("IsActive").checked;
         const customerImageAttachment = document.getElementById("CustomerImageAttachment").value.trim();
         const customerImageAttachmentold = document.getElementById("CustomerImageAttachmentOld").value.trim();
+        const nTimeIn = getTimeFromTextbox("TimeIn");
+        const nTimeOut = getTimeFromTextbox("TimeOut");
 
 
 
@@ -642,6 +719,8 @@
             CustomerImageAttachmentfilename: CustomerImageAttachmentfilename,
             CustomerImageAttachmentfilenameold: customerImageAttachmentold,
             CustomerImageAttachmentbase64: CustomerImageAttachmentbase64,
+            TimeIn: nTimeIn,
+            TimeOut: nTimeOut,
             IsActive: isActive,
             IsUpdate: IsUpdate,
         };
@@ -720,6 +799,7 @@
         document.getElementById("saveBtn").textContent = "Save";
         document.getElementById("Customer").focus();
         document.getElementById("ViewImageBtn").style.display = "none";
+        setCurrentTime();
         await LoadGridViewData();
     }
     // Cancel Button click
