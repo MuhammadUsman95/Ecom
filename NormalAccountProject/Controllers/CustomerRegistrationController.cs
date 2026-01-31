@@ -74,6 +74,9 @@ namespace NormalAccountProject.Controllers
                     
                     cmd.Parameters.AddWithValue("@TimeIn", nCustomerTabObj.TimeIn);
                     cmd.Parameters.AddWithValue("@TimeOut", nCustomerTabObj.TimeOut);
+                    cmd.Parameters.AddWithValue("@DeliveryCharges", nCustomerTabObj.DeliveryCharges);
+                    cmd.Parameters.AddWithValue("@PerProductAmount", nCustomerTabObj.PerProductAmount);
+                    //cmd.Parameters.AddWithValue("@UserId", nCustomerTabObj.Userid);
 
                     if (nCustomerTabObj.IsUpdate)
                     {
@@ -92,7 +95,12 @@ namespace NormalAccountProject.Controllers
                                       $"@IsUpdate='{(nCustomerTabObj.IsUpdate ? "1" : "0")}'" +
                                       $"@ImagePath='{(nCustomerTabObj.CustomerImageAttachmentfilename)}'" +
                                       $"@TimeIn='{(nCustomerTabObj.TimeIn)}'" +
-                                      $"@TimeOut='{(nCustomerTabObj.TimeOut)}'";
+                                      $"@TimeOut='{(nCustomerTabObj.TimeOut)}'"+
+                                      $"@DeliveryCharges='{(nCustomerTabObj.DeliveryCharges)}'" +
+                                      $"@PerProductAmount='{(nCustomerTabObj.PerProductAmount)}'" 
+
+
+                                      ;
 
                     if (nCustomerTabObj.IsUpdate)
                     {

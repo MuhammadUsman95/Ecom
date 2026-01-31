@@ -9,14 +9,17 @@
         public string? Type { get; set; }
         public string? Userid { get; set; }
         public bool IsUpdate { get; set; }
-
         public string? CustomerImageAttachmentfilename { get; set; }
         public string? CustomerImageAttachmentfilenameold { get; set; }
         public string? CustomerImageAttachmentbase64 { get; set; }
 
-
         public string? TimeIn { get; set; }
         public string? TimeOut { get; set; }
+
+        public string? DeliveryCharges { get; set; }
+        public string? PerProductAmount { get; set; }
+
+
     }
 
     public class CustomerTypedd

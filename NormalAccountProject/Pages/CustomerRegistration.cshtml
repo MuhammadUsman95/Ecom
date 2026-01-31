@@ -53,6 +53,16 @@
                             <input type="time" id="TimeOut" class="form-control" placeholder="Enter Time Out">
                         </div>
                     </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="DeliveryCharges">Delivery Charges</label>
+                            <input type="text" id="DeliveryCharges" class="form-control" placeholder="Enter Delivery Charges">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="PerProductAmount">Per Product Amount</label>
+                            <input type="text" id="PerProductAmount" class="form-control" placeholder="Enter Per Product Amount">
+                        </div>
+                    </div>
 
                     <!-- Row 2: Type + IsActive + Buttons -->
                     <div class="row mb-3">
@@ -272,6 +282,9 @@
         await LoadData();
         await LoadGridViewData();
         setCurrentTime();
+        document.getElementById("DeliveryCharges").value = "0";
+        document.getElementById("PerProductAmount").value = "0";
+
         const fields = [
             document.getElementById("Customer"),
             document.getElementById("ContactNo"),
@@ -516,7 +529,8 @@
         document.getElementById("ContactNo").value = rowData["Contact #"] || "";
         document.getElementById("TypeId").value = rowData["Type"] || "";
         document.getElementById("IsActive").checked = rowData["Is Active"] || false;
-
+        document.getElementById("DeliveryCharges").value = rowData["Delivery Charges"] || "";
+        document.getElementById("PerProductAmount").value = rowData["PerProductAmount"] || "";
         // ✅ TIME SET ON EDIT
         setTimeToTextbox("TimeIn", rowData["TimeIn"]);
         setTimeToTextbox("TimeOut", rowData["TimeOut"]);
@@ -635,6 +649,8 @@
         const customerImageAttachmentold = document.getElementById("CustomerImageAttachmentOld").value.trim();
         const nTimeIn = getTimeFromTextbox("TimeIn");
         const nTimeOut = getTimeFromTextbox("TimeOut");
+        const nDeliveryCharges = document.getElementById("DeliveryCharges").value.trim();
+        const nPerProductAmount = document.getElementById("PerProductAmount").value.trim();
 
 
 
@@ -721,6 +737,8 @@
             CustomerImageAttachmentbase64: CustomerImageAttachmentbase64,
             TimeIn: nTimeIn,
             TimeOut: nTimeOut,
+            DeliveryCharges: nDeliveryCharges,
+            PerProductAmount: nPerProductAmount,
             IsActive: isActive,
             IsUpdate: IsUpdate,
         };
@@ -799,6 +817,8 @@
         document.getElementById("saveBtn").textContent = "Save";
         document.getElementById("Customer").focus();
         document.getElementById("ViewImageBtn").style.display = "none";
+        document.getElementById("DeliveryCharges").value = "0";
+        document.getElementById("PerProductAmount").value = "0";
         setCurrentTime();
         await LoadGridViewData();
     }
