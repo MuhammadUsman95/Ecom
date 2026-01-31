@@ -6,106 +6,129 @@
 
 <div class="section__content section__content--p30">
     <div class="container-fluid">
-        <div class="row">
+        <!-- Dashboard Header -->
+        <div class="row mb-4">
             <div class="col-md-12">
-                <div class="overview-wrap d-flex justify-content-between align-items-center">
-                    <h2 class="title-1">Dashboard</h2>
-                    <button id="refreshBtn" class="btn btn-primary">
-                        <i class="fa fa-refresh" id="refreshIcon"></i> Refresh
+                <div class="dashboard-header">
+                    <div class="header-left">
+                        <h2 class="dashboard-title">
+                            <i class="fas fa-chart-line"></i> Dashboard Overview
+                        </h2>
+                        <p class="dashboard-subtitle">Welcome back! Here's what's happening today</p>
+                    </div>
+                    <button id="refreshBtn" class="btn-refresh">
+                        <i class="fa fa-refresh" id="refreshIcon"></i>
+                        <span>Refresh Data</span>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="row m-t-25">
-            <div class="col-sm-6 col-lg-3">
-                <div class="overview-item overview-item--c1">
-                    <div class="overview__inner">
-                        <div class="overview-box clearfix">
-                            <div class="icon">
-                                <i class="zmdi zmdi-account-o"></i>
-                            </div>
-                            <div class="text">
-                                <h2 id="Card1TotalValue"></h2>
-                                <span id="Card1Caption"></span>
-                            </div>
-                        </div>
-                        <div class="overview-chart">
-                            @* <canvas id="widgetChart1"></canvas> *@
-                        </div>
+
+        <!-- Stats Cards -->
+        <div class="row mb-4">
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="stat-card stat-card-1">
+                    <div class="stat-icon">
+                        <i class="zmdi zmdi-account-o"></i>
                     </div>
+                    <div class="stat-content">
+                        <h2 id="Card1TotalValue" class="stat-value">0</h2>
+                        <span id="Card1Caption" class="stat-label">Loading...</span>
+                    </div>
+                    <div class="stat-chart">
+                        <canvas id="widgetChart1"></canvas>
+                    </div>
+                    <div class="stat-overlay"></div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="overview-item overview-item--c2">
-                    <div class="overview__inner">
-                        <div class="overview-box clearfix">
-                            <div class="icon">
-                                <i class="zmdi zmdi-shopping-cart"></i>
-                            </div>
-                            <div class="text">
-                                <h2 id="Card2TotalValue"></h2>
-                                <span id="Card2Caption"></span>
-                            </div>
-                        </div>
-                        <div class="overview-chart">
-                            <canvas id="widgetChart2"></canvas>
-                        </div>
+
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="stat-card stat-card-2">
+                    <div class="stat-icon">
+                        <i class="zmdi zmdi-shopping-cart"></i>
                     </div>
+                    <div class="stat-content">
+                        <h2 id="Card2TotalValue" class="stat-value">0</h2>
+                        <span id="Card2Caption" class="stat-label">Loading...</span>
+                    </div>
+                    <div class="stat-chart">
+                        <canvas id="widgetChart2"></canvas>
+                    </div>
+                    <div class="stat-overlay"></div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="overview-item overview-item--c3">
-                    <div class="overview__inner">
-                        <div class="overview-box clearfix">
-                            <div class="icon">
-                                <i class="zmdi zmdi-calendar-note"></i>
-                            </div>
-                            <div class="text">
-                                <h2 id="Card3TotalValue"></h2>
-                                <span id="Card3Caption"></span>
-                            </div>
-                        </div>
-                        <div class="overview-chart">
-                            <canvas id="widgetChart3"></canvas>
-                        </div>
+
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="stat-card stat-card-3">
+                    <div class="stat-icon">
+                        <i class="zmdi zmdi-calendar-note"></i>
                     </div>
+                    <div class="stat-content">
+                        <h2 id="Card3TotalValue" class="stat-value">0</h2>
+                        <span id="Card3Caption" class="stat-label">Loading...</span>
+                    </div>
+                    <div class="stat-chart">
+                        <canvas id="widgetChart3"></canvas>
+                    </div>
+                    <div class="stat-overlay"></div>
                 </div>
             </div>
-            <div class="col-sm-6 col-lg-3">
-                <div class="overview-item overview-item--c4">
-                    <div class="overview__inner">
-                        <div class="overview-box clearfix">
-                            <div class="icon">
-                                <i class="zmdi zmdi-money"></i>
-                            </div>
-                            <div class="text">
-                                <h2 id="Card4TotalValue"></h2>
-                                <span id="Card4Caption"></span>
-                            </div>
-                        </div>
-                        <div class="overview-chart">
-                            <canvas id="widgetChart4"></canvas>
-                        </div>
+
+            <div class="col-sm-6 col-lg-3 mb-3">
+                <div class="stat-card stat-card-4">
+                    <div class="stat-icon">
+                        <i class="zmdi zmdi-money"></i>
                     </div>
+                    <div class="stat-content">
+                        <h2 id="Card4TotalValue" class="stat-value">0</h2>
+                        <span id="Card4Caption" class="stat-label">Loading...</span>
+                    </div>
+                    <div class="stat-chart">
+                        <canvas id="widgetChart4"></canvas>
+                    </div>
+                    <div class="stat-overlay"></div>
                 </div>
             </div>
         </div>
+
+        <!-- Data Tables Section -->
         <div class="row">
-            <div class="col-lg-9">
-                <h2 class="title-1 m-b-25" id="Grid1Caption"></h2>
-                <div class="table-responsive table--no-card m-b-40 custom-table-scroll">
-                    <table class="table table-borderless table-striped table-earning">
-                        <thead id="gridThead"></thead>
-                        <tbody id="gridTbody"></tbody>
-                    </table>
+            <div class="col-lg-9 mb-4">
+                <div class="data-card">
+                    <div class="card-header">
+                        <h3 id="Grid1Caption" class="card-title">
+                            <i class="fas fa-table"></i> Recent Activity
+                        </h3>
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Download">
+                                <i class="fas fa-download"></i>
+                            </button>
+                            <button class="btn-icon" title="Filter">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-container custom-table-scroll">
+                            <table class="modern-table">
+                                <thead id="gridThead"></thead>
+                                <tbody id="gridTbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-3">
-                <h2 class="title-1 m-b-25" id="Grid2Caption"></h2>
-                <div class="au-card au-card--bg-blue au-card-top-countries m-b-40">
-                    <div class="au-card-inner">
-                        <div class="table-responsive custom-table2-scroll">
-                            <table class="table table-top-countries">
+
+            <div class="col-lg-3 mb-4">
+                <div class="data-card summary-card">
+                    <div class="card-header">
+                        <h3 id="Grid2Caption" class="card-title">
+                            <i class="fas fa-chart-pie"></i> Summary
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="summary-container custom-table2-scroll">
+                            <table class="summary-table">
                                 <tbody id="grid2Tbody"></tbody>
                             </table>
                         </div>
@@ -113,87 +136,555 @@
                 </div>
             </div>
         </div>
-        
-        <div class="row">
-            @* <div class="col-lg-6">
-                <div class="au-card recent-report">
-                    <div class="au-card-inner">
-                        <h3 class="title-2">recent reports</h3>
-                        <div class="chart-info">
-                            <div class="chart-info__right">
-                                <div class="chart-statis">
-                                    <span class="index incre">
-                                        <i class="zmdi zmdi-long-arrow-up"></i>25%
-                                    </span>
-                                    <span class="label">products</span>
-                                </div>
-                                <div class="chart-statis me-0">
-                                    <span class="index decre">
-                                        <i class="zmdi zmdi-long-arrow-down"></i>10%
-                                    </span>
-                                    <span class="label">services</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="recent-report__chart">
-                            <canvas id="recent-rep-chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="au-card chart-percent-card">
-                    <div class="au-card-inner">
-                        <h3 class="title-2 tm-b-5">Revenue Distribution</h3>
-                        <div class="row no-gutters">
-                            <div class="col-xl-12">
-                                <div class="percent-chart">
-                                    <canvas id="percent-chart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> *@
-        </div>
+
+        <!-- Footer -->
         <div class="row">
             <div class="col-md-12">
-                <div class="copyright">
-                    <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">AV_Softs</span></p>
+                <div class="dashboard-footer">
+                    <p>Software Developed By <span>AV_Softs</span></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<style>
+    /* ========== Dashboard Header ========== */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        animation: fadeInDown 0.6s ease;
+    }
+
+    .header-left {
+        flex: 1;
+    }
+
+    .dashboard-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0 0 5px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .dashboard-title i {
+            color: #667eea;
+            font-size: 26px;
+        }
+
+    .dashboard-subtitle {
+        color: #7f8c8d;
+        font-size: 14px;
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .btn-refresh {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 11px 22px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-refresh:active {
+            transform: translateY(0);
+        }
+
+    /* ========== Stats Cards ========== */
+    .stat-card {
+        background: white;
+        border-radius: 14px;
+        padding: 22px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.6s ease;
+        animation-fill-mode: both;
+        height: 100%;
+    }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+    .stat-overlay {
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        opacity: 0.12;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card-1 .stat-overlay {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-card-2 .stat-overlay {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .stat-card-3 .stat-overlay {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .stat-card-4 .stat-overlay {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .stat-icon {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        color: white;
+        margin-bottom: 14px;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .stat-card-1 .stat-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-card-2 .stat-icon {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .stat-card-3 .stat-icon {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .stat-card-4 .stat-icon {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    .stat-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .stat-value {
+        font-size: 30px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0 0 5px 0;
+        line-height: 1;
+    }
+
+    .stat-label {
+        color: #7f8c8d;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        display: block;
+    }
+
+    .stat-chart {
+        margin-top: 14px;
+        position: relative;
+        z-index: 2;
+        height: 60px;
+    }
+
+    /* ========== Data Cards ========== */
+    .data-card {
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease 0.5s both;
+        height: 100%;
+    }
+
+    .card-header {
+        padding: 18px 22px;
+        border-bottom: 1px solid #ecf0f1;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    }
+
+    .card-title {
+        font-size: 17px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .card-title i {
+            color: #667eea;
+            font-size: 18px;
+        }
+
+    .card-actions {
+        display: flex;
+        gap: 6px;
+    }
+
+    .btn-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        background: white;
+        color: #7f8c8d;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+    }
+
+        .btn-icon:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+    .card-body {
+        padding: 0;
+    }
+
+    /* ========== Modern Table ========== */
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .modern-table thead th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 18px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            border: none;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        .modern-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+            .modern-table tbody tr:hover {
+                background: #f8f9fa;
+                transform: scale(1.005);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            }
+
+        .modern-table tbody td {
+            padding: 14px 18px;
+            color: #2c3e50;
+            font-size: 13px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .modern-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+    .custom-table-scroll {
+        max-height: 450px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #667eea #f0f0f0;
+    }
+
+        .custom-table-scroll::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+
+        .custom-table-scroll::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .custom-table-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+    /* ========== Summary Card ========== */
+    .summary-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+        .summary-card .card-header {
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+            background: transparent;
+        }
+
+        .summary-card .card-title {
+            color: white;
+        }
+
+            .summary-card .card-title i {
+                color: white;
+            }
+
+    .summary-table {
+        width: 100%;
+    }
+
+        .summary-table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+            .summary-table tbody tr:hover {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .summary-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+        .summary-table tbody td {
+            padding: 12px 18px;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+            .summary-table tbody td:last-child {
+                text-align: right;
+                font-weight: 700;
+            }
+
+    .custom-table2-scroll {
+        max-height: 420px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.5) rgba(255, 255, 255, 0.1);
+    }
+
+        .custom-table2-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-table2-scroll::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .custom-table2-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+        }
+
+    /* ========== Footer ========== */
+    .dashboard-footer {
+        text-align: center;
+        padding: 16px 0;
+        margin-top: 15px;
+        border-top: 1px solid #ecf0f1;
+        animation: fadeIn 0.6s ease 0.8s both;
+    }
+
+        .dashboard-footer p {
+            color: #7f8c8d;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .dashboard-footer span {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+    /* ========== Animations ========== */
+    keyframes fadeInDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+
+    }
+
+    keyframes rotateIcon {
+        from
+
+    {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+    }
+
+    .rotate {
+        animation: rotateIcon 1s linear infinite;
+    }
+
+    /* ========== Responsive Design ========== */
+    media (max-width: 991px) {
+        .dashboard-header
+
+    {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .btn-refresh {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .card-actions {
+        display: none;
+    }
+
+    }
+
+    media (max-width: 768px) {
+        .dashboard-title
+
+    {
+        font-size: 22px;
+    }
+
+    .stat-value {
+        font-size: 26px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    }
+
+    /* ========== Text Alignment Utilities ========== */
+    .text-end {
+        text-align: right !important;
+    }
+</style>
+
 <script>
     let userId = localStorage.getItem("userId") || "";
 
-
     document.addEventListener("DOMContentLoaded", async function () {
-        // await LoadData();
+        await LoadData();
     });
 
     document.getElementById("refreshBtn").addEventListener("click", async function() {
         const icon = document.getElementById("refreshIcon");
-
-        // Start rotation
         icon.classList.add("rotate");
 
         try {
-            await LoadData(); // Your async function
+            await LoadData();
         } catch (error) {
             console.error(error);
         } finally {
-            // Stop rotation after LoadData completes
             icon.classList.remove("rotate");
         }
     });
 
-
-
     async function LoadData() {
-
         const nInfoTab = {
             Userid: userId
         };
@@ -212,7 +703,7 @@
                         animateValue("Card3TotalValue", 0, response.Card3TotalValue, 1500);
                         animateValue("Card4TotalValue", 0, response.Card4TotalValue, 1500);
 
-                        // Set captions (no animation)
+                        // Set captions
                         document.getElementById("Card1Caption").innerHTML = response.Card1Caption;
                         document.getElementById("Card2Caption").innerHTML = response.Card2Caption;
                         document.getElementById("Card3Caption").innerHTML = response.Card3Caption;
@@ -220,12 +711,8 @@
                         document.getElementById("Grid1Caption").innerHTML = response.Grid1Caption;
                         document.getElementById("Grid2Caption").innerHTML = response.Grid2Caption;
 
-                        console.log(response.Grid1Data);
                         renderGrid(response.Grid1Data);
-
-                        console.log(response.Grid2Data);
                         renderGrid2(response.Grid2Data);
-
                         nLoadChartsCards(response.chart2Data, response.chart3Data, response.chart4Data);
 
                         resolve();
@@ -257,24 +744,19 @@
 
         window.requestAnimationFrame(step);
     }
-    
 
-
-    // ==== Function to load all charts ====
-        // Global chart references
+    // Global chart references
     let widgetChart2Instance = null;
     let widgetChart3Instance = null;
     let widgetChart4Instance = null;
-    function nLoadChartsCards(chart2Data, chart3Data, chart4Data) {
 
-        // ----------- WidgetChart 2 -----------
+    function nLoadChartsCards(chart2Data, chart3Data, chart4Data) {
+        // WidgetChart 2
         const chart2Texts = chart2Data.map(x => x.Text);
         const chart2Values = chart2Data.map(x => x.Value);
         const ctx2 = document.getElementById("widgetChart2");
         if (ctx2) {
-            ctx2.height = 130;
-
-            // Destroy previous instance if exists
+            ctx2.height = 60;
             if (widgetChart2Instance) widgetChart2Instance.destroy();
 
             widgetChart2Instance = new Chart(ctx2, {
@@ -284,8 +766,11 @@
                     datasets: [{
                         data: chart2Values,
                         label: 'Amount',
-                        backgroundColor: 'transparent',
-                        borderColor: 'rgba(255,255,255,.55)',
+                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                        borderColor: '#f093fb',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
@@ -293,32 +778,31 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            mode: 'index',
-                            titleFont: { size: 12, family: 'Poppins' },
-                            titleColor: '#000',
-                            bodyColor: '#000',
-                            bodyFont: { family: 'Poppins' },
-                            backgroundColor: '#fff',
-                            cornerRadius: 3,
-                            intersect: false,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 10,
+                            cornerRadius: 6,
+                            titleFont: { size: 12, weight: '600' },
+                            bodyFont: { size: 11 }
                         }
                     },
                     responsive: true,
                     scales: {
-                        x: { grid: { color: 'transparent' }, ticks: { font: { size: 2 }, color: 'transparent' } },
-                        y: { display: false, ticks: { display: false } }
+                        x: { display: false },
+                        y: { display: false }
                     },
-                    elements: { line: { tension: 0.00001, borderWidth: 1 }, point: { radius: 4, hitRadius: 10, hoverRadius: 4 } }
+                    elements: {
+                        point: { radius: 2, hoverRadius: 4 }
+                    }
                 }
             });
         }
 
-        // ----------- WidgetChart 3 -----------
+        // WidgetChart 3
         const chart3Texts = chart3Data.map(x => x.Text);
         const chart3Values = chart3Data.map(x => x.Value);
         const ctx3 = document.getElementById("widgetChart3");
         if (ctx3) {
-            ctx3.height = 130;
+            ctx3.height = 60;
             if (widgetChart3Instance) widgetChart3Instance.destroy();
 
             widgetChart3Instance = new Chart(ctx3, {
@@ -328,8 +812,11 @@
                     datasets: [{
                         data: chart3Values,
                         label: 'Amount',
-                        backgroundColor: 'transparent',
-                        borderColor: 'rgba(255,255,255,.55)',
+                        backgroundColor: 'rgba(79, 172, 254, 0.1)',
+                        borderColor: '#4facfe',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
                     }]
                 },
                 options: {
@@ -337,32 +824,31 @@
                     plugins: {
                         legend: { display: false },
                         tooltip: {
-                            mode: 'index',
-                            titleFont: { size: 12, family: 'Poppins' },
-                            titleColor: '#000',
-                            bodyColor: '#000',
-                            bodyFont: { family: 'Poppins' },
-                            backgroundColor: '#fff',
-                            cornerRadius: 3,
-                            intersect: false,
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 10,
+                            cornerRadius: 6,
+                            titleFont: { size: 12, weight: '600' },
+                            bodyFont: { size: 11 }
                         }
                     },
                     responsive: true,
                     scales: {
-                        x: { grid: { color: 'transparent' }, ticks: { font: { size: 2 }, color: 'transparent' } },
-                        y: { display: false, ticks: { display: false } }
+                        x: { display: false },
+                        y: { display: false }
                     },
-                    elements: { line: { borderWidth: 1 }, point: { radius: 4, hitRadius: 10, hoverRadius: 4 } }
+                    elements: {
+                        point: { radius: 2, hoverRadius: 4 }
+                    }
                 }
             });
         }
 
-        // ----------- WidgetChart 4 -----------
+        // WidgetChart 4
         const chart4Texts = chart4Data.map(x => x.Text);
         const chart4Values = chart4Data.map(x => x.Value);
         const ctx4 = document.getElementById("widgetChart4");
         if (ctx4) {
-            ctx4.height = 115;
+            ctx4.height = 60;
             if (widgetChart4Instance) widgetChart4Instance.destroy();
 
             widgetChart4Instance = new Chart(ctx4, {
@@ -372,29 +858,34 @@
                     datasets: [{
                         label: "Amount",
                         data: chart4Values,
-                        borderColor: "transparent",
-                        borderWidth: "0",
-                        backgroundColor: "rgba(255,255,255,.3)"
+                        backgroundColor: 'rgba(67, 233, 123, 0.8)',
+                        borderRadius: 4,
+                        borderSkipped: false
                     }]
                 },
                 options: {
-                    maintainAspectRatio: true,
-                    plugins: { legend: { display: false } },
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            padding: 10,
+                            cornerRadius: 6,
+                            titleFont: { size: 12, weight: '600' },
+                            bodyFont: { size: 11 }
+                        }
+                    },
                     responsive: true,
                     scales: {
-                        x: { grid: { color: 'transparent' }, ticks: { font: { size: 2 }, color: 'transparent' } },
-                        y: { display: false, ticks: { display: false } }
-                    },
-                    elements: { rectangle: { borderWidth: 0 } }
+                        x: { display: false },
+                        y: { display: false }
+                    }
                 }
             });
         }
     }
 
-
-    // ==== Function to load All Grids ====
     function renderGrid(gridData) {
-
         if (!gridData || gridData.length === 0) return;
 
         const thead = document.getElementById("gridThead");
@@ -403,40 +894,37 @@
         thead.innerHTML = "";
         tbody.innerHTML = "";
 
-        /* ---------- THEAD (Dynamic) ---------- */
+        // THEAD
         const headerRow = document.createElement("tr");
-
         Object.keys(gridData[0]).forEach(key => {
             const th = document.createElement("th");
-            th.innerText = key.replace(/([A-Z])/g, ' $1').toLowerCase();
+            th.innerText = key.replace(/([A-Z])/g, ' $1').trim();
 
-            if (["price", "quantity", "total"].includes(key)) {
+            if (["price", "quantity", "total", "amount"].some(k => key.toLowerCase().includes(k))) {
                 th.classList.add("text-end");
             }
 
             headerRow.appendChild(th);
         });
-
         thead.appendChild(headerRow);
 
-        /* ---------- TBODY (Dynamic Rows) ---------- */
+        // TBODY
         gridData.forEach(row => {
             const tr = document.createElement("tr");
-
             Object.entries(row).forEach(([key, value]) => {
                 const td = document.createElement("td");
                 td.innerText = value;
 
-                if (["price", "quantity", "total"].includes(key)) {
+                if (["price", "quantity", "total", "amount"].some(k => key.toLowerCase().includes(k))) {
                     td.classList.add("text-end");
                 }
 
                 tr.appendChild(td);
             });
-
             tbody.appendChild(tr);
         });
     }
+
     function renderGrid2(gridData) {
         if (!gridData || gridData.length === 0) return;
 
@@ -446,56 +934,15 @@
         gridData.forEach(row => {
             const tr = document.createElement("tr");
 
-            // Pehla column (Name / dynamic)
             const td1 = document.createElement("td");
-            td1.innerText = Object.values(row)[0]; // pehla column
+            td1.innerText = Object.values(row)[0];
             tr.appendChild(td1);
 
-            // Doosra column (Value / dynamic)
             const td2 = document.createElement("td");
-            td2.innerText = Object.values(row)[1]; // doosra column
-            td2.classList.add("text-end");
+            td2.innerText = Object.values(row)[1];
             tr.appendChild(td2);
 
             tbody.appendChild(tr);
         });
     }
-
 </script>
-
-<style>
-    .custom-table-scroll {
-        max-height: 520px; /* ~8 rows ke liye scroll */
-        overflow-y: auto;
-    }
-
-    /* Sticky thead */
-    .custom-table-scroll thead th {
-        position: sticky;
-        top: 0;
-        z-index: 10;
-    }
-
-    .custom-table2-scroll {
-        max-height: 470px; /* 470px ke baad scroll */
-        overflow-y: auto;
-    }
-
-    @@keyframes rotateIcon {
-        from
-
-    {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-
-    }
-
-    .rotate {
-        animation: rotateIcon 1s linear infinite;
-    }
-
-</style>
