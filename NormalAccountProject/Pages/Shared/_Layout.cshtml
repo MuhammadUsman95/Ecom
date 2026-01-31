@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Title Page-->
-    <title>@ViewData["Title"]</title>
+    <title>@ViewData["Title"] - E-Commerce Portal</title>
 
     @await Html.PartialAsync("_CommonScripts")
 
@@ -27,6 +27,412 @@
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
 
+    <!-- Custom Modern Theme CSS -->
+    <style>
+        /* ========== Global Theme Overrides ========== */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --dark-bg: #1a1a2e;
+            --sidebar-bg: #2c2c3e;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+
+        /* ========== Sidebar Styling ========== */
+        .menu-sidebar {
+            background: var(--sidebar-bg);
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.1);
+            width: 260px;
+            position: fixed;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+            .menu-sidebar .logo {
+                background: var(--primary-gradient);
+                padding: 25px 20px;
+                text-align: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                position: relative;
+                overflow: hidden;
+            }
+
+                .menu-sidebar .logo::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 200%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+                    animation: shine 3s infinite;
+                }
+
+        keyframes shine {
+            0%
+
+        {
+            left: -100%;
+        }
+
+        100% {
+            left: 100%;
+        }
+
+        }
+
+        .menu-sidebar .logo a {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .menu-sidebar .logo img {
+            max-height: 45px;
+            filter: brightness(0) invert(1);
+        }
+
+        /* Sidebar Menu Items */
+        .navbar-sidebar .navbar__list {
+            padding: 20px 0;
+        }
+
+            .navbar-sidebar .navbar__list > li {
+                margin-bottom: 5px;
+            }
+
+                .navbar-sidebar .navbar__list > li > a {
+                    padding: 14px 25px;
+                    color: rgba(255, 255, 255, 0.8);
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    font-size: 15px;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                    border-left: 3px solid transparent;
+                    position: relative;
+                }
+
+                    .navbar-sidebar .navbar__list > li > a i {
+                        font-size: 18px;
+                        width: 24px;
+                        text-align: center;
+                    }
+
+                    .navbar-sidebar .navbar__list > li > a:hover {
+                        background: rgba(255, 255, 255, 0.05);
+                        color: white;
+                        border-left-color: #667eea;
+                        padding-left: 30px;
+                    }
+
+                .navbar-sidebar .navbar__list > li.active > a {
+                    background: rgba(102, 126, 234, 0.15);
+                    color: white;
+                    border-left-color: #667eea;
+                    font-weight: 600;
+                }
+
+        /* Submenu Styling */
+        .navbar-sidebar .navbar__sub-list {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px 0;
+        }
+
+            .navbar-sidebar .navbar__sub-list li a {
+                padding: 10px 25px 10px 60px;
+                color: rgba(255, 255, 255, 0.7);
+                display: block;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                position: relative;
+            }
+
+                .navbar-sidebar .navbar__sub-list li a::before {
+                    content: '•';
+                    position: absolute;
+                    left: 45px;
+                    color: rgba(255, 255, 255, 0.5);
+                }
+
+                .navbar-sidebar .navbar__sub-list li a:hover {
+                    color: white;
+                    padding-left: 65px;
+                    background: rgba(255, 255, 255, 0.05);
+                }
+
+        /* ========== Header Desktop Styling ========== */
+        .header-desktop {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-bottom: 1px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-wrap {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 12px 0;
+        }
+
+        /* Account Dropdown */
+        .account-wrap .account-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #e0e0e0;
+            background: white;
+        }
+
+            .account-wrap .account-item:hover {
+                background: #f8f9fa;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                transform: translateY(-1px);
+            }
+
+            .account-wrap .account-item .image {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 2px solid #667eea;
+            }
+
+                .account-wrap .account-item .image img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+            .account-wrap .account-item .content a {
+                color: #2c3e50;
+                font-weight: 600;
+                font-size: 14px;
+            }
+
+        /* Account Dropdown Menu */
+        .account-dropdown {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e0e0e0;
+            min-width: 260px;
+            margin-top: 10px;
+        }
+
+            .account-dropdown .info {
+                padding: 20px;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+                .account-dropdown .info .image {
+                    width: 60px;
+                    height: 60px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    border: 3px solid #667eea;
+                    margin-bottom: 12px;
+                }
+
+                    .account-dropdown .info .image img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                .account-dropdown .info .content h5 {
+                    margin: 0;
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #2c3e50;
+                }
+
+        .account-dropdown__footer a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            color: #e74c3c;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-radius: 0 0 12px 12px;
+        }
+
+            .account-dropdown__footer a:hover {
+                background: #ffebee;
+                color: #c62828;
+            }
+
+            .account-dropdown__footer a i {
+                font-size: 18px;
+            }
+
+        /* ========== Mobile Header ========== */
+        .header-mobile {
+            background: var(--sidebar-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-mobile__bar {
+            padding: 15px 0;
+        }
+
+        .header-mobile .logo {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+            .header-mobile .logo img {
+                max-height: 35px;
+                filter: brightness(0) invert(1);
+            }
+
+        .hamburger-inner,
+        .hamburger-inner::before,
+        .hamburger-inner::after {
+            background-color: white;
+        }
+
+        /* Mobile Navigation */
+        .navbar-mobile {
+            background: var(--sidebar-bg);
+        }
+
+        .navbar-mobile__list > li > a {
+            color: rgba(255, 255, 255, 0.9);
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+            .navbar-mobile__list > li > a:hover,
+            .navbar-mobile__list > li.active > a {
+                background: rgba(102, 126, 234, 0.15);
+                border-left-color: #667eea;
+                color: white;
+            }
+
+        .navbar-mobile-sub__list li a {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px 10px 50px;
+            font-size: 14px;
+        }
+
+            .navbar-mobile-sub__list li a:hover {
+                background: rgba(255, 255, 255, 0.05);
+                color: white;
+            }
+
+        /* ========== Page Container ========== */
+        .page-container {
+            
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        .page-container {
+    background: #e5e5e5;
+    padding-left: 260px;
+}
+        .main-content {
+            padding: 0;
+        }
+
+        /* ========== Scrollbar Styling ========== */
+        .menu-sidebar__content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .menu-sidebar__content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-sidebar__content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+            .menu-sidebar__content::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+        /* ========== Animations ========== */
+        @@keyframes fadeIn {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .page-container {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* ========== Responsive Adjustments ========== */
+        @@media (max-width: 991px) {
+            .page-container
+
+        {
+            margin-left: 0;
+        }
+
+        }
+
+        /* ========== Custom Section Padding ========== */
+        .section__content--p30 {
+            padding: 25px 30px;
+        }
+
+        /* ========== Brand Text Instead of Logo ========== */
+        .logo-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+            .logo-text i {
+                font-size: 26px;
+            }
+    </style>
 </head>
 
 <body>
@@ -36,8 +442,9 @@
             <div class="header-mobile__bar">
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
-                        <a class="logo" href="index.html">
-                            <img src="images/icon/logo.png" alt="CoolAdmin" />
+                        <a class="logo" href="/Home">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>AV_Softs</span>
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -61,7 +468,7 @@
                             </a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="/CustomerRegistration">Customer Registeration</a>
+                                    <a href="/CustomerRegistration">Customer Registration</a>
                                 </li>
                                 <li>
                                     <a href="/OrderManagement">Order Management</a>
@@ -76,8 +483,9 @@
         <!-- MENU SIDEBAR-->
         <aside class="menu-sidebar d-none d-lg-block">
             <div class="logo">
-                <a href="#">
-                    <img src="images/icon/logo.png" alt="Cool Admin" />
+                <a href="/Home" class="logo-text">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>AV_Softs</span>
                 </a>
             </div>
             <div class="menu-sidebar__content js-scrollbar1">
@@ -94,7 +502,7 @@
                             </a>
                             <ul class="list-unstyled navbar__sub-list js-sub-list">
                                 <li>
-                                    <a href="/CustomerRegistration">Customer Registeration</a>
+                                    <a href="/CustomerRegistration">Customer Registration</a>
                                 </li>
                                 <li>
                                     <a href="/OrderManagement">Order Management</a>
@@ -117,21 +525,21 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu">
                                         <div class="image">
-                                            <img src="images/icon/avatar-01.jpg" alt="Loading" />
+                                            <img src="images/icon/avatar-01.jpg" alt="User Avatar" />
                                         </div>
                                         <div class="content">
-                                            <a class="js-acc-btn">Loading</a>
+                                            <a class="js-acc-btn" id="userName">Loading...</a>
                                         </div>
                                         <div class="account-dropdown js-dropdown">
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="images/icon/avatar-01.jpg" alt="Loading" />
+                                                        <img src="images/icon/avatar-01.jpg" alt="User Avatar" />
                                                     </a>
                                                 </div>
                                                 <div class="content">
                                                     <h5 class="name">
-                                                        <a id="userName">Loading</a>
+                                                        <a id="userNameDropdown">Loading...</a>
                                                     </h5>
                                                 </div>
                                             </div>
@@ -154,8 +562,8 @@
                 @RenderBody()
             </div>
             <!-- END MAIN CONTENT-->
-            <!-- END PAGE CONTAINER-->
         </div>
+        <!-- END PAGE CONTAINER-->
 
     </div>
 
@@ -163,7 +571,7 @@
     <script src="js/vanilla-utils.js"></script>
     <!-- Bootstrap JS-->
     <script src="vendor/bootstrap-5.3.8.bundle.min.js"></script>
-    <!-- Vendor JS       -->
+    <!-- Vendor JS -->
     <script src="vendor/perfect-scrollbar/perfect-scrollbar-1.5.6.min.js"></script>
     <script src="vendor/chartjs/chart.umd.js-4.5.0.min.js"></script>
 
@@ -175,6 +583,56 @@
     <script src="js/modern-plugins.js"></script>
     <script src="js/Layout.js"></script>
 
+    <!-- Custom Layout Script -->
+    <script>
+        // Load user name from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem('userId') || 'Guest User';
+            const userNameElements = document.querySelectorAll('#userName, #userNameDropdown');
+            userNameElements.forEach(el => {
+                el.textContent = userId;
+            });
+
+            // Logout functionality
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.clear();
+                    window.location.href = '/Login';
+                });
+            }
+
+            // Set active menu item based on current page
+            const currentPath = window.location.pathname;
+            const menuLinks = document.querySelectorAll('.navbar__list a, .navbar-mobile__list a');
+
+            menuLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && currentPath.includes(href) && href !== '#') {
+                    // Remove active class from all items
+                    document.querySelectorAll('.navbar__list li, .navbar-mobile__list li').forEach(li => {
+                        li.classList.remove('active');
+                    });
+
+                    // Add active class to current item
+                    const parentLi = link.closest('li');
+                    if (parentLi) {
+                        parentLi.classList.add('active');
+
+                        // If submenu item, also activate parent
+                        const parentSubMenu = parentLi.closest('.navbar__sub-list, .navbar-mobile-sub__list');
+                        if (parentSubMenu) {
+                            const parentMenuItem = parentSubMenu.previousElementSibling;
+                            if (parentMenuItem && parentMenuItem.closest('li')) {
+                                parentMenuItem.closest('li').classList.add('active');
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 <!-- end document-->
