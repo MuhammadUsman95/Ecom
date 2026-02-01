@@ -1,15 +1,14 @@
-﻿@page "/CustomerRegistration"
-@model NormalAccountProject.Pages.CustomerRegistrationModel
+﻿@page
+@model NormalAccountProject.Pages.ProductModel
 @{
-    ViewData["Title"] = "Customer Registration";
+    ViewData["Title"] = "Product";
 }
-
 <div class="section__content section__content--p30">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="overview-wrap d-flex justify-content-between align-items-center">
-                    <h2 class="title-1">Customer Registration</h2>
+                    <h2 class="title-1">Produc</h2>
                     <div>
                         <button class="btn btn-info" id="gridViewToggleBtn">
                             <i class="fas fa-table me-2"></i>Grid View
@@ -34,25 +33,18 @@
                         <input style="display:none;" type="text" id="CustomerImageAttachmentOld">
 
                         <div class="col-md-6">
-                            <label for="Customer">Customer Name</label>
-                            <input type="text" id="Customer" class="form-control" placeholder="Enter Customer Name">
+                            <label for="Product">Product</label>
+                            <input type="text" id="Product" class="form-control" placeholder="Enter Product Name">
                         </div>
+
+
                         <div class="col-md-6">
-                            <label for="ContactNo">Contact Number</label>
-                            <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number" inputmode="numeric" autocomplete="off">
+                            <label for="ProductDescription">Product Description</label>
+                            <input type="text" id="ProductDescription" class="form-control" placeholder="Enter Product Description">
                         </div>
+
                     </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="TimeIn">Time In</label>
-                            <input type="time" id="TimeIn" class="form-control" placeholder="Enter Time In">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="TimeOut">Time Out</label>
-                            <input type="time" id="TimeOut" class="form-control" placeholder="Enter Time Out">
-                        </div>
-                    </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="DeliveryCharges">Delivery Charges</label>
@@ -67,9 +59,9 @@
                     <!-- Row 2: Type + Department -->
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="TypeId">Type</label>
-                            <select id="TypeId" class="form-control">
-                                <option value="">-- Select Type --</option>
+                            <label for="CategoryId">Category</label>
+                            <select id="CategoryId" class="form-control">
+                                <option value="">-- Select Category --</option>
                             </select>
                         </div>
                         <div class="col-md-6">
@@ -91,7 +83,7 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-12" style="display: grid;">
-                            <label>Customer Image (Max Size 500KB)*</label>
+                            <label>Product Image (Max Size 500KB)*</label>
                             <input id="CustomerImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png" required>
                         </div>
                     </div>

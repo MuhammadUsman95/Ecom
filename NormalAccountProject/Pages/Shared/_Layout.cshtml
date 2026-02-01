@@ -22,7 +22,7 @@
     <link href="css/aos.css" rel="stylesheet" media="all">
     <link href="vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
     <link href="css/swiper-bundle-11.2.10.min.css" rel="stylesheet" media="all">
-    <link href="vendor/perfect-scrollbar/perfect-scrollbar-1.5.6.css" rel="stylesheet" media="all">
+    <link href="vendor/perfect-scrollbar/perfect-scrollbar-1.5.6.min.css" rel="stylesheet" media="all">
 
     <!-- Main CSS-->
     <link href="css/theme.css" rel="stylesheet" media="all">
@@ -201,7 +201,6 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
-            border: 1px solid #e0e0e0;
             background: white;
         }
 
@@ -352,14 +351,15 @@
 
         /* ========== Page Container ========== */
         .page-container {
-            
             background: #f5f7fa;
             min-height: 100vh;
         }
+
         .page-container {
-    background: #e5e5e5;
-    padding-left: 260px;
-}
+            background: #e5e5e5;
+            padding-left: 260px;
+        }
+
         .main-content {
             padding: 0;
         }
@@ -384,18 +384,15 @@
 
         /* ========== Animations ========== */
         @@keyframes fadeIn {
-            from
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
 
-        {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .page-container {
@@ -404,12 +401,9 @@
 
         /* ========== Responsive Adjustments ========== */
         @@media (max-width: 991px) {
-            .page-container
-
-        {
-            margin-left: 0;
-        }
-
+            .page-container {
+                margin-left: 0;
+            }
         }
 
         /* ========== Custom Section Padding ========== */
@@ -457,23 +451,20 @@
             <nav class="navbar-mobile">
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
-                        <li class="active">
+                        <li>
                             <a href="/Home">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard
                             </a>
                         </li>
-                        <li class="has-sub">
-                            <a class="js-arrow">
-                                <i class="fas fa-table"></i>Forms
+                        <li>
+                            <a href="/CustomerRegistration">
+                                <i class="fas fa-user-plus"></i>Customer Registration
                             </a>
-                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                <li>
-                                    <a href="/CustomerRegistration">Customer Registration</a>
-                                </li>
-                                <li>
-                                    <a href="/OrderManagement">Order Management</a>
-                                </li>
-                            </ul>
+                        </li>
+                        <li>
+                            <a href="/OrderManagement">
+                                <i class="fas fa-clipboard-list"></i>Order Management
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -491,23 +482,25 @@
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="active">
+                        <li>
                             <a href="/Home">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard
                             </a>
                         </li>
-                        <li class="has-sub">
-                            <a class="js-arrow">
-                                <i class="fas fa-table"></i>Forms
+                        <li>
+                            <a href="/CustomerRegistration">
+                                <i class="fas fa-user-plus"></i>Customer Registration
                             </a>
-                            <ul class="list-unstyled navbar__sub-list js-sub-list">
-                                <li>
-                                    <a href="/CustomerRegistration">Customer Registration</a>
-                                </li>
-                                <li>
-                                    <a href="/OrderManagement">Order Management</a>
-                                </li>
-                            </ul>
+                        </li>
+                        <li>
+                            <a href="/OrderManagement">
+                                <i class="fas fa-clipboard-list"></i>Order Management
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Product">
+                                <i class="fas fa-clipboard-list"></i>Product
+                            </a>
                         </li>
                     </ul>
                 </nav>
@@ -604,33 +597,60 @@
             }
 
             // Set active menu item based on current page
-            const currentPath = window.location.pathname;
-            const menuLinks = document.querySelectorAll('.navbar__list a, .navbar-mobile__list a');
+            const currentPath = window.location.pathname.toLowerCase();
 
-            menuLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && currentPath.includes(href) && href !== '#') {
-                    // Remove active class from all items
-                    document.querySelectorAll('.navbar__list li, .navbar-mobile__list li').forEach(li => {
-                        li.classList.remove('active');
+            // Remove all active classes first
+            document.querySelectorAll('.navbar__list li, .navbar-mobile__list li').forEach(li => {
+                li.classList.remove('active');
+            });
+
+            // Define menu mapping
+            const menuMapping = {
+                '/home': 'Home',
+                '/customerregistration': 'CustomerRegistration',
+                '/ordermanagement': 'OrderManagement',
+                '/Product': 'Product'
+            };
+
+            // Find matching menu item
+            let matchFound = false;
+
+            // Check exact matches first
+            for (const [path, pageId] of Object.entries(menuMapping)) {
+                if (currentPath === path || currentPath.startsWith(path + '/')) {
+                    // Desktop menu
+                    const desktopLinks = document.querySelectorAll('.navbar__list a[href*="' + pageId + '"]');
+                    desktopLinks.forEach(link => {
+                        const parentLi = link.closest('li');
+                        if (parentLi) {
+                            parentLi.classList.add('active');
+                            matchFound = true;
+                        }
                     });
 
-                    // Add active class to current item
+                    // Mobile menu
+                    const mobileLinks = document.querySelectorAll('.navbar-mobile__list a[href*="' + pageId + '"]');
+                    mobileLinks.forEach(link => {
+                        const parentLi = link.closest('li');
+                        if (parentLi) {
+                            parentLi.classList.add('active');
+                            matchFound = true;
+                        }
+                    });
+                    break;
+                }
+            }
+
+            // If no match found, activate Home by default
+            if (!matchFound) {
+                const homeLinks = document.querySelectorAll('a[href="/Home"]');
+                homeLinks.forEach(link => {
                     const parentLi = link.closest('li');
                     if (parentLi) {
                         parentLi.classList.add('active');
-
-                        // If submenu item, also activate parent
-                        const parentSubMenu = parentLi.closest('.navbar__sub-list, .navbar-mobile-sub__list');
-                        if (parentSubMenu) {
-                            const parentMenuItem = parentSubMenu.previousElementSibling;
-                            if (parentMenuItem && parentMenuItem.closest('li')) {
-                                parentMenuItem.closest('li').classList.add('active');
-                            }
-                        }
                     }
-                }
-            });
+                });
+            }
         });
     </script>
 </body>

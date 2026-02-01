@@ -26,19 +26,27 @@ namespace NormalAccountProject.Controllers
         {
             try
             {
-
-                var parameters = new Dictionary<string, object>
+                // Load Type List
+                var typeParameters = new Dictionary<string, object>
                 {
                     { "@nType", 0 },
                     { "@nsType", 1 }
                 };
+                List<CustomerTypedd> nTypeList = await nGetDataAsync<CustomerTypedd>("Customer_SP", typeParameters);
 
-                List<CustomerTypedd> nTypeList = await nGetDataAsync<CustomerTypedd>("Customer_SP", parameters);
+                // Load Department List
+                var departmentParameters = new Dictionary<string, object>
+                {
+                    { "@nType", 0 },
+                    { "@nsType", 5 }
+                };
+                List<DepartmentDD> nDepartmentList = await nGetDataAsync<DepartmentDD>("Customer_SP", departmentParameters);
 
                 var response = new
                 {
                     statusId = 1,
-                    TypeList = nTypeList
+                    TypeList = nTypeList,
+                    DepartmentList = nDepartmentList
                 };
                 return Ok(response);
             }
@@ -68,15 +76,15 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@ContactNo", nCustomerTabObj.ContactNo);
                     cmd.Parameters.AddWithValue("@IsActive", nCustomerTabObj.IsActive ? "1" : "0");
                     cmd.Parameters.AddWithValue("@Type", nCustomerTabObj.Type);
+                    cmd.Parameters.AddWithValue("@DepartmentId", nCustomerTabObj.DepartmentId);
                     cmd.Parameters.AddWithValue("@UserId", nCustomerTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nCustomerTabObj.IsUpdate ? "1" : "0");
                     cmd.Parameters.AddWithValue("@ImagePath", nCustomerTabObj.CustomerImageAttachmentfilename);
-                    
+
                     cmd.Parameters.AddWithValue("@TimeIn", nCustomerTabObj.TimeIn);
                     cmd.Parameters.AddWithValue("@TimeOut", nCustomerTabObj.TimeOut);
                     cmd.Parameters.AddWithValue("@DeliveryCharges", nCustomerTabObj.DeliveryCharges);
                     cmd.Parameters.AddWithValue("@PerProductAmount", nCustomerTabObj.PerProductAmount);
-                    //cmd.Parameters.AddWithValue("@UserId", nCustomerTabObj.Userid);
 
                     if (nCustomerTabObj.IsUpdate)
                     {
@@ -91,16 +99,14 @@ namespace NormalAccountProject.Controllers
                                       $"@ContactNo='{nCustomerTabObj.ContactNo}', " +
                                       $"@IsActive='{(nCustomerTabObj.IsActive ? "1" : "0")}', " +
                                       $"@Type='{nCustomerTabObj.Type}', " +
+                                      $"@DepartmentId='{nCustomerTabObj.DepartmentId}', " +
                                       $"@UserId='{nCustomerTabObj.Userid}', " +
-                                      $"@IsUpdate='{(nCustomerTabObj.IsUpdate ? "1" : "0")}'" +
-                                      $"@ImagePath='{(nCustomerTabObj.CustomerImageAttachmentfilename)}'" +
-                                      $"@TimeIn='{(nCustomerTabObj.TimeIn)}'" +
-                                      $"@TimeOut='{(nCustomerTabObj.TimeOut)}'"+
-                                      $"@DeliveryCharges='{(nCustomerTabObj.DeliveryCharges)}'" +
-                                      $"@PerProductAmount='{(nCustomerTabObj.PerProductAmount)}'" 
-
-
-                                      ;
+                                      $"@IsUpdate='{(nCustomerTabObj.IsUpdate ? "1" : "0")}', " +
+                                      $"@ImagePath='{nCustomerTabObj.CustomerImageAttachmentfilename}', " +
+                                      $"@TimeIn='{nCustomerTabObj.TimeIn}', " +
+                                      $"@TimeOut='{nCustomerTabObj.TimeOut}', " +
+                                      $"@DeliveryCharges='{nCustomerTabObj.DeliveryCharges}', " +
+                                      $"@PerProductAmount='{nCustomerTabObj.PerProductAmount}'";
 
                     if (nCustomerTabObj.IsUpdate)
                     {
