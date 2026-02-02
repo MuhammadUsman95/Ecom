@@ -1,14 +1,15 @@
-﻿@page
-@model NormalAccountProject.Pages.ProductModel
+﻿@page "/Product"
+@model NormalAccountProject.Pages.CustomerRegistrationModel
 @{
-    ViewData["Title"] = "Product";
+    ViewData["Title"] = "Produc";
 }
+
 <div class="section__content section__content--p30">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
                 <div class="overview-wrap d-flex justify-content-between align-items-center">
-                    <h2 class="title-1">Produc</h2>
+                    <h2 class="title-1">Product</h2>
                     <div>
                         <button class="btn btn-info" id="gridViewToggleBtn">
                             <i class="fas fa-table me-2"></i>Grid View
@@ -29,47 +30,54 @@
                 <div class="col-md-6">
                     <!-- Row 1: Customer Name + Contact No -->
                     <div class="row mb-3">
-                        <input style="display:none;" type="text" id="CustomerId">
+                        <input style="display:none;" type="text" id="ProductId">
                         <input style="display:none;" type="text" id="CustomerImageAttachmentOld">
 
                         <div class="col-md-6">
                             <label for="Product">Product</label>
-                            <input type="text" id="Product" class="form-control" placeholder="Enter Product Name">
+                                <input type="text" id="Product" class="form-control" placeholder="Enter Product Name">
                         </div>
-
-
-                        <div class="col-md-6">
-                            <label for="ProductDescription">Product Description</label>
-                            <input type="text" id="ProductDescription" class="form-control" placeholder="Enter Product Description">
-                        </div>
-
+    @*                     <div class="col-md-6">
+                            <label for="ContactNo">Contact Number</label>
+                            <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number" inputmode="numeric" autocomplete="off">
+                        </div> *@
                     </div>
 
-                    <div class="row mb-3">
+@*                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="DeliveryCharges">Delivery Charges</label>
-                            <input type="text" id="DeliveryCharges" class="form-control" placeholder="Enter Delivery Charges">
+                            <label for="TimeIn">Time In</label>
+                            <input type="time" id="TimeIn" class="form-control" placeholder="Enter Time In">
                         </div>
                         <div class="col-md-6">
-                            <label for="PerProductAmount">Per Product Amount</label>
-                            <input type="text" id="PerProductAmount" class="form-control" placeholder="Enter Per Product Amount">
+                            <label for="TimeOut">Time Out</label>
+                            <input type="time" id="TimeOut" class="form-control" placeholder="Enter Time Out">
+                        </div>
+                    </div> *@
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="Prices">Prices</label>
+                            <input type="text" id="Prices" class="form-control" placeholder="Enter Prices">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="DiscountAmount">DiscountAmount</label>
+                            <input type="text" id="DiscountAmount" class="form-control" placeholder="Enter DiscountAmount">
                         </div>
                     </div>
 
                     <!-- Row 2: Type + Department -->
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="CategoryId">Category</label>
-                            <select id="CategoryId" class="form-control">
-                                <option value="">-- Select Category --</option>
+                            <label for="CustomerId">Customer</label>
+                            <select id="CustomerId" class="form-control">
+                                <option value="">-- Select Customer --</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
+@*                         <div class="col-md-6">
                             <label for="DepartmentId">Department</label>
                             <select id="DepartmentId" class="form-control">
                                 <option value="">-- Select Department --</option>
                             </select>
-                        </div>
+                        </div> *@
                     </div>
 
                     <!-- Row 3: IsActive -->
@@ -106,7 +114,7 @@
                 <div class="col-md-12">
                     <div id="CustomerGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
                     <div class="mt-3" style="text-align:center;">
-                        <p>Total Customers (<span id="TotalCustomersCount">100</span>)</p>
+                        <p>Total Product (<span id="TotalCustomersCount">100</span>)</p>
                     </div>
                 </div>
             </div>
@@ -138,7 +146,7 @@
         document.getElementById("gridViewContainer").style.display = "none";
         document.getElementById("formViewToggleBtn").style.display = "none";
         document.getElementById("gridViewToggleBtn").style.display = "inline-block";
-        document.getElementById("Customer").focus();
+        document.getElementById("Product").focus();
     }
 
     function showGridView() {
@@ -197,7 +205,7 @@
 
                 const originalNameParts = file.name.split(".");
                 const fileExtension = originalNameParts.pop();
-                const newFileName = `${customer}_${timestamp}_CustomerRegistrationLogo.${fileExtension}`;
+                const newFileName = `${Product}_${timestamp}_CustomerRegistrationLogo.${fileExtension}`;
 
                 // Convert ArrayBuffer to Base64
                 const arrayBuffer = e.target.result;
@@ -224,59 +232,59 @@
     // Customer Image
 
 
-    // Time In - Time Out Textbox
-    function setCurrentTime() {
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const currentTime = `${hours}:${minutes}`;
+    // // Time In - Time Out Textbox
+    // function setCurrentTime() {
+    //     const now = new Date();
+    //     const hours = String(now.getHours()).padStart(2, '0');
+    //     const minutes = String(now.getMinutes()).padStart(2, '0');
+    //     const currentTime = `${hours}:${minutes}`;
 
-        document.getElementById("TimeIn").value = currentTime;
-        document.getElementById("TimeOut").value = currentTime;
+    //     document.getElementById("TimeIn").value = currentTime;
+    //     document.getElementById("TimeOut").value = currentTime;
 
-        // initial store bhi karwa dete hain
-        storeTime("TimeIn");
-        storeTime("TimeOut");
-    }
-    function storeTime(inputId) {
-        const timeValue = document.getElementById(inputId).value;
+    //     // initial store bhi karwa dete hain
+    //     storeTime("TimeIn");
+    //     storeTime("TimeOut");
+    // }
+    // function storeTime(inputId) {
+    //     const timeValue = document.getElementById(inputId).value;
 
-        if (!timeValue) return;
+    //     if (!timeValue) return;
 
-        // format: 1900-01-01 HH:mm:00.000
-        const formattedTime = `1900-01-01 ${timeValue}:00.000`;
+    //     // format: 1900-01-01 HH:mm:00.000
+    //     const formattedTime = `1900-01-01 ${timeValue}:00.000`;
 
-        console.log(inputId + " => ", formattedTime);
+    //     console.log(inputId + " => ", formattedTime);
 
-        // future ke liye variables
-        if (inputId === "TimeIn") {
-            window.TimeInValue = formattedTime;
-        } else if (inputId === "TimeOut") {
-            window.TimeOutValue = formattedTime;
-        }
-    }
-    function getTimeFromTextbox(inputId) {
-        const timeValue = document.getElementById(inputId).value;
+    //     // future ke liye variables
+    //     if (inputId === "TimeIn") {
+    //         window.TimeInValue = formattedTime;
+    //     } else if (inputId === "TimeOut") {
+    //         window.TimeOutValue = formattedTime;
+    //     }
+    // }
+    // function getTimeFromTextbox(inputId) {
+    //     const timeValue = document.getElementById(inputId).value;
 
-        if (!timeValue) {
-            console.log(inputId + " is empty");
-            return;
-        }
+    //     if (!timeValue) {
+    //         console.log(inputId + " is empty");
+    //         return;
+    //     }
 
-        // Same backend-ready format
-        const formattedTime = `1900-01-01 ${timeValue}:00.000`;
+    //     // Same backend-ready format
+    //     const formattedTime = `1900-01-01 ${timeValue}:00.000`;
 
-        return formattedTime;
-    }
-    function setTimeToTextbox(inputId, dateTimeValue) {
-        if (!dateTimeValue) return;
+    //     return formattedTime;
+    // }
+    // function setTimeToTextbox(inputId, dateTimeValue) {
+    //     if (!dateTimeValue) return;
 
-        // "1900-01-01T18:30:00" → "18:30"
-        const time = dateTimeValue.split("T")[1].substring(0, 5);
+    //     // "1900-01-01T18:30:00" → "18:30"
+    //     const time = dateTimeValue.split("T")[1].substring(0, 5);
 
-        document.getElementById(inputId).value = time;
-    }
-    // Time In - Time Out Textbox
+    //     document.getElementById(inputId).value = time;
+    // }
+    // // Time In - Time Out Textbox
 
 
     // Form Load
@@ -284,14 +292,14 @@
         await LoadData();
         await LoadGridViewData();
         setCurrentTime();
-        document.getElementById("DeliveryCharges").value = "0";
-        document.getElementById("PerProductAmount").value = "0";
+        document.getElementById("Prices").value = "0";
+        document.getElementById("DiscountAmount").value = "0";
 
         const fields = [
-            document.getElementById("Customer"),
-            document.getElementById("ContactNo"),
-            document.getElementById("TypeId"),
-            document.getElementById("DepartmentId"),
+            document.getElementById("Product"),
+            // document.getElementById("ContactNo"),
+            document.getElementById("CustomerId"),
+            // document.getElementById("DepartmentId"),
             document.getElementById("IsActive")
         ];
         fields.forEach((field, index) => {
@@ -344,32 +352,32 @@
     }
     function TypeDropdown(typeList) {
 
-        const ddl = document.getElementById("TypeId");
+        const ddl = document.getElementById("CustomerId");
 
         // Clear existing options
         ddl.innerHTML = '<option value="">-- Select Type --</option>';
 
         typeList.forEach(item => {
             const option = document.createElement("option");
-            option.value = item.TypeId;   // backend value
-            option.text = item.Type;      // display text
+            option.value = item.CustomerId;   // backend value
+            option.text = item.Customer;      // display text
             ddl.appendChild(option);
         });
     }
-    function DepartmentDropdown(departmentList) {
+    // function DepartmentDropdown(departmentList) {
 
-        const ddl = document.getElementById("DepartmentId");
+    //     const ddl = document.getElementById("DepartmentId");
 
-        // Clear existing options
-        ddl.innerHTML = '<option value="">-- Select Department --</option>';
+    //     // Clear existing options
+    //     ddl.innerHTML = '<option value="">-- Select Department --</option>';
 
-        departmentList.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.DepartmentId;   // backend value
-            option.text = item.Department;      // display text
-            ddl.appendChild(option);
-        });
-    }
+    //     departmentList.forEach(item => {
+    //         const option = document.createElement("option");
+    //         option.value = item.DepartmentId;   // backend value
+    //         option.text = item.Department;      // display text
+    //         ddl.appendChild(option);
+    //     });
+    // }
     // Load Type & Department DropDown
 
 
@@ -417,7 +425,7 @@
         }
 
         // Determine columns dynamically (skip 'Userid', 'Type', 'CustomerId', 'DepartmentId')
-        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "CustomerId" && col !== "DepartmentId" && col !== "ImagePath" && col !== "TimeIn" && col !== "TimeOut");
+        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "ProductId" && col !== "ImagePath");
 
         // Table creation
         const table = document.createElement("table");
@@ -541,23 +549,23 @@
         IsUpdate = true;
         document.getElementById("saveBtn").textContent = "Update";
 
-        document.getElementById("CustomerId").value = rowData["CustomerId"] || "";
+        document.getElementById("ProductId").value = rowData["ProductId"] || "";
         document.getElementById("CustomerImageAttachmentOld").value = rowData["ImagePath"] || "";
-        document.getElementById("Customer").value = rowData["Customer Name"] || "";
-        document.getElementById("ContactNo").value = rowData["Contact #"] || "";
-        document.getElementById("TypeId").value = rowData["Type"] || "";
-        document.getElementById("DepartmentId").value = rowData["DepartmentId"] || "";
+        document.getElementById("Product").value = rowData["Product Name"] || "";
+        // document.getElementById("ContactNo").value = rowData["Contact #"] || "";
+        document.getElementById("CustomerId").value = rowData["Customer"] || "";
+        // document.getElementById("DepartmentId").value = rowData["DepartmentId"] || "";
         document.getElementById("IsActive").checked = rowData["Is Active"] || false;
-        document.getElementById("DeliveryCharges").value = rowData["Delivery Charges"] || "";
-        document.getElementById("PerProductAmount").value = rowData["PerProductAmount"] || "";
-        // ✅ TIME SET ON EDIT
-        setTimeToTextbox("TimeIn", rowData["TimeIn"]);
-        setTimeToTextbox("TimeOut", rowData["TimeOut"]);
+        document.getElementById("Prices").value = rowData["Prices"] || "";
+        document.getElementById("DiscountAmount").value = rowData["DiscountAmount"] || "";
+        // // ✅ TIME SET ON EDIT
+        // setTimeToTextbox("TimeIn", rowData["TimeIn"]);
+        // setTimeToTextbox("TimeOut", rowData["TimeOut"]);
 
-        console.log("Edit TimeIn:", rowData["TimeIn"]);
-        console.log("Edit TimeOut:", rowData["TimeOut"]);
+        // console.log("Edit TimeIn:", rowData["TimeIn"]);
+        // console.log("Edit TimeOut:", rowData["TimeOut"]);
 
-        document.getElementById("Customer").focus();
+        document.getElementById("Product").focus();
 
         ViewImage(rowData["ImagePath"] || "");
     }
@@ -568,7 +576,7 @@
         // 🔵 Step 1: Confirmation Swal
         const result = await Swal.fire({
             title: 'Are you sure?',
-            text: `Do you really want to delete this customer (${rowData["Customer Name"]}) ?`,
+            text: `Do you really want to delete this Product (${rowData["Product Name"]}) ?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes',
@@ -582,14 +590,14 @@
 
         const nInfoTab = {
             Userid: userId.toString(),
-            CustomerId: rowData["CustomerId"].toString(),
+            ProductId: rowData["ProductId"].toString(),
             CustomerImageAttachmentfilenameold: rowData["ImagePath"].toString()
         };
 
         // 🔵 Step 2: Loader Swal
         Swal.fire({
             title: 'Please wait',
-            text: 'Customer Delete is in process...',
+            text: 'Product Delete is in process...',
             allowOutsideClick: false,
             allowEscapeKey: false,
             returnFocus: false,      // Prevent focus issues
@@ -609,11 +617,11 @@
             if (response.statusId === 1) {
                 await Swal.fire({
                     icon: 'success',
-                    title: 'Customer Deleted',
-                    text: response.message || 'Customer deleted successfully',
+                    title: 'Product Deleted',
+                    text: response.message || 'Product deleted successfully',
                     returnFocus: false,
                     didClose: () => {
-                        document.getElementById("Customer").focus();
+                        document.getElementById("Product").focus();
                     }
                 });
 
@@ -622,8 +630,8 @@
             } else {
                 await Swal.fire({
                     icon: 'warning',
-                    title: 'Customer Delete',
-                    text: response.message || 'Customer delete failed',
+                    title: 'Product Delete',
+                    text: response.message || 'Product delete failed',
                     returnFocus: false
                 });
             }
@@ -634,7 +642,7 @@
             await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while deleting customer',
+                text: 'An error occurred while deleting Product',
                 returnFocus: false
             });
 
@@ -659,18 +667,18 @@
         await SaveData();
     });
     async function SaveData() {
-        const customerid = document.getElementById("CustomerId").value.trim();
-        const customer = document.getElementById("Customer").value.trim();
-        const contactNo = document.getElementById("ContactNo").value.trim();
-        const type = document.getElementById("TypeId").value.trim();
-        const department = document.getElementById("DepartmentId").value.trim();
+        const ProductId = document.getElementById("ProductId").value.trim();
+        const Product = document.getElementById("Product").value.trim();
+        // const contactNo = document.getElementById("ContactNo").value.trim();
+        const CustomerId = document.getElementById("CustomerId").value.trim();
+        // const department = document.getElementById("DepartmentId").value.trim();
         const isActive = document.getElementById("IsActive").checked;
         const customerImageAttachment = document.getElementById("CustomerImageAttachment").value.trim();
         const customerImageAttachmentold = document.getElementById("CustomerImageAttachmentOld").value.trim();
-        const nTimeIn = getTimeFromTextbox("TimeIn");
-        const nTimeOut = getTimeFromTextbox("TimeOut");
-        const nDeliveryCharges = document.getElementById("DeliveryCharges").value.trim();
-        const nPerProductAmount = document.getElementById("PerProductAmount").value.trim();
+        // const nTimeIn = getTimeFromTextbox("TimeIn");
+        // const nTimeOut = getTimeFromTextbox("TimeOut");
+        const nPrices = document.getElementById("Prices").value.trim();
+        const nDiscountAmount = document.getElementById("DiscountAmount").value.trim();
 
 
 
@@ -689,59 +697,59 @@
         }
 
         // 🔴 Contact No Validation
-        if (!contactNo) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Contact number is required',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("ContactNo").focus();
-                }
-            });
-            return;
-        }
+        // if (!contactNo) {
+        //     await Swal.fire({
+        //         icon: 'warning',
+        //         title: 'Validation',
+        //         text: 'Contact number is required',
+        //         returnFocus: false,
+        //         didClose: () => {
+        //             document.getElementById("ContactNo").focus();
+        //         }
+        //     });
+        //     return;
+        // }
 
-        if (contactNo.length < 10) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Contact number must be at least 10 digits',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("ContactNo").focus();
-                }
-            });
-            return;
-        }
+        // if (contactNo.length < 10) {
+        //     await Swal.fire({
+        //         icon: 'warning',
+        //         title: 'Validation',
+        //         text: 'Contact number must be at least 10 digits',
+        //         returnFocus: false,
+        //         didClose: () => {
+        //             document.getElementById("ContactNo").focus();
+        //         }
+        //     });
+        //     return;
+        // }
 
         // 🔴 Type Validation
-        if (!type) {
+        if (!CustomerId) {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Please select customer type',
+                text: 'Please select customer Customer',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("TypeId").focus();
+                    document.getElementById("CustomerId").focus();
                 }
             });
             return;
         }
 
         // 🔴 Department Validation
-        if (!department) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Please select department',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("DepartmentId").focus();
-                }
-            });
-            return;
-        }
+        // if (!department) {
+        //     await Swal.fire({
+        //         icon: 'warning',
+        //         title: 'Validation',
+        //         text: 'Please select department',
+        //         returnFocus: false,
+        //         didClose: () => {
+        //             document.getElementById("DepartmentId").focus();
+        //         }
+        //     });
+        //     return;
+        // }
 
         // 🔴 Customer Image Validation
         if (!customerImageAttachment) {
@@ -762,18 +770,18 @@
 
         const nInfoTab = {
             Userid: userId,
-            CustomerId:customerid,
-            Customer: customer,
-            ContactNo: contactNo,
+            ProductId:ProductId,
+            Product: Product,
+            // ContactNo: contactNo,
             Type: type,
-            DepartmentId: department,
+            // DepartmentId: department,
             CustomerImageAttachmentfilename: CustomerImageAttachmentfilename,
             CustomerImageAttachmentfilenameold: customerImageAttachmentold,
             CustomerImageAttachmentbase64: CustomerImageAttachmentbase64,
-            TimeIn: nTimeIn,
-            TimeOut: nTimeOut,
-            DeliveryCharges: nDeliveryCharges,
-            PerProductAmount: nPerProductAmount,
+            // TimeIn: nTimeIn,
+            // TimeOut: nTimeOut,
+            Prices: nPrices,
+            DiscountAmount: nDiscountAmount,
             IsActive: isActive,
             IsUpdate: IsUpdate,
         };
@@ -841,20 +849,20 @@
     });
     async function nClearForm()
     {
-        document.getElementById("CustomerId").value = "";
+        document.getElementById("ProductId").value = "";
         document.getElementById("CustomerImageAttachmentOld").value = "";
         document.getElementById("Customer").value = "";
-        document.getElementById("ContactNo").value = "";
-        document.getElementById("TypeId").value = "";
-        document.getElementById("DepartmentId").value = "";
+        // document.getElementById("ContactNo").value = "";
+        document.getElementById("CustomerId").value = "";
+        // document.getElementById("DepartmentId").value = "";
         document.getElementById("IsActive").checked = false;
         document.getElementById("CustomerImageAttachment").value = "";
         IsUpdate = false;
         document.getElementById("saveBtn").textContent = "Save";
         document.getElementById("Customer").focus();
         document.getElementById("ViewImageBtn").style.display = "none";
-        document.getElementById("DeliveryCharges").value = "0";
-        document.getElementById("PerProductAmount").value = "0";
+        document.getElementById("Prices").value = "0";
+        document.getElementById("DiscountAmount").value = "0";
         setCurrentTime();
         await LoadGridViewData();
     }
@@ -862,22 +870,22 @@
 
 
 
-    // Contact Input
-    const contactInput = document.getElementById("ContactNo");
-    contactInput.addEventListener("keydown", function (e) {
-        if (
-            e.ctrlKey || e.metaKey || // Ctrl / Cmd
-            (e.key >= '0' && e.key <= '9') ||
-            ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
-        ) {
-            return; // allow
-        }
-        e.preventDefault();
-    });
-    contactInput.addEventListener("input", function () {
-        this.value = this.value.replace(/\D/g, '');
-    });
-    // Contact Input
+    // // Contact Input
+    // const contactInput = document.getElementById("ContactNo");
+    // contactInput.addEventListener("keydown", function (e) {
+    //     if (
+    //         e.ctrlKey || e.metaKey || // Ctrl / Cmd
+    //         (e.key >= '0' && e.key <= '9') ||
+    //         ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
+    //     ) {
+    //         return; // allow
+    //     }
+    //     e.preventDefault();
+    // });
+    // contactInput.addEventListener("input", function () {
+    //     this.value = this.value.replace(/\D/g, '');
+    // });
+    // // Contact Input
 </script>
 
 <style>
