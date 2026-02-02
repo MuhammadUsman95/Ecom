@@ -1,12 +1,363 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using NormalAccountProject.Models;
+using System.Data;
+using System.Data.SqlClient;
+using System.Dynamic;
+using System.Net;
+using static NormalAccountProject.Controllers.DashboardController;
 
 namespace NormalAccountProject.Controllers
 {
-    public class ProductController : Controller
+    [Route("[controller]")]
+    [ApiController]
+    public class ProductRegistrationController : Controller
     {
-        public IActionResult Index()
+        private readonly IConfiguration _configuration;
+        private string connectionString;
+
+        public ProductRegistrationController(IConfiguration configuration)
         {
-            return View();
+            _configuration = configuration;
+            connectionString = _configuration.GetConnectionString("Connection1");
+        }
+
+        [HttpPost("nLoadProductRegistrationData")]
+        public async Task<IActionResult> nLoadProductRegistrationData([FromBody] nInfoTab nInfoTabObj)
+        {
+            try
+            {
+                // Load Category List
+                var categoryParameters = new Dictionary<string, object>
+                {
+                    { "@nCategoryId", 0 },
+                    { "@nsCategoryId", 1 }
+                };
+                List<CategoryDD> nCategoryList = await nGetDataAsync<CategoryDD>("Ecom_ProductSP", categoryParameters);
+
+                var response = new
+                {
+                    statusId = 1,
+                    CategoryList = nCategoryList
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    statusId = 0,
+                    message = "Error: " + ex.Message
+                });
+            }
+        }
+
+        [HttpPost("nSaveProductRegistrationData")]
+        public async Task<IActionResult> nSaveProductRegistrationData([FromBody] ProductTab nProductTabObj)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand("Ecom_ProductSP", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@nCategoryId", 0);
+                    cmd.Parameters.AddWithValue("@nsCategoryId", 0);
+                    cmd.Parameters.AddWithValue("@Product", nProductTabObj.Product);
+                    cmd.Parameters.AddWithValue("@IsActive", nProductTabObj.IsActive ? "1" : "0");
+                    cmd.Parameters.AddWithValue("@CategoryId", nProductTabObj.CategoryId);
+                    cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid);
+                    cmd.Parameters.AddWithValue("@IsUpdate", nProductTabObj.IsUpdate ? "1" : "0");
+                    cmd.Parameters.AddWithValue("@ProductImage", nProductTabObj.ProductImageAttachmentfilename);
+                    cmd.Parameters.AddWithValue("@Prices", nProductTabObj.Prices);
+                    cmd.Parameters.AddWithValue("@DiscountAmount", nProductTabObj.DiscountAmount);
+
+                    if (nProductTabObj.IsUpdate)
+                    {
+                        cmd.Parameters.AddWithValue("@ProductId", nProductTabObj.ProductId);
+                    }
+
+                    // 🔹 Build SQL exec line for debugging
+                    string sqlDebug = $"EXEC Ecom_ProductSP " +
+                                      $"@nCategoryId=0, " +
+                                      $"@nsCategoryId=0, " +
+                                      $"@Product='{nProductTabObj.Product}', " +
+                                      $"@IsActive='{(nProductTabObj.IsActive ? "1" : "0")}', " +
+                                      $"@CategoryId='{nProductTabObj.CategoryId}', " +
+                                      $"@UserId='{nProductTabObj.Userid}', " +
+                                      $"@IsUpdate='{(nProductTabObj.IsUpdate ? "1" : "0")}', " +
+                                      $"@ProductImage='{nProductTabObj.ProductImageAttachmentfilename}', " +
+                                      $"@Prices='{nProductTabObj.Prices}', " +
+                                      $"@DiscountAmount='{nProductTabObj.DiscountAmount}'";
+
+                    if (nProductTabObj.IsUpdate)
+                    {
+                        sqlDebug += $", @ProductId='{nProductTabObj.ProductId}'";
+                    }
+
+                    // 🔹 You can now log or store sqlDebug for SQL Server testing
+                    Console.WriteLine(sqlDebug);
+
+                    await con.OpenAsync();
+
+                    using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await dr.ReadAsync())
+                        {
+                            int statusId = Convert.ToInt32(dr["StatusId"]);
+
+                            if (statusId == 1)
+                            {
+                                if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
+                                {
+                                    string oldFileName = Path.GetFileName(nProductTabObj.ProductImageAttachmentfilenameold);
+                                    await DeleteFromFtp(oldFileName);
+                                    await UploadToFtp(nProductTabObj.ProductImageAttachmentfilename, nProductTabObj.ProductImageAttachmentbase64);
+                                }
+                            }
+
+                            return Ok(new
+                            {
+                                statusId = statusId,
+                                message = dr["MessageCaption"]?.ToString()
+                            });
+                        }
+                    }
+                }
+
+                return Ok(new
+                {
+                    statusId = 0,
+                    message = "No response from database"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    statusId = 0,
+                    message = "Error: " + ex.Message
+                });
+            }
+        }
+
+        [HttpPost("nLoadGridViewData")]
+        public async Task<IActionResult> nLoadGridViewData([FromBody] nInfoTab nInfoTabObj)
+        {
+            try
+            {
+
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@nCategoryId", 0 },
+                    { "@nsCategoryId", 2 }
+                };
+
+                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("Ecom_ProductSP", parameters);
+
+                var response = new
+                {
+                    statusId = 1,
+                    GridViewDataList = nDataList
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    statusId = 0,
+                    message = "Error: " + ex.Message
+                });
+            }
+        }
+
+        [HttpPost("nDeleteProductRegistrationData")]
+        public async Task<IActionResult> nDeleteProductRegistrationData([FromBody] ProductTab nProductTabObj)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand("Ecom_ProductSP", con))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@nCategoryId", 0);
+                    cmd.Parameters.AddWithValue("@nsCategoryId", 3);
+                    cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid);
+                    cmd.Parameters.AddWithValue("@ProductId", nProductTabObj.ProductId);
+
+                    await con.OpenAsync();
+
+                    using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
+                    {
+                        if (await dr.ReadAsync())
+                        {
+                            int statusId = Convert.ToInt32(dr["StatusId"]);
+                            if (statusId == 1)
+                            {
+                                if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
+                                {
+                                    string oldFileName = Path.GetFileName(nProductTabObj.ProductImageAttachmentfilenameold);
+                                    await DeleteFromFtp(oldFileName);
+                                }
+                            }
+
+                            return Ok(new
+                            {
+                                statusId = statusId,
+                                message = dr["MessageCaption"].ToString()
+                            });
+                        }
+                    }
+                }
+
+                return Ok(new
+                {
+                    statusId = 0,
+                    message = "No response from database"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new
+                {
+                    statusId = 0,
+                    message = "Error: " + ex.Message
+                });
+            }
+        }
+
+
+        async Task DeleteFromFtp(string attachmentFileName)
+        {
+            if (string.IsNullOrEmpty(attachmentFileName))
+                return;
+
+            string ftpPath = _configuration["Config:ftpPath"];
+            string ftpServer = _configuration["Config:ftpServer"];
+            string ftpUser = _configuration["Config:ftpUser"];
+            string ftpPassword = _configuration["Config:ftpPassword"];
+            string ftpPort = _configuration["Config:ftpPort"];
+
+            string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+                request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+                request.UseBinary = true;
+                request.UsePassive = true;
+                request.KeepAlive = false;
+
+                using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+                {
+                    // Optional: log response.StatusDescription
+                }
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (response != null && response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+                    // File does not exist → ignore
+                }
+                else
+                {
+                    throw; // rethrow other exceptions
+                }
+            }
+        }
+        async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
+        {
+            string ftpPath = _configuration["Config:ftpPath"];
+            string ftpServer = _configuration["Config:ftpServer"];
+            string ftpUser = _configuration["Config:ftpUser"];
+            string ftpPassword = _configuration["Config:ftpPassword"];
+            string ftpPort = _configuration["Config:ftpPort"];
+
+            // Remove base64 header if exists
+            if (attachmentBase64.Contains(","))
+                attachmentBase64 = attachmentBase64.Split(',')[1];
+
+            byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
+
+            string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+            request.Method = WebRequestMethods.Ftp.UploadFile;
+            request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+            request.UseBinary = true;
+            request.UsePassive = true;
+            request.KeepAlive = false;
+            request.ContentLength = fileBytes.Length;
+
+            using (Stream requestStream = await request.GetRequestStreamAsync())
+            {
+                await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+            }
+
+            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+            {
+                // Optional: log response.StatusDescription
+            }
+        }
+        public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
+        {
+            List<T> list = new();
+
+            using SqlConnection con = new SqlConnection(connectionString);
+            using SqlCommand cmd = new SqlCommand(storedProcedure, con);
+
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                    cmd.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+            }
+
+            await con.OpenAsync();
+
+            using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+
+            if (typeof(T) == typeof(ExpandoObject))
+            {
+                // ExpandoObject handling
+                while (await dr.ReadAsync())
+                {
+                    IDictionary<string, object> expando = new ExpandoObject();
+
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        expando[dr.GetName(i)] = dr.IsDBNull(i) ? null : dr.GetValue(i);
+                    }
+
+                    list.Add((T)expando);
+                }
+            }
+            else
+            {
+                // Normal class handling via reflection
+                var props = typeof(T).GetProperties();
+
+                while (await dr.ReadAsync())
+                {
+                    T obj = new T();
+
+                    foreach (var prop in props)
+                    {
+                        if (!dr.HasColumn(prop.Name) || dr[prop.Name] == DBNull.Value)
+                            continue;
+
+                        prop.SetValue(obj, Convert.ChangeType(dr[prop.Name], prop.PropertyType));
+                    }
+
+                    list.Add(obj);
+                }
+            }
+
+            return list;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿@page "/Product"
-@model NormalAccountProject.Pages.CustomerRegistrationModel
+@model NormalAccountProject.Pages.ProductModel
 @{
-    ViewData["Title"] = "Produc";
+    ViewData["Title"] = "Product Registration";
 }
 
 <div class="section__content section__content--p30">
@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="overview-wrap d-flex justify-content-between align-items-center">
-                    <h2 class="title-1">Product</h2>
+                    <h2 class="title-1">Product Registration</h2>
                     <div>
                         <button class="btn btn-info" id="gridViewToggleBtn">
                             <i class="fas fa-table me-2"></i>Grid View
@@ -28,59 +28,41 @@
         <div id="formViewContainer">
             <div class="row mt-3">
                 <div class="col-md-6">
-                    <!-- Row 1: Customer Name + Contact No -->
-                    <div class="row mb-3">
-                        <input style="display:none;" type="text" id="ProductId">
-                        <input style="display:none;" type="text" id="CustomerImageAttachmentOld">
+                    <!-- Hidden Fields -->
+                    <input style="display:none;" type="text" id="ProductId">
+                    <input style="display:none;" type="text" id="ProductImageAttachmentOld">
 
-                        <div class="col-md-6">
-                            <label for="Product">Product</label>
-                                <input type="text" id="Product" class="form-control" placeholder="Enter Product Name">
-                        </div>
-    @*                     <div class="col-md-6">
-                            <label for="ContactNo">Contact Number</label>
-                            <input type="text" id="ContactNo" class="form-control" placeholder="Enter Contact Number" inputmode="numeric" autocomplete="off">
-                        </div> *@
-                    </div>
-
-@*                     <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="TimeIn">Time In</label>
-                            <input type="time" id="TimeIn" class="form-control" placeholder="Enter Time In">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="TimeOut">Time Out</label>
-                            <input type="time" id="TimeOut" class="form-control" placeholder="Enter Time Out">
-                        </div>
-                    </div> *@
+                    <!-- Row 1: Product Name -->
                     <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="Prices">Prices</label>
-                            <input type="text" id="Prices" class="form-control" placeholder="Enter Prices">
-                        </div>
-                        <div class="col-md-6">
-                            <label for="DiscountAmount">DiscountAmount</label>
-                            <input type="text" id="DiscountAmount" class="form-control" placeholder="Enter DiscountAmount">
+                        <div class="col-md-12">
+                            <label for="Product">Product Name *</label>
+                            <input type="text" id="Product" class="form-control" placeholder="Enter Product Name">
                         </div>
                     </div>
 
-                    <!-- Row 2: Type + Department -->
+                    <!-- Row 2: Prices & Discount Amount -->
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="CustomerId">Customer</label>
-                            <select id="CustomerId" class="form-control">
-                                <option value="">-- Select Customer --</option>
+                            <label for="Prices">Prices *</label>
+                            <input type="text" id="Prices" class="form-control" placeholder="Enter Prices" inputmode="numeric">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="DiscountAmount">Discount Amount</label>
+                            <input type="text" id="DiscountAmount" class="form-control" placeholder="Enter Discount Amount" inputmode="numeric">
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Category -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="CategoryId">Category *</label>
+                            <select id="CategoryId" class="form-control">
+                                <option value="">-- Select Category --</option>
                             </select>
                         </div>
-@*                         <div class="col-md-6">
-                            <label for="DepartmentId">Department</label>
-                            <select id="DepartmentId" class="form-control">
-                                <option value="">-- Select Department --</option>
-                            </select>
-                        </div> *@
                     </div>
 
-                    <!-- Row 3: IsActive -->
+                    <!-- Row 4: IsActive -->
                     <div class="row mb-3">
                         <div class="col-md-6 d-flex align-items-center">
                             <div class="form-check">
@@ -89,14 +71,18 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Row 5: Product Image -->
                     <div class="row mb-3">
                         <div class="col-md-12" style="display: grid;">
                             <label>Product Image (Max Size 500KB)*</label>
-                            <input id="CustomerImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png" required>
+                            <input id="ProductImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png,.jpg" required>
                         </div>
                     </div>
+
+                    <!-- Row 6: Buttons -->
                     <div class="row mb-3">
-                        <div class="col-md-4 d-flex align-items-end">
+                        <div class="col-md-12 d-flex align-items-end">
                             <button class="btn btn-success me-2" id="saveBtn">Save</button>
                             <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
                             <a class="btn btn-warning" style="display:none;" id="ViewImageBtn" target="_blank">
@@ -112,9 +98,9 @@
         <div id="gridViewContainer" style="display:none;">
             <div class="row mt-5">
                 <div class="col-md-12">
-                    <div id="CustomerGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
+                    <div id="ProductGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
                     <div class="mt-3" style="text-align:center;">
-                        <p>Total Product (<span id="TotalCustomersCount">100</span>)</p>
+                        <p>Total Products (<span id="TotalProductsCount">0</span>)</p>
                     </div>
                 </div>
             </div>
@@ -162,8 +148,8 @@
     // VIEW TOGGLE FUNCTIONS
 
 
-    // Customer Image
-    document.getElementById("CustomerImageAttachment").addEventListener("change", async function () {
+    // Product Image Validation
+    document.getElementById("ProductImageAttachment").addEventListener("change", async function () {
         const file = this.files[0];
         if (!file) return;
 
@@ -178,437 +164,279 @@
                 text: 'Image size must be less than 500 KB.',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("CustomerImageAttachment").focus();
+                    document.getElementById("ProductImageAttachment").focus();
                 }
             });
         }
     });
-    function GetCustomerImageAttachmentFile() {
+
+    function GetProductImageAttachmentFile() {
         return new Promise((resolve, reject) => {
-            const fileInput = document.getElementById("CustomerImageAttachment");
+            const fileInput = document.getElementById("ProductImageAttachment");
             const file = fileInput.files[0];
 
             if (!file) {
-                resolve({ CustomerImageAttachmentfilename: "", CustomerImageAttachmentbase64: "" });
+                resolve({ ProductImageAttachmentfilename: "", ProductImageAttachmentbase64: "" });
                 return;
             }
 
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                const customer = document.getElementById("Customer").value.trim();
+                const product = document.getElementById("Product").value.trim();
 
                 // 🔹 Generate timestamp ddMMyyyyhhmm
                 const now = new Date();
                 const pad = (num) => num.toString().padStart(2, "0");
-                const timestamp = `${pad(now.getDate())}${pad(now.getMonth() + 1)}${now.getFullYear()}${pad(now.getHours())}${pad(now.getMinutes())}`;
 
-                const originalNameParts = file.name.split(".");
-                const fileExtension = originalNameParts.pop();
-                const newFileName = `${Product}_${timestamp}_CustomerRegistrationLogo.${fileExtension}`;
+                const dd = pad(now.getDate());
+                const MM = pad(now.getMonth() + 1);
+                const yyyy = now.getFullYear();
+                const hh = pad(now.getHours());
+                const mm = pad(now.getMinutes());
+                const timestamp = `${dd}${MM}${yyyy}${hh}${mm}`;
 
-                // Convert ArrayBuffer to Base64
-                const arrayBuffer = e.target.result;
-                const uint8Array = new Uint8Array(arrayBuffer);
-                let binaryString = "";
-                for (let i = 0; i < uint8Array.length; i++) {
-                    binaryString += String.fromCharCode(uint8Array[i]);
-                }
-                const base64String = btoa(binaryString);
+                // 🔹 Get file extension
+                const extension = file.name.split('.').pop();
+
+                // 🔹 Build filename: Product_timestamp.extension
+                const filename = `${product}_${timestamp}.${extension}`;
 
                 resolve({
-                    CustomerImageAttachmentfilename: newFileName,
-                    CustomerImageAttachmentbase64: base64String // ✅ only Base64 part
+                    ProductImageAttachmentfilename: filename,
+                    ProductImageAttachmentbase64: e.target.result
                 });
             };
 
             reader.onerror = function () {
-                resolve({ CustomerImageAttachmentfilename: "", CustomerImageAttachmentbase64: "" });
+                reject(new Error("File read error"));
             };
 
-            reader.readAsArrayBuffer(file); // ✅ this is important
+            reader.readAsDataURL(file);
         });
     }
-    // Customer Image
 
 
-    // // Time In - Time Out Textbox
-    // function setCurrentTime() {
-    //     const now = new Date();
-    //     const hours = String(now.getHours()).padStart(2, '0');
-    //     const minutes = String(now.getMinutes()).padStart(2, '0');
-    //     const currentTime = `${hours}:${minutes}`;
-
-    //     document.getElementById("TimeIn").value = currentTime;
-    //     document.getElementById("TimeOut").value = currentTime;
-
-    //     // initial store bhi karwa dete hain
-    //     storeTime("TimeIn");
-    //     storeTime("TimeOut");
-    // }
-    // function storeTime(inputId) {
-    //     const timeValue = document.getElementById(inputId).value;
-
-    //     if (!timeValue) return;
-
-    //     // format: 1900-01-01 HH:mm:00.000
-    //     const formattedTime = `1900-01-01 ${timeValue}:00.000`;
-
-    //     console.log(inputId + " => ", formattedTime);
-
-    //     // future ke liye variables
-    //     if (inputId === "TimeIn") {
-    //         window.TimeInValue = formattedTime;
-    //     } else if (inputId === "TimeOut") {
-    //         window.TimeOutValue = formattedTime;
-    //     }
-    // }
-    // function getTimeFromTextbox(inputId) {
-    //     const timeValue = document.getElementById(inputId).value;
-
-    //     if (!timeValue) {
-    //         console.log(inputId + " is empty");
-    //         return;
-    //     }
-
-    //     // Same backend-ready format
-    //     const formattedTime = `1900-01-01 ${timeValue}:00.000`;
-
-    //     return formattedTime;
-    // }
-    // function setTimeToTextbox(inputId, dateTimeValue) {
-    //     if (!dateTimeValue) return;
-
-    //     // "1900-01-01T18:30:00" → "18:30"
-    //     const time = dateTimeValue.split("T")[1].substring(0, 5);
-
-    //     document.getElementById(inputId).value = time;
-    // }
-    // // Time In - Time Out Textbox
-
-
-    // Form Load
-    document.addEventListener("DOMContentLoaded", async function () {
-        await LoadData();
+    // PAGE LOAD
+    window.addEventListener("load", async function () {
+        await LoadProductRegistrationData();
         await LoadGridViewData();
-        setCurrentTime();
-        document.getElementById("Prices").value = "0";
-        document.getElementById("DiscountAmount").value = "0";
-
-        const fields = [
-            document.getElementById("Product"),
-            // document.getElementById("ContactNo"),
-            document.getElementById("CustomerId"),
-            // document.getElementById("DepartmentId"),
-            document.getElementById("IsActive")
-        ];
-        fields.forEach((field, index) => {
-            field.addEventListener("keydown", function (e) {
-                if (e.key === "Enter") {
-                    e.preventDefault();
-
-                    if (index < fields.length - 1) {
-                        fields[index + 1].focus();
-                    } else {
-                        // Last field → trigger save
-                        document.getElementById("saveBtn").click();
-                    }
-                }
-            });
-        });
-        document.getElementById("Customer").focus();
     });
-    // Form Load
+    // PAGE LOAD
 
 
-
-    // Load Type & Department DropDown
-    async function LoadData() {
-        const nInfoTab = { Userid: userId };
-
-        return new Promise((resolve, reject) => {
-            jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadCustomerRegistrationData", "CustomerRegistration")',
-                data: JSON.stringify(nInfoTab),
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.statusId === 1) {
-
-                        TypeDropdown(response.TypeList);
-                        DepartmentDropdown(response.DepartmentList);
-                        resolve();
-                    } else {
-                        toastr.warning("No data found for CustomerRegistration.");
-                        reject();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error LoadData details: ", xhr, status, error);
-                    reject();
-                }
-            });
-        });
-    }
-    function TypeDropdown(typeList) {
-
-        const ddl = document.getElementById("CustomerId");
-
-        // Clear existing options
-        ddl.innerHTML = '<option value="">-- Select Type --</option>';
-
-        typeList.forEach(item => {
-            const option = document.createElement("option");
-            option.value = item.CustomerId;   // backend value
-            option.text = item.Customer;      // display text
-            ddl.appendChild(option);
-        });
-    }
-    // function DepartmentDropdown(departmentList) {
-
-    //     const ddl = document.getElementById("DepartmentId");
-
-    //     // Clear existing options
-    //     ddl.innerHTML = '<option value="">-- Select Department --</option>';
-
-    //     departmentList.forEach(item => {
-    //         const option = document.createElement("option");
-    //         option.value = item.DepartmentId;   // backend value
-    //         option.text = item.Department;      // display text
-    //         ddl.appendChild(option);
-    //     });
-    // }
-    // Load Type & Department DropDown
-
-
-
-    // Grid View
-    async function LoadGridViewData() {
-        const nInfoTab = { Userid: userId };
-
-        return new Promise((resolve, reject) => {
-            jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadGridViewData", "CustomerRegistration")',
-                data: JSON.stringify(nInfoTab),
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.statusId === 1) {
-
-                        console.log(response.GridViewDataList);
-                        GridViewDataList = response.GridViewDataList;
-                        // Render Grid
-                        renderCustomerGrid(GridViewDataList);
-                        resolve();
-                    } else {
-                        toastr.warning("No data found for CustomerRegistration.");
-                        reject();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error LoadData details: ", xhr, status, error);
-                    reject();
-                }
-            });
-        });
-    }
-    function renderCustomerGrid(gridData) {
-        const container = document.getElementById("CustomerGridContainer");
-
-        // Clear previous grid
-        container.innerHTML = "";
-
-        if (!gridData || gridData.length === 0) {
-            container.innerHTML = '<p>No records found.</p>';
-            document.getElementById("TotalCustomersCount").textContent = "0";
-            return;
-        }
-
-        // Determine columns dynamically (skip 'Userid', 'Type', 'CustomerId', 'DepartmentId')
-        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "ProductId" && col !== "ImagePath");
-
-        // Table creation
-        const table = document.createElement("table");
-        table.className = "table table-bordered table-striped table-sm mb-0";
-
-        // Table Header
-        const thead = document.createElement("thead");
-        thead.style.position = "sticky";
-        thead.style.top = "0";
-        thead.style.backgroundColor = "#fff";
-        thead.style.zIndex = "10";
-
-        // Header Row
-        const headerRow = document.createElement("tr");
-
-        // Actions column
-        const actionTh = document.createElement("th");
-        actionTh.textContent = "";
-        headerRow.appendChild(actionTh);
-
-        columns.forEach(col => {
-            const th = document.createElement("th");
-            th.textContent = col;
-            headerRow.appendChild(th);
-        });
-        thead.appendChild(headerRow);
-
-        // Filter Row
-        const filterRow = document.createElement("tr");
-        const emptyTh = document.createElement("th");
-        filterRow.appendChild(emptyTh);
-
-        columns.forEach(col => {
-            const th = document.createElement("th");
-            const input = document.createElement("input");
-            input.type = "text";
-            input.placeholder = `Filter ${col}`;
-            input.className = "form-control form-control-sm";
-            input.addEventListener("input", function () {
-                filterTable(this, col);
-            });
-            th.appendChild(input);
-            filterRow.appendChild(th);
-        });
-        thead.appendChild(filterRow);
-
-        table.appendChild(thead);
-
-        // Table Body
-        const tbody = document.createElement("tbody");
-
-        gridData.forEach(row => {
-            const tr = document.createElement("tr");
-
-            // Actions column
-            const actionTd = document.createElement("td");
-
-            const editBtn = document.createElement("button");
-            editBtn.className = "btn btn-sm btn-primary me-1";
-            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-            editBtn.style.padding = "3px";
-            editBtn.addEventListener("click", () => {
-                onEditRow(row);
-                showFormView();
-            });
-            actionTd.appendChild(editBtn);
-
-            const deleteBtn = document.createElement("button");
-            deleteBtn.className = "btn btn-sm btn-danger";
-            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-            deleteBtn.style.padding = "3px";
-            deleteBtn.addEventListener("click", () => onDeleteRow(row));
-            actionTd.appendChild(deleteBtn);
-
-            tr.appendChild(actionTd);
-
-            // Other columns
-            columns.forEach(col => {
-                const td = document.createElement("td");
-                if (col === "Is Active") {
-                    td.innerHTML = row[col] ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">In-Active</span>';
-                } else {
-                    td.textContent = row[col];
-                }
-                tr.appendChild(td);
-            });
-
-            tbody.appendChild(tr);
-        });
-
-        table.appendChild(tbody);
-        container.appendChild(table);
-
-        // 🔹 Initial total customers count
-        document.getElementById("TotalCustomersCount").textContent = tbody.rows.length;
-    }
-    function filterTable(input, column) {
-        const table = input.closest("table");
-        const tbody = table.querySelector("tbody");
-        const rows = Array.from(tbody.rows);
-        const filterValue = input.value.toLowerCase();
-
-        const colIndex = Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th => th.textContent === column);
-
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            const cellText = row.cells[colIndex].textContent.toLowerCase();
-            if (cellText.includes(filterValue)) {
-                row.style.display = "";
-                visibleCount++;
-            } else {
-                row.style.display = "none";
-            }
-        });
-
-        // 🔹 Update total customers count based on visible rows
-        document.getElementById("TotalCustomersCount").textContent = visibleCount;
-    }
-    function onEditRow(rowData) {
-        IsUpdate = true;
-        document.getElementById("saveBtn").textContent = "Update";
-
-        document.getElementById("ProductId").value = rowData["ProductId"] || "";
-        document.getElementById("CustomerImageAttachmentOld").value = rowData["ImagePath"] || "";
-        document.getElementById("Product").value = rowData["Product Name"] || "";
-        // document.getElementById("ContactNo").value = rowData["Contact #"] || "";
-        document.getElementById("CustomerId").value = rowData["Customer"] || "";
-        // document.getElementById("DepartmentId").value = rowData["DepartmentId"] || "";
-        document.getElementById("IsActive").checked = rowData["Is Active"] || false;
-        document.getElementById("Prices").value = rowData["Prices"] || "";
-        document.getElementById("DiscountAmount").value = rowData["DiscountAmount"] || "";
-        // // ✅ TIME SET ON EDIT
-        // setTimeToTextbox("TimeIn", rowData["TimeIn"]);
-        // setTimeToTextbox("TimeOut", rowData["TimeOut"]);
-
-        // console.log("Edit TimeIn:", rowData["TimeIn"]);
-        // console.log("Edit TimeOut:", rowData["TimeOut"]);
-
-        document.getElementById("Product").focus();
-
-        ViewImage(rowData["ImagePath"] || "");
-    }
-
-    async function onDeleteRow(rowData) {
-        console.log("Delete clicked", rowData);
-
-        // 🔵 Step 1: Confirmation Swal
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: `Do you really want to delete this Product (${rowData["Product Name"]}) ?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        });
-
-        if (!result.isConfirmed) {
-            // User clicked "No", exit function
-            return;
-        }
-
+    // Load Product Registration Data (Category Dropdown)
+    async function LoadProductRegistrationData() {
         const nInfoTab = {
-            Userid: userId.toString(),
-            ProductId: rowData["ProductId"].toString(),
-            CustomerImageAttachmentfilenameold: rowData["ImagePath"].toString()
+            Userid: userId,
         };
 
-        // 🔵 Step 2: Loader Swal
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadProductRegistrationData", "ProductRegistration")',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            if (response.statusId === 1) {
+                // ✅ Populate Category Dropdown
+                const categorySelect = document.getElementById("CategoryId");
+                categorySelect.innerHTML = '<option value="">-- Select Category --</option>';
+                response.CategoryList.forEach(item => {
+                    categorySelect.innerHTML += `<option value="${item.CategoryIdId}">${item.CategoryId}</option>`;
+                });
+
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Product Registration',
+                    text: response.message || 'Failed to load data'
+                });
+            }
+
+        } catch (xhr) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while loading data'
+            });
+            console.error("LoadProductRegistrationData Error:", xhr);
+        }
+    }
+    // Load Product Registration Data
+
+
+    // Load Grid View Data
+    async function LoadGridViewData() {
+        const nInfoTab = {
+            Userid: userId,
+        };
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadGridViewData", "ProductRegistration")',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            if (response.statusId === 1) {
+                GridViewDataList = response.gridViewDataList || [];
+
+                // ✅ Update Total Count
+                document.getElementById("TotalProductsCount").textContent = GridViewDataList.length;
+
+                // ✅ Render Grid
+                RenderGridView();
+
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Grid View',
+                    text: response.message || 'Failed to load grid data'
+                });
+            }
+
+        } catch (xhr) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while loading grid view'
+            });
+            console.error("LoadGridViewData Error:", xhr);
+        }
+    }
+    // Load Grid View Data
+
+
+    // Render Grid View
+    function RenderGridView() {
+        const container = document.getElementById("ProductGridContainer");
+
+        if (GridViewDataList.length === 0) {
+            container.innerHTML = `<p style="text-align:center; margin-top:20px;">No products available</p>`;
+            return;
+        }
+
+        let tableHTML = `
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Product Code</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Prices</th>
+                        <th>Discount Amount</th>
+                        <th>Is Active</th>
+                        <th>Product Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        GridViewDataList.forEach(item => {
+            tableHTML += `
+                <tr>
+                    <td>${item.ProductCode || ''}</td>
+                    <td>${item['Product Name'] || ''}</td>
+                    <td>${item['CategoryId Name'] || ''}</td>
+                    <td>${item.Prices || '0'}</td>
+                    <td>${item['Discount Amount'] || '0'}</td>
+                    <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
+                    <td>
+                        ${item.ProductImage ? `<a href="${item.ProductImage}" target="_blank">View Image</a>` : 'No Image'}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="EditProduct(${item.ProductCode})">Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="DeleteProduct(${item.ProductCode})">Delete</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+
+        container.innerHTML = tableHTML;
+    }
+    // Render Grid View
+
+
+    // Edit Product
+    function EditProduct(productId) {
+        const product = GridViewDataList.find(c => c.ProductCode === productId);
+        if (!product) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Product not found'
+            });
+            return;
+        }
+
+        // ✅ Populate Form
+        document.getElementById("ProductId").value = product.ProductCode;
+        document.getElementById("Product").value = product['Product Name'] || '';
+        document.getElementById("CategoryId").value = product.CategoryId || '';
+        document.getElementById("Prices").value = product.Prices || '0';
+        document.getElementById("DiscountAmount").value = product['Discount Amount'] || '0';
+        document.getElementById("IsActive").checked = product['Is Active'] === true || product['Is Active'] === 1;
+
+        // ✅ Product Image
+        if (product.ProductImage) {
+            document.getElementById("ProductImageAttachmentOld").value = product.ProductImage;
+            document.getElementById("ViewImageBtn").href = product.ProductImage;
+            document.getElementById("ViewImageBtn").style.display = "inline-block";
+        }
+
+        // ✅ Switch to Form View
+        IsUpdate = true;
+        document.getElementById("saveBtn").textContent = "Update";
+        showFormView();
+    }
+    // Edit Product
+
+
+    // Delete Product
+    async function DeleteProduct(productId) {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        });
+
+        if (!result.isConfirmed) return;
+
+        const product = GridViewDataList.find(c => c.ProductCode === productId);
+
+        const nProductTab = {
+            Userid: userId,
+            ProductId: productId,
+            ProductImageAttachmentfilenameold: product?.ProductImage || ""
+        };
+
+        // 🔵 Loader
         Swal.fire({
             title: 'Please wait',
-            text: 'Product Delete is in process...',
+            text: 'Deleting product...',
             allowOutsideClick: false,
             allowEscapeKey: false,
-            returnFocus: false,      // Prevent focus issues
             didOpen: () => Swal.showLoading()
         });
 
         try {
             const response = await jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nDeleteCustomerRegistrationData", "CustomerRegistration")',
-                data: JSON.stringify(nInfoTab),
+                url: '@Url.Action("nDeleteProductRegistrationData", "ProductRegistration")',
+                data: JSON.stringify(nProductTab),
                 contentType: 'application/json'
             });
 
@@ -618,21 +446,15 @@
                 await Swal.fire({
                     icon: 'success',
                     title: 'Product Deleted',
-                    text: response.message || 'Product deleted successfully',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("Product").focus();
-                    }
+                    text: response.message || 'Product deleted successfully'
                 });
 
-                // ✅ Clear Form
-                nClearForm();
+                await LoadGridViewData();
             } else {
                 await Swal.fire({
                     icon: 'warning',
-                    title: 'Product Delete',
-                    text: response.message || 'Product delete failed',
-                    returnFocus: false
+                    title: 'Delete Failed',
+                    text: response.message || 'Failed to delete product'
                 });
             }
 
@@ -642,146 +464,95 @@
             await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while deleting Product',
-                returnFocus: false
+                text: 'An error occurred while deleting product'
             });
 
-            console.error("Delete Error:", xhr);
+            console.error("DeleteProduct Error:", xhr);
         }
     }
-    function ViewImage(Link)
-    {
-        const viewBtn = document.getElementById("ViewImageBtn");
-        viewBtn.style.display = "";
-        viewBtn.href = Link;
-        viewBtn.target = "_blank";
-    }
-    // Grid View
-
+    // Delete Product
 
 
     // Save Button click
     document.getElementById("saveBtn").addEventListener("click", async function () {
-        console.log(getTimeFromTextbox("TimeIn"));
-        console.log(getTimeFromTextbox("TimeOut"));
-        await SaveData();
-    });
-    async function SaveData() {
+        // 🔴 Get Form Values
         const ProductId = document.getElementById("ProductId").value.trim();
         const Product = document.getElementById("Product").value.trim();
-        // const contactNo = document.getElementById("ContactNo").value.trim();
-        const CustomerId = document.getElementById("CustomerId").value.trim();
-        // const department = document.getElementById("DepartmentId").value.trim();
+        const CategoryId = document.getElementById("CategoryId").value.trim();
+        const Prices = document.getElementById("Prices").value.trim();
+        const DiscountAmount = document.getElementById("DiscountAmount").value.trim();
         const isActive = document.getElementById("IsActive").checked;
-        const customerImageAttachment = document.getElementById("CustomerImageAttachment").value.trim();
-        const customerImageAttachmentold = document.getElementById("CustomerImageAttachmentOld").value.trim();
-        // const nTimeIn = getTimeFromTextbox("TimeIn");
-        // const nTimeOut = getTimeFromTextbox("TimeOut");
-        const nPrices = document.getElementById("Prices").value.trim();
-        const nDiscountAmount = document.getElementById("DiscountAmount").value.trim();
+        const productImageAttachment = document.getElementById("ProductImageAttachment").files.length > 0;
+        const productImageAttachmentold = document.getElementById("ProductImageAttachmentOld").value.trim();
 
-
-
-        // 🔴 Customer Name Validation
-        if (!customer) {
+        // 🔴 Product Name Validation
+        if (!Product) {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Customer name is required',
+                text: 'Product name is required',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("Customer").focus();
+                    document.getElementById("Product").focus();
                 }
             });
             return;
         }
 
-        // 🔴 Contact No Validation
-        // if (!contactNo) {
-        //     await Swal.fire({
-        //         icon: 'warning',
-        //         title: 'Validation',
-        //         text: 'Contact number is required',
-        //         returnFocus: false,
-        //         didClose: () => {
-        //             document.getElementById("ContactNo").focus();
-        //         }
-        //     });
-        //     return;
-        // }
-
-        // if (contactNo.length < 10) {
-        //     await Swal.fire({
-        //         icon: 'warning',
-        //         title: 'Validation',
-        //         text: 'Contact number must be at least 10 digits',
-        //         returnFocus: false,
-        //         didClose: () => {
-        //             document.getElementById("ContactNo").focus();
-        //         }
-        //     });
-        //     return;
-        // }
-
-        // 🔴 Type Validation
-        if (!CustomerId) {
+        // 🔴 Category Validation
+        if (!CategoryId) {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Please select customer Customer',
+                text: 'Please select category',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("CustomerId").focus();
+                    document.getElementById("CategoryId").focus();
                 }
             });
             return;
         }
 
-        // 🔴 Department Validation
-        // if (!department) {
-        //     await Swal.fire({
-        //         icon: 'warning',
-        //         title: 'Validation',
-        //         text: 'Please select department',
-        //         returnFocus: false,
-        //         didClose: () => {
-        //             document.getElementById("DepartmentId").focus();
-        //         }
-        //     });
-        //     return;
-        // }
-
-        // 🔴 Customer Image Validation
-        if (!customerImageAttachment) {
+        // 🔴 Prices Validation
+        if (!Prices || parseFloat(Prices) <= 0) {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Please select customer image',
+                text: 'Please enter valid price',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("CustomerImageAttachment").focus();
+                    document.getElementById("Prices").focus();
                 }
             });
             return;
         }
 
-        const { CustomerImageAttachmentfilename, CustomerImageAttachmentbase64 } = await GetCustomerImageAttachmentFile();
+        // 🔴 Product Image Validation (only for new products)
+        if (!IsUpdate && !productImageAttachment) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please select product image',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("ProductImageAttachment").focus();
+                }
+            });
+            return;
+        }
 
+        const { ProductImageAttachmentfilename, ProductImageAttachmentbase64 } = await GetProductImageAttachmentFile();
 
-        const nInfoTab = {
+        const nProductTab = {
             Userid: userId,
-            ProductId:ProductId,
+            ProductId: ProductId,
             Product: Product,
-            // ContactNo: contactNo,
-            Type: type,
-            // DepartmentId: department,
-            CustomerImageAttachmentfilename: CustomerImageAttachmentfilename,
-            CustomerImageAttachmentfilenameold: customerImageAttachmentold,
-            CustomerImageAttachmentbase64: CustomerImageAttachmentbase64,
-            // TimeIn: nTimeIn,
-            // TimeOut: nTimeOut,
-            Prices: nPrices,
-            DiscountAmount: nDiscountAmount,
+            CategoryId: CategoryId,
+            ProductImageAttachmentfilename: ProductImageAttachmentfilename,
+            ProductImageAttachmentfilenameold: productImageAttachmentold,
+            ProductImageAttachmentbase64: ProductImageAttachmentbase64,
+            Prices: Prices,
+            DiscountAmount: DiscountAmount,
             IsActive: isActive,
             IsUpdate: IsUpdate,
         };
@@ -789,7 +560,7 @@
         // 🔵 Loader
         Swal.fire({
             title: 'Please wait',
-            text: 'Customer creation is in process...',
+            text: 'Product registration is in process...',
             allowOutsideClick: false,
             allowEscapeKey: false,
             didOpen: () => Swal.showLoading()
@@ -798,8 +569,8 @@
         try {
             const response = await jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nSaveCustomerRegistrationData", "CustomerRegistration")',
-                data: JSON.stringify(nInfoTab),
+                url: '@Url.Action("nSaveProductRegistrationData", "ProductRegistration")',
+                data: JSON.stringify(nProductTab),
                 contentType: 'application/json'
             });
 
@@ -808,11 +579,11 @@
             if (response.statusId === 1) {
                 await Swal.fire({
                     icon: 'success',
-                    title: 'Customer Registration',
-                    text: response.message || 'Customer saved successfully',
+                    title: 'Product Registration',
+                    text: response.message || 'Product saved successfully',
                     returnFocus: false,
                     didClose: () => {
-                        document.getElementById("Customer").focus();
+                        document.getElementById("Product").focus();
                     }
                 });
 
@@ -822,8 +593,8 @@
             } else {
                 await Swal.fire({
                     icon: 'warning',
-                    title: 'Customer Registration',
-                    text: response.message || 'Customer save failed'
+                    title: 'Product Registration',
+                    text: response.message || 'Product save failed'
                 });
             }
 
@@ -833,59 +604,60 @@
             await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while saving customer'
+                text: 'An error occurred while saving product'
             });
 
             console.error("SaveData Error:", xhr);
         }
-    }
+    });
     // Save Button click
-
 
 
     // Cancel Button click
     document.getElementById("cancelBtn").addEventListener("click", function () {
         nClearForm();
     });
-    async function nClearForm()
-    {
+
+    async function nClearForm() {
         document.getElementById("ProductId").value = "";
-        document.getElementById("CustomerImageAttachmentOld").value = "";
-        document.getElementById("Customer").value = "";
-        // document.getElementById("ContactNo").value = "";
-        document.getElementById("CustomerId").value = "";
-        // document.getElementById("DepartmentId").value = "";
+        document.getElementById("ProductImageAttachmentOld").value = "";
+        document.getElementById("Product").value = "";
+        document.getElementById("CategoryId").value = "";
         document.getElementById("IsActive").checked = false;
-        document.getElementById("CustomerImageAttachment").value = "";
-        IsUpdate = false;
-        document.getElementById("saveBtn").textContent = "Save";
-        document.getElementById("Customer").focus();
-        document.getElementById("ViewImageBtn").style.display = "none";
+        document.getElementById("ProductImageAttachment").value = "";
         document.getElementById("Prices").value = "0";
         document.getElementById("DiscountAmount").value = "0";
-        setCurrentTime();
+        IsUpdate = false;
+        document.getElementById("saveBtn").textContent = "Save";
+        document.getElementById("Product").focus();
+        document.getElementById("ViewImageBtn").style.display = "none";
         await LoadGridViewData();
     }
     // Cancel Button click
 
 
+    // Numeric Input for Prices and Discount
+    const pricesInput = document.getElementById("Prices");
+    const discountInput = document.getElementById("DiscountAmount");
 
-    // // Contact Input
-    // const contactInput = document.getElementById("ContactNo");
-    // contactInput.addEventListener("keydown", function (e) {
-    //     if (
-    //         e.ctrlKey || e.metaKey || // Ctrl / Cmd
-    //         (e.key >= '0' && e.key <= '9') ||
-    //         ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
-    //     ) {
-    //         return; // allow
-    //     }
-    //     e.preventDefault();
-    // });
-    // contactInput.addEventListener("input", function () {
-    //     this.value = this.value.replace(/\D/g, '');
-    // });
-    // // Contact Input
+    [pricesInput, discountInput].forEach(input => {
+        input.addEventListener("keydown", function (e) {
+            if (
+                e.ctrlKey || e.metaKey ||
+                (e.key >= '0' && e.key <= '9') ||
+                e.key === '.' ||
+                ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
+            ) {
+                return;
+            }
+            e.preventDefault();
+        });
+
+        input.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9.]/g, '');
+        });
+    });
+    // Numeric Input
 </script>
 
 <style>
@@ -893,5 +665,18 @@
         appearance: auto;
         -webkit-appearance: auto;
         -moz-appearance: auto;
+    }
+
+    .table-responsive {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+    }
+
+    .table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #343a40;
+        color: white;
+        z-index: 10;
     }
 </style>
