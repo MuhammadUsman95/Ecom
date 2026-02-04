@@ -1,7 +1,7 @@
-﻿@page "/CustomerRegistration"
-@model NormalAccountProject.Pages.CustomerRegistrationModel
+﻿@page "/VendorRegistration"
+@model NormalAccountProject.Pages.VendorRegistrationModel
 @{
-    ViewData["Title"] = "Customer Registration";
+    ViewData["Title"] = "Vendor Registration";
 }
 
 <div class="section__content section__content--p30">
@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="overview-wrap d-flex justify-content-between align-items-center">
-                    <h2 class="title-1">Customer Registration</h2>
+                    <h2 class="title-1">Vendor Registration</h2>
                     <div>
                         <button class="btn btn-info" id="gridViewToggleBtn">
                             <i class="fas fa-table me-2"></i>Grid View
@@ -28,14 +28,14 @@
         <div id="formViewContainer">
             <div class="row mt-3">
                 <div class="col-md-6">
-                    <!-- Row 1: Customer Name + Contact No -->
+                    <!-- Row 1: Vendor Name + Contact No -->
                     <div class="row mb-3">
-                        <input style="display:none;" type="text" id="CustomerId">
-                        <input style="display:none;" type="text" id="CustomerImageAttachmentOld">
+                        <input style="display:none;" type="text" id="VendorId">
+                        <input style="display:none;" type="text" id="VendorImageAttachmentOld">
 
                         <div class="col-md-6">
-                            <label for="Customer">Customer Name</label>
-                            <input type="text" id="Customer" class="form-control" placeholder="Enter Customer Name">
+                            <label for="Vendor">Vendor Name</label>
+                            <input type="text" id="Vendor" class="form-control" placeholder="Enter Vendor Name">
                         </div>
                         <div class="col-md-6">
                             <label for="ContactNo">Contact Number</label>
@@ -91,8 +91,8 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-12" style="display: grid;">
-                            <label>Customer Image (Max Size 500KB)*</label>
-                            <input id="CustomerImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png" required>
+                            <label>Vendor Image (Max Size 500KB)*</label>
+                            <input id="VendorImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png" required>
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -112,9 +112,9 @@
         <div id="gridViewContainer" style="display:none;">
             <div class="row mt-5">
                 <div class="col-md-12">
-                    <div id="CustomerGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
+                    <div id="VendorGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
                     <div class="mt-3" style="text-align:center;">
-                        <p>Total Customers (<span id="TotalCustomersCount">100</span>)</p>
+                        <p>Total Vendors (<span id="TotalVendorsCount">100</span>)</p>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@
         document.getElementById("gridViewContainer").style.display = "none";
         document.getElementById("formViewToggleBtn").style.display = "none";
         document.getElementById("gridViewToggleBtn").style.display = "inline-block";
-        document.getElementById("Customer").focus();
+        document.getElementById("Vendor").focus();
     }
 
     function showGridView() {
@@ -162,8 +162,8 @@
     // VIEW TOGGLE FUNCTIONS
 
 
-    // Customer Image
-    document.getElementById("CustomerImageAttachment").addEventListener("change", async function () {
+    // Vendor Image
+    document.getElementById("VendorImageAttachment").addEventListener("change", async function () {
         const file = this.files[0];
         if (!file) return;
 
@@ -178,25 +178,25 @@
                 text: 'Image size must be less than 500 KB.',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("CustomerImageAttachment").focus();
+                    document.getElementById("VendorImageAttachment").focus();
                 }
             });
         }
     });
-    function GetCustomerImageAttachmentFile() {
+    function GetVendorImageAttachmentFile() {
         return new Promise((resolve, reject) => {
-            const fileInput = document.getElementById("CustomerImageAttachment");
+            const fileInput = document.getElementById("VendorImageAttachment");
             const file = fileInput.files[0];
 
             if (!file) {
-                resolve({ CustomerImageAttachmentfilename: "", CustomerImageAttachmentbase64: "" });
+                resolve({ VendorImageAttachmentfilename: "", VendorImageAttachmentbase64: "" });
                 return;
             }
 
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                const customer = document.getElementById("Customer").value.trim();
+                const Vendor = document.getElementById("Vendor").value.trim();
 
                 // 🔹 Generate timestamp ddMMyyyyhhmm
                 const now = new Date();
@@ -205,7 +205,7 @@
 
                 const originalNameParts = file.name.split(".");
                 const fileExtension = originalNameParts.pop();
-                const newFileName = `${customer}_${timestamp}_CustomerRegistrationLogo.${fileExtension}`;
+                const newFileName = `${Vendor}_${timestamp}_VendorRegistrationLogo.${fileExtension}`;
 
                 // Convert ArrayBuffer to Base64
                 const arrayBuffer = e.target.result;
@@ -217,19 +217,19 @@
                 const base64String = btoa(binaryString);
 
                 resolve({
-                    CustomerImageAttachmentfilename: newFileName,
-                    CustomerImageAttachmentbase64: base64String // ✅ only Base64 part
+                    VendorImageAttachmentfilename: newFileName,
+                    VendorImageAttachmentbase64: base64String // ✅ only Base64 part
                 });
             };
 
             reader.onerror = function () {
-                resolve({ CustomerImageAttachmentfilename: "", CustomerImageAttachmentbase64: "" });
+                resolve({ VendorImageAttachmentfilename: "", VendorImageAttachmentbase64: "" });
             };
 
             reader.readAsArrayBuffer(file); // ✅ this is important
         });
     }
-    // Customer Image
+    // Vendor Image
 
 
     // Time In - Time Out Textbox
@@ -296,7 +296,7 @@
         document.getElementById("PerProductAmount").value = "0";
 
         const fields = [
-            document.getElementById("Customer"),
+            document.getElementById("Vendor"),
             document.getElementById("ContactNo"),
             document.getElementById("TypeId"),
             document.getElementById("DepartmentId"),
@@ -316,7 +316,7 @@
                 }
             });
         });
-        document.getElementById("Customer").focus();
+        document.getElementById("Vendor").focus();
     });
     // Form Load
 
@@ -329,7 +329,7 @@
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nLoadCustomerRegistrationData", "CustomerRegistration")',
+                url: '@Url.Action("nLoadVendorRegistrationData", "VendorRegistration")',
                 data: JSON.stringify(nInfoTab),
                 contentType: 'application/json',
                 success: function (response) {
@@ -339,7 +339,7 @@
                         DepartmentDropdown(response.DepartmentList);
                         resolve();
                     } else {
-                        toastr.warning("No data found for CustomerRegistration.");
+                        toastr.warning("No data found for VendorRegistration.");
                         reject();
                     }
                 },
@@ -389,7 +389,7 @@
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nLoadGridViewData", "CustomerRegistration")',
+                url: '@Url.Action("nLoadGridViewData", "VendorRegistration")',
                 data: JSON.stringify(nInfoTab),
                 contentType: 'application/json',
                 success: function (response) {
@@ -398,10 +398,10 @@
                         console.log(response.GridViewDataList);
                         GridViewDataList = response.GridViewDataList;
                         // Render Grid
-                        renderCustomerGrid(GridViewDataList);
+                        renderVendorGrid(GridViewDataList);
                         resolve();
                     } else {
-                        toastr.warning("No data found for CustomerRegistration.");
+                        toastr.warning("No data found for VendorRegistration.");
                         reject();
                     }
                 },
@@ -412,20 +412,20 @@
             });
         });
     }
-    function renderCustomerGrid(gridData) {
-        const container = document.getElementById("CustomerGridContainer");
+    function renderVendorGrid(gridData) {
+        const container = document.getElementById("VendorGridContainer");
 
         // Clear previous grid
         container.innerHTML = "";
 
         if (!gridData || gridData.length === 0) {
             container.innerHTML = '<p>No records found.</p>';
-            document.getElementById("TotalCustomersCount").textContent = "0";
+            document.getElementById("TotalVendorsCount").textContent = "0";
             return;
         }
 
-        // Determine columns dynamically (skip 'Userid', 'Type', 'CustomerId', 'DepartmentId')
-        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "CustomerId" && col !== "DepartmentId" && col !== "ImagePath" && col !== "TimeIn" && col !== "TimeOut");
+        // Determine columns dynamically (skip 'Userid', 'Type', 'VendorId', 'DepartmentId')
+        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "VendorId" && col !== "DepartmentId" && col !== "ImagePath" && col !== "TimeIn" && col !== "TimeOut");
 
         // Table creation
         const table = document.createElement("table");
@@ -519,8 +519,8 @@
         table.appendChild(tbody);
         container.appendChild(table);
 
-        // 🔹 Initial total customers count
-        document.getElementById("TotalCustomersCount").textContent = tbody.rows.length;
+        // 🔹 Initial total Vendors count
+        document.getElementById("TotalVendorsCount").textContent = tbody.rows.length;
     }
     function filterTable(input, column) {
         const table = input.closest("table");
@@ -542,16 +542,16 @@
             }
         });
 
-        // 🔹 Update total customers count based on visible rows
-        document.getElementById("TotalCustomersCount").textContent = visibleCount;
+        // 🔹 Update total Vendors count based on visible rows
+        document.getElementById("TotalVendorsCount").textContent = visibleCount;
     }
     function onEditRow(rowData) {
         IsUpdate = true;
         document.getElementById("saveBtn").textContent = "Update";
 
-        document.getElementById("CustomerId").value = rowData["CustomerId"] || "";
-        document.getElementById("CustomerImageAttachmentOld").value = rowData["ImagePath"] || "";
-        document.getElementById("Customer").value = rowData["Customer Name"] || "";
+        document.getElementById("VendorId").value = rowData["VendorId"] || "";
+        document.getElementById("VendorImageAttachmentOld").value = rowData["ImagePath"] || "";
+        document.getElementById("Vendor").value = rowData["Vendor Name"] || "";
         document.getElementById("ContactNo").value = rowData["Contact #"] || "";
         document.getElementById("TypeId").value = rowData["Type"] || "";
         document.getElementById("DepartmentId").value = rowData["DepartmentId"] || "";
@@ -565,7 +565,7 @@
         console.log("Edit TimeIn:", rowData["TimeIn"]);
         console.log("Edit TimeOut:", rowData["TimeOut"]);
 
-        document.getElementById("Customer").focus();
+        document.getElementById("Vendor").focus();
 
         ViewImage(rowData["ImagePath"] || "");
     }
@@ -576,7 +576,7 @@
         // 🔵 Step 1: Confirmation Swal
         const result = await Swal.fire({
             title: 'Are you sure?',
-            text: `Do you really want to delete this customer (${rowData["Customer Name"]}) ?`,
+            text: `Do you really want to delete this Vendor (${rowData["Vendor Name"]}) ?`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes',
@@ -590,14 +590,14 @@
 
         const nInfoTab = {
             Userid: userId.toString(),
-            CustomerId: rowData["CustomerId"].toString(),
-            CustomerImageAttachmentfilenameold: rowData["ImagePath"].toString()
+            VendorId: rowData["VendorId"].toString(),
+            VendorImageAttachmentfilenameold: rowData["ImagePath"].toString()
         };
 
         // 🔵 Step 2: Loader Swal
         Swal.fire({
             title: 'Please wait',
-            text: 'Customer Delete is in process...',
+            text: 'Vendor Delete is in process...',
             allowOutsideClick: false,
             allowEscapeKey: false,
             returnFocus: false,      // Prevent focus issues
@@ -607,7 +607,7 @@
         try {
             const response = await jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nDeleteCustomerRegistrationData", "CustomerRegistration")',
+                url: '@Url.Action("nDeleteVendorRegistrationData", "VendorRegistration")',
                 data: JSON.stringify(nInfoTab),
                 contentType: 'application/json'
             });
@@ -617,11 +617,11 @@
             if (response.statusId === 1) {
                 await Swal.fire({
                     icon: 'success',
-                    title: 'Customer Deleted',
-                    text: response.message || 'Customer deleted successfully',
+                    title: 'Vendor Deleted',
+                    text: response.message || 'Vendor deleted successfully',
                     returnFocus: false,
                     didClose: () => {
-                        document.getElementById("Customer").focus();
+                        document.getElementById("Vendor").focus();
                     }
                 });
 
@@ -630,8 +630,8 @@
             } else {
                 await Swal.fire({
                     icon: 'warning',
-                    title: 'Customer Delete',
-                    text: response.message || 'Customer delete failed',
+                    title: 'Vendor Delete',
+                    text: response.message || 'Vendor delete failed',
                     returnFocus: false
                 });
             }
@@ -642,7 +642,7 @@
             await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while deleting customer',
+                text: 'An error occurred while deleting Vendor',
                 returnFocus: false
             });
 
@@ -667,14 +667,14 @@
         await SaveData();
     });
     async function SaveData() {
-        const customerid = document.getElementById("CustomerId").value.trim();
-        const customer = document.getElementById("Customer").value.trim();
+        const VendorId = document.getElementById("VendorId").value.trim();
+        const Vendor = document.getElementById("Vendor").value.trim();
         const contactNo = document.getElementById("ContactNo").value.trim();
         const type = document.getElementById("TypeId").value.trim();
         const department = document.getElementById("DepartmentId").value.trim();
         const isActive = document.getElementById("IsActive").checked;
-        const customerImageAttachment = document.getElementById("CustomerImageAttachment").value.trim();
-        const customerImageAttachmentold = document.getElementById("CustomerImageAttachmentOld").value.trim();
+        const VendorImageAttachment = document.getElementById("VendorImageAttachment").value.trim();
+        const VendorImageAttachmentold = document.getElementById("VendorImageAttachmentOld").value.trim();
         const nTimeIn = getTimeFromTextbox("TimeIn");
         const nTimeOut = getTimeFromTextbox("TimeOut");
         const nDeliveryCharges = document.getElementById("DeliveryCharges").value.trim();
@@ -682,15 +682,15 @@
 
 
 
-        // 🔴 Customer Name Validation
-        if (!customer) {
+        // 🔴 Vendor Name Validation
+        if (!Vendor) {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Customer name is required',
+                text: 'Vendor name is required',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("Customer").focus();
+                    document.getElementById("Vendor").focus();
                 }
             });
             return;
@@ -728,7 +728,7 @@
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Please select customer type',
+                text: 'Please select Vendor type',
                 returnFocus: false,
                 didClose: () => {
                     document.getElementById("TypeId").focus();
@@ -751,33 +751,33 @@
             return;
         }
 
-        // 🔴 Customer Image Validation
-        if (!customerImageAttachment) {
+        // 🔴 Vendor Image Validation
+        if (!VendorImageAttachment) {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Please select customer image',
+                text: 'Please select Vendor image',
                 returnFocus: false,
                 didClose: () => {
-                    document.getElementById("CustomerImageAttachment").focus();
+                    document.getElementById("VendorImageAttachment").focus();
                 }
             });
             return;
         }
 
-        const { CustomerImageAttachmentfilename, CustomerImageAttachmentbase64 } = await GetCustomerImageAttachmentFile();
+        const { VendorImageAttachmentfilename, VendorImageAttachmentbase64 } = await GetVendorImageAttachmentFile();
 
 
         const nInfoTab = {
             Userid: userId,
-            CustomerId:customerid,
-            Customer: customer,
+            VendorId:VendorId,
+            Vendor: Vendor,
             ContactNo: contactNo,
             Type: type,
             DepartmentId: department,
-            CustomerImageAttachmentfilename: CustomerImageAttachmentfilename,
-            CustomerImageAttachmentfilenameold: customerImageAttachmentold,
-            CustomerImageAttachmentbase64: CustomerImageAttachmentbase64,
+            VendorImageAttachmentfilename: VendorImageAttachmentfilename,
+            VendorImageAttachmentfilenameold: VendorImageAttachmentold,
+            VendorImageAttachmentbase64: VendorImageAttachmentbase64,
             TimeIn: nTimeIn,
             TimeOut: nTimeOut,
             DeliveryCharges: nDeliveryCharges,
@@ -789,7 +789,7 @@
         // 🔵 Loader
         Swal.fire({
             title: 'Please wait',
-            text: 'Customer creation is in process...',
+            text: 'Vendor creation is in process...',
             allowOutsideClick: false,
             allowEscapeKey: false,
             didOpen: () => Swal.showLoading()
@@ -798,7 +798,7 @@
         try {
             const response = await jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nSaveCustomerRegistrationData", "CustomerRegistration")',
+                url: '@Url.Action("nSaveVendorRegistrationData", "VendorRegistration")',
                 data: JSON.stringify(nInfoTab),
                 contentType: 'application/json'
             });
@@ -808,11 +808,11 @@
             if (response.statusId === 1) {
                 await Swal.fire({
                     icon: 'success',
-                    title: 'Customer Registration',
-                    text: response.message || 'Customer saved successfully',
+                    title: 'Vendor Registration',
+                    text: response.message || 'Vendor saved successfully',
                     returnFocus: false,
                     didClose: () => {
-                        document.getElementById("Customer").focus();
+                        document.getElementById("Vendor").focus();
                     }
                 });
 
@@ -822,8 +822,8 @@
             } else {
                 await Swal.fire({
                     icon: 'warning',
-                    title: 'Customer Registration',
-                    text: response.message || 'Customer save failed'
+                    title: 'Vendor Registration',
+                    text: response.message || 'Vendor save failed'
                 });
             }
 
@@ -833,7 +833,7 @@
             await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while saving customer'
+                text: 'An error occurred while saving Vendor'
             });
 
             console.error("SaveData Error:", xhr);
@@ -849,17 +849,17 @@
     });
     async function nClearForm()
     {
-        document.getElementById("CustomerId").value = "";
-        document.getElementById("CustomerImageAttachmentOld").value = "";
-        document.getElementById("Customer").value = "";
+        document.getElementById("VendorId").value = "";
+        document.getElementById("VendorImageAttachmentOld").value = "";
+        document.getElementById("Vendor").value = "";
         document.getElementById("ContactNo").value = "";
         document.getElementById("TypeId").value = "";
         document.getElementById("DepartmentId").value = "";
         document.getElementById("IsActive").checked = false;
-        document.getElementById("CustomerImageAttachment").value = "";
+        document.getElementById("VendorImageAttachment").value = "";
         IsUpdate = false;
         document.getElementById("saveBtn").textContent = "Save";
-        document.getElementById("Customer").focus();
+        document.getElementById("Vendor").focus();
         document.getElementById("ViewImageBtn").style.display = "none";
         document.getElementById("DeliveryCharges").value = "0";
         document.getElementById("PerProductAmount").value = "0";
