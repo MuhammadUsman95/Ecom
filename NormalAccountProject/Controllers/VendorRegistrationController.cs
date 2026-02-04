@@ -10,19 +10,19 @@ namespace NormalAccountProject.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class CustomerRegistrationController : Controller
+    public class VendorRegistrationController : Controller
     {
         private readonly IConfiguration _configuration;
         private string connectionString;
 
-        public CustomerRegistrationController(IConfiguration configuration)
+        public VendorRegistrationController(IConfiguration configuration)
         {
             _configuration = configuration;
             connectionString = _configuration.GetConnectionString("Connection1");
         }
 
-        [HttpPost("nLoadCustomerRegistrationData")]
-        public async Task<IActionResult> nLoadCustomerRegistrationData([FromBody] nInfoTab nInfoTabObj)
+        [HttpPost("nLoadVendorRegistrationData")]
+        public async Task<IActionResult> nLoadVendorRegistrationData([FromBody] nInfoTab nInfoTabObj)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace NormalAccountProject.Controllers
                     { "@nType", 0 },
                     { "@nsType", 1 }
                 };
-                List<CustomerTypedd> nTypeList = await nGetDataAsync<CustomerTypedd>("Customer_SP", typeParameters);
+                List<VendorTypedd> nTypeList = await nGetDataAsync<VendorTypedd>("Ecom_VendorSP", typeParameters);
 
                 // Load Department List
                 var departmentParameters = new Dictionary<string, object>
@@ -40,7 +40,7 @@ namespace NormalAccountProject.Controllers
                     { "@nType", 0 },
                     { "@nsType", 5 }
                 };
-                List<DepartmentDD> nDepartmentList = await nGetDataAsync<DepartmentDD>("Customer_SP", departmentParameters);
+                List<DepartmentDD> nDepartmentList = await nGetDataAsync<DepartmentDD>("Ecom_VendorSP", departmentParameters);
 
                 var response = new
                 {
@@ -60,57 +60,57 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        [HttpPost("nSaveCustomerRegistrationData")]
-        public async Task<IActionResult> nSaveCustomerRegistrationData([FromBody] CustomerTab nCustomerTabObj)
+        [HttpPost("nSaveVendorRegistrationData")]
+        public async Task<IActionResult> nSaveVendorRegistrationData([FromBody] Ecom_VendorTab nEcom_VendorTabObj)
         {
             try
             {
                 using (SqlConnection con = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand("Customer_SP", con))
+                using (SqlCommand cmd = new SqlCommand("Ecom_VendorSP", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     cmd.Parameters.AddWithValue("@nType", 0);
                     cmd.Parameters.AddWithValue("@nsType", 0);
-                    cmd.Parameters.AddWithValue("@Customer", nCustomerTabObj.Customer);
-                    cmd.Parameters.AddWithValue("@ContactNo", nCustomerTabObj.ContactNo);
-                    cmd.Parameters.AddWithValue("@IsActive", nCustomerTabObj.IsActive ? "1" : "0");
-                    cmd.Parameters.AddWithValue("@Type", nCustomerTabObj.Type);
-                    cmd.Parameters.AddWithValue("@DepartmentId", nCustomerTabObj.DepartmentId);
-                    cmd.Parameters.AddWithValue("@UserId", nCustomerTabObj.Userid);
-                    cmd.Parameters.AddWithValue("@IsUpdate", nCustomerTabObj.IsUpdate ? "1" : "0");
-                    cmd.Parameters.AddWithValue("@ImagePath", nCustomerTabObj.CustomerImageAttachmentfilename);
+                    cmd.Parameters.AddWithValue("@Vendor", nEcom_VendorTabObj.Vendor);
+                    cmd.Parameters.AddWithValue("@ContactNo", nEcom_VendorTabObj.ContactNo);
+                    cmd.Parameters.AddWithValue("@IsActive", nEcom_VendorTabObj.IsActive ? "1" : "0");
+                    cmd.Parameters.AddWithValue("@Type", nEcom_VendorTabObj.Type);
+                    cmd.Parameters.AddWithValue("@DepartmentId", nEcom_VendorTabObj.DepartmentId);
+                    cmd.Parameters.AddWithValue("@UserId", nEcom_VendorTabObj.Userid);
+                    cmd.Parameters.AddWithValue("@IsUpdate", nEcom_VendorTabObj.IsUpdate ? "1" : "0");
+                    cmd.Parameters.AddWithValue("@ImagePath", nEcom_VendorTabObj.VendorImageAttachmentfilename);
 
-                    cmd.Parameters.AddWithValue("@TimeIn", nCustomerTabObj.TimeIn);
-                    cmd.Parameters.AddWithValue("@TimeOut", nCustomerTabObj.TimeOut);
-                    cmd.Parameters.AddWithValue("@DeliveryCharges", nCustomerTabObj.DeliveryCharges);
-                    cmd.Parameters.AddWithValue("@PerProductAmount", nCustomerTabObj.PerProductAmount);
+                    cmd.Parameters.AddWithValue("@TimeIn", nEcom_VendorTabObj.TimeIn);
+                    cmd.Parameters.AddWithValue("@TimeOut", nEcom_VendorTabObj.TimeOut);
+                    cmd.Parameters.AddWithValue("@DeliveryCharges", nEcom_VendorTabObj.DeliveryCharges);
+                    cmd.Parameters.AddWithValue("@PerProductAmount", nEcom_VendorTabObj.PerProductAmount);
 
-                    if (nCustomerTabObj.IsUpdate)
+                    if (nEcom_VendorTabObj.IsUpdate)
                     {
-                        cmd.Parameters.AddWithValue("@CustomerId", nCustomerTabObj.CustomerId);
+                        cmd.Parameters.AddWithValue("@VendorId", nEcom_VendorTabObj.VendorId);
                     }
 
                     // 🔹 Build SQL exec line for debugging
-                    string sqlDebug = $"EXEC Customer_SP " +
+                    string sqlDebug = $"EXEC Ecom_VendorSP " +
                                       $"@nType=0, " +
                                       $"@nsType=0, " +
-                                      $"@Customer='{nCustomerTabObj.Customer}', " +
-                                      $"@ContactNo='{nCustomerTabObj.ContactNo}', " +
-                                      $"@IsActive='{(nCustomerTabObj.IsActive ? "1" : "0")}', " +
-                                      $"@Type='{nCustomerTabObj.Type}', " +
-                                      $"@DepartmentId='{nCustomerTabObj.DepartmentId}', " +
-                                      $"@UserId='{nCustomerTabObj.Userid}', " +
-                                      $"@IsUpdate='{(nCustomerTabObj.IsUpdate ? "1" : "0")}', " +
-                                      $"@ImagePath='{nCustomerTabObj.CustomerImageAttachmentfilename}', " +
-                                      $"@TimeIn='{nCustomerTabObj.TimeIn}', " +
-                                      $"@TimeOut='{nCustomerTabObj.TimeOut}', " +
-                                      $"@DeliveryCharges='{nCustomerTabObj.DeliveryCharges}', " +
-                                      $"@PerProductAmount='{nCustomerTabObj.PerProductAmount}'";
+                                      $"@Vendor='{nEcom_VendorTabObj.Vendor}', " +
+                                      $"@ContactNo='{nEcom_VendorTabObj.ContactNo}', " +
+                                      $"@IsActive='{(nEcom_VendorTabObj.IsActive ? "1" : "0")}', " +
+                                      $"@Type='{nEcom_VendorTabObj.Type}', " +
+                                      $"@DepartmentId='{nEcom_VendorTabObj.DepartmentId}', " +
+                                      $"@UserId='{nEcom_VendorTabObj.Userid}', " +
+                                      $"@IsUpdate='{(nEcom_VendorTabObj.IsUpdate ? "1" : "0")}', " +
+                                      $"@ImagePath='{nEcom_VendorTabObj.VendorImageAttachmentfilename}', " +
+                                      $"@TimeIn='{nEcom_VendorTabObj.TimeIn}', " +
+                                      $"@TimeOut='{nEcom_VendorTabObj.TimeOut}', " +
+                                      $"@DeliveryCharges='{nEcom_VendorTabObj.DeliveryCharges}', " +
+                                      $"@PerProductAmount='{nEcom_VendorTabObj.PerProductAmount}'";
 
-                    if (nCustomerTabObj.IsUpdate)
+                    if (nEcom_VendorTabObj.IsUpdate)
                     {
-                        sqlDebug += $", @CustomerId='{nCustomerTabObj.CustomerId}'";
+                        sqlDebug += $", @VendorId='{nEcom_VendorTabObj.VendorId}'";
                     }
 
                     // 🔹 You can now log or store sqlDebug for SQL Server testing
@@ -126,11 +126,11 @@ namespace NormalAccountProject.Controllers
 
                             if (statusId == 1)
                             {
-                                if (!string.IsNullOrEmpty(nCustomerTabObj.CustomerImageAttachmentfilename))
+                                if (!string.IsNullOrEmpty(nEcom_VendorTabObj.VendorImageAttachmentfilename))
                                 {
-                                    string oldFileName = Path.GetFileName(nCustomerTabObj.CustomerImageAttachmentfilenameold);
+                                    string oldFileName = Path.GetFileName(nEcom_VendorTabObj.VendorImageAttachmentfilenameold);
                                     await DeleteFromFtp(oldFileName);
-                                    await UploadToFtp(nCustomerTabObj.CustomerImageAttachmentfilename, nCustomerTabObj.CustomerImageAttachmentbase64);
+                                    await UploadToFtp(nEcom_VendorTabObj.VendorImageAttachmentfilename, nEcom_VendorTabObj.VendorImageAttachmentbase64);
                                 }
                             }
 
@@ -171,7 +171,7 @@ namespace NormalAccountProject.Controllers
                     { "@nsType", 2 }
                 };
 
-                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("Customer_SP", parameters);
+                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("Ecom_VendorSP", parameters);
 
                 var response = new
                 {
@@ -190,19 +190,19 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        [HttpPost("nDeleteCustomerRegistrationData")]
-        public async Task<IActionResult> nDeleteCustomerRegistrationData([FromBody] CustomerTab nCustomerTabObj)
+        [HttpPost("nDeleteVendorRegistrationData")]
+        public async Task<IActionResult> nDeleteVendorRegistrationData([FromBody] Ecom_VendorTab nEcom_VendorTabObj)
         {
             try
             {
                 using (SqlConnection con = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand("Customer_SP", con))
+                using (SqlCommand cmd = new SqlCommand("Ecom_VendorSP", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@nType", 0);
                     cmd.Parameters.AddWithValue("@nsType", 3);
-                    cmd.Parameters.AddWithValue("@UserId", nCustomerTabObj.Userid);
-                    cmd.Parameters.AddWithValue("@CustomerId", nCustomerTabObj.CustomerId);
+                    cmd.Parameters.AddWithValue("@UserId", nEcom_VendorTabObj.Userid);
+                    cmd.Parameters.AddWithValue("@VendorId", nEcom_VendorTabObj.VendorId);
 
                     await con.OpenAsync();
 
@@ -213,9 +213,9 @@ namespace NormalAccountProject.Controllers
                             int statusId = Convert.ToInt32(dr["StatusId"]);
                             if (statusId == 1)
                             {
-                                if (!string.IsNullOrEmpty(nCustomerTabObj.CustomerImageAttachmentfilenameold))
+                                if (!string.IsNullOrEmpty(nEcom_VendorTabObj.VendorImageAttachmentfilenameold))
                                 {
-                                    string oldFileName = Path.GetFileName(nCustomerTabObj.CustomerImageAttachmentfilenameold);
+                                    string oldFileName = Path.GetFileName(nEcom_VendorTabObj.VendorImageAttachmentfilenameold);
                                     await DeleteFromFtp(oldFileName);
                                 }
                             }
