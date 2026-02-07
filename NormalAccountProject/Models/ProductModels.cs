@@ -19,7 +19,7 @@
     // Category Dropdown Model
     public class CategoryDD
     {
-        public string? CategoryIdId { get; set; }
         public string? CategoryId { get; set; }
+        public string? Category { get; set; }
     }
 }
