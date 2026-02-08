@@ -44,11 +44,11 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="Prices">Prices *</label>
-                            <input type="text" id="Prices" class="form-control" placeholder="Enter Prices" inputmode="numeric">
+                            <input type="text" id="Prices" class="form-control" placeholder="Enter Prices" inputmode="decimal">
                         </div>
                         <div class="col-md-6">
                             <label for="DiscountAmount">Discount Amount</label>
-                            <input type="text" id="DiscountAmount" class="form-control" placeholder="Enter Discount Amount" inputmode="numeric">
+                            <input type="text" id="DiscountAmount" class="form-control" placeholder="Enter Discount Amount" inputmode="decimal">
                         </div>
                     </div>
 
@@ -62,7 +62,17 @@
                         </div>
                     </div>
 
-                    <!-- Row 4: IsActive -->
+                    <!-- ✅ Row 4: Vendor (NEW) -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="VendorId">Vendor *</label>
+                            <select id="VendorId" class="form-control">
+                                <option value="">-- Select Vendor --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: IsActive -->
                     <div class="row mb-3">
                         <div class="col-md-6 d-flex align-items-center">
                             <div class="form-check">
@@ -72,7 +82,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 5: Product Image -->
+                    <!-- Row 6: Product Image -->
                     <div class="row mb-3">
                         <div class="col-md-12" style="display: grid;">
                             <label>Product Image (Max Size 500KB)*</label>
@@ -80,7 +90,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 6: Buttons -->
+                    <!-- Row 7: Buttons -->
                     <div class="row mb-3">
                         <div class="col-md-12 d-flex align-items-end">
                             <button class="btn btn-success me-2" id="saveBtn">Save</button>
@@ -124,7 +134,6 @@
     let userId = localStorage.getItem("userId") || "";
     let GridViewDataList = [];
     let IsUpdate = false;
-    // Variable Declaration
 
     // VIEW TOGGLE FUNCTIONS
     function showFormView() {
@@ -142,22 +151,17 @@
         document.getElementById("formViewToggleBtn").style.display = "inline-block";
     }
 
-    // Toggle Button Click Events
     document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
     document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
-    // VIEW TOGGLE FUNCTIONS
-
 
     // Product Image Validation
     document.getElementById("ProductImageAttachment").addEventListener("change", async function () {
         const file = this.files[0];
         if (!file) return;
 
-        const maxSize = 500 * 1024; // 500 KB
+        const maxSize = 500 * 1024;
         if (file.size > maxSize) {
-            // Clear file input
             this.value = "";
-
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
@@ -184,8 +188,6 @@
 
             reader.onload = function (e) {
                 const product = document.getElementById("Product").value.trim();
-
-                // 🔹 Generate timestamp ddMMyyyyhhmm
                 const now = new Date();
                 const pad = (num) => num.toString().padStart(2, "0");
 
@@ -196,10 +198,7 @@
                 const mm = pad(now.getMinutes());
                 const timestamp = `${dd}${MM}${yyyy}${hh}${mm}`;
 
-                // 🔹 Get file extension
                 const extension = file.name.split('.').pop();
-
-                // 🔹 Build filename: Product_timestamp.extension
                 const filename = `${product}_${timestamp}.${extension}`;
 
                 resolve({
@@ -216,16 +215,13 @@
         });
     }
 
-
     // PAGE LOAD
     window.addEventListener("load", async function () {
         await LoadProductRegistrationData();
         await LoadGridViewData();
     });
-    // PAGE LOAD
 
-
-    // Load Product Registration Data (Category Dropdown)
+    // Load Product Registration Data
     async function LoadProductRegistrationData() {
         const nInfoTab = {
             Userid: userId,
@@ -247,6 +243,13 @@
                     categorySelect.innerHTML += `<option value="${item.CategoryId}">${item.Category}</option>`;
                 });
 
+                // ✅ Populate Vendor Dropdown (NEW)
+                const vendorSelect = document.getElementById("VendorId");
+                vendorSelect.innerHTML = '<option value="">-- Select Vendor --</option>';
+                response.VendorList.forEach(item => {
+                    vendorSelect.innerHTML += `<option value="${item.VendorId}">${item.Vendor}</option>`;
+                });
+
             } else {
                 await Swal.fire({
                     icon: 'warning',
@@ -264,8 +267,6 @@
             console.error("LoadProductRegistrationData Error:", xhr);
         }
     }
-    // Load Product Registration Data
-
 
     // Load Grid View Data
     async function LoadGridViewData() {
@@ -282,12 +283,9 @@
             });
 
             if (response.statusId === 1) {
-                GridViewDataList = response.gridViewDataList || [];
+                GridViewDataList = response.GridViewDataList || [];  // ✅ Fixed case
 
-                // ✅ Update Total Count
                 document.getElementById("TotalProductsCount").textContent = GridViewDataList.length;
-
-                // ✅ Render Grid
                 RenderGridView();
 
             } else {
@@ -307,8 +305,6 @@
             console.error("LoadGridViewData Error:", xhr);
         }
     }
-    // Load Grid View Data
-
 
     // Render Grid View
     function RenderGridView() {
@@ -326,6 +322,7 @@
                         <th>Product Code</th>
                         <th>Product Name</th>
                         <th>Category</th>
+                        <th>Vendor</th>
                         <th>Prices</th>
                         <th>Discount Amount</th>
                         <th>Is Active</th>
@@ -342,6 +339,7 @@
                     <td>${item.ProductCode || ''}</td>
                     <td>${item['Product Name'] || ''}</td>
                     <td>${item['CategoryId Name'] || ''}</td>
+                    <td>${item.Vendor || ''}</td>
                     <td>${item.Prices || '0'}</td>
                     <td>${item['Discount Amount'] || '0'}</td>
                     <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
@@ -363,8 +361,6 @@
 
         container.innerHTML = tableHTML;
     }
-    // Render Grid View
-
 
     // Edit Product
     function EditProduct(productId) {
@@ -378,28 +374,24 @@
             return;
         }
 
-        // ✅ Populate Form
         document.getElementById("ProductId").value = product.ProductCode;
         document.getElementById("Product").value = product['Product Name'] || '';
         document.getElementById("CategoryId").value = product.CategoryId || '';
+        document.getElementById("VendorId").value = product.VendorId || '';  // ✅ Added
         document.getElementById("Prices").value = product.Prices || '0';
         document.getElementById("DiscountAmount").value = product['Discount Amount'] || '0';
         document.getElementById("IsActive").checked = product['Is Active'] === true || product['Is Active'] === 1;
 
-        // ✅ Product Image
         if (product.ProductImage) {
             document.getElementById("ProductImageAttachmentOld").value = product.ProductImage;
             document.getElementById("ViewImageBtn").href = product.ProductImage;
             document.getElementById("ViewImageBtn").style.display = "inline-block";
         }
 
-        // ✅ Switch to Form View
         IsUpdate = true;
         document.getElementById("saveBtn").textContent = "Update";
         showFormView();
     }
-    // Edit Product
-
 
     // Delete Product
     async function DeleteProduct(productId) {
@@ -423,7 +415,6 @@
             ProductImageAttachmentfilenameold: product?.ProductImage || ""
         };
 
-        // 🔵 Loader
         Swal.fire({
             title: 'Please wait',
             text: 'Deleting product...',
@@ -470,22 +461,20 @@
             console.error("DeleteProduct Error:", xhr);
         }
     }
-    // Delete Product
-
 
     // Save Button click
     document.getElementById("saveBtn").addEventListener("click", async function () {
-        // 🔴 Get Form Values
         const ProductId = document.getElementById("ProductId").value.trim();
         const Product = document.getElementById("Product").value.trim();
         const CategoryId = document.getElementById("CategoryId").value.trim();
+        const VendorId = document.getElementById("VendorId").value.trim();  // ✅ Added
         const Prices = document.getElementById("Prices").value.trim();
         const DiscountAmount = document.getElementById("DiscountAmount").value.trim();
         const isActive = document.getElementById("IsActive").checked;
         const productImageAttachment = document.getElementById("ProductImageAttachment").files.length > 0;
         const productImageAttachmentold = document.getElementById("ProductImageAttachmentOld").value.trim();
 
-        // 🔴 Product Name Validation
+        // Validations
         if (!Product) {
             await Swal.fire({
                 icon: 'warning',
@@ -499,7 +488,6 @@
             return;
         }
 
-        // 🔴 Category Validation
         if (!CategoryId) {
             await Swal.fire({
                 icon: 'warning',
@@ -513,12 +501,26 @@
             return;
         }
 
-        // 🔴 Prices Validation
-        if (!Prices || parseFloat(Prices) <= 0) {
+        // ✅ Vendor Validation (NEW)
+        if (!VendorId) {
             await Swal.fire({
                 icon: 'warning',
                 title: 'Validation',
-                text: 'Please enter valid price',
+                text: 'Please select vendor',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("VendorId").focus();
+                }
+            });
+            return;
+        }
+
+        // ✅ Improved Numeric Validation
+        if (!Prices || isNaN(Prices) || parseFloat(Prices) <= 0) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please enter valid price (numbers only)',
                 returnFocus: false,
                 didClose: () => {
                     document.getElementById("Prices").focus();
@@ -527,7 +529,20 @@
             return;
         }
 
-        // 🔴 Product Image Validation (only for new products)
+        // ✅ Discount Amount Validation (numeric but can be 0)
+        if (DiscountAmount && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0)) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please enter valid discount amount (numbers only)',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("DiscountAmount").focus();
+                }
+            });
+            return;
+        }
+
         if (!IsUpdate && !productImageAttachment) {
             await Swal.fire({
                 icon: 'warning',
@@ -548,16 +563,16 @@
             ProductId: ProductId,
             Product: Product,
             CategoryId: CategoryId,
+            VendorId: VendorId,  // ✅ Added
             ProductImageAttachmentfilename: ProductImageAttachmentfilename,
             ProductImageAttachmentfilenameold: productImageAttachmentold,
             ProductImageAttachmentbase64: ProductImageAttachmentbase64,
             Prices: Prices,
-            DiscountAmount: DiscountAmount,
+            DiscountAmount: DiscountAmount || "0",
             IsActive: isActive,
             IsUpdate: IsUpdate,
         };
 
-        // 🔵 Loader
         Swal.fire({
             title: 'Please wait',
             text: 'Product registration is in process...',
@@ -587,7 +602,6 @@
                     }
                 });
 
-                // ✅ Clear Form
                 nClearForm();
 
             } else {
@@ -610,8 +624,6 @@
             console.error("SaveData Error:", xhr);
         }
     });
-    // Save Button click
-
 
     // Cancel Button click
     document.getElementById("cancelBtn").addEventListener("click", function () {
@@ -623,41 +635,48 @@
         document.getElementById("ProductImageAttachmentOld").value = "";
         document.getElementById("Product").value = "";
         document.getElementById("CategoryId").value = "";
+        document.getElementById("VendorId").value = "";  // ✅ Added
         document.getElementById("IsActive").checked = false;
         document.getElementById("ProductImageAttachment").value = "";
-        document.getElementById("Prices").value = "0";
-        document.getElementById("DiscountAmount").value = "0";
+        document.getElementById("Prices").value = "";
+        document.getElementById("DiscountAmount").value = "";
         IsUpdate = false;
         document.getElementById("saveBtn").textContent = "Save";
         document.getElementById("Product").focus();
         document.getElementById("ViewImageBtn").style.display = "none";
         await LoadGridViewData();
     }
-    // Cancel Button click
 
-
-    // Numeric Input for Prices and Discount
+    // ✅ Improved Numeric Input Validation
     const pricesInput = document.getElementById("Prices");
     const discountInput = document.getElementById("DiscountAmount");
 
     [pricesInput, discountInput].forEach(input => {
         input.addEventListener("keydown", function (e) {
-            if (
-                e.ctrlKey || e.metaKey ||
-                (e.key >= '0' && e.key <= '9') ||
-                e.key === '.' ||
-                ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
-            ) {
+            // Allow: backspace, delete, tab, escape, enter
+            if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
+                // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+                (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
+                (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
+                (e.keyCode === 86 && (e.ctrlKey === true || e.metaKey === true)) ||
+                (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
+                // Allow: home, end, left, right
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
                 return;
             }
-            e.preventDefault();
+            // Ensure that it is a number and stop the keypress
+            if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) && e.keyCode !== 110 && e.keyCode !== 190) {
+                e.preventDefault();
+            }
         });
 
-        input.addEventListener("input", function () {
-            this.value = this.value.replace(/[^0-9.]/g, '');
+        // ✅ Additional validation on paste
+        input.addEventListener("paste", function (e) {
+            setTimeout(() => {
+                this.value = this.value.replace(/[^0-9.]/g, '');
+            }, 10);
         });
     });
-    // Numeric Input
 </script>
 
 <style>

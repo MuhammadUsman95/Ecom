@@ -34,10 +34,19 @@ namespace NormalAccountProject.Controllers
                 };
                 List<CategoryDD> nCategoryList = await nGetDataAsync<CategoryDD>("Ecom_ProductSP", categoryParameters);
 
+                // ✅ Load Vendor List (NEW)
+                var vendorParameters = new Dictionary<string, object>
+                {
+                    { "@nCategoryId", 0 },
+                    { "@nsCategoryId", 7 }
+                };
+                List<VendorDD> nVendorList = await nGetDataAsync<VendorDD>("Ecom_ProductSP", vendorParameters);
+
                 var response = new
                 {
                     statusId = 1,
-                    CategoryList = nCategoryList
+                    CategoryList = nCategoryList,
+                    VendorList = nVendorList  // ✅ Added
                 };
                 return Ok(response);
             }
@@ -66,37 +75,17 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@Product", nProductTabObj.Product);
                     cmd.Parameters.AddWithValue("@IsActive", nProductTabObj.IsActive ? "1" : "0");
                     cmd.Parameters.AddWithValue("@CategoryId", nProductTabObj.CategoryId);
+                    cmd.Parameters.AddWithValue("@VendorId", nProductTabObj.VendorId);  // ✅ Added
                     cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nProductTabObj.IsUpdate ? "1" : "0");
-                    cmd.Parameters.AddWithValue("@ProductImage", nProductTabObj.ProductImageAttachmentfilename);
+                    cmd.Parameters.AddWithValue("@ProductImage", nProductTabObj.ProductImageAttachmentfilename ?? "");
                     cmd.Parameters.AddWithValue("@Prices", nProductTabObj.Prices);
-                    cmd.Parameters.AddWithValue("@DiscountAmount", nProductTabObj.DiscountAmount);
+                    cmd.Parameters.AddWithValue("@DiscountAmount", nProductTabObj.DiscountAmount ?? "0");
 
                     if (nProductTabObj.IsUpdate)
                     {
                         cmd.Parameters.AddWithValue("@ProductId", nProductTabObj.ProductId);
                     }
-
-                    // 🔹 Build SQL exec line for debugging
-                    string sqlDebug = $"EXEC Ecom_ProductSP " +
-                                      $"@nCategoryId=0, " +
-                                      $"@nsCategoryId=0, " +
-                                      $"@Product='{nProductTabObj.Product}', " +
-                                      $"@IsActive='{(nProductTabObj.IsActive ? "1" : "0")}', " +
-                                      $"@CategoryId='{nProductTabObj.CategoryId}', " +
-                                      $"@UserId='{nProductTabObj.Userid}', " +
-                                      $"@IsUpdate='{(nProductTabObj.IsUpdate ? "1" : "0")}', " +
-                                      $"@ProductImage='{nProductTabObj.ProductImageAttachmentfilename}', " +
-                                      $"@Prices='{nProductTabObj.Prices}', " +
-                                      $"@DiscountAmount='{nProductTabObj.DiscountAmount}'";
-
-                    if (nProductTabObj.IsUpdate)
-                    {
-                        sqlDebug += $", @ProductId='{nProductTabObj.ProductId}'";
-                    }
-
-                    // 🔹 You can now log or store sqlDebug for SQL Server testing
-                    Console.WriteLine(sqlDebug);
 
                     await con.OpenAsync();
 
@@ -146,7 +135,6 @@ namespace NormalAccountProject.Controllers
         {
             try
             {
-
                 var parameters = new Dictionary<string, object>
                 {
                     { "@nCategoryId", 0 },
@@ -158,7 +146,7 @@ namespace NormalAccountProject.Controllers
                 var response = new
                 {
                     statusId = 1,
-                    GridViewDataList = nDataList
+                    GridViewDataList = nDataList  // ✅ Fixed case sensitivity
                 };
                 return Ok(response);
             }
@@ -227,7 +215,6 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-
         async Task DeleteFromFtp(string attachmentFileName)
         {
             if (string.IsNullOrEmpty(attachmentFileName))
@@ -264,10 +251,11 @@ namespace NormalAccountProject.Controllers
                 }
                 else
                 {
-                    throw; // rethrow other exceptions
+                    throw;
                 }
             }
         }
+
         async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
         {
             string ftpPath = _configuration["Config:ftpPath"];
@@ -276,7 +264,6 @@ namespace NormalAccountProject.Controllers
             string ftpPassword = _configuration["Config:ftpPassword"];
             string ftpPort = _configuration["Config:ftpPort"];
 
-            // Remove base64 header if exists
             if (attachmentBase64.Contains(","))
                 attachmentBase64 = attachmentBase64.Split(',')[1];
 
@@ -302,6 +289,7 @@ namespace NormalAccountProject.Controllers
                 // Optional: log response.StatusDescription
             }
         }
+
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
             List<T> list = new();
@@ -323,7 +311,6 @@ namespace NormalAccountProject.Controllers
 
             if (typeof(T) == typeof(ExpandoObject))
             {
-                // ExpandoObject handling
                 while (await dr.ReadAsync())
                 {
                     IDictionary<string, object> expando = new ExpandoObject();
@@ -338,7 +325,6 @@ namespace NormalAccountProject.Controllers
             }
             else
             {
-                // Normal class handling via reflection
                 var props = typeof(T).GetProperties();
 
                 while (await dr.ReadAsync())
