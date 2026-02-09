@@ -62,7 +62,7 @@
                         </div>
                     </div>
 
-                    <!-- ✅ Row 4: Vendor (NEW) -->
+                    <!-- Row 4: Vendor -->
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="VendorId">Vendor *</label>
@@ -236,14 +236,14 @@
             });
 
             if (response.statusId === 1) {
-                // ✅ Populate Category Dropdown
+                // Populate Category Dropdown
                 const categorySelect = document.getElementById("CategoryId");
                 categorySelect.innerHTML = '<option value="">-- Select Category --</option>';
                 response.CategoryList.forEach(item => {
                     categorySelect.innerHTML += `<option value="${item.CategoryId}">${item.Category}</option>`;
                 });
 
-                // ✅ Populate Vendor Dropdown (NEW)
+                // Populate Vendor Dropdown
                 const vendorSelect = document.getElementById("VendorId");
                 vendorSelect.innerHTML = '<option value="">-- Select Vendor --</option>';
                 response.VendorList.forEach(item => {
@@ -283,8 +283,7 @@
             });
 
             if (response.statusId === 1) {
-                GridViewDataList = response.GridViewDataList || [];  // ✅ Fixed case
-
+                GridViewDataList = response.GridViewDataList || [];
                 document.getElementById("TotalProductsCount").textContent = GridViewDataList.length;
                 RenderGridView();
 
@@ -306,7 +305,7 @@
         }
     }
 
-    // Render Grid View
+    // ✅ Render Grid View - FIXED FIELD NAMES
     function RenderGridView() {
         const container = document.getElementById("ProductGridContainer");
 
@@ -339,7 +338,7 @@
                     <td>${item.ProductCode || ''}</td>
                     <td>${item['Product Name'] || ''}</td>
                     <td>${item['CategoryId Name'] || ''}</td>
-                    <td>${item.Vendor || ''}</td>
+                    <td>${item['VendorId Name'] || ''}</td>
                     <td>${item.Prices || '0'}</td>
                     <td>${item['Discount Amount'] || '0'}</td>
                     <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
@@ -362,9 +361,10 @@
         container.innerHTML = tableHTML;
     }
 
-    // Edit Product
+    // ✅ Edit Product - FIXED FIELD MAPPING
     function EditProduct(productId) {
         const product = GridViewDataList.find(c => c.ProductCode === productId);
+
         if (!product) {
             Swal.fire({
                 icon: 'error',
@@ -374,18 +374,23 @@
             return;
         }
 
-        document.getElementById("ProductId").value = product.ProductCode;
+        // Set form values
+        document.getElementById("ProductId").value = product.ProductCode || '';
         document.getElementById("Product").value = product['Product Name'] || '';
         document.getElementById("CategoryId").value = product.CategoryId || '';
-        document.getElementById("VendorId").value = product.VendorId || '';  // ✅ Added
+        document.getElementById("VendorId").value = product.VendorId || '';
         document.getElementById("Prices").value = product.Prices || '0';
         document.getElementById("DiscountAmount").value = product['Discount Amount'] || '0';
         document.getElementById("IsActive").checked = product['Is Active'] === true || product['Is Active'] === 1;
 
+        // Handle product image
         if (product.ProductImage) {
             document.getElementById("ProductImageAttachmentOld").value = product.ProductImage;
             document.getElementById("ViewImageBtn").href = product.ProductImage;
             document.getElementById("ViewImageBtn").style.display = "inline-block";
+        } else {
+            document.getElementById("ProductImageAttachmentOld").value = "";
+            document.getElementById("ViewImageBtn").style.display = "none";
         }
 
         IsUpdate = true;
@@ -467,7 +472,7 @@
         const ProductId = document.getElementById("ProductId").value.trim();
         const Product = document.getElementById("Product").value.trim();
         const CategoryId = document.getElementById("CategoryId").value.trim();
-        const VendorId = document.getElementById("VendorId").value.trim();  // ✅ Added
+        const VendorId = document.getElementById("VendorId").value.trim();
         const Prices = document.getElementById("Prices").value.trim();
         const DiscountAmount = document.getElementById("DiscountAmount").value.trim();
         const isActive = document.getElementById("IsActive").checked;
@@ -501,7 +506,6 @@
             return;
         }
 
-        // ✅ Vendor Validation (NEW)
         if (!VendorId) {
             await Swal.fire({
                 icon: 'warning',
@@ -515,7 +519,6 @@
             return;
         }
 
-        // ✅ Improved Numeric Validation
         if (!Prices || isNaN(Prices) || parseFloat(Prices) <= 0) {
             await Swal.fire({
                 icon: 'warning',
@@ -529,7 +532,6 @@
             return;
         }
 
-        // ✅ Discount Amount Validation (numeric but can be 0)
         if (DiscountAmount && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0)) {
             await Swal.fire({
                 icon: 'warning',
@@ -563,7 +565,7 @@
             ProductId: ProductId,
             Product: Product,
             CategoryId: CategoryId,
-            VendorId: VendorId,  // ✅ Added
+            VendorId: VendorId,
             ProductImageAttachmentfilename: ProductImageAttachmentfilename,
             ProductImageAttachmentfilenameold: productImageAttachmentold,
             ProductImageAttachmentbase64: ProductImageAttachmentbase64,
@@ -635,7 +637,7 @@
         document.getElementById("ProductImageAttachmentOld").value = "";
         document.getElementById("Product").value = "";
         document.getElementById("CategoryId").value = "";
-        document.getElementById("VendorId").value = "";  // ✅ Added
+        document.getElementById("VendorId").value = "";
         document.getElementById("IsActive").checked = false;
         document.getElementById("ProductImageAttachment").value = "";
         document.getElementById("Prices").value = "";
@@ -647,7 +649,7 @@
         await LoadGridViewData();
     }
 
-    // ✅ Improved Numeric Input Validation
+    // Numeric Input Validation
     const pricesInput = document.getElementById("Prices");
     const discountInput = document.getElementById("DiscountAmount");
 
@@ -670,7 +672,6 @@
             }
         });
 
-        // ✅ Additional validation on paste
         input.addEventListener("paste", function (e) {
             setTimeout(() => {
                 this.value = this.value.replace(/[^0-9.]/g, '');

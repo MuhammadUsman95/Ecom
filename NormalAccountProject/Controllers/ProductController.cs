@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
 using System.Net;
-using static NormalAccountProject.Controllers.DashboardController;
 
 namespace NormalAccountProject.Controllers
 {
@@ -34,7 +33,7 @@ namespace NormalAccountProject.Controllers
                 };
                 List<CategoryDD> nCategoryList = await nGetDataAsync<CategoryDD>("Ecom_ProductSP", categoryParameters);
 
-                // ✅ Load Vendor List (NEW)
+                // Load Vendor List
                 var vendorParameters = new Dictionary<string, object>
                 {
                     { "@nCategoryId", 0 },
@@ -46,7 +45,7 @@ namespace NormalAccountProject.Controllers
                 {
                     statusId = 1,
                     CategoryList = nCategoryList,
-                    VendorList = nVendorList  // ✅ Added
+                    VendorList = nVendorList
                 };
                 return Ok(response);
             }
@@ -75,7 +74,7 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@Product", nProductTabObj.Product);
                     cmd.Parameters.AddWithValue("@IsActive", nProductTabObj.IsActive ? "1" : "0");
                     cmd.Parameters.AddWithValue("@CategoryId", nProductTabObj.CategoryId);
-                    cmd.Parameters.AddWithValue("@VendorId", nProductTabObj.VendorId);  // ✅ Added
+                    cmd.Parameters.AddWithValue("@VendorId", nProductTabObj.VendorId);
                     cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nProductTabObj.IsUpdate ? "1" : "0");
                     cmd.Parameters.AddWithValue("@ProductImage", nProductTabObj.ProductImageAttachmentfilename ?? "");
@@ -95,12 +94,20 @@ namespace NormalAccountProject.Controllers
                         {
                             int statusId = Convert.ToInt32(dr["StatusId"]);
 
+                            // ✅ FTP Upload/Delete Logic - Only execute if DB operation succeeded
                             if (statusId == 1)
                             {
+                                // If new image is uploaded
                                 if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
                                 {
-                                    string oldFileName = Path.GetFileName(nProductTabObj.ProductImageAttachmentfilenameold);
-                                    await DeleteFromFtp(oldFileName);
+                                    // Delete old image if exists (during update)
+                                    if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
+                                    {
+                                        string oldFileName = Path.GetFileName(nProductTabObj.ProductImageAttachmentfilenameold);
+                                        await DeleteFromFtp(oldFileName);
+                                    }
+
+                                    // Upload new image
                                     await UploadToFtp(nProductTabObj.ProductImageAttachmentfilename, nProductTabObj.ProductImageAttachmentbase64);
                                 }
                             }
@@ -146,7 +153,7 @@ namespace NormalAccountProject.Controllers
                 var response = new
                 {
                     statusId = 1,
-                    GridViewDataList = nDataList  // ✅ Fixed case sensitivity
+                    GridViewDataList = nDataList
                 };
                 return Ok(response);
             }
@@ -181,6 +188,8 @@ namespace NormalAccountProject.Controllers
                         if (await dr.ReadAsync())
                         {
                             int statusId = Convert.ToInt32(dr["StatusId"]);
+
+                            // Delete image from FTP if delete succeeded
                             if (statusId == 1)
                             {
                                 if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
@@ -215,21 +224,22 @@ namespace NormalAccountProject.Controllers
             }
         }
 
+        // ✅ FTP Delete Function
         async Task DeleteFromFtp(string attachmentFileName)
         {
             if (string.IsNullOrEmpty(attachmentFileName))
                 return;
 
-            string ftpPath = _configuration["Config:ftpPath"];
-            string ftpServer = _configuration["Config:ftpServer"];
-            string ftpUser = _configuration["Config:ftpUser"];
-            string ftpPassword = _configuration["Config:ftpPassword"];
-            string ftpPort = _configuration["Config:ftpPort"];
-
-            string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
-
             try
             {
+                string ftpPath = _configuration["Config:ftpPath"];
+                string ftpServer = _configuration["Config:ftpServer"];
+                string ftpUser = _configuration["Config:ftpUser"];
+                string ftpPassword = _configuration["Config:ftpPassword"];
+                string ftpPort = _configuration["Config:ftpPort"];
+
+                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
                 request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
@@ -239,57 +249,81 @@ namespace NormalAccountProject.Controllers
 
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    // Optional: log response.StatusDescription
+                    // Successfully deleted
+                    Console.WriteLine($"FTP Delete Success: {response.StatusDescription}");
                 }
             }
             catch (WebException ex)
             {
-                FtpWebResponse response = (FtpWebResponse)ex.Response;
-                if (response != null && response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                if (ex.Response is FtpWebResponse response)
                 {
-                    // File does not exist → ignore
+                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                    {
+                        // File does not exist - ignore
+                        Console.WriteLine($"FTP Delete: File not found - {attachmentFileName}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"FTP Delete Error: {response.StatusDescription}");
+                        throw;
+                    }
                 }
                 else
                 {
+                    Console.WriteLine($"FTP Delete Error: {ex.Message}");
                     throw;
                 }
             }
         }
 
+        // ✅ FTP Upload Function
         async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
         {
-            string ftpPath = _configuration["Config:ftpPath"];
-            string ftpServer = _configuration["Config:ftpServer"];
-            string ftpUser = _configuration["Config:ftpUser"];
-            string ftpPassword = _configuration["Config:ftpPassword"];
-            string ftpPort = _configuration["Config:ftpPort"];
+            if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
+                return;
 
-            if (attachmentBase64.Contains(","))
-                attachmentBase64 = attachmentBase64.Split(',')[1];
-
-            byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
-
-            string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
-
-            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-            request.Method = WebRequestMethods.Ftp.UploadFile;
-            request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
-            request.UseBinary = true;
-            request.UsePassive = true;
-            request.KeepAlive = false;
-            request.ContentLength = fileBytes.Length;
-
-            using (Stream requestStream = await request.GetRequestStreamAsync())
+            try
             {
-                await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+                string ftpPath = _configuration["Config:ftpPath"];
+                string ftpServer = _configuration["Config:ftpServer"];
+                string ftpUser = _configuration["Config:ftpUser"];
+                string ftpPassword = _configuration["Config:ftpPassword"];
+                string ftpPort = _configuration["Config:ftpPort"];
+
+                // Remove data:image/png;base64, prefix if present
+                if (attachmentBase64.Contains(","))
+                    attachmentBase64 = attachmentBase64.Split(',')[1];
+
+                byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
+
+                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                request.Method = WebRequestMethods.Ftp.UploadFile;
+                request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+                request.UseBinary = true;
+                request.UsePassive = true;
+                request.KeepAlive = false;
+                request.ContentLength = fileBytes.Length;
+
+                using (Stream requestStream = await request.GetRequestStreamAsync())
+                {
+                    await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+                }
+
+                using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+                {
+                    Console.WriteLine($"FTP Upload Success: {response.StatusDescription}");
+                }
             }
-
-            using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+            catch (Exception ex)
             {
-                // Optional: log response.StatusDescription
+                Console.WriteLine($"FTP Upload Error: {ex.Message}");
+                throw;
             }
         }
 
+        // ✅ Generic Data Fetcher
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
             List<T> list = new();
@@ -344,6 +378,20 @@ namespace NormalAccountProject.Controllers
             }
 
             return list;
+        }
+    }
+
+    // ✅ Extension Method for SqlDataReader
+    public static class SqlDataReaderExtensions
+    {
+        public static bool HasColumn(this SqlDataReader reader, string columnName)
+        {
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                if (reader.GetName(i).Equals(columnName, StringComparison.InvariantCultureIgnoreCase))
+                    return true;
+            }
+            return false;
         }
     }
 }

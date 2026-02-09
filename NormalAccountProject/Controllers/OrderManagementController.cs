@@ -22,7 +22,7 @@ namespace NormalAccountProject.Controllers
         }
 
         [HttpPost("nLoadCustomerRegistrationData")]
-        public async Task<IActionResult> nLoadCustomerRegistrationData([FromBody] nInfoTab nInfoTabObj)
+        public async Task<IActionResult> nLoadCustomerRegistrationData([FromBody] Models.nInfoTab nInfoTabObj)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace NormalAccountProject.Controllers
         }
         
         [HttpPost("nLoadGridViewData")]
-        public async Task<IActionResult> nLoadGridViewData([FromBody] nInfoTab nInfoTabObj)
+        public async Task<IActionResult> nLoadGridViewData([FromBody] Models.nInfoTab nInfoTabObj)
         {
             try
             {
