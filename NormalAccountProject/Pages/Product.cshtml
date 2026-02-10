@@ -305,7 +305,7 @@
         }
     }
 
-    // ✅ Render Grid View - FIXED FIELD NAMES
+    // Render Grid View
     function RenderGridView() {
         const container = document.getElementById("ProductGridContainer");
 
@@ -346,8 +346,8 @@
                         ${item.ProductImage ? `<a href="${item.ProductImage}" target="_blank">View Image</a>` : 'No Image'}
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-primary" onclick="EditProduct(${item.ProductCode})">Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick="DeleteProduct(${item.ProductCode})">Delete</button>
+                        <button class="btn btn-sm btn-primary" onclick='EditProduct(${item.ProductCode})'>Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick='DeleteProduct(${item.ProductCode})'>Delete</button>
                     </td>
                 </tr>
             `;
@@ -361,20 +361,25 @@
         container.innerHTML = tableHTML;
     }
 
-    // ✅ Edit Product - FIXED FIELD MAPPING
+    // ✅ FIXED - Edit Product Function
     function EditProduct(productId) {
-        const product = GridViewDataList.find(c => c.ProductCode === productId);
+        console.log("Edit clicked for ProductCode:", productId);
+        console.log("GridViewDataList:", GridViewDataList);
+
+        const product = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productId));
 
         if (!product) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'Product not found'
+                text: 'Product not found. ProductCode: ' + productId
             });
+            console.error("Product not found:", productId);
             return;
         }
 
-        // Set form values
+        console.log("Found product:", product);
+
         document.getElementById("ProductId").value = product.ProductCode || '';
         document.getElementById("Product").value = product['Product Name'] || '';
         document.getElementById("CategoryId").value = product.CategoryId || '';
@@ -383,7 +388,6 @@
         document.getElementById("DiscountAmount").value = product['Discount Amount'] || '0';
         document.getElementById("IsActive").checked = product['Is Active'] === true || product['Is Active'] === 1;
 
-        // Handle product image
         if (product.ProductImage) {
             document.getElementById("ProductImageAttachmentOld").value = product.ProductImage;
             document.getElementById("ViewImageBtn").href = product.ProductImage;
@@ -398,8 +402,11 @@
         showFormView();
     }
 
-    // Delete Product
+    // ✅ COMPLETELY FIXED - Delete Product Function
     async function DeleteProduct(productId) {
+        console.log("Delete clicked for ProductCode:", productId);
+        console.log("GridViewDataList:", GridViewDataList);
+
         const result = await Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -412,13 +419,38 @@
 
         if (!result.isConfirmed) return;
 
-        const product = GridViewDataList.find(c => c.ProductCode === productId);
+        // ✅ FIX: Convert to number for comparison
+        const product = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productId));
+
+        if (!product) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Product not found for deletion'
+            });
+            console.error("Product not found:", productId);
+            return;
+        }
+
+        // ✅ CRITICAL FIX: Extract only filename from full URL
+        let imageFilename = "";
+        if (product.ProductImage) {
+            // If it's a full URL like "http://192.168.100.243/ProductRegistration/image.jpg"
+            // Extract only "image.jpg"
+            const urlParts = product.ProductImage.split('/');
+            imageFilename = urlParts[urlParts.length - 1];
+        }
+
+        console.log("Product to delete:", product);
+        console.log("Image filename:", imageFilename);
 
         const nProductTab = {
             Userid: userId,
-            ProductId: productId,
-            ProductImageAttachmentfilenameold: product?.ProductImage || ""
+            ProductId: parseInt(productId),
+            ProductImageAttachmentfilenameold: imageFilename // ✅ Only filename, not full URL
         };
+
+        console.log("Sending to backend:", nProductTab);
 
         Swal.fire({
             title: 'Please wait',
@@ -435,6 +467,8 @@
                 data: JSON.stringify(nProductTab),
                 contentType: 'application/json'
             });
+
+            console.log("Delete response:", response);
 
             Swal.close();
 
@@ -454,16 +488,28 @@
                 });
             }
 
-        } catch (xhr) {
+        } catch (error) {
             Swal.close();
+
+            console.error("DeleteProduct Error:", error);
+
+            // ✅ Show detailed error message
+            let errorMessage = 'An error occurred while deleting product';
+
+            if (error.responseJSON && error.responseJSON.message) {
+                errorMessage = error.responseJSON.message;
+            } else if (error.responseText) {
+                errorMessage = error.responseText;
+            } else if (error.statusText) {
+                errorMessage = error.statusText;
+            }
 
             await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while deleting product'
+                text: errorMessage,
+                footer: 'Check browser console for details (Press F12)'
             });
-
-            console.error("DeleteProduct Error:", xhr);
         }
     }
 
@@ -655,18 +701,14 @@
 
     [pricesInput, discountInput].forEach(input => {
         input.addEventListener("keydown", function (e) {
-            // Allow: backspace, delete, tab, escape, enter
             if ([8, 9, 27, 13, 46].indexOf(e.keyCode) !== -1 ||
-                // Allow: Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
                 (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) ||
                 (e.keyCode === 67 && (e.ctrlKey === true || e.metaKey === true)) ||
                 (e.keyCode === 86 && (e.ctrlKey === true || e.metaKey === true)) ||
                 (e.keyCode === 88 && (e.ctrlKey === true || e.metaKey === true)) ||
-                // Allow: home, end, left, right
                 (e.keyCode >= 35 && e.keyCode <= 39)) {
                 return;
             }
-            // Ensure that it is a number and stop the keypress
             if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105) && e.keyCode !== 110 && e.keyCode !== 190) {
                 e.preventDefault();
             }

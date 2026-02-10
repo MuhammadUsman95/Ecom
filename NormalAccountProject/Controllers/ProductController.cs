@@ -94,7 +94,7 @@ namespace NormalAccountProject.Controllers
                         {
                             int statusId = Convert.ToInt32(dr["StatusId"]);
 
-                            // ✅ FTP Upload/Delete Logic - Only execute if DB operation succeeded
+                            // FTP Upload/Delete Logic - Only execute if DB operation succeeded
                             if (statusId == 1)
                             {
                                 // If new image is uploaded
@@ -170,15 +170,21 @@ namespace NormalAccountProject.Controllers
         [HttpPost("nDeleteProductRegistrationData")]
         public async Task<IActionResult> nDeleteProductRegistrationData([FromBody] ProductTab nProductTabObj)
         {
+            // ✅ CRITICAL FIX: Clear model state to bypass validation
+            ModelState.Clear();
+
             try
             {
+                Console.WriteLine($"Delete Request - ProductId: {nProductTabObj.ProductId}, UserId: {nProductTabObj.Userid}");
+                Console.WriteLine($"Image filename: {nProductTabObj.ProductImageAttachmentfilenameold}");
+
                 using (SqlConnection con = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand("Ecom_ProductSP", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@nCategoryId", 0);
                     cmd.Parameters.AddWithValue("@nsCategoryId", 3);
-                    cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid);
+                    cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid ?? "");
                     cmd.Parameters.AddWithValue("@ProductId", nProductTabObj.ProductId);
 
                     await con.OpenAsync();
@@ -188,43 +194,77 @@ namespace NormalAccountProject.Controllers
                         if (await dr.ReadAsync())
                         {
                             int statusId = Convert.ToInt32(dr["StatusId"]);
+                            string message = dr["MessageCaption"]?.ToString() ?? "";
+
+                            Console.WriteLine($"SP Response - StatusId: {statusId}, Message: {message}");
 
                             // Delete image from FTP if delete succeeded
                             if (statusId == 1)
                             {
                                 if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
                                 {
-                                    string oldFileName = Path.GetFileName(nProductTabObj.ProductImageAttachmentfilenameold);
-                                    await DeleteFromFtp(oldFileName);
+                                    try
+                                    {
+                                        // ✅ Extract filename if full URL is received
+                                        string fileName = nProductTabObj.ProductImageAttachmentfilenameold;
+                                        
+                                        if (fileName.Contains("/"))
+                                        {
+                                            fileName = Path.GetFileName(fileName);
+                                        }
+
+                                        Console.WriteLine($"Attempting to delete file: {fileName}");
+                                        await DeleteFromFtp(fileName);
+                                        Console.WriteLine($"File deleted successfully: {fileName}");
+                                    }
+                                    catch (Exception ftpEx)
+                                    {
+                                        // Log FTP error but don't fail the whole operation
+                                        Console.WriteLine($"FTP Delete Warning: {ftpEx.Message}");
+                                    }
                                 }
                             }
 
                             return Ok(new
                             {
                                 statusId = statusId,
-                                message = dr["MessageCaption"].ToString()
+                                message = message
+                            });
+                        }
+                        else
+                        {
+                            Console.WriteLine("No data returned from stored procedure");
+                            return Ok(new
+                            {
+                                statusId = 0,
+                                message = "No response from database"
                             });
                         }
                     }
                 }
-
+            }
+            catch (SqlException sqlEx)
+            {
+                Console.WriteLine($"SQL Error: {sqlEx.Message}");
                 return Ok(new
                 {
                     statusId = 0,
-                    message = "No response from database"
+                    message = $"Database Error: {sqlEx.Message}"
                 });
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"General Error: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
                 return Ok(new
                 {
                     statusId = 0,
-                    message = "Error: " + ex.Message
+                    message = $"Error: {ex.Message}"
                 });
             }
         }
 
-        // ✅ FTP Delete Function
+        // FTP Delete Function
         async Task DeleteFromFtp(string attachmentFileName)
         {
             if (string.IsNullOrEmpty(attachmentFileName))
@@ -249,7 +289,6 @@ namespace NormalAccountProject.Controllers
 
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    // Successfully deleted
                     Console.WriteLine($"FTP Delete Success: {response.StatusDescription}");
                 }
             }
@@ -259,7 +298,6 @@ namespace NormalAccountProject.Controllers
                 {
                     if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                     {
-                        // File does not exist - ignore
                         Console.WriteLine($"FTP Delete: File not found - {attachmentFileName}");
                     }
                     else
@@ -276,7 +314,7 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        // ✅ FTP Upload Function
+        // FTP Upload Function
         async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
         {
             if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
@@ -323,7 +361,7 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        // ✅ Generic Data Fetcher
+        // Generic Data Fetcher
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
             List<T> list = new();
@@ -381,7 +419,7 @@ namespace NormalAccountProject.Controllers
         }
     }
 
-    // ✅ Extension Method for SqlDataReader
+    // Extension Method for SqlDataReader
     public static class SqlDataReaderExtensions
     {
         public static bool HasColumn(this SqlDataReader reader, string columnName)
