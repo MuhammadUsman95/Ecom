@@ -44,11 +44,11 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="Prices">Prices *</label>
-                            <input type="text" id="Prices" class="form-control" placeholder="Enter Prices" inputmode="decimal">
+                            <input type="text" value="0" id="Prices" class="form-control" placeholder="Enter Prices" inputmode="decimal">
                         </div>
                         <div class="col-md-6">
                             <label for="DiscountAmount">Discount Amount</label>
-                            <input type="text" id="DiscountAmount" class="form-control" placeholder="Enter Discount Amount" inputmode="decimal">
+                            <input type="text" value="0" id="DiscountAmount" class="form-control" placeholder="Enter Discount Amount" inputmode="decimal">
                         </div>
                     </div>
 
@@ -446,9 +446,11 @@
 
         const nProductTab = {
             Userid: userId,
-            ProductId: parseInt(productId),
-            ProductImageAttachmentfilenameold: imageFilename // ✅ Only filename, not full URL
+            ProductId: `${productId}`,   // Convert to string
+            ProductImageAttachmentfilenameold: imageFilename,
+            FtpPath: "/Image/ProductRegistration"
         };
+
 
         console.log("Sending to backend:", nProductTab);
 
@@ -767,8 +769,8 @@
         const { ProductImageAttachmentfilename, ProductImageAttachmentbase64 } = await GetProductImageAttachmentFile();
 
         const nProductTab = {
-            Userid: userId,
-            ProductId: ProductId,
+            Userid: userId || "",
+            ProductId: ProductId,  // ✅ Convert to number or 0
             Product: Product,
             CategoryId: CategoryId,
             VendorId: VendorId,
@@ -779,6 +781,7 @@
             DiscountAmount: DiscountAmount || "0",
             IsActive: isActive,
             IsUpdate: IsUpdate,
+            FtpPath: "/Image/ProductRegistration"  // ✅ NEW - FTP Path from frontend
         };
 
         // ✅ Console log to debug

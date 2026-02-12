@@ -133,11 +133,11 @@ namespace NormalAccountProject.Controllers
                                     if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
                                     {
                                         string oldFileName = Path.GetFileName(nProductTabObj.ProductImageAttachmentfilenameold);
-                                        await DeleteFromFtp(oldFileName);
+                                        await DeleteFromFtp(oldFileName, nProductTabObj.FtpPath);
                                     }
 
                                     // Upload new image
-                                    await UploadToFtp(nProductTabObj.ProductImageAttachmentfilename, nProductTabObj.ProductImageAttachmentbase64);
+                                    await UploadToFtp(nProductTabObj.ProductImageAttachmentfilename, nProductTabObj.ProductImageAttachmentbase64, nProductTabObj.FtpPath);
                                 }
                             }
 
@@ -239,7 +239,7 @@ namespace NormalAccountProject.Controllers
                                         }
 
                                         Console.WriteLine($"Attempting to delete file: {fileName}");
-                                        await DeleteFromFtp(fileName);
+                                        await DeleteFromFtp(fileName, deleteRequest.FtpPath);
                                         Console.WriteLine($"File deleted successfully: {fileName}");
                                     }
                                     catch (Exception ftpEx)
@@ -288,21 +288,25 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        // FTP Delete Function
-        async Task DeleteFromFtp(string attachmentFileName)
+        // ✅ Updated FTP Delete Function with FtpPath parameter
+        async Task DeleteFromFtp(string attachmentFileName, string ftpPath)
         {
             if (string.IsNullOrEmpty(attachmentFileName))
                 return;
 
             try
             {
-                string ftpPath = _configuration["/Image/ProductRegistration/"];
                 string ftpServer = _configuration["Config:ftpServer"];
                 string ftpUser = _configuration["Config:ftpUser"];
                 string ftpPassword = _configuration["Config:ftpPassword"];
                 string ftpPort = _configuration["Config:ftpPort"];
 
-                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+                // ✅ Use provided ftpPath or default
+                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/Image/ProductRegistration";
+
+                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
+
+                Console.WriteLine($"FTP Delete URL: {ftpUrl}");
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
@@ -338,19 +342,21 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        // FTP Upload Function
-        async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
+        // ✅ Updated FTP Upload Function with FtpPath parameter
+        async Task UploadToFtp(string attachmentFileName, string attachmentBase64, string ftpPath)
         {
             if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
                 return;
 
             try
             {
-                string ftpPath = _configuration["/Image/ProductRegistration/"];
                 string ftpServer = _configuration["Config:ftpServer"];
                 string ftpUser = _configuration["Config:ftpUser"];
                 string ftpPassword = _configuration["Config:ftpPassword"];
                 string ftpPort = _configuration["Config:ftpPort"];
+
+                // ✅ Use provided ftpPath or default
+                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/Image/ProductRegistration";
 
                 // Remove data:image/png;base64, prefix if present
                 if (attachmentBase64.Contains(","))
@@ -358,7 +364,9 @@ namespace NormalAccountProject.Controllers
 
                 byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
 
-                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{ftpPath}/{attachmentFileName}";
+                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
+
+                Console.WriteLine($"FTP Upload URL: {ftpUrl}");
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
                 request.Method = WebRequestMethods.Ftp.UploadFile;

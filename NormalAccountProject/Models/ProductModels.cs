@@ -23,25 +23,27 @@
     // ✅ Product Tab - Main Product Model
     public class ProductTab
     {
-        public string Userid { get; set; }
-        public string ProductId { get; set; }
-        public string Product { get; set; }
+        public string? Userid { get; set; }
+        public string? ProductId { get; set; }
+        public string? Product { get; set; }
         public bool IsActive { get; set; }
-        public string CategoryId { get; set; }
-        public string VendorId { get; set; }
-        public string Prices { get; set; }
-        public string DiscountAmount { get; set; }
+        public string? CategoryId { get; set; }
+        public string? VendorId { get; set; }
+        public string? Prices { get; set; }
+        public string? DiscountAmount { get; set; }
         public bool IsUpdate { get; set; }
 
         // Image Fields
-        public string ProductImageAttachmentfilename { get; set; }
-        public string ProductImageAttachmentfilenameold { get; set; }
-        public string ProductImageAttachmentbase64 { get; set; }
+        public string? ProductImageAttachmentfilename { get; set; }
+        public string? ProductImageAttachmentfilenameold { get; set; }
+        public string? ProductImageAttachmentbase64 { get; set; }
+        public string? FtpPath { get; set; }  // ✅ NEW
     }
     public class ProductDeleteRequest
     {
         public string? Userid { get; set; }
-        public int ProductId { get; set; }
+        public string? ProductId { get; set; }
         public string? ProductImageAttachmentfilenameold { get; set; }
+        public string? FtpPath { get; set; }  // ✅ NEW
     }
 }
