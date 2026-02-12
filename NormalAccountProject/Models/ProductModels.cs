@@ -24,7 +24,7 @@
     public class ProductTab
     {
         public string Userid { get; set; }
-        public int ProductId { get; set; }
+        public string ProductId { get; set; }
         public string Product { get; set; }
         public bool IsActive { get; set; }
         public string CategoryId { get; set; }
@@ -37,5 +37,11 @@
         public string ProductImageAttachmentfilename { get; set; }
         public string ProductImageAttachmentfilenameold { get; set; }
         public string ProductImageAttachmentbase64 { get; set; }
+    }
+    public class ProductDeleteRequest
+    {
+        public string? Userid { get; set; }
+        public int ProductId { get; set; }
+        public string? ProductImageAttachmentfilenameold { get; set; }
     }
 }

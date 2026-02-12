@@ -513,7 +513,167 @@
         }
     }
 
-    // Save Button click
+    // // Save Button click
+    // document.getElementById("saveBtn").addEventListener("click", async function () {
+    //     const ProductId = document.getElementById("ProductId").value.trim();
+    //     const Product = document.getElementById("Product").value.trim();
+    //     const CategoryId = document.getElementById("CategoryId").value.trim();
+    //     const VendorId = document.getElementById("VendorId").value.trim();
+    //     const Prices = document.getElementById("Prices").value.trim();
+    //     const DiscountAmount = document.getElementById("DiscountAmount").value.trim();
+    //     const isActive = document.getElementById("IsActive").checked;
+    //     const productImageAttachment = document.getElementById("ProductImageAttachment").files.length > 0;
+    //     const productImageAttachmentold = document.getElementById("ProductImageAttachmentOld").value.trim();
+
+    //     // Validations
+    //     if (!Product) {
+    //         await Swal.fire({
+    //             icon: 'warning',
+    //             title: 'Validation',
+    //             text: 'Product name is required',
+    //             returnFocus: false,
+    //             didClose: () => {
+    //                 document.getElementById("Product").focus();
+    //             }
+    //         });
+    //         return;
+    //     }
+
+    //     if (!CategoryId) {
+    //         await Swal.fire({
+    //             icon: 'warning',
+    //             title: 'Validation',
+    //             text: 'Please select category',
+    //             returnFocus: false,
+    //             didClose: () => {
+    //                 document.getElementById("CategoryId").focus();
+    //             }
+    //         });
+    //         return;
+    //     }
+
+    //     if (!VendorId) {
+    //         await Swal.fire({
+    //             icon: 'warning',
+    //             title: 'Validation',
+    //             text: 'Please select vendor',
+    //             returnFocus: false,
+    //             didClose: () => {
+    //                 document.getElementById("VendorId").focus();
+    //             }
+    //         });
+    //         return;
+    //     }
+
+    //     if (!Prices || isNaN(Prices) || parseFloat(Prices) <= 0) {
+    //         await Swal.fire({
+    //             icon: 'warning',
+    //             title: 'Validation',
+    //             text: 'Please enter valid price (numbers only)',
+    //             returnFocus: false,
+    //             didClose: () => {
+    //                 document.getElementById("Prices").focus();
+    //             }
+    //         });
+    //         return;
+    //     }
+
+    //     if (DiscountAmount && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0)) {
+    //         await Swal.fire({
+    //             icon: 'warning',
+    //             title: 'Validation',
+    //             text: 'Please enter valid discount amount (numbers only)',
+    //             returnFocus: false,
+    //             didClose: () => {
+    //                 document.getElementById("DiscountAmount").focus();
+    //             }
+    //         });
+    //         return;
+    //     }
+
+    //     if (!IsUpdate && !productImageAttachment) {
+    //         await Swal.fire({
+    //             icon: 'warning',
+    //             title: 'Validation',
+    //             text: 'Please select product image',
+    //             returnFocus: false,
+    //             didClose: () => {
+    //                 document.getElementById("ProductImageAttachment").focus();
+    //             }
+    //         });
+    //         return;
+    //     }
+
+    //     const { ProductImageAttachmentfilename, ProductImageAttachmentbase64 } = await GetProductImageAttachmentFile();
+
+    //     const nProductTab = {
+    //         Userid: userId,
+    //         ProductId: ProductId,
+    //         Product: Product,
+    //         CategoryId: CategoryId,
+    //         VendorId: VendorId,
+    //         ProductImageAttachmentfilename: ProductImageAttachmentfilename,
+    //         ProductImageAttachmentfilenameold: productImageAttachmentold,
+    //         ProductImageAttachmentbase64: ProductImageAttachmentbase64,
+    //         Prices: Prices,
+    //         DiscountAmount: DiscountAmount || "0",
+    //         IsActive: isActive,
+    //         IsUpdate: IsUpdate,
+    //     };
+
+    //     Swal.fire({
+    //         title: 'Please wait',
+    //         text: 'Product registration is in process...',
+    //         allowOutsideClick: false,
+    //         allowEscapeKey: false,
+    //         didOpen: () => Swal.showLoading()
+    //     });
+
+    //     try {
+    //         const response = await jQuery.ajax({
+    //             type: 'POST',
+    //             url: '@Url.Action("nSaveProductRegistrationData", "ProductRegistration")',
+    //             data: JSON.stringify(nProductTab),
+    //             contentType: 'application/json'
+    //         });
+
+    //         Swal.close();
+
+    //         if (response.statusId === 1) {
+    //             await Swal.fire({
+    //                 icon: 'success',
+    //                 title: 'Product Registration',
+    //                 text: response.message || 'Product saved successfully',
+    //                 returnFocus: false,
+    //                 didClose: () => {
+    //                     document.getElementById("Product").focus();
+    //                 }
+    //             });
+
+    //             nClearForm();
+
+    //         } else {
+    //             await Swal.fire({
+    //                 icon: 'warning',
+    //                 title: 'Product Registration',
+    //                 text: response.message || 'Product save failed'
+    //             });
+    //         }
+
+    //     } catch (xhr) {
+    //         Swal.close();
+
+    //         await Swal.fire({
+    //             icon: 'error',
+    //             title: 'Error',
+    //             text: 'An error occurred while saving product'
+    //         });
+
+    //         console.error("SaveData Error:", xhr);
+    //     }
+    // });
+
+        // Save Button click - UPDATED WITH BETTER ERROR HANDLING
     document.getElementById("saveBtn").addEventListener("click", async function () {
         const ProductId = document.getElementById("ProductId").value.trim();
         const Product = document.getElementById("Product").value.trim();
@@ -621,6 +781,9 @@
             IsUpdate: IsUpdate,
         };
 
+        // ✅ Console log to debug
+        console.log("Sending data:", nProductTab);
+
         Swal.fire({
             title: 'Please wait',
             text: 'Product registration is in process...',
@@ -636,6 +799,9 @@
                 data: JSON.stringify(nProductTab),
                 contentType: 'application/json'
             });
+
+            // ✅ Console log response
+            console.log("Server response:", response);
 
             Swal.close();
 
@@ -663,13 +829,47 @@
         } catch (xhr) {
             Swal.close();
 
+            // ✅ IMPROVED ERROR HANDLING - Show actual error
+            console.error("SaveData Error:", xhr);
+
+            let errorMessage = 'An error occurred while saving product';
+
+            // Extract actual error message
+            if (xhr.responseJSON) {
+                if (xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                } else if (xhr.responseJSON.errors) {
+                    // Model validation errors
+                    const errors = Object.values(xhr.responseJSON.errors).flat();
+                    errorMessage = errors.join('\n');
+                } else if (xhr.responseJSON.title) {
+                    errorMessage = xhr.responseJSON.title;
+                } else {
+                    errorMessage = JSON.stringify(xhr.responseJSON);
+                }
+            } else if (xhr.responseText) {
+                try {
+                    const parsed = JSON.parse(xhr.responseText);
+                    if (parsed.message) {
+                        errorMessage = parsed.message;
+                    } else if (parsed.title) {
+                        errorMessage = parsed.title;
+                    } else {
+                        errorMessage = xhr.responseText.substring(0, 200);
+                    }
+                } catch {
+                    errorMessage = xhr.responseText.substring(0, 200);
+                }
+            } else if (xhr.statusText) {
+                errorMessage = `${xhr.status}: ${xhr.statusText}`;
+            }
+
             await Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'An error occurred while saving product'
+                html: errorMessage.replace(/\n/g, '<br>'),
+                footer: '<small>Check browser console (F12) for more details</small>'
             });
-
-            console.error("SaveData Error:", xhr);
         }
     });
 

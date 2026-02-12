@@ -62,13 +62,42 @@ namespace NormalAccountProject.Controllers
         [HttpPost("nSaveProductRegistrationData")]
         public async Task<IActionResult> nSaveProductRegistrationData([FromBody] ProductTab nProductTabObj)
         {
+            // ✅ Clear model state to bypass automatic validation
+            ModelState.Clear();
+
+            // ✅ Manual validation
+            if (string.IsNullOrEmpty(nProductTabObj.Product))
+            {
+                return Ok(new { statusId = 0, message = "Product name is required" });
+            }
+
+            if (string.IsNullOrEmpty(nProductTabObj.CategoryId))
+            {
+                return Ok(new { statusId = 0, message = "Category is required" });
+            }
+
+            if (string.IsNullOrEmpty(nProductTabObj.VendorId))
+            {
+                return Ok(new { statusId = 0, message = "Vendor is required" });
+            }
+
+            if (string.IsNullOrEmpty(nProductTabObj.Prices))
+            {
+                return Ok(new { statusId = 0, message = "Price is required" });
+            }
+
+            // ✅ Validate image for new product (not update)
+            if (!nProductTabObj.IsUpdate && string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
+            {
+                return Ok(new { statusId = 0, message = "Product image is required" });
+            }
+
             try
             {
                 using (SqlConnection con = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand("Ecom_ProductSP", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-
                     cmd.Parameters.AddWithValue("@nCategoryId", 0);
                     cmd.Parameters.AddWithValue("@nsCategoryId", 0);
                     cmd.Parameters.AddWithValue("@Product", nProductTabObj.Product);
@@ -168,15 +197,12 @@ namespace NormalAccountProject.Controllers
         }
 
         [HttpPost("nDeleteProductRegistrationData")]
-        public async Task<IActionResult> nDeleteProductRegistrationData([FromBody] ProductTab nProductTabObj)
+        public async Task<IActionResult> nDeleteProductRegistrationData([FromBody] ProductDeleteRequest deleteRequest)
         {
-            // ✅ CRITICAL FIX: Clear model state to bypass validation
-            ModelState.Clear();
-
             try
             {
-                Console.WriteLine($"Delete Request - ProductId: {nProductTabObj.ProductId}, UserId: {nProductTabObj.Userid}");
-                Console.WriteLine($"Image filename: {nProductTabObj.ProductImageAttachmentfilenameold}");
+                Console.WriteLine($"Delete Request - ProductId: {deleteRequest.ProductId}, UserId: {deleteRequest.Userid}");
+                Console.WriteLine($"Image filename: {deleteRequest.ProductImageAttachmentfilenameold}");
 
                 using (SqlConnection con = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand("Ecom_ProductSP", con))
@@ -184,8 +210,8 @@ namespace NormalAccountProject.Controllers
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@nCategoryId", 0);
                     cmd.Parameters.AddWithValue("@nsCategoryId", 3);
-                    cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid ?? "");
-                    cmd.Parameters.AddWithValue("@ProductId", nProductTabObj.ProductId);
+                    cmd.Parameters.AddWithValue("@UserId", deleteRequest.Userid ?? "");
+                    cmd.Parameters.AddWithValue("@ProductId", deleteRequest.ProductId);
 
                     await con.OpenAsync();
 
@@ -201,13 +227,12 @@ namespace NormalAccountProject.Controllers
                             // Delete image from FTP if delete succeeded
                             if (statusId == 1)
                             {
-                                if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
+                                if (!string.IsNullOrEmpty(deleteRequest.ProductImageAttachmentfilenameold))
                                 {
                                     try
                                     {
-                                        // ✅ Extract filename if full URL is received
-                                        string fileName = nProductTabObj.ProductImageAttachmentfilenameold;
-                                        
+                                        string fileName = deleteRequest.ProductImageAttachmentfilenameold;
+
                                         if (fileName.Contains("/"))
                                         {
                                             fileName = Path.GetFileName(fileName);
@@ -219,7 +244,6 @@ namespace NormalAccountProject.Controllers
                                     }
                                     catch (Exception ftpEx)
                                     {
-                                        // Log FTP error but don't fail the whole operation
                                         Console.WriteLine($"FTP Delete Warning: {ftpEx.Message}");
                                     }
                                 }
@@ -272,7 +296,7 @@ namespace NormalAccountProject.Controllers
 
             try
             {
-                string ftpPath = _configuration["Config:ftpPath"];
+                string ftpPath = _configuration["/Image/ProductRegistration/"];
                 string ftpServer = _configuration["Config:ftpServer"];
                 string ftpUser = _configuration["Config:ftpUser"];
                 string ftpPassword = _configuration["Config:ftpPassword"];
@@ -322,7 +346,7 @@ namespace NormalAccountProject.Controllers
 
             try
             {
-                string ftpPath = _configuration["Config:ftpPath"];
+                string ftpPath = _configuration["/Image/ProductRegistration/"];
                 string ftpServer = _configuration["Config:ftpServer"];
                 string ftpUser = _configuration["Config:ftpUser"];
                 string ftpPassword = _configuration["Config:ftpPassword"];
