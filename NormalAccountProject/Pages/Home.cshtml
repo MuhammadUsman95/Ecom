@@ -20,6 +20,10 @@
                         <i class="fa fa-refresh" id="refreshIcon"></i>
                         <span>Refresh Data</span>
                     </button>
+                    <div class="auto-refresh-timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="refreshTimer">Next refresh in 5:00</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,6 +43,7 @@
                         <canvas id="widgetChart1"></canvas>
                     </div>
                     <div class="stat-overlay"></div>
+                    <div class="stat-glow"></div>
                 </div>
             </div>
 
@@ -55,6 +60,7 @@
                         <canvas id="widgetChart2"></canvas>
                     </div>
                     <div class="stat-overlay"></div>
+                    <div class="stat-glow"></div>
                 </div>
             </div>
 
@@ -71,6 +77,7 @@
                         <canvas id="widgetChart3"></canvas>
                     </div>
                     <div class="stat-overlay"></div>
+                    <div class="stat-glow"></div>
                 </div>
             </div>
 
@@ -87,6 +94,7 @@
                         <canvas id="widgetChart4"></canvas>
                     </div>
                     <div class="stat-overlay"></div>
+                    <div class="stat-glow"></div>
                 </div>
             </div>
         </div>
@@ -149,13 +157,18 @@
 </div>
 
 <style>
+    /* ========== Global Smooth Animations ========== */
+    * {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
     /* ========== Dashboard Header ========== */
     .dashboard-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px 0;
-        animation: fadeInDown 0.6s ease;
+        animation: slideInFromTop 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
 
     .header-left {
@@ -175,6 +188,7 @@
         .dashboard-title i {
             color: #2d2e31;
             font-size: 26px;
+            animation: iconPulse 2s ease-in-out infinite;
         }
 
     .dashboard-subtitle {
@@ -182,6 +196,7 @@
         font-size: 14px;
         margin: 0;
         font-weight: 500;
+        animation: fadeIn 1s ease 0.3s both;
     }
 
     .btn-refresh {
@@ -193,35 +208,104 @@
         font-weight: 600;
         font-size: 14px;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        position: relative;
+        overflow: hidden;
     }
 
+        .btn-refresh::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-refresh:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
         .btn-refresh:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
         }
 
         .btn-refresh:active {
-            transform: translateY(0);
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .btn-refresh span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-refresh i {
+            position: relative;
+            z-index: 1;
+        }
+
+    .auto-refresh-timer {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 15px;
+        padding: 8px 16px;
+        background: rgba(45, 46, 49, 0.05);
+        border-radius: 8px;
+        font-size: 13px;
+        color: #7f8c8d;
+        font-weight: 500;
+        animation: fadeIn 1s ease 0.5s both;
+    }
+
+        .auto-refresh-timer i {
+            font-size: 12px;
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+
+        .auto-refresh-timer span {
+            font-family: 'Courier New', monospace;
         }
 
     /* ========== Stats Cards ========== */
     .stat-card {
         background: white;
-        border-radius: 14px;
+        border-radius: 16px;
         padding: 22px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        animation: fadeInUp 0.6s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: cardSlideUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
         animation-fill-mode: both;
         height: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.05);
     }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
 
         .stat-card:nth-child(1) {
             animation-delay: 0.1s;
@@ -240,9 +324,22 @@
         }
 
         .stat-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
         }
+
+            .stat-card:hover .stat-overlay {
+                transform: scale(1.2);
+                opacity: 0.18;
+            }
+
+            .stat-card:hover .stat-glow {
+                opacity: 0.6;
+            }
+
+            .stat-card:hover .stat-icon {
+                transform: rotate(5deg) scale(1.1);
+            }
 
     .stat-overlay {
         position: absolute;
@@ -252,38 +349,66 @@
         height: 100px;
         border-radius: 50%;
         opacity: 0.12;
-        transition: all 0.3s ease;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-glow {
+        position: absolute;
+        bottom: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
     }
 
     .stat-card-1 .stat-overlay {
         background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
     }
 
+    .stat-card-1 .stat-glow {
+        background: radial-gradient(circle, rgba(45, 46, 49, 0.3) 0%, transparent 70%);
+    }
+
     .stat-card-2 .stat-overlay {
         background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .stat-card-2 .stat-glow {
+        background: radial-gradient(circle, rgba(240, 147, 251, 0.3) 0%, transparent 70%);
     }
 
     .stat-card-3 .stat-overlay {
         background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     }
 
+    .stat-card-3 .stat-glow {
+        background: radial-gradient(circle, rgba(79, 172, 254, 0.3) 0%, transparent 70%);
+    }
+
     .stat-card-4 .stat-overlay {
         background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
     }
 
+    .stat-card-4 .stat-glow {
+        background: radial-gradient(circle, rgba(67, 233, 123, 0.3) 0%, transparent 70%);
+    }
+
     .stat-icon {
-        width: 54px;
-        height: 54px;
-        border-radius: 12px;
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 26px;
         color: white;
-        margin-bottom: 14px;
+        margin-bottom: 16px;
         position: relative;
         z-index: 2;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .stat-card-1 .stat-icon {
@@ -308,11 +433,17 @@
     }
 
     .stat-value {
-        font-size: 30px;
+        font-size: 32px;
         font-weight: 700;
         color: #2c3e50;
-        margin: 0 0 5px 0;
+        margin: 0 0 6px 0;
         line-height: 1;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover .stat-value {
+        transform: scale(1.05);
+        color: #1a252f;
     }
 
     .stat-label {
@@ -320,29 +451,42 @@
         font-size: 12px;
         font-weight: 600;
         text-transform: uppercase;
-        letter-spacing: 0.4px;
+        letter-spacing: 0.5px;
         display: block;
     }
 
     .stat-chart {
-        margin-top: 14px;
+        margin-top: 16px;
         position: relative;
         z-index: 2;
         height: 60px;
+        opacity: 0.9;
+        transition: opacity 0.3s ease;
+    }
+
+    .stat-card:hover .stat-chart {
+        opacity: 1;
     }
 
     /* ========== Data Cards ========== */
     .data-card {
         background: white;
-        border-radius: 14px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         overflow: hidden;
-        animation: fadeInUp 0.6s ease 0.5s both;
+        animation: cardSlideUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s both;
         height: 100%;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.4s ease;
     }
 
+        .data-card:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
     .card-header {
-        padding: 18px 22px;
+        padding: 20px 24px;
         border-bottom: 1px solid #ecf0f1;
         display: flex;
         justify-content: space-between;
@@ -357,39 +501,65 @@
         margin: 0;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 10px;
     }
 
         .card-title i {
             color: #2d2e31;
             font-size: 18px;
+            animation: iconBounce 2s ease-in-out infinite;
         }
 
     .card-actions {
         display: flex;
-        gap: 6px;
+        gap: 8px;
     }
 
     .btn-icon {
-        width: 34px;
-        height: 34px;
-        border-radius: 8px;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
         border: 1px solid #e0e0e0;
         background: white;
         color: #7f8c8d;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 13px;
+        position: relative;
+        overflow: hidden;
     }
+
+        .btn-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(45, 46, 49, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .btn-icon:hover::before {
+            width: 120px;
+            height: 120px;
+        }
 
         .btn-icon:hover {
             background: #2d2e31;
             color: white;
             border-color: #2d2e31;
-            transform: translateY(-2px);
+            transform: translateY(-3px) rotate(5deg);
+            box-shadow: 0 4px 12px rgba(45, 46, 49, 0.3);
+        }
+
+        .btn-icon:active {
+            transform: translateY(-1px) rotate(0deg);
         }
 
     .card-body {
@@ -410,31 +580,54 @@
         .modern-table thead th {
             background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
             color: white;
-            padding: 14px 18px;
+            padding: 16px 20px;
             font-weight: 600;
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: 0.5px;
             border: none;
             position: sticky;
             top: 0;
             z-index: 10;
             white-space: nowrap;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .modern-table tbody tr {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border-bottom: 1px solid #f0f0f0;
+            animation: tableRowFadeIn 0.4s ease;
+            animation-fill-mode: both;
         }
 
+            .modern-table tbody tr:nth-child(1) {
+                animation-delay: 0.05s;
+            }
+
+            .modern-table tbody tr:nth-child(2) {
+                animation-delay: 0.1s;
+            }
+
+            .modern-table tbody tr:nth-child(3) {
+                animation-delay: 0.15s;
+            }
+
+            .modern-table tbody tr:nth-child(4) {
+                animation-delay: 0.2s;
+            }
+
+            .modern-table tbody tr:nth-child(5) {
+                animation-delay: 0.25s;
+            }
+
             .modern-table tbody tr:hover {
-                background: #f8f9fa;
-                transform: scale(1.005);
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+                background: linear-gradient(90deg, #f8f9fa 0%, #ffffff 100%);
+                transform: translateX(4px) scale(1.002);
+                box-shadow: -3px 0 0 0 #2d2e31, 0 2px 8px rgba(0, 0, 0, 0.08);
             }
 
         .modern-table tbody td {
-            padding: 14px 18px;
+            padding: 16px 20px;
             color: #2c3e50;
             font-size: 13px;
             font-weight: 500;
@@ -453,8 +646,8 @@
     }
 
         .custom-table-scroll::-webkit-scrollbar {
-            width: 7px;
-            height: 7px;
+            width: 8px;
+            height: 8px;
         }
 
         .custom-table-scroll::-webkit-scrollbar-track {
@@ -465,17 +658,37 @@
         .custom-table-scroll::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
             border-radius: 10px;
+            transition: background 0.3s ease;
         }
+
+            .custom-table-scroll::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(135deg, #1a1b1d 0%, #4a4650 100%);
+            }
 
     /* ========== Summary Card ========== */
     .summary-card {
         background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
         color: white;
+        position: relative;
+        overflow: hidden;
     }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: summaryGlow 6s ease-in-out infinite;
+        }
 
         .summary-card .card-header {
             border-bottom-color: rgba(255, 255, 255, 0.2);
             background: transparent;
+            position: relative;
+            z-index: 1;
         }
 
         .summary-card .card-title {
@@ -488,15 +701,37 @@
 
     .summary-table {
         width: 100%;
+        position: relative;
+        z-index: 1;
     }
 
         .summary-table tbody tr {
             border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: tableRowFadeIn 0.5s ease;
+            animation-fill-mode: both;
         }
 
+            .summary-table tbody tr:nth-child(1) {
+                animation-delay: 0.1s;
+            }
+
+            .summary-table tbody tr:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            .summary-table tbody tr:nth-child(3) {
+                animation-delay: 0.3s;
+            }
+
+            .summary-table tbody tr:nth-child(4) {
+                animation-delay: 0.4s;
+            }
+
             .summary-table tbody tr:hover {
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateX(4px);
+                box-shadow: -3px 0 0 0 rgba(255, 255, 255, 0.5);
             }
 
             .summary-table tbody tr:last-child {
@@ -504,7 +739,7 @@
             }
 
         .summary-table tbody td {
-            padding: 12px 18px;
+            padding: 14px 20px;
             color: white;
             font-size: 13px;
             font-weight: 500;
@@ -513,6 +748,7 @@
             .summary-table tbody td:last-child {
                 text-align: right;
                 font-weight: 700;
+                font-size: 14px;
             }
 
     .custom-table2-scroll {
@@ -523,7 +759,7 @@
     }
 
         .custom-table2-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 7px;
         }
 
         .custom-table2-scroll::-webkit-scrollbar-track {
@@ -534,21 +770,27 @@
         .custom-table2-scroll::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.4);
             border-radius: 10px;
+            transition: background 0.3s ease;
         }
+
+            .custom-table2-scroll::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.6);
+            }
 
     /* ========== Footer ========== */
     .dashboard-footer {
         text-align: center;
-        padding: 16px 0;
-        margin-top: 15px;
+        padding: 18px 0;
+        margin-top: 20px;
         border-top: 1px solid #ecf0f1;
-        animation: fadeIn 0.6s ease 0.8s both;
+        animation: fadeIn 1s ease 1s both;
     }
 
         .dashboard-footer p {
             color: #7f8c8d;
             font-size: 13px;
             margin: 0;
+            font-weight: 500;
         }
 
         .dashboard-footer span {
@@ -557,15 +799,32 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             font-weight: 700;
+            position: relative;
+            display: inline-block;
         }
 
-    /* ========== Animations ========== */
-    keyframes fadeInDown {
+            .dashboard-footer span::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
+                transition: width 0.3s ease;
+            }
+
+            .dashboard-footer span:hover::after {
+                width: 100%;
+            }
+
+    /* ========== Advanced Animations ========== */
+    @@keyframes slideInFromTop {
         from
 
     {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(-30px);
     }
 
     to {
@@ -575,22 +834,22 @@
 
     }
 
-    keyframes fadeInUp {
+    @@keyframes cardSlideUp {
         from
 
     {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(40px) scale(0.95);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 
     }
 
-    keyframes fadeIn {
+    @@keyframes fadeIn {
         from
 
     {
@@ -603,7 +862,7 @@
 
     }
 
-    keyframes rotateIcon {
+    @@keyframes rotateIcon {
         from
 
     {
@@ -616,23 +875,101 @@
 
     }
 
+    @@keyframes iconPulse {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    }
+
+    @@keyframes iconBounce {
+        0%, 100%
+
+    {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+
+    }
+
+    @@keyframes tableRowFadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    }
+
+    @@keyframes summaryGlow {
+        0%, 100%
+
+    {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    }
+
     .rotate {
         animation: rotateIcon 1s linear infinite;
     }
 
+    .pulse-update {
+        animation: pulseValue 0.6s ease;
+    }
+
+    @@keyframes pulseValue {
+        0%, 100%
+
+    {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+        color: #2d2e31;
+    }
+
+    }
+
     /* ========== Responsive Design ========== */
-    media (max-width: 991px) {
+    @@media (max-width: 991px) {
         .dashboard-header
 
     {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 14px;
     }
 
     .btn-refresh {
         width: 100%;
         justify-content: center;
+    }
+
+    .auto-refresh-timer {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
     }
 
     .card-actions {
@@ -641,19 +978,29 @@
 
     }
 
-    media (max-width: 768px) {
+    @@media (max-width: 768px) {
         .dashboard-title
 
     {
-        font-size: 22px;
+        font-size: 24px;
     }
 
     .stat-value {
-        font-size: 26px;
+        font-size: 28px;
     }
 
     .stat-card {
         padding: 18px;
+    }
+
+    .card-header {
+        padding: 16px 18px;
+    }
+
+    .modern-table thead th,
+    .modern-table tbody td {
+        padding: 12px 16px;
+        font-size: 12px;
     }
 
     }
@@ -666,21 +1013,132 @@
 
 <script>
     let userId = localStorage.getItem("userId") || "";
+    let autoRefreshInterval = null;
+    let countdownInterval = null;
+    let nextRefreshTime = null;
 
     document.addEventListener("DOMContentLoaded", async function () {
         await LoadData();
+
+        // Auto-refresh every 5 minutes (300000 milliseconds)
+        startAutoRefresh();
     });
+
+    function updateCountdownDisplay() {
+        const timerElement = document.getElementById("refreshTimer");
+
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        countdownInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = nextRefreshTime - now;
+
+            if (distance < 0) {
+                timerElement.textContent = "Refreshing...";
+                return;
+            }
+
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            timerElement.textContent = `Next refresh in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    function startAutoRefresh() {
+        // Clear any existing intervals
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+        if (countdownInterval) {
+            clearInterval(countdownInterval);
+        }
+
+        // Set next refresh time
+        nextRefreshTime = new Date().getTime() + 300000; // 5 minutes from now
+        updateCountdownDisplay();
+
+        // Set new interval for 5 minutes
+        autoRefreshInterval = setInterval(async function() {
+            console.log("Auto-refreshing dashboard data...");
+
+            // Add visual feedback
+            const refreshBtn = document.getElementById("refreshBtn");
+            const icon = document.getElementById("refreshIcon");
+
+            icon.classList.add("rotate");
+            refreshBtn.style.opacity = "0.7";
+
+            try {
+                await LoadData();
+
+                // Reset timer for next refresh
+                nextRefreshTime = new Date().getTime() + 300000;
+
+                // Show success notification
+                if (typeof toastr !== 'undefined') {
+                    toastr.success("Dashboard data refreshed automatically", "", {
+                        timeOut: 2000,
+                        positionClass: "toast-bottom-right"
+                    });
+                }
+            } catch (error) {
+                console.error("Auto-refresh failed:", error);
+
+                if (typeof toastr !== 'undefined') {
+                    toastr.error("Failed to refresh dashboard data", "", {
+                        timeOut: 2000,
+                        positionClass: "toast-bottom-right"
+                    });
+                }
+            } finally {
+                setTimeout(() => {
+                    icon.classList.remove("rotate");
+                    refreshBtn.style.opacity = "1";
+                }, 1000);
+            }
+        }, 300000); // 5 minutes = 300000 milliseconds
+
+        console.log("Auto-refresh enabled: Dashboard will reload every 5 minutes");
+    }
 
     document.getElementById("refreshBtn").addEventListener("click", async function() {
         const icon = document.getElementById("refreshIcon");
+        const btn = this;
+
+        // Add rotating animation
         icon.classList.add("rotate");
+        btn.style.pointerEvents = 'none';
 
         try {
             await LoadData();
+
+            // Restart auto-refresh timer after manual refresh
+            startAutoRefresh();
+
+            if (typeof toastr !== 'undefined') {
+                toastr.success("Dashboard refreshed successfully", "", {
+                    timeOut: 2000,
+                    positionClass: "toast-bottom-right"
+                });
+            }
         } catch (error) {
             console.error(error);
+
+            if (typeof toastr !== 'undefined') {
+                toastr.error("Failed to refresh dashboard", "", {
+                    timeOut: 2000,
+                    positionClass: "toast-bottom-right"
+                });
+            }
         } finally {
-            icon.classList.remove("rotate");
+            // Remove rotation after animation completes
+            setTimeout(() => {
+                icon.classList.remove("rotate");
+                btn.style.pointerEvents = 'auto';
+            }, 1000);
         }
     });
 
@@ -697,19 +1155,19 @@
                 contentType: 'application/json',
                 success: function (response) {
                     if (response.statusId === 1) {
-                        // Animate cards
+                        // Animate cards with pulse effect
                         animateValue("Card1TotalValue", 0, response.Card1TotalValue, 1500);
                         animateValue("Card2TotalValue", 0, response.Card2TotalValue, 1500);
                         animateValue("Card3TotalValue", 0, response.Card3TotalValue, 1500);
                         animateValue("Card4TotalValue", 0, response.Card4TotalValue, 1500);
 
-                        // Set captions
-                        document.getElementById("Card1Caption").innerHTML = response.Card1Caption;
-                        document.getElementById("Card2Caption").innerHTML = response.Card2Caption;
-                        document.getElementById("Card3Caption").innerHTML = response.Card3Caption;
-                        document.getElementById("Card4Caption").innerHTML = response.Card4Caption;
-                        document.getElementById("Grid1Caption").innerHTML = response.Grid1Caption;
-                        document.getElementById("Grid2Caption").innerHTML = response.Grid2Caption;
+                        // Set captions with fade effect
+                        fadeInElement("Card1Caption", response.Card1Caption);
+                        fadeInElement("Card2Caption", response.Card2Caption);
+                        fadeInElement("Card3Caption", response.Card3Caption);
+                        fadeInElement("Card4Caption", response.Card4Caption);
+                        fadeInElement("Grid1Caption", response.Grid1Caption);
+                        fadeInElement("Grid2Caption", response.Grid2Caption);
 
                         renderGrid(response.Grid1Data);
                         renderGrid2(response.Grid2Data);
@@ -729,16 +1187,39 @@
         });
     }
 
+    function fadeInElement(id, value) {
+        const element = document.getElementById(id);
+        element.style.opacity = '0';
+        element.innerHTML = value;
+
+        setTimeout(() => {
+            element.style.transition = 'opacity 0.5s ease';
+            element.style.opacity = '1';
+        }, 100);
+    }
+
     function animateValue(id, start, end, duration) {
         let obj = document.getElementById(id);
         let startTimestamp = null;
 
+        // Add pulse class
+        obj.classList.add('pulse-update');
+
         const step = (timestamp) => {
             if (!startTimestamp) startTimestamp = timestamp;
             const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-            obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            obj.innerHTML = Math.floor(easeOutQuart * (end - start) + start).toLocaleString();
+
             if (progress < 1) {
                 window.requestAnimationFrame(step);
+            } else {
+                // Remove pulse class when done
+                setTimeout(() => {
+                    obj.classList.remove('pulse-update');
+                }, 100);
             }
         };
 
@@ -751,6 +1232,36 @@
     let widgetChart4Instance = null;
 
     function nLoadChartsCards(chart2Data, chart3Data, chart4Data) {
+        // Enhanced Chart configurations
+        const chartOptions = {
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.85)',
+                    padding: 12,
+                    cornerRadius: 8,
+                    titleFont: { size: 13, weight: '600' },
+                    bodyFont: { size: 12 },
+                    displayColors: false,
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y.toLocaleString();
+                        }
+                    }
+                }
+            },
+            responsive: true,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            }
+        };
+
         // WidgetChart 2
         const chart2Texts = chart2Data.map(x => x.Text);
         const chart2Values = chart2Data.map(x => x.Value);
@@ -766,32 +1277,20 @@
                     datasets: [{
                         data: chart2Values,
                         label: 'Amount',
-                        backgroundColor: 'rgba(240, 147, 251, 0.1)',
+                        backgroundColor: 'rgba(240, 147, 251, 0.15)',
                         borderColor: '#f093fb',
-                        borderWidth: 2,
+                        borderWidth: 2.5,
                         fill: true,
-                        tension: 0.4
+                        tension: 0.4,
+                        pointBackgroundColor: '#f093fb',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
                     }]
                 },
                 options: {
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 10,
-                            cornerRadius: 6,
-                            titleFont: { size: 12, weight: '600' },
-                            bodyFont: { size: 11 }
-                        }
-                    },
-                    responsive: true,
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
-                    },
+                    ...chartOptions,
                     elements: {
-                        point: { radius: 2, hoverRadius: 4 }
+                        point: { radius: 3, hoverRadius: 5 }
                     }
                 }
             });
@@ -812,32 +1311,20 @@
                     datasets: [{
                         data: chart3Values,
                         label: 'Amount',
-                        backgroundColor: 'rgba(79, 172, 254, 0.1)',
+                        backgroundColor: 'rgba(79, 172, 254, 0.15)',
                         borderColor: '#4facfe',
-                        borderWidth: 2,
+                        borderWidth: 2.5,
                         fill: true,
-                        tension: 0.4
+                        tension: 0.4,
+                        pointBackgroundColor: '#4facfe',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
                     }]
                 },
                 options: {
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 10,
-                            cornerRadius: 6,
-                            titleFont: { size: 12, weight: '600' },
-                            bodyFont: { size: 11 }
-                        }
-                    },
-                    responsive: true,
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
-                    },
+                    ...chartOptions,
                     elements: {
-                        point: { radius: 2, hoverRadius: 4 }
+                        point: { radius: 3, hoverRadius: 5 }
                     }
                 }
             });
@@ -858,27 +1345,17 @@
                     datasets: [{
                         label: "Amount",
                         data: chart4Values,
-                        backgroundColor: 'rgba(67, 233, 123, 0.8)',
-                        borderRadius: 4,
-                        borderSkipped: false
+                        backgroundColor: 'rgba(67, 233, 123, 0.85)',
+                        borderRadius: 6,
+                        borderSkipped: false,
+                        hoverBackgroundColor: 'rgba(67, 233, 123, 1)'
                     }]
                 },
                 options: {
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            padding: 10,
-                            cornerRadius: 6,
-                            titleFont: { size: 12, weight: '600' },
-                            bodyFont: { size: 11 }
-                        }
-                    },
-                    responsive: true,
-                    scales: {
-                        x: { display: false },
-                        y: { display: false }
+                    ...chartOptions,
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeInOutQuart'
                     }
                 }
             });
@@ -908,9 +1385,11 @@
         });
         thead.appendChild(headerRow);
 
-        // TBODY
-        gridData.forEach(row => {
+        // TBODY with staggered animation
+        gridData.forEach((row, index) => {
             const tr = document.createElement("tr");
+            tr.style.animationDelay = `${index * 0.05}s`;
+
             Object.entries(row).forEach(([key, value]) => {
                 const td = document.createElement("td");
                 td.innerText = value;
@@ -931,8 +1410,9 @@
         const tbody = document.getElementById("grid2Tbody");
         tbody.innerHTML = "";
 
-        gridData.forEach(row => {
+        gridData.forEach((row, index) => {
             const tr = document.createElement("tr");
+            tr.style.animationDelay = `${(index + 1) * 0.1}s`;
 
             const td1 = document.createElement("td");
             td1.innerText = Object.values(row)[0];

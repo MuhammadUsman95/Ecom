@@ -40,9 +40,14 @@
             --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f5f7fa;
+            overflow-x: hidden;
         }
 
         /* ========== Sidebar Styling ========== */
@@ -53,6 +58,8 @@
             position: fixed;
             height: 100vh;
             overflow: hidden;
+            z-index: 1000;
+            transition: transform 0.3s ease;
         }
 
             .menu-sidebar .logo {
@@ -75,7 +82,7 @@
                     animation: shine 3s infinite;
                 }
 
-        keyframes shine {
+        @@keyframes shine {
             0%
 
         {
@@ -292,72 +299,228 @@
         .header-mobile {
             background: var(--sidebar-bg);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
         }
 
         .header-mobile__bar {
             padding: 15px 0;
         }
 
-        .header-mobile .logo {
-            color: white;
-            font-size: 22px;
-            font-weight: 700;
+        .header-mobile-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
+        .header-mobile .logo {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .header-mobile .logo i {
+                font-size: 22px;
+            }
+
             .header-mobile .logo img {
-                max-height: 35px;
+                max-height: 32px;
                 filter: brightness(0) invert(1);
             }
+
+        .hamburger {
+            padding: 8px;
+            display: inline-block;
+            cursor: pointer;
+            transition-property: opacity, filter;
+            transition-duration: 0.15s;
+            transition-timing-function: linear;
+            font: inherit;
+            color: inherit;
+            text-transform: none;
+            background-color: transparent;
+            border: 0;
+            margin: 0;
+            overflow: visible;
+        }
+
+        .hamburger-box {
+            width: 30px;
+            height: 24px;
+            display: inline-block;
+            position: relative;
+        }
 
         .hamburger-inner,
         .hamburger-inner::before,
         .hamburger-inner::after {
+            width: 30px;
+            height: 3px;
             background-color: white;
+            border-radius: 4px;
+            position: absolute;
+            transition-property: transform;
+            transition-duration: 0.15s;
+            transition-timing-function: ease;
         }
+
+        .hamburger-inner {
+            display: block;
+            top: 50%;
+            margin-top: -2px;
+        }
+
+            .hamburger-inner::before,
+            .hamburger-inner::after {
+                content: "";
+                display: block;
+            }
+
+            .hamburger-inner::before {
+                top: -8px;
+            }
+
+            .hamburger-inner::after {
+                bottom: -8px;
+            }
+
+        /* Hamburger Animation */
+        .hamburger--slider .hamburger-inner {
+            top: 2px;
+        }
+
+            .hamburger--slider .hamburger-inner::before {
+                top: 8px;
+                transition-property: transform, opacity;
+                transition-timing-function: ease;
+                transition-duration: 0.15s;
+            }
+
+            .hamburger--slider .hamburger-inner::after {
+                top: 16px;
+            }
+
+        .hamburger--slider.is-active .hamburger-inner {
+            transform: translate3d(0, 8px, 0) rotate(45deg);
+        }
+
+            .hamburger--slider.is-active .hamburger-inner::before {
+                transform: rotate(-45deg) translate3d(-5.71429px, -6px, 0);
+                opacity: 0;
+            }
+
+            .hamburger--slider.is-active .hamburger-inner::after {
+                transform: translate3d(0, -16px, 0) rotate(-90deg);
+            }
 
         /* Mobile Navigation */
         .navbar-mobile {
+            position: fixed;
+            top: 62px;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: var(--sidebar-bg);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+            padding-bottom: 20px;
         }
 
-        .navbar-mobile__list > li > a {
-            color: rgba(255, 255, 255, 0.9);
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 500;
-            border-left: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-            .navbar-mobile__list > li > a:hover,
-            .navbar-mobile__list > li.active > a {
-                background: rgba(102, 126, 234, 0.15);
-                border-left-color: #2d2e31;
-                color: white;
+            .navbar-mobile.show {
+                transform: translateX(0);
             }
 
-        .navbar-mobile-sub__list li a {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 10px 20px 10px 50px;
-            font-size: 14px;
+        .navbar-mobile__list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
         }
 
-            .navbar-mobile-sub__list li a:hover {
-                background: rgba(255, 255, 255, 0.05);
-                color: white;
+            .navbar-mobile__list > li {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+                .navbar-mobile__list > li > a {
+                    color: rgba(255, 255, 255, 0.9);
+                    padding: 16px 20px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    font-weight: 500;
+                    font-size: 15px;
+                    border-left: 3px solid transparent;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
+                }
+
+                    .navbar-mobile__list > li > a i {
+                        font-size: 18px;
+                        width: 24px;
+                        text-align: center;
+                    }
+
+                    .navbar-mobile__list > li > a:hover,
+                    .navbar-mobile__list > li.active > a {
+                        background: rgba(102, 126, 234, 0.15);
+                        border-left-color: #2d2e31;
+                        color: white;
+                    }
+
+        .navbar-mobile-sub__list {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+            .navbar-mobile-sub__list li a {
+                color: rgba(255, 255, 255, 0.8);
+                padding: 12px 20px 12px 50px;
+                font-size: 14px;
+                display: block;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+                .navbar-mobile-sub__list li a:hover {
+                    background: rgba(255, 255, 255, 0.05);
+                    color: white;
+                }
+
+        /* Mobile Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 62px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+            .mobile-overlay.show {
+                display: block;
+                opacity: 1;
             }
 
         /* ========== Page Container ========== */
         .page-container {
             background: #f5f7fa;
             min-height: 100vh;
-        }
-
-        .page-container {
-            background: #e5e5e5;
             padding-left: 260px;
+            transition: padding-left 0.3s ease;
         }
 
         .main-content {
@@ -365,45 +528,45 @@
         }
 
         /* ========== Scrollbar Styling ========== */
-        .menu-sidebar__content::-webkit-scrollbar {
+        .menu-sidebar__content::-webkit-scrollbar,
+        .navbar-mobile::-webkit-scrollbar {
             width: 6px;
         }
 
-        .menu-sidebar__content::-webkit-scrollbar-track {
+        .menu-sidebar__content::-webkit-scrollbar-track,
+        .navbar-mobile::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.05);
         }
 
-        .menu-sidebar__content::-webkit-scrollbar-thumb {
+        .menu-sidebar__content::-webkit-scrollbar-thumb,
+        .navbar-mobile::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
         }
 
-            .menu-sidebar__content::-webkit-scrollbar-thumb:hover {
+            .menu-sidebar__content::-webkit-scrollbar-thumb:hover,
+            .navbar-mobile::-webkit-scrollbar-thumb:hover {
                 background: rgba(255, 255, 255, 0.3);
             }
 
         /* ========== Animations ========== */
         @@keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+            from
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         }
 
         .page-container {
             animation: fadeIn 0.5s ease;
-        }
-
-        /* ========== Responsive Adjustments ========== */
-        @@media (max-width: 991px) {
-            .page-container {
-                margin-left: 0;
-            }
         }
 
         /* ========== Custom Section Padding ========== */
@@ -421,11 +584,183 @@
             font-size: 22px;
             font-weight: 700;
             letter-spacing: 1px;
+            text-decoration: none;
         }
 
             .logo-text i {
                 font-size: 26px;
             }
+
+        /* ========== Mobile Responsive Adjustments ========== */
+        @@media (max-width: 1024px) {
+            .page-container
+
+        {
+            padding-left: 0;
+        }
+
+        .menu-sidebar {
+            transform: translateX(-100%);
+        }
+
+        .section__content--p30 {
+            padding: 20px 15px;
+        }
+
+        }
+
+        @@media (max-width: 991px) {
+            body
+
+        {
+            padding-top: 62px;
+        }
+
+        .page-container {
+            padding-left: 0;
+            margin-left: 0;
+        }
+
+        .header-desktop {
+            display: none !important;
+        }
+
+        .account-wrap .account-item {
+            padding: 6px 12px;
+        }
+
+            .account-wrap .account-item .image {
+                width: 35px;
+                height: 35px;
+            }
+
+            .account-wrap .account-item .content a {
+                font-size: 13px;
+            }
+
+        .account-dropdown {
+            min-width: 220px;
+        }
+
+        }
+
+        @@media (max-width: 768px) {
+            .header-mobile .logo
+
+        {
+            font-size: 18px;
+        }
+
+        .header-mobile .logo i {
+            font-size: 20px;
+        }
+
+        .section__content--p30 {
+            padding: 15px 12px;
+        }
+
+        .account-dropdown {
+            min-width: 200px;
+            right: 10px !important;
+        }
+
+            .account-dropdown .info {
+                padding: 15px;
+            }
+
+                .account-dropdown .info .image {
+                    width: 50px;
+                    height: 50px;
+                }
+
+                .account-dropdown .info .content h5 {
+                    font-size: 14px;
+                }
+
+        .account-dropdown__footer a {
+            padding: 12px 15px;
+            font-size: 13px;
+        }
+
+        }
+
+        @@media (max-width: 480px) {
+            .header-mobile .logo
+
+        {
+            font-size: 16px;
+        }
+
+        .header-mobile .logo i {
+            font-size: 18px;
+        }
+
+        .navbar-mobile__list > li > a {
+            padding: 14px 15px;
+            font-size: 14px;
+        }
+
+        .navbar-mobile-sub__list li a {
+            padding: 10px 15px 10px 40px;
+            font-size: 13px;
+        }
+
+        .section__content--p30 {
+            padding: 12px 10px;
+        }
+
+        }
+
+        /* Touch-friendly improvements */
+        @@media (hover: none) and (pointer: coarse) {
+            .navbar-mobile__list > li > a, .account-wrap .account-item
+
+        {
+            min-height: 48px;
+        }
+
+        .hamburger {
+            min-width: 48px;
+            min-height: 48px;
+        }
+
+        }
+
+        /* Landscape mobile orientation */
+        @@media (max-width: 991px) and (orientation: landscape) {
+            .navbar-mobile
+
+        {
+            top: 56px;
+        }
+
+        .mobile-overlay {
+            top: 56px;
+        }
+
+        .header-mobile__bar {
+            padding: 10px 0;
+        }
+
+        }
+
+        /* Print styles */
+        @@media print {
+            .header-mobile, .menu-sidebar, .hamburger, .account-dropdown
+
+        {
+            display: none !important;
+        }
+
+        .page-container {
+            padding-left: 0 !important;
+        }
+
+        body {
+            padding-top: 0 !important;
+        }
+
+        }
     </style>
 </head>
 
@@ -440,7 +775,7 @@
                             <i class="fas fa-shopping-cart"></i>
                             <span>AV_Softs</span>
                         </a>
-                        <button class="hamburger hamburger--slider" type="button">
+                        <button class="hamburger hamburger--slider" type="button" id="mobileMenuToggle">
                             <span class="hamburger-box">
                                 <span class="hamburger-inner"></span>
                             </span>
@@ -448,7 +783,7 @@
                     </div>
                 </div>
             </div>
-            <nav class="navbar-mobile">
+            <nav class="navbar-mobile" id="mobileMenu">
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li>
@@ -466,9 +801,20 @@
                                 <i class="fas fa-clipboard-list"></i>Order Management
                             </a>
                         </li>
+                        <li>
+                            <a href="/Product">
+                                <i class="fas fa-box"></i>Product
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="mobileLogoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>Logout
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
+            <div class="mobile-overlay" id="mobileOverlay"></div>
         </header>
         <!-- END HEADER MOBILE-->
         <!-- MENU SIDEBAR-->
@@ -499,7 +845,7 @@
                         </li>
                         <li>
                             <a href="/Product">
-                                <i class="fas fa-clipboard-list"></i>Product
+                                <i class="fas fa-box"></i>Product
                             </a>
                         </li>
                     </ul>
@@ -557,7 +903,6 @@
             <!-- END MAIN CONTENT-->
         </div>
         <!-- END PAGE CONTAINER-->
-
     </div>
 
     <!-- Jquery JS-->
@@ -578,21 +923,69 @@
 
     <!-- Custom Layout Script -->
     <script>
-        // Load user name from localStorage
+        // Mobile menu functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+
+            if (mobileMenuToggle && mobileMenu) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    this.classList.toggle('is-active');
+                    mobileMenu.classList.toggle('show');
+                    mobileOverlay.classList.toggle('show');
+                    document.body.style.overflow = mobileMenu.classList.contains('show') ? 'hidden' : '';
+                });
+
+                // Close menu when clicking overlay
+                mobileOverlay.addEventListener('click', function() {
+                    mobileMenuToggle.classList.remove('is-active');
+                    mobileMenu.classList.remove('show');
+                    mobileOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                });
+
+                // Close menu when clicking a link
+                const mobileLinks = mobileMenu.querySelectorAll('a:not(#mobileLogoutBtn)');
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        mobileMenuToggle.classList.remove('is-active');
+                        mobileMenu.classList.remove('show');
+                        mobileOverlay.classList.remove('show');
+                        document.body.style.overflow = '';
+                    });
+                });
+            }
+
+            // Load user name from localStorage
             const userId = localStorage.getItem('userId') || 'Guest User';
             const userNameElements = document.querySelectorAll('#userName, #userNameDropdown');
             userNameElements.forEach(el => {
                 el.textContent = userId;
             });
 
-            // Logout functionality
+            // Logout functionality - Desktop
             const logoutBtn = document.getElementById('logoutBtn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    localStorage.clear();
-                    window.location.href = '/Login';
+                    if (confirm('Are you sure you want to logout?')) {
+                        localStorage.clear();
+                        window.location.href = '/Login';
+                    }
+                });
+            }
+
+            // Logout functionality - Mobile
+            const mobileLogoutBtn = document.getElementById('mobileLogoutBtn');
+            if (mobileLogoutBtn) {
+                mobileLogoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to logout?')) {
+                        localStorage.clear();
+                        window.location.href = '/Login';
+                    }
                 });
             }
 
@@ -607,9 +1000,9 @@
             // Define menu mapping
             const menuMapping = {
                 '/home': 'Home',
-                '/VendorRegistration': 'VendorRegistration',
+                '/vendorregistration': 'VendorRegistration',
                 '/ordermanagement': 'OrderManagement',
-                '/Product': 'Product'
+                '/product': 'Product'
             };
 
             // Find matching menu item
@@ -651,6 +1044,26 @@
                     }
                 });
             }
+
+            // Handle orientation change for mobile
+            window.addEventListener('orientationchange', function() {
+                if (mobileMenu.classList.contains('show')) {
+                    mobileMenuToggle.classList.remove('is-active');
+                    mobileMenu.classList.remove('show');
+                    mobileOverlay.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Prevent zoom on double tap for iOS
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(event) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
         });
     </script>
 </body>
