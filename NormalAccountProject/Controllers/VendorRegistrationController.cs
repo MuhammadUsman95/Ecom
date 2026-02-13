@@ -251,7 +251,7 @@ namespace NormalAccountProject.Controllers
             if (string.IsNullOrEmpty(attachmentFileName))
                 return;
 
-            string ftpPath = _configuration["/Image/ProductRegistration/"];
+            string ftpPath = "/wwwroot/Images/VendorRegistration/";  // ✅ Hardcoded
             string ftpServer = _configuration["Config:ftpServer"];
             string ftpUser = _configuration["Config:ftpUser"];
             string ftpPassword = _configuration["Config:ftpPassword"];
@@ -286,9 +286,10 @@ namespace NormalAccountProject.Controllers
                 }
             }
         }
+
         async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
         {
-            string ftpPath = _configuration["/Image/ProductRegistration/"];
+            string ftpPath = "/wwwroot/Images/VendorRegistration/";  // ✅ Hardcoded
             string ftpServer = _configuration["Config:ftpServer"];
             string ftpUser = _configuration["Config:ftpUser"];
             string ftpPassword = _configuration["Config:ftpPassword"];

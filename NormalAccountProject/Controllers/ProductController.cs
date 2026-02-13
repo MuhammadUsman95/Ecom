@@ -302,7 +302,7 @@ namespace NormalAccountProject.Controllers
                 string ftpPort = _configuration["Config:ftpPort"];
 
                 // ✅ Use provided ftpPath or default
-                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/Image/ProductRegistration";
+                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
 
                 string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
 
@@ -356,7 +356,7 @@ namespace NormalAccountProject.Controllers
                 string ftpPort = _configuration["Config:ftpPort"];
 
                 // ✅ Use provided ftpPath or default
-                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/Image/ProductRegistration";
+                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
 
                 // Remove data:image/png;base64, prefix if present
                 if (attachmentBase64.Contains(","))
