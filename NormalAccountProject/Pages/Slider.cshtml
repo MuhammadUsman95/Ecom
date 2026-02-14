@@ -601,22 +601,22 @@
             }
 
             const { SilderImageAttachmentfilename, SilderImageAttachmentbase64 } = await GetSilderImageAttachmentFile();
-
-            const nSliderTab = {
-                Userid: userId || "",
-                SilderId: SilderId,
-                SilderName: SilderName,
-                HeadingSlider: HeadingSlider || "",
-                DescriptionSlider: DescriptionSlider || "",
-                SliderType: SliderType,
-                VendorId: VendorId,
-                SilderImageAttachmentfilename: SilderImageAttachmentfilename,
-                SilderImageAttachmentfilenameold: silderImageAttachmentold,
-                SilderImageAttachmentbase64: SilderImageAttachmentbase64,
-                IsActive: isActive,
-                IsUpdate: IsUpdate,
-                FtpPath: "/wwwroot/Images/SilderNameRegistration"
-            };
+    // Change this line in Save button click handler:
+    const nSliderTab = {
+        Userid: userId || "",
+        SilderId: SilderId,
+        SilderName: SilderName,
+        HeadingSlider: HeadingSlider || "",
+        DescriptionSlider: DescriptionSlider || "",
+        SliderType: SliderType,
+        VendorId: VendorId,
+        SilderImageAttachmentfilename: SilderImageAttachmentfilename,
+        SilderImageAttachmentfilenameold: silderImageAttachmentold,
+        SilderImageAttachmentbase64: SilderImageAttachmentbase64,
+        IsActive: isActive,
+        IsUpdate: IsUpdate,
+        FtpPath: "/wwwroot/Images/SliderRegistration"  // ✅ CHANGE TO YOUR EXISTING FTP PATH
+    };
 
             console.log("Sending data:", nSliderTab);
 

@@ -117,8 +117,9 @@ namespace NormalAccountProject.Controllers
                         if (await dr.ReadAsync())
                         {
                             int statusId = Convert.ToInt32(dr["StatusId"]);
+                            string dbMessage = dr["MessageCaption"]?.ToString() ?? "";
 
-                            // FTP Upload/Delete Logic - Only execute if DB operation succeeded
+                            // ✅ FTP Upload/Delete Logic - Only execute if DB operation succeeded
                             if (statusId == 1)
                             {
                                 // Only process images if a NEW image was uploaded
@@ -140,12 +141,20 @@ namespace NormalAccountProject.Controllers
                                             nSliderTabObj.SilderImageAttachmentbase64,
                                             nSliderTabObj.FtpPath
                                         );
+
+                                        Console.WriteLine("✅ Image uploaded successfully!");
                                     }
                                     catch (Exception ftpEx)
                                     {
-                                        Console.WriteLine($"FTP Operation Warning: {ftpEx.Message}");
-                                        // Don't fail the entire operation for FTP errors
-                                        // Data is already saved in DB
+                                        Console.WriteLine($"❌ FTP Operation Error: {ftpEx.Message}");
+                                        Console.WriteLine($"Stack Trace: {ftpEx.StackTrace}");
+
+                                        // ✅ RETURN ERROR TO USER (Don't silently ignore)
+                                        return Ok(new
+                                        {
+                                            statusId = 0,
+                                            message = $"Data saved but image upload failed: {ftpEx.Message}\n\nPlease check FTP configuration or contact administrator."
+                                        });
                                     }
                                 }
                             }
@@ -153,7 +162,7 @@ namespace NormalAccountProject.Controllers
                             return Ok(new
                             {
                                 statusId = statusId,
-                                message = dr["MessageCaption"]?.ToString()
+                                message = dbMessage
                             });
                         }
                     }
@@ -401,32 +410,114 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        // FTP Upload Function
-        async Task UploadToFtp(string attachmentFileName, string attachmentBase64, string ftpPath)
+        // ✅ NEW METHOD: Create FTP Directory Recursively
+        async Task CreateFtpDirectoryIfNotExists(string ftpServer, string ftpPort, string ftpUser, string ftpPassword, string directoryPath)
         {
-            if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
-                return;
+            try
+            {
+                // Split path into parts (e.g., /wwwroot/Images/SliderRegistration -> ["wwwroot", "Images", "SliderRegistration"])
+                string[] pathParts = directoryPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+                string currentPath = "";
+
+                foreach (string part in pathParts)
+                {
+                    currentPath += "/" + part;
+                    string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{currentPath}";
+
+                    try
+                    {
+                        // Check if directory exists
+                        FtpWebRequest listRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                        listRequest.Method = WebRequestMethods.Ftp.ListDirectory;
+                        listRequest.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+                        listRequest.UsePassive = true;
+                        listRequest.KeepAlive = false;
+                        listRequest.Timeout = 5000;
+
+                        using (FtpWebResponse response = (FtpWebResponse)await listRequest.GetResponseAsync())
+                        {
+                            Console.WriteLine($"✅ Directory exists: {currentPath}");
+                        }
+                    }
+                    catch (WebException ex)
+                    {
+                        if (ex.Response is FtpWebResponse response)
+                        {
+                            // Directory doesn't exist - create it
+                            if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                            {
+                                Console.WriteLine($"📁 Creating directory: {currentPath}");
+
+                                FtpWebRequest createRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                                createRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
+                                createRequest.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+                                createRequest.UsePassive = true;
+                                createRequest.KeepAlive = false;
+                                createRequest.Timeout = 10000;
+
+                                using (FtpWebResponse createResponse = (FtpWebResponse)await createRequest.GetResponseAsync())
+                                {
+                                    Console.WriteLine($"✅ Created directory: {currentPath} - {createResponse.StatusDescription}");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"⚠️ Directory creation warning: {ex.Message}");
+                // Don't throw - directory might already exist or we might not have permission
+            }
+        }
+
+        // ✅ UPDATED FTP Upload Function with Auto Directory Creation
+        async Task UploadToFtp(string fileName, string base64String, string ftpPath)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+                throw new Exception("Filename is empty");
+
+            if (string.IsNullOrWhiteSpace(base64String))
+                throw new Exception("Base64 string is empty");
+
+            string ftpServer = _configuration["Config:ftpServer"];
+            string ftpUser = _configuration["Config:ftpUser"];
+            string ftpPassword = _configuration["Config:ftpPassword"];
+            string ftpPort = _configuration["Config:ftpPort"];
+
+            if (string.IsNullOrWhiteSpace(ftpServer))
+                throw new Exception("FTP Server not configured");
+
+            if (string.IsNullOrWhiteSpace(ftpUser))
+                throw new Exception("FTP Username not configured");
+
+            if (string.IsNullOrWhiteSpace(ftpPassword))
+                throw new Exception("FTP Password not configured");
+
+            Console.WriteLine($"🔧 FTP Config - Server: {ftpServer}, Port: {ftpPort}, User: {ftpUser}");
+
+            // Remove base64 header
+            if (base64String.Contains(","))
+                base64String = base64String.Split(',')[1];
+
+            byte[] fileBytes = Convert.FromBase64String(base64String);
+
+            string finalPath = string.IsNullOrWhiteSpace(ftpPath)
+                ? "/wwwroot/Images/SliderRegistration"
+                : ftpPath;
+
+            Console.WriteLine($"📂 FTP Path: {finalPath}");
+
+            // ✅ CREATE DIRECTORY IF NOT EXISTS
+            await CreateFtpDirectoryIfNotExists(ftpServer, ftpPort, ftpUser, ftpPassword, finalPath);
+
+            string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalPath}/{fileName}";
+
+            Console.WriteLine($"📤 Uploading To: {ftpUrl}");
 
             try
             {
-                string ftpServer = _configuration["Config:ftpServer"];
-                string ftpUser = _configuration["Config:ftpUser"];
-                string ftpPassword = _configuration["Config:ftpPassword"];
-                string ftpPort = _configuration["Config:ftpPort"];
-
-                // Use provided ftpPath or default
-                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/SliderRegistration";
-
-                // Remove data:image/png;base64, prefix if present
-                if (attachmentBase64.Contains(","))
-                    attachmentBase64 = attachmentBase64.Split(',')[1];
-
-                byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
-
-                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
-
-                Console.WriteLine($"FTP Upload URL: {ftpUrl}");
-
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
@@ -434,22 +525,46 @@ namespace NormalAccountProject.Controllers
                 request.UsePassive = true;
                 request.KeepAlive = false;
                 request.ContentLength = fileBytes.Length;
-                request.Timeout = 30000; // 30 seconds timeout
+                request.Timeout = 30000;
 
-                using (Stream requestStream = await request.GetRequestStreamAsync())
+                using (Stream stream = await request.GetRequestStreamAsync())
                 {
-                    await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+                    await stream.WriteAsync(fileBytes, 0, fileBytes.Length);
                 }
 
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    Console.WriteLine($"FTP Upload Success: {response.StatusDescription}");
+                    Console.WriteLine($"✅ FTP Upload Success: {response.StatusDescription}");
                 }
+            }
+            catch (WebException webEx)
+            {
+                string errorDetails = "";
+
+                if (webEx.Response is FtpWebResponse ftpResponse)
+                {
+                    errorDetails = $"FTP Status: {ftpResponse.StatusCode} - {ftpResponse.StatusDescription}";
+
+                    try
+                    {
+                        using (Stream responseStream = ftpResponse.GetResponseStream())
+                        using (StreamReader reader = new StreamReader(responseStream))
+                        {
+                            errorDetails += "\nServer Response: " + await reader.ReadToEndAsync();
+                        }
+                    }
+                    catch { }
+                }
+
+                Console.WriteLine($"❌ WebException: {webEx.Message}");
+                Console.WriteLine($"❌ Details: {errorDetails}");
+
+                throw new Exception($"FTP Upload Failed: {errorDetails}", webEx);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"FTP Upload Error: {ex.Message}");
-                throw; // Propagate upload errors
+                Console.WriteLine($"❌ FTP Upload Error: {ex.Message}");
+                throw;
             }
         }
 
@@ -533,3 +648,30 @@ namespace NormalAccountProject.Controllers
     // This extension method is already defined in ProductRegistrationController.cs
     // Extension methods work globally, so one definition is enough
 }
+//```
+
+//---
+
+//## **Key Changes:**
+
+//1. ✅ **Added `CreateFtpDirectoryIfNotExists` method** - Automatically creates directories
+//2. ✅ **Updated `UploadToFtp`** - Calls directory creation before upload
+//3. ✅ **Better error messages** - User ko proper error dikhega
+//4. ✅ **Detailed console logging** - Debugging ke liye
+
+//---
+
+//## **Testing:**
+
+//Run karo aur console output dekho:
+//```
+//🔧 FTP Config - Server: your - server.com, Port: 21, User: youruser
+//📂 FTP Path: / wwwroot / Images / SliderRegistration
+//📁 Creating directory: / wwwroot
+//✅ Created directory: / wwwroot
+//📁 Creating directory: / wwwroot / Images
+//✅ Created directory: / wwwroot / Images
+//📁 Creating directory: / wwwroot / Images / SliderRegistration
+//✅ Created directory: / wwwroot / Images / SliderRegistration
+//📤 Uploading To: ftp://your-server.com:21/wwwroot/Images/SliderRegistration/Test_15022026.jpg
+//✅ FTP Upload Success: 226 Transfer complete

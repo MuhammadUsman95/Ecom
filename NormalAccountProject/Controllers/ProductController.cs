@@ -413,39 +413,101 @@ namespace NormalAccountProject.Controllers
         }
 
         // ✅ FTP Upload Function
+        //async Task UploadToFtp(string attachmentFileName, string attachmentBase64, string ftpPath)
+        //{
+        //    if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
+        //        return;
+
+        //    try
+        //    {
+        //        string ftpServer = _configuration["Config:ftpServer"];
+        //        string ftpUser = _configuration["Config:ftpUser"];
+        //        string ftpPassword = _configuration["Config:ftpPassword"];
+        //        string ftpPort = _configuration["Config:ftpPort"];
+
+        //        // ✅ Use provided ftpPath or default
+        //        string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
+
+        //        // Remove data:image/png;base64, prefix if present
+        //        if (attachmentBase64.Contains(","))
+        //            attachmentBase64 = attachmentBase64.Split(',')[1];
+
+        //        byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
+
+        //        string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
+
+        //        Console.WriteLine($"FTP Upload URL: {ftpUrl}");
+
+        //        FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+        //        request.Method = WebRequestMethods.Ftp.UploadFile;
+        //        request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+        //        request.UseBinary = true;
+        //        request.UsePassive = true;
+        //        request.KeepAlive = false;
+        //        request.ContentLength = fileBytes.Length;
+        //        request.Timeout = 30000; // 30 seconds timeout
+
+        //        using (Stream requestStream = await request.GetRequestStreamAsync())
+        //        {
+        //            await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
+        //        }
+
+        //        using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+        //        {
+        //            Console.WriteLine($"FTP Upload Success: {response.StatusDescription}");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"FTP Upload Error: {ex.Message}");
+        //        throw; // Propagate upload errors
+        //    }
+        //}
+        // ✅ FINAL MERGED FTP Upload Function (Stable Version)
         async Task UploadToFtp(string attachmentFileName, string attachmentBase64, string ftpPath)
         {
-            if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
-                return;
-
             try
             {
+                Console.WriteLine("===== FTP UPLOAD START =====");
+
+                if (string.IsNullOrWhiteSpace(attachmentFileName))
+                    throw new Exception("FTP Upload Error: Filename is empty");
+
+                if (string.IsNullOrWhiteSpace(attachmentBase64))
+                    throw new Exception("FTP Upload Error: Base64 is empty");
+
                 string ftpServer = _configuration["Config:ftpServer"];
                 string ftpUser = _configuration["Config:ftpUser"];
                 string ftpPassword = _configuration["Config:ftpPassword"];
                 string ftpPort = _configuration["Config:ftpPort"];
 
-                // ✅ Use provided ftpPath or default
-                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
+                // ✅ Default path if not provided
+                string finalFtpPath = !string.IsNullOrWhiteSpace(ftpPath)
+                    ? ftpPath
+                    : "/wwwroot/Images/ProductRegistration";
 
-                // Remove data:image/png;base64, prefix if present
+                // ✅ Remove base64 prefix
                 if (attachmentBase64.Contains(","))
                     attachmentBase64 = attachmentBase64.Split(',')[1];
 
                 byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
 
-                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
+                // ✅ Port optional handling
+                string ftpUrl = string.IsNullOrWhiteSpace(ftpPort)
+                    ? $"ftp://{ftpServer}{finalFtpPath}/{attachmentFileName}"
+                    : $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
 
-                Console.WriteLine($"FTP Upload URL: {ftpUrl}");
+                Console.WriteLine($"FTP URL: {ftpUrl}");
+                Console.WriteLine($"File Size: {fileBytes.Length}");
 
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
                 request.Method = WebRequestMethods.Ftp.UploadFile;
                 request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
                 request.UseBinary = true;
-                request.UsePassive = true;
+                request.UsePassive = false; // ⚠ important for shared hosting
                 request.KeepAlive = false;
                 request.ContentLength = fileBytes.Length;
-                request.Timeout = 30000; // 30 seconds timeout
+                request.Timeout = 30000;
 
                 using (Stream requestStream = await request.GetRequestStreamAsync())
                 {
@@ -456,14 +518,16 @@ namespace NormalAccountProject.Controllers
                 {
                     Console.WriteLine($"FTP Upload Success: {response.StatusDescription}");
                 }
+
+                Console.WriteLine("===== FTP UPLOAD END =====");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"FTP Upload Error: {ex.Message}");
-                throw; // Propagate upload errors
+                Console.WriteLine("===== FTP UPLOAD ERROR =====");
+                Console.WriteLine(ex.ToString());
+                throw; // so you can see error in API response
             }
         }
-
         // Generic Data Fetcher
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {

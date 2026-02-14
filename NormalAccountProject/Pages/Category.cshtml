@@ -1,0 +1,464 @@
+﻿@page "/Category"
+@model NormalAccountProject.Pages.CategoryModel
+@{
+    ViewData["Title"] = "Category Registration";
+}
+
+<div class="section__content section__content--p30">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="overview-wrap d-flex justify-content-between align-items-center">
+                    <h2 class="title-1">Category Registration</h2>
+                    <div>
+                        <button class="btn btn-info" id="gridViewToggleBtn">
+                            <i class="fas fa-table me-2"></i>Grid View
+                        </button>
+                        <button class="btn btn-primary" id="formViewToggleBtn" style="display:none;">
+                            <i class="fas fa-form me-2"></i>Form View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- FORM VIEW -->
+        <div id="formViewContainer">
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <!-- Hidden Fields -->
+                    <input style="display:none;" type="text" id="CategoryId">
+
+                    <!-- Row 1: Category Name -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="Category">Category Name *</label>
+                            <input type="text" id="Category" class="form-control" placeholder="Enter Category Name">
+                        </div>
+                    </div>
+
+                    <!-- Row 2: IsActive -->
+                    <div class="row mb-3">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check">
+                                <input type="checkbox" id="IsActive" class="form-check-input" checked>
+                                <label class="form-check-label" for="IsActive">Is Active</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Buttons -->
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex align-items-end">
+                            <button class="btn btn-success me-2" id="saveBtn">Save</button>
+                            <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID VIEW -->
+        <div id="gridViewContainer" style="display:none;">
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div id="CategoryGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
+                    <div class="mt-3" style="text-align:center;">
+                        <p>Total Categories (<span id="TotalCategoriesCount">0</span>)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="copyright">
+                    <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">AV_Softs</span></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Variable Declaration
+    let userId = localStorage.getItem("userId") || "";
+    let GridViewDataList = [];
+    let IsUpdate = false;
+
+    // VIEW TOGGLE FUNCTIONS
+    function showFormView() {
+        document.getElementById("formViewContainer").style.display = "block";
+        document.getElementById("gridViewContainer").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "none";
+        document.getElementById("gridViewToggleBtn").style.display = "inline-block";
+        document.getElementById("Category").focus();
+    }
+
+    function showGridView() {
+        document.getElementById("formViewContainer").style.display = "none";
+        document.getElementById("gridViewContainer").style.display = "block";
+        document.getElementById("gridViewToggleBtn").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "inline-block";
+    }
+
+    document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
+    document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
+
+    // PAGE LOAD
+    window.addEventListener("load", async function () {
+        await LoadCategoryRegistrationData();
+        await LoadGridViewData();
+    });
+
+    // Load Category Registration Data
+    async function LoadCategoryRegistrationData() {
+        const nInfoTab = {
+            Userid: userId,
+        };
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadCategoryRegistrationData", "CategoryRegistration")',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            if (response.statusId === 1) {
+                console.log("Category page loaded successfully");
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Category Registration',
+                    text: response.message || 'Failed to load data'
+                });
+            }
+
+        } catch (xhr) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while loading data'
+            });
+            console.error("LoadCategoryRegistrationData Error:", xhr);
+        }
+    }
+
+    // Load Grid View Data
+    async function LoadGridViewData() {
+        const nInfoTab = {
+            Userid: userId,
+        };
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadGridViewData", "CategoryRegistration")',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            if (response.statusId === 1) {
+                GridViewDataList = response.GridViewDataList || [];
+                document.getElementById("TotalCategoriesCount").textContent = GridViewDataList.length;
+                RenderGridView();
+
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Grid View',
+                    text: response.message || 'Failed to load grid data'
+                });
+            }
+
+        } catch (xhr) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while loading grid view'
+            });
+            console.error("LoadGridViewData Error:", xhr);
+        }
+    }
+
+    // Render Grid View
+    function RenderGridView() {
+        const container = document.getElementById("CategoryGridContainer");
+
+        if (GridViewDataList.length === 0) {
+            container.innerHTML = `<p style="text-align:center; margin-top:20px;">No categories available</p>`;
+            return;
+        }
+
+        let tableHTML = `
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Actions</th>
+                        <th>Category ID</th>
+                        <th>Category Name</th>
+                        <th>Is Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        GridViewDataList.forEach(item => {
+            tableHTML += `
+                <tr>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick='EditCategory(${item.CategoryId})'>Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick='DeleteCategory(${item.CategoryId})'>Delete</button>
+                    </td>
+                    <td>${item.CategoryId || ''}</td>
+                    <td>${item.Category || ''}</td>
+                    <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
+                </tr>
+            `;
+        });
+
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+
+        container.innerHTML = tableHTML;
+    }
+
+    // Edit Category Function
+    function EditCategory(categoryId) {
+        console.log("Edit clicked for CategoryId:", categoryId);
+
+        const category = GridViewDataList.find(c => parseInt(c.CategoryId) === parseInt(categoryId));
+
+        if (!category) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Category not found. CategoryId: ' + categoryId
+            });
+            return;
+        }
+
+        document.getElementById("CategoryId").value = category.CategoryId || '';
+        document.getElementById("Category").value = category.Category || '';
+        document.getElementById("IsActive").checked = category['Is Active'] === true || category['Is Active'] === 1;
+
+        IsUpdate = true;
+        document.getElementById("saveBtn").textContent = "Update";
+        showFormView();
+    }
+
+    // Delete Category Function
+    async function DeleteCategory(categoryId) {
+        console.log("Delete clicked for CategoryId:", categoryId);
+
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        });
+
+        if (!result.isConfirmed) return;
+
+        const nCategoryTab = {
+            Userid: userId,
+            CategoryId: `${categoryId}`
+        };
+
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Deleting category...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nDeleteCategoryRegistrationData", "CategoryRegistration")',
+                data: JSON.stringify(nCategoryTab),
+                contentType: 'application/json'
+            });
+
+            Swal.close();
+
+            if (response.statusId === 1) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Category Deleted',
+                    text: response.message || 'Category deleted successfully'
+                });
+
+                await LoadGridViewData();
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Delete Failed',
+                    text: response.message || 'Failed to delete category'
+                });
+            }
+
+        } catch (error) {
+            Swal.close();
+            console.error("DeleteCategory Error:", error);
+
+            let errorMessage = 'An error occurred while deleting category';
+
+            if (error.responseJSON && error.responseJSON.message) {
+                errorMessage = error.responseJSON.message;
+            } else if (error.responseText) {
+                errorMessage = error.responseText;
+            } else if (error.statusText) {
+                errorMessage = error.statusText;
+            }
+
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage
+            });
+        }
+    }
+
+    // Save Button click
+    document.getElementById("saveBtn").addEventListener("click", async function () {
+        const CategoryId = document.getElementById("CategoryId").value.trim();
+        const Category = document.getElementById("Category").value.trim();
+        const isActive = document.getElementById("IsActive").checked;
+
+        // Validations
+        if (!Category) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Category name is required',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("Category").focus();
+                }
+            });
+            return;
+        }
+
+        const nCategoryTab = {
+            Userid: userId || "",
+            CategoryId: CategoryId,
+            Category: Category,
+            IsActive: isActive,
+            IsUpdate: IsUpdate
+        };
+
+        console.log("Sending data:", nCategoryTab);
+
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Category registration is in process...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nSaveCategoryRegistrationData", "CategoryRegistration")',
+                data: JSON.stringify(nCategoryTab),
+                contentType: 'application/json'
+            });
+
+            console.log("Server response:", response);
+
+            Swal.close();
+
+            if (response.statusId === 1) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Category Registration',
+                    text: response.message || 'Category saved successfully',
+                    returnFocus: false,
+                    didClose: () => {
+                        document.getElementById("Category").focus();
+                    }
+                });
+
+                nClearForm();
+
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Category Registration',
+                    text: response.message || 'Category save failed'
+                });
+            }
+
+        } catch (xhr) {
+            Swal.close();
+
+            console.error("SaveData Error:", xhr);
+
+            let errorMessage = 'An error occurred while saving category';
+
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+                errorMessage = xhr.responseJSON.message;
+            } else if (xhr.responseText) {
+                errorMessage = xhr.responseText.substring(0, 200);
+            } else if (xhr.statusText) {
+                errorMessage = `${xhr.status}: ${xhr.statusText}`;
+            }
+
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage
+            });
+        }
+    });
+
+    // Cancel Button click
+    document.getElementById("cancelBtn").addEventListener("click", function () {
+        nClearForm();
+    });
+
+    async function nClearForm() {
+        document.getElementById("CategoryId").value = "";
+        document.getElementById("Category").value = "";
+        document.getElementById("IsActive").checked = true;
+        IsUpdate = false;
+        document.getElementById("saveBtn").textContent = "Save";
+        document.getElementById("Category").focus();
+        await LoadGridViewData();
+    }
+</script>
+
+<style>
+    select.form-control {
+        appearance: auto;
+        -webkit-appearance: auto;
+        -moz-appearance: auto;
+    }
+
+    .table-responsive {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+    }
+
+    .table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #343a40;
+        color: white;
+        z-index: 10;
+    }
+</style>
