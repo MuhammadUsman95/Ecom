@@ -47,7 +47,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f5f7fa;
-            overflow-x: hidden;
+            overflow: hidden !important;
         }
 
         /* ========== Sidebar Styling ========== */
@@ -83,16 +83,13 @@
                 }
 
         @@keyframes shine {
-            0%
+            0% {
+                left: -100%;
+            }
 
-        {
-            left: -100%;
-        }
-
-        100% {
-            left: 100%;
-        }
-
+            100% {
+                left: 100%;
+            }
         }
 
         .menu-sidebar .logo a {
@@ -515,16 +512,18 @@
                 opacity: 1;
             }
 
-        /* ========== Page Container ========== */
+        /* ========== Page Container - NO SCROLL ========== */
         .page-container {
             background: #f5f7fa;
             min-height: 100vh;
             padding-left: 260px;
             transition: padding-left 0.3s ease;
+            overflow: hidden !important;
         }
 
         .main-content {
             padding: 0;
+            overflow: visible !important;
         }
 
         /* ========== Scrollbar Styling ========== */
@@ -551,18 +550,15 @@
 
         /* ========== Animations ========== */
         @@keyframes fadeIn {
-            from
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
 
-        {
-            opacity: 0;
-            transform: translateY(10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .page-container {
@@ -572,6 +568,7 @@
         /* ========== Custom Section Padding ========== */
         .section__content--p30 {
             padding: 25px 30px;
+            overflow: visible !important;
         }
 
         /* ========== Brand Text Instead of Logo ========== */
@@ -593,173 +590,152 @@
 
         /* ========== Mobile Responsive Adjustments ========== */
         @@media (max-width: 1024px) {
-            .page-container
+            .page-container {
+                padding-left: 0;
+            }
 
-        {
-            padding-left: 0;
-        }
+            .menu-sidebar {
+                transform: translateX(-100%);
+            }
 
-        .menu-sidebar {
-            transform: translateX(-100%);
-        }
-
-        .section__content--p30 {
-            padding: 20px 15px;
-        }
-
+            .section__content--p30 {
+                padding: 20px 15px;
+            }
         }
 
         @@media (max-width: 991px) {
-            body
-
-        {
-            padding-top: 62px;
-        }
-
-        .page-container {
-            padding-left: 0;
-            margin-left: 0;
-        }
-
-        .header-desktop {
-            display: none !important;
-        }
-
-        .account-wrap .account-item {
-            padding: 6px 12px;
-        }
-
-            .account-wrap .account-item .image {
-                width: 35px;
-                height: 35px;
+            body {
+                padding-top: 62px;
             }
 
-            .account-wrap .account-item .content a {
-                font-size: 13px;
+            .page-container {
+                padding-left: 0;
+                margin-left: 0;
             }
 
-        .account-dropdown {
-            min-width: 220px;
-        }
+            .header-desktop {
+                display: none !important;
+            }
 
+            .account-wrap .account-item {
+                padding: 6px 12px;
+            }
+
+                .account-wrap .account-item .image {
+                    width: 35px;
+                    height: 35px;
+                }
+
+                .account-wrap .account-item .content a {
+                    font-size: 13px;
+                }
+
+            .account-dropdown {
+                min-width: 220px;
+            }
         }
 
         @@media (max-width: 768px) {
-            .header-mobile .logo
-
-        {
-            font-size: 18px;
-        }
-
-        .header-mobile .logo i {
-            font-size: 20px;
-        }
-
-        .section__content--p30 {
-            padding: 15px 12px;
-        }
-
-        .account-dropdown {
-            min-width: 200px;
-            right: 10px !important;
-        }
-
-            .account-dropdown .info {
-                padding: 15px;
+            .header-mobile .logo {
+                font-size: 18px;
             }
 
-                .account-dropdown .info .image {
-                    width: 50px;
-                    height: 50px;
+                .header-mobile .logo i {
+                    font-size: 20px;
                 }
 
-                .account-dropdown .info .content h5 {
-                    font-size: 14px;
+            .section__content--p30 {
+                padding: 15px 12px;
+            }
+
+            .account-dropdown {
+                min-width: 200px;
+                right: 10px !important;
+            }
+
+                .account-dropdown .info {
+                    padding: 15px;
                 }
 
-        .account-dropdown__footer a {
-            padding: 12px 15px;
-            font-size: 13px;
-        }
+                    .account-dropdown .info .image {
+                        width: 50px;
+                        height: 50px;
+                    }
 
+                    .account-dropdown .info .content h5 {
+                        font-size: 14px;
+                    }
+
+            .account-dropdown__footer a {
+                padding: 12px 15px;
+                font-size: 13px;
+            }
         }
 
         @@media (max-width: 480px) {
-            .header-mobile .logo
+            .header-mobile .logo {
+                font-size: 16px;
+            }
 
-        {
-            font-size: 16px;
-        }
+                .header-mobile .logo i {
+                    font-size: 18px;
+                }
 
-        .header-mobile .logo i {
-            font-size: 18px;
-        }
+            .navbar-mobile__list > li > a {
+                padding: 14px 15px;
+                font-size: 14px;
+            }
 
-        .navbar-mobile__list > li > a {
-            padding: 14px 15px;
-            font-size: 14px;
-        }
+            .navbar-mobile-sub__list li a {
+                padding: 10px 15px 10px 40px;
+                font-size: 13px;
+            }
 
-        .navbar-mobile-sub__list li a {
-            padding: 10px 15px 10px 40px;
-            font-size: 13px;
-        }
-
-        .section__content--p30 {
-            padding: 12px 10px;
-        }
-
+            .section__content--p30 {
+                padding: 12px 10px;
+            }
         }
 
         /* Touch-friendly improvements */
         @@media (hover: none) and (pointer: coarse) {
-            .navbar-mobile__list > li > a, .account-wrap .account-item
+            .navbar-mobile__list > li > a, .account-wrap .account-item {
+                min-height: 48px;
+            }
 
-        {
-            min-height: 48px;
-        }
-
-        .hamburger {
-            min-width: 48px;
-            min-height: 48px;
-        }
-
+            .hamburger {
+                min-width: 48px;
+                min-height: 48px;
+            }
         }
 
         /* Landscape mobile orientation */
         @@media (max-width: 991px) and (orientation: landscape) {
-            .navbar-mobile
+            .navbar-mobile {
+                top: 56px;
+            }
 
-        {
-            top: 56px;
-        }
+            .mobile-overlay {
+                top: 56px;
+            }
 
-        .mobile-overlay {
-            top: 56px;
-        }
-
-        .header-mobile__bar {
-            padding: 10px 0;
-        }
-
+            .header-mobile__bar {
+                padding: 10px 0;
+            }
         }
 
         /* Print styles */
         @@media print {
-            .header-mobile, .menu-sidebar, .hamburger, .account-dropdown
+            .header-mobile, .menu-sidebar, .hamburger, .account-dropdown {
+                display: none !important;
+            }
 
-        {
-            display: none !important;
-        }
+            .page-container {
+                padding-left: 0 !important;
+            }
 
-        .page-container {
-            padding-left: 0 !important;
-        }
-
-        body {
-            padding-top: 0 !important;
-        }
-
+            body {
+                padding-top: 0 !important;
+            }
         }
     </style>
 </head>
@@ -838,14 +814,15 @@
                                 <i class="fas fa-user-plus"></i>Vendor Registration
                             </a>
                         </li>
+
                         <li>
-                            <a href="/OrderManagement">
-                                <i class="fas fa-clipboard-list"></i>Order Management
+                            <a href="/Product">
+                                <i class="fas fa-box"></i>Product Registration
                             </a>
                         </li>
                         <li>
-                            <a href="/Product">
-                                <i class="fas fa-box"></i>Product
+                            <a href="/OrderManagement">
+                                <i class="fas fa-clipboard-list"></i>Order Management
                             </a>
                         </li>
                     </ul>

@@ -40,7 +40,15 @@
                         </div>
                     </div>
 
-                    <!-- Row 2: Prices & Discount Amount -->
+                    <!-- Row 2: Product Description (2 ROWS TEXTAREA) ✅ -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="ProductDescription">Product Description *</label>
+                            <textarea id="ProductDescription" class="form-control" placeholder="Enter Product Description" rows="2" style="resize: vertical;"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Prices & Discount Amount -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="Prices">Prices *</label>
@@ -52,7 +60,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 3: Category -->
+                    <!-- Row 4: Category -->
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="CategoryId">Category *</label>
@@ -62,7 +70,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 4: Vendor -->
+                    <!-- Row 5: Vendor -->
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <label for="VendorId">Vendor *</label>
@@ -72,7 +80,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 5: IsActive -->
+                    <!-- Row 6: IsActive -->
                     <div class="row mb-3">
                         <div class="col-md-6 d-flex align-items-center">
                             <div class="form-check">
@@ -82,7 +90,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 6: Product Image -->
+                    <!-- Row 7: Product Image -->
                     <div class="row mb-3">
                         <div class="col-md-12" style="display: grid;">
                             <label>Product Image (Max Size 500KB)*</label>
@@ -90,7 +98,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 7: Buttons -->
+                    <!-- Row 8: Buttons -->
                     <div class="row mb-3">
                         <div class="col-md-12 d-flex align-items-end">
                             <button class="btn btn-success me-2" id="saveBtn">Save</button>
@@ -268,7 +276,7 @@
         }
     }
 
-    // Load Grid View Data
+    // ✅ IMPROVED Load Grid View Data with Debug
     async function LoadGridViewData() {
         const nInfoTab = {
             Userid: userId,
@@ -284,6 +292,13 @@
 
             if (response.statusId === 1) {
                 GridViewDataList = response.GridViewDataList || [];
+
+                // ✅ DEBUG: Check what columns are available
+                if (GridViewDataList.length > 0) {
+                    console.log("Available columns:", Object.keys(GridViewDataList[0]));
+                    console.log("First row data:", GridViewDataList[0]);
+                }
+
                 document.getElementById("TotalProductsCount").textContent = GridViewDataList.length;
                 RenderGridView();
 
@@ -305,7 +320,7 @@
         }
     }
 
-    // Render Grid View
+    // ✅ IMPROVED Render Grid View - Handle Multiple Column Name Possibilities
     function RenderGridView() {
         const container = document.getElementById("ProductGridContainer");
 
@@ -314,12 +329,23 @@
             return;
         }
 
+        // ✅ Helper function to get value from multiple possible column names
+        function getValue(item, possibleNames, defaultValue = '') {
+            for (let name of possibleNames) {
+                if (item[name] !== undefined && item[name] !== null) {
+                    return item[name];
+                }
+            }
+            return defaultValue;
+        }
+
         let tableHTML = `
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
                         <th>Product Code</th>
                         <th>Product Name</th>
+                        <th>Product Description</th>
                         <th>Category</th>
                         <th>Vendor</th>
                         <th>Prices</th>
@@ -333,21 +359,30 @@
         `;
 
         GridViewDataList.forEach(item => {
+            // ✅ Try multiple possible column names for Product Description
+            const productDescription = getValue(item, [
+                'Product Description',
+                'ProductDescription',
+                'Description',
+                'Product_Description'
+            ], 'N/A');
+
             tableHTML += `
                 <tr>
-                    <td>${item.ProductCode || ''}</td>
-                    <td>${item['Product Name'] || ''}</td>
-                    <td>${item['CategoryId Name'] || ''}</td>
-                    <td>${item['VendorId Name'] || ''}</td>
-                    <td>${item.Prices || '0'}</td>
-                    <td>${item['Discount Amount'] || '0'}</td>
-                    <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
-                    <td>
-                        ${item.ProductImage ? `<a href="${item.ProductImage}" target="_blank">View Image</a>` : 'No Image'}
-                    </td>
                     <td>
                         <button class="btn btn-sm btn-primary" onclick='EditProduct(${item.ProductCode})'>Edit</button>
                         <button class="btn btn-sm btn-danger" onclick='DeleteProduct(${item.ProductCode})'>Delete</button>
+                    </td>
+                    <td>${item.ProductCode || ''}</td>
+                    <td>${getValue(item, ['Product Name', 'ProductName', 'Product'])}</td>
+                    <td>${productDescription}</td>
+                    <td>${getValue(item, ['CategoryId Name', 'Category', 'CategoryName'])}</td>
+                    <td>${getValue(item, ['VendorId Name', 'Vendor', 'VendorName'])}</td>
+                    <td>${item.Prices || '0'}</td>
+                    <td>${getValue(item, ['Discount Amount', 'DiscountAmount'], '0')}</td>
+                    <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
+                    <td>
+                        ${item.ProductImage ? `<a href="${item.ProductImage}" target="_blank">View Image</a>` : 'No Image'}
                     </td>
                 </tr>
             `;
@@ -361,10 +396,9 @@
         container.innerHTML = tableHTML;
     }
 
-    // ✅ FIXED - Edit Product Function
+    // ✅ IMPROVED Edit Product Function
     function EditProduct(productId) {
         console.log("Edit clicked for ProductCode:", productId);
-        console.log("GridViewDataList:", GridViewDataList);
 
         const product = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productId));
 
@@ -380,12 +414,23 @@
 
         console.log("Found product:", product);
 
+        // ✅ Helper function to get value from multiple possible column names
+        function getValue(possibleNames, defaultValue = '') {
+            for (let name of possibleNames) {
+                if (product[name] !== undefined && product[name] !== null) {
+                    return product[name];
+                }
+            }
+            return defaultValue;
+        }
+
         document.getElementById("ProductId").value = product.ProductCode || '';
-        document.getElementById("Product").value = product['Product Name'] || '';
+        document.getElementById("Product").value = getValue(['Product Name', 'ProductName', 'Product']);
+        document.getElementById("ProductDescription").value = getValue(['Product Description', 'ProductDescription', 'Description']);
         document.getElementById("CategoryId").value = product.CategoryId || '';
         document.getElementById("VendorId").value = product.VendorId || '';
         document.getElementById("Prices").value = product.Prices || '0';
-        document.getElementById("DiscountAmount").value = product['Discount Amount'] || '0';
+        document.getElementById("DiscountAmount").value = getValue(['Discount Amount', 'DiscountAmount'], '0');
         document.getElementById("IsActive").checked = product['Is Active'] === true || product['Is Active'] === 1;
 
         if (product.ProductImage) {
@@ -402,10 +447,9 @@
         showFormView();
     }
 
-    // ✅ COMPLETELY FIXED - Delete Product Function
+    // ✅ Delete Product Function
     async function DeleteProduct(productId) {
         console.log("Delete clicked for ProductCode:", productId);
-        console.log("GridViewDataList:", GridViewDataList);
 
         const result = await Swal.fire({
             title: 'Are you sure?',
@@ -419,7 +463,6 @@
 
         if (!result.isConfirmed) return;
 
-        // ✅ FIX: Convert to number for comparison
         const product = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productId));
 
         if (!product) {
@@ -432,27 +475,19 @@
             return;
         }
 
-        // ✅ CRITICAL FIX: Extract only filename from full URL
+        // ✅ Extract only filename from full URL
         let imageFilename = "";
         if (product.ProductImage) {
-            // If it's a full URL like "http://192.168.100.243/ProductRegistration/image.jpg"
-            // Extract only "image.jpg"
             const urlParts = product.ProductImage.split('/');
             imageFilename = urlParts[urlParts.length - 1];
         }
 
-        console.log("Product to delete:", product);
-        console.log("Image filename:", imageFilename);
-
         const nProductTab = {
             Userid: userId,
-            ProductId: `${productId}`,   // Convert to string
+            ProductId: `${productId}`,
             ProductImageAttachmentfilenameold: imageFilename,
             FtpPath: "/wwwroot/Images/ProductRegistration"
         };
-
-
-        console.log("Sending to backend:", nProductTab);
 
         Swal.fire({
             title: 'Please wait',
@@ -469,8 +504,6 @@
                 data: JSON.stringify(nProductTab),
                 contentType: 'application/json'
             });
-
-            console.log("Delete response:", response);
 
             Swal.close();
 
@@ -492,10 +525,8 @@
 
         } catch (error) {
             Swal.close();
-
             console.error("DeleteProduct Error:", error);
 
-            // ✅ Show detailed error message
             let errorMessage = 'An error occurred while deleting product';
 
             if (error.responseJSON && error.responseJSON.message) {
@@ -515,170 +546,11 @@
         }
     }
 
-    // // Save Button click
-    // document.getElementById("saveBtn").addEventListener("click", async function () {
-    //     const ProductId = document.getElementById("ProductId").value.trim();
-    //     const Product = document.getElementById("Product").value.trim();
-    //     const CategoryId = document.getElementById("CategoryId").value.trim();
-    //     const VendorId = document.getElementById("VendorId").value.trim();
-    //     const Prices = document.getElementById("Prices").value.trim();
-    //     const DiscountAmount = document.getElementById("DiscountAmount").value.trim();
-    //     const isActive = document.getElementById("IsActive").checked;
-    //     const productImageAttachment = document.getElementById("ProductImageAttachment").files.length > 0;
-    //     const productImageAttachmentold = document.getElementById("ProductImageAttachmentOld").value.trim();
-
-    //     // Validations
-    //     if (!Product) {
-    //         await Swal.fire({
-    //             icon: 'warning',
-    //             title: 'Validation',
-    //             text: 'Product name is required',
-    //             returnFocus: false,
-    //             didClose: () => {
-    //                 document.getElementById("Product").focus();
-    //             }
-    //         });
-    //         return;
-    //     }
-
-    //     if (!CategoryId) {
-    //         await Swal.fire({
-    //             icon: 'warning',
-    //             title: 'Validation',
-    //             text: 'Please select category',
-    //             returnFocus: false,
-    //             didClose: () => {
-    //                 document.getElementById("CategoryId").focus();
-    //             }
-    //         });
-    //         return;
-    //     }
-
-    //     if (!VendorId) {
-    //         await Swal.fire({
-    //             icon: 'warning',
-    //             title: 'Validation',
-    //             text: 'Please select vendor',
-    //             returnFocus: false,
-    //             didClose: () => {
-    //                 document.getElementById("VendorId").focus();
-    //             }
-    //         });
-    //         return;
-    //     }
-
-    //     if (!Prices || isNaN(Prices) || parseFloat(Prices) <= 0) {
-    //         await Swal.fire({
-    //             icon: 'warning',
-    //             title: 'Validation',
-    //             text: 'Please enter valid price (numbers only)',
-    //             returnFocus: false,
-    //             didClose: () => {
-    //                 document.getElementById("Prices").focus();
-    //             }
-    //         });
-    //         return;
-    //     }
-
-    //     if (DiscountAmount && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0)) {
-    //         await Swal.fire({
-    //             icon: 'warning',
-    //             title: 'Validation',
-    //             text: 'Please enter valid discount amount (numbers only)',
-    //             returnFocus: false,
-    //             didClose: () => {
-    //                 document.getElementById("DiscountAmount").focus();
-    //             }
-    //         });
-    //         return;
-    //     }
-
-    //     if (!IsUpdate && !productImageAttachment) {
-    //         await Swal.fire({
-    //             icon: 'warning',
-    //             title: 'Validation',
-    //             text: 'Please select product image',
-    //             returnFocus: false,
-    //             didClose: () => {
-    //                 document.getElementById("ProductImageAttachment").focus();
-    //             }
-    //         });
-    //         return;
-    //     }
-
-    //     const { ProductImageAttachmentfilename, ProductImageAttachmentbase64 } = await GetProductImageAttachmentFile();
-
-    //     const nProductTab = {
-    //         Userid: userId,
-    //         ProductId: ProductId,
-    //         Product: Product,
-    //         CategoryId: CategoryId,
-    //         VendorId: VendorId,
-    //         ProductImageAttachmentfilename: ProductImageAttachmentfilename,
-    //         ProductImageAttachmentfilenameold: productImageAttachmentold,
-    //         ProductImageAttachmentbase64: ProductImageAttachmentbase64,
-    //         Prices: Prices,
-    //         DiscountAmount: DiscountAmount || "0",
-    //         IsActive: isActive,
-    //         IsUpdate: IsUpdate,
-    //     };
-
-    //     Swal.fire({
-    //         title: 'Please wait',
-    //         text: 'Product registration is in process...',
-    //         allowOutsideClick: false,
-    //         allowEscapeKey: false,
-    //         didOpen: () => Swal.showLoading()
-    //     });
-
-    //     try {
-    //         const response = await jQuery.ajax({
-    //             type: 'POST',
-    //             url: '@Url.Action("nSaveProductRegistrationData", "ProductRegistration")',
-    //             data: JSON.stringify(nProductTab),
-    //             contentType: 'application/json'
-    //         });
-
-    //         Swal.close();
-
-    //         if (response.statusId === 1) {
-    //             await Swal.fire({
-    //                 icon: 'success',
-    //                 title: 'Product Registration',
-    //                 text: response.message || 'Product saved successfully',
-    //                 returnFocus: false,
-    //                 didClose: () => {
-    //                     document.getElementById("Product").focus();
-    //                 }
-    //             });
-
-    //             nClearForm();
-
-    //         } else {
-    //             await Swal.fire({
-    //                 icon: 'warning',
-    //                 title: 'Product Registration',
-    //                 text: response.message || 'Product save failed'
-    //             });
-    //         }
-
-    //     } catch (xhr) {
-    //         Swal.close();
-
-    //         await Swal.fire({
-    //             icon: 'error',
-    //             title: 'Error',
-    //             text: 'An error occurred while saving product'
-    //         });
-
-    //         console.error("SaveData Error:", xhr);
-    //     }
-    // });
-
-        // Save Button click - UPDATED WITH BETTER ERROR HANDLING
+    // ✅ Save Button click - WITH BETTER ERROR HANDLING
     document.getElementById("saveBtn").addEventListener("click", async function () {
         const ProductId = document.getElementById("ProductId").value.trim();
         const Product = document.getElementById("Product").value.trim();
+        const ProductDescription = document.getElementById("ProductDescription").value.trim();
         const CategoryId = document.getElementById("CategoryId").value.trim();
         const VendorId = document.getElementById("VendorId").value.trim();
         const Prices = document.getElementById("Prices").value.trim();
@@ -696,6 +568,19 @@
                 returnFocus: false,
                 didClose: () => {
                     document.getElementById("Product").focus();
+                }
+            });
+            return;
+        }
+
+        if (!ProductDescription) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Product description is required',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("ProductDescription").focus();
                 }
             });
             return;
@@ -770,8 +655,9 @@
 
         const nProductTab = {
             Userid: userId || "",
-            ProductId: ProductId,  // ✅ Convert to number or 0
+            ProductId: ProductId,
             Product: Product,
+            ProductDescription: ProductDescription,
             CategoryId: CategoryId,
             VendorId: VendorId,
             ProductImageAttachmentfilename: ProductImageAttachmentfilename,
@@ -781,10 +667,9 @@
             DiscountAmount: DiscountAmount || "0",
             IsActive: isActive,
             IsUpdate: IsUpdate,
-            FtpPath: "/wwwroot/Images/ProductRegistration"  // ✅ NEW - FTP Path from frontend
+            FtpPath: "/wwwroot/Images/ProductRegistration"
         };
 
-        // ✅ Console log to debug
         console.log("Sending data:", nProductTab);
 
         Swal.fire({
@@ -803,7 +688,6 @@
                 contentType: 'application/json'
             });
 
-            // ✅ Console log response
             console.log("Server response:", response);
 
             Swal.close();
@@ -832,17 +716,14 @@
         } catch (xhr) {
             Swal.close();
 
-            // ✅ IMPROVED ERROR HANDLING - Show actual error
             console.error("SaveData Error:", xhr);
 
             let errorMessage = 'An error occurred while saving product';
 
-            // Extract actual error message
             if (xhr.responseJSON) {
                 if (xhr.responseJSON.message) {
                     errorMessage = xhr.responseJSON.message;
                 } else if (xhr.responseJSON.errors) {
-                    // Model validation errors
                     const errors = Object.values(xhr.responseJSON.errors).flat();
                     errorMessage = errors.join('\n');
                 } else if (xhr.responseJSON.title) {
@@ -885,12 +766,13 @@
         document.getElementById("ProductId").value = "";
         document.getElementById("ProductImageAttachmentOld").value = "";
         document.getElementById("Product").value = "";
+        document.getElementById("ProductDescription").value = "";
         document.getElementById("CategoryId").value = "";
         document.getElementById("VendorId").value = "";
         document.getElementById("IsActive").checked = false;
         document.getElementById("ProductImageAttachment").value = "";
-        document.getElementById("Prices").value = "";
-        document.getElementById("DiscountAmount").value = "";
+        document.getElementById("Prices").value = "0";
+        document.getElementById("DiscountAmount").value = "0";
         IsUpdate = false;
         document.getElementById("saveBtn").textContent = "Save";
         document.getElementById("Product").focus();
