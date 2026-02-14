@@ -65,6 +65,29 @@ namespace NormalAccountProject.Controllers
             // Clear model state to bypass automatic validation
             ModelState.Clear();
 
+            // ✅ ENHANCED: Check FTP Configuration FIRST
+            string ftpServer = _configuration["Config:ftpServer"];
+            string ftpUser = _configuration["Config:ftpUser"];
+            string ftpPassword = _configuration["Config:ftpPassword"];
+            string ftpPort = _configuration["Config:ftpPort"];
+
+            Console.WriteLine("========================================");
+            Console.WriteLine("🔧 FTP CONFIGURATION CHECK");
+            Console.WriteLine($"Server: {(string.IsNullOrEmpty(ftpServer) ? "❌ NOT SET" : $"✅ {ftpServer}")}");
+            Console.WriteLine($"User: {(string.IsNullOrEmpty(ftpUser) ? "❌ NOT SET" : $"✅ {ftpUser}")}");
+            Console.WriteLine($"Password: {(string.IsNullOrEmpty(ftpPassword) ? "❌ NOT SET" : "✅ SET")}");
+            Console.WriteLine($"Port: {(string.IsNullOrEmpty(ftpPort) ? "❌ NOT SET (will use 21)" : $"✅ {ftpPort}")}");
+            Console.WriteLine("========================================");
+
+            if (string.IsNullOrEmpty(ftpServer) || string.IsNullOrEmpty(ftpUser) || string.IsNullOrEmpty(ftpPassword))
+            {
+                return Ok(new
+                {
+                    statusId = 0,
+                    message = "❌ FTP Configuration Missing in appsettings.json!\n\nRequired fields:\n- Config:ftpServer\n- Config:ftpUser\n- Config:ftpPassword\n- Config:ftpPort"
+                });
+            }
+
             // Manual validation
             if (string.IsNullOrEmpty(nSliderTabObj.SilderName))
             {
@@ -119,6 +142,8 @@ namespace NormalAccountProject.Controllers
                             int statusId = Convert.ToInt32(dr["StatusId"]);
                             string dbMessage = dr["MessageCaption"]?.ToString() ?? "";
 
+                            Console.WriteLine($"📊 DB OPERATION - StatusId: {statusId}, Message: {dbMessage}");
+
                             // ✅ FTP Upload/Delete Logic - Only execute if DB operation succeeded
                             if (statusId == 1)
                             {
@@ -127,35 +152,57 @@ namespace NormalAccountProject.Controllers
                                 {
                                     try
                                     {
+                                        Console.WriteLine("========================================");
+                                        Console.WriteLine("📂 FTP OPERATION STARTING");
+                                        Console.WriteLine($"New File: {nSliderTabObj.SilderImageAttachmentfilename}");
+                                        Console.WriteLine($"Old File: {nSliderTabObj.SilderImageAttachmentfilenameold ?? "NONE"}");
+                                        Console.WriteLine($"FTP Path: {nSliderTabObj.FtpPath}");
+                                        Console.WriteLine($"Base64 Length: {nSliderTabObj.SilderImageAttachmentbase64?.Length ?? 0}");
+                                        Console.WriteLine("========================================");
+
                                         // Delete old image ONLY if updating AND old image exists
                                         if (nSliderTabObj.IsUpdate && !string.IsNullOrEmpty(nSliderTabObj.SilderImageAttachmentfilenameold))
                                         {
-                                            Console.WriteLine($"Deleting old image: {nSliderTabObj.SilderImageAttachmentfilenameold}");
+                                            Console.WriteLine($"🗑️ Attempting to delete old image: {nSliderTabObj.SilderImageAttachmentfilenameold}");
                                             await DeleteFromFtp(nSliderTabObj.SilderImageAttachmentfilenameold, nSliderTabObj.FtpPath);
                                         }
 
                                         // Upload new image
-                                        Console.WriteLine($"Uploading new image: {nSliderTabObj.SilderImageAttachmentfilename}");
+                                        Console.WriteLine($"📤 Uploading new image: {nSliderTabObj.SilderImageAttachmentfilename}");
                                         await UploadToFtp(
                                             nSliderTabObj.SilderImageAttachmentfilename,
                                             nSliderTabObj.SilderImageAttachmentbase64,
                                             nSliderTabObj.FtpPath
                                         );
 
-                                        Console.WriteLine("✅ Image uploaded successfully!");
+                                        Console.WriteLine("✅ ✅ ✅ IMAGE UPLOADED SUCCESSFULLY! ✅ ✅ ✅");
                                     }
                                     catch (Exception ftpEx)
                                     {
-                                        Console.WriteLine($"❌ FTP Operation Error: {ftpEx.Message}");
+                                        Console.WriteLine("========================================");
+                                        Console.WriteLine("❌ FTP OPERATION FAILED");
+                                        Console.WriteLine($"Error: {ftpEx.Message}");
                                         Console.WriteLine($"Stack Trace: {ftpEx.StackTrace}");
+                                        Console.WriteLine("========================================");
 
-                                        // ✅ RETURN ERROR TO USER (Don't silently ignore)
+                                        // ✅ RETURN DETAILED ERROR TO USER
                                         return Ok(new
                                         {
                                             statusId = 0,
-                                            message = $"Data saved but image upload failed: {ftpEx.Message}\n\nPlease check FTP configuration or contact administrator."
+                                            message = $"⚠️ Database saved successfully but FTP upload failed!\n\n" +
+                                                     $"Error Details:\n{ftpEx.Message}\n\n" +
+                                                     $"Possible Solutions:\n" +
+                                                     $"1. Check appsettings.json FTP configuration\n" +
+                                                     $"2. Verify FTP server is accessible\n" +
+                                                     $"3. Check FTP folder permissions\n" +
+                                                     $"4. Ensure folder path exists: {nSliderTabObj.FtpPath}\n\n" +
+                                                     $"Contact system administrator for assistance."
                                         });
                                     }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("⚠️ No new image to upload (update without image change)");
                                 }
                             }
 
@@ -176,7 +223,7 @@ namespace NormalAccountProject.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Save Error: {ex.Message}");
+                Console.WriteLine($"❌ SAVE ERROR: {ex.Message}");
                 Console.WriteLine($"Stack Trace: {ex.StackTrace}");
                 return Ok(new
                 {
@@ -221,7 +268,7 @@ namespace NormalAccountProject.Controllers
         {
             try
             {
-                Console.WriteLine($"Delete Request - SilderId: {deleteRequest.SilderId}, UserId: {deleteRequest.Userid}");
+                Console.WriteLine($"🗑️ DELETE REQUEST - SilderId: {deleteRequest.SilderId}, UserId: {deleteRequest.Userid}");
                 Console.WriteLine($"Image filename: {deleteRequest.SilderImageAttachmentfilenameold}");
 
                 using (SqlConnection con = new SqlConnection(connectionString))
@@ -302,18 +349,21 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        // FTP Delete Function with File Existence Check
+        // ✅ IMPROVED: FTP Delete with Better Error Handling
         async Task DeleteFromFtp(string attachmentFileName, string ftpPath)
         {
             if (string.IsNullOrEmpty(attachmentFileName))
+            {
+                Console.WriteLine("⚠️ DeleteFromFtp: Filename is empty, skipping");
                 return;
+            }
 
             try
             {
                 string ftpServer = _configuration["Config:ftpServer"];
                 string ftpUser = _configuration["Config:ftpUser"];
                 string ftpPassword = _configuration["Config:ftpPassword"];
-                string ftpPort = _configuration["Config:ftpPort"];
+                string ftpPort = _configuration["Config:ftpPort"] ?? "21";
 
                 // Use provided ftpPath or default
                 string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/SliderRegistration";
@@ -325,14 +375,14 @@ namespace NormalAccountProject.Controllers
 
                 string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{fileName}";
 
-                Console.WriteLine($"FTP Delete Attempt - URL: {ftpUrl}");
+                Console.WriteLine($"🗑️ FTP Delete - URL: {ftpUrl}");
 
                 // Check if file exists first
                 bool fileExists = await CheckFtpFileExists(ftpUrl, ftpUser, ftpPassword);
 
                 if (!fileExists)
                 {
-                    Console.WriteLine($"FTP Delete Skipped: File doesn't exist - {fileName}");
+                    Console.WriteLine($"⚠️ File doesn't exist (already deleted or never uploaded): {fileName}");
                     return; // Don't throw error, just skip
                 }
 
@@ -343,54 +393,52 @@ namespace NormalAccountProject.Controllers
                 request.UseBinary = true;
                 request.UsePassive = true;
                 request.KeepAlive = false;
-                request.Timeout = 10000; // 10 seconds timeout
+                request.Timeout = 10000;
 
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    Console.WriteLine($"FTP Delete Success: {response.StatusDescription}");
+                    Console.WriteLine($"✅ FTP Delete Success: {response.StatusDescription}");
                 }
             }
             catch (WebException ex)
             {
                 if (ex.Response is FtpWebResponse response)
                 {
-                    Console.WriteLine($"FTP Delete Error Code: {response.StatusCode}");
-                    Console.WriteLine($"FTP Delete Error Message: {response.StatusDescription}");
+                    Console.WriteLine($"❌ FTP Delete Error Code: {response.StatusCode}");
+                    Console.WriteLine($"❌ FTP Delete Error: {response.StatusDescription}");
 
-                    // Don't throw error for file not found - just log it
                     if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                     {
-                        Console.WriteLine($"FTP Delete: File not found (already deleted or never existed) - {attachmentFileName}");
-                        return; // Don't propagate error
+                        Console.WriteLine($"⚠️ File not found (ignoring): {attachmentFileName}");
+                        return;
                     }
                 }
 
-                Console.WriteLine($"FTP Delete Exception: {ex.Message}");
-                // Don't throw - just log
+                Console.WriteLine($"❌ FTP Delete Exception: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"FTP Delete General Error: {ex.Message}");
-                // Don't throw - just log
+                Console.WriteLine($"❌ FTP Delete Error: {ex.Message}");
             }
         }
 
-        // Helper Method - Check if file exists on FTP
+        // ✅ Helper Method - Check if file exists on FTP
         async Task<bool> CheckFtpFileExists(string ftpUrl, string ftpUser, string ftpPassword)
         {
             try
             {
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-                request.Method = WebRequestMethods.Ftp.GetFileSize; // Just check size
+                request.Method = WebRequestMethods.Ftp.GetFileSize;
                 request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
                 request.UseBinary = true;
                 request.UsePassive = true;
                 request.KeepAlive = false;
-                request.Timeout = 5000; // 5 seconds timeout
+                request.Timeout = 5000;
 
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    return true; // File exists
+                    Console.WriteLine($"✅ File exists: {ftpUrl}");
+                    return true;
                 }
             }
             catch (WebException ex)
@@ -399,25 +447,26 @@ namespace NormalAccountProject.Controllers
                 {
                     if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                     {
-                        return false; // File doesn't exist
+                        Console.WriteLine($"⚠️ File doesn't exist: {ftpUrl}");
+                        return false;
                     }
                 }
-                return false; // Assume doesn't exist on any error
+                return false;
             }
             catch
             {
-                return false; // Assume doesn't exist
+                return false;
             }
         }
 
-        // ✅ NEW METHOD: Create FTP Directory Recursively
+        // ✅ IMPROVED: Create FTP Directory with Better Logging
         async Task CreateFtpDirectoryIfNotExists(string ftpServer, string ftpPort, string ftpUser, string ftpPassword, string directoryPath)
         {
             try
             {
-                // Split path into parts (e.g., /wwwroot/Images/SliderRegistration -> ["wwwroot", "Images", "SliderRegistration"])
-                string[] pathParts = directoryPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                Console.WriteLine($"📁 Checking FTP directory: {directoryPath}");
 
+                string[] pathParts = directoryPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
                 string currentPath = "";
 
                 foreach (string part in pathParts)
@@ -427,7 +476,6 @@ namespace NormalAccountProject.Controllers
 
                     try
                     {
-                        // Check if directory exists
                         FtpWebRequest listRequest = (FtpWebRequest)WebRequest.Create(ftpUrl);
                         listRequest.Method = WebRequestMethods.Ftp.ListDirectory;
                         listRequest.Credentials = new NetworkCredential(ftpUser, ftpPassword);
@@ -444,7 +492,6 @@ namespace NormalAccountProject.Controllers
                     {
                         if (ex.Response is FtpWebResponse response)
                         {
-                            // Directory doesn't exist - create it
                             if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                             {
                                 Console.WriteLine($"📁 Creating directory: {currentPath}");
@@ -458,8 +505,12 @@ namespace NormalAccountProject.Controllers
 
                                 using (FtpWebResponse createResponse = (FtpWebResponse)await createRequest.GetResponseAsync())
                                 {
-                                    Console.WriteLine($"✅ Created directory: {currentPath} - {createResponse.StatusDescription}");
+                                    Console.WriteLine($"✅ Created directory: {currentPath}");
                                 }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"⚠️ Directory check failed: {currentPath} - {response.StatusDescription}");
                             }
                         }
                     }
@@ -468,40 +519,75 @@ namespace NormalAccountProject.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"⚠️ Directory creation warning: {ex.Message}");
-                // Don't throw - directory might already exist or we might not have permission
             }
         }
 
-        // ✅ UPDATED FTP Upload Function with Auto Directory Creation
+        // ✅ IMPROVED: FTP Upload with Detailed Logging
         async Task UploadToFtp(string fileName, string base64String, string ftpPath)
         {
+            Console.WriteLine("========================================");
+            Console.WriteLine("📤 STARTING FTP UPLOAD");
+            Console.WriteLine("========================================");
+
+            // Validation
             if (string.IsNullOrWhiteSpace(fileName))
+            {
+                Console.WriteLine("❌ ERROR: Filename is empty");
                 throw new Exception("Filename is empty");
+            }
 
             if (string.IsNullOrWhiteSpace(base64String))
-                throw new Exception("Base64 string is empty");
+            {
+                Console.WriteLine("❌ ERROR: Base64 string is empty");
+                throw new Exception("Base64 image data is empty");
+            }
 
             string ftpServer = _configuration["Config:ftpServer"];
             string ftpUser = _configuration["Config:ftpUser"];
             string ftpPassword = _configuration["Config:ftpPassword"];
-            string ftpPort = _configuration["Config:ftpPort"];
+            string ftpPort = _configuration["Config:ftpPort"] ?? "21";
+
+            Console.WriteLine($"🔧 FTP Server: {ftpServer}");
+            Console.WriteLine($"🔧 FTP Port: {ftpPort}");
+            Console.WriteLine($"🔧 FTP User: {ftpUser}");
+            Console.WriteLine($"📄 Filename: {fileName}");
 
             if (string.IsNullOrWhiteSpace(ftpServer))
-                throw new Exception("FTP Server not configured");
+            {
+                Console.WriteLine("❌ ERROR: FTP Server not configured");
+                throw new Exception("FTP Server not configured in appsettings.json");
+            }
 
             if (string.IsNullOrWhiteSpace(ftpUser))
-                throw new Exception("FTP Username not configured");
+            {
+                Console.WriteLine("❌ ERROR: FTP Username not configured");
+                throw new Exception("FTP Username not configured in appsettings.json");
+            }
 
             if (string.IsNullOrWhiteSpace(ftpPassword))
-                throw new Exception("FTP Password not configured");
-
-            Console.WriteLine($"🔧 FTP Config - Server: {ftpServer}, Port: {ftpPort}, User: {ftpUser}");
+            {
+                Console.WriteLine("❌ ERROR: FTP Password not configured");
+                throw new Exception("FTP Password not configured in appsettings.json");
+            }
 
             // Remove base64 header
             if (base64String.Contains(","))
+            {
+                Console.WriteLine("🔧 Removing base64 header prefix");
                 base64String = base64String.Split(',')[1];
+            }
 
-            byte[] fileBytes = Convert.FromBase64String(base64String);
+            byte[] fileBytes;
+            try
+            {
+                fileBytes = Convert.FromBase64String(base64String);
+                Console.WriteLine($"✅ Base64 decoded successfully - Size: {fileBytes.Length} bytes ({fileBytes.Length / 1024.0:F2} KB)");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ ERROR: Failed to decode base64 - {ex.Message}");
+                throw new Exception($"Invalid base64 image data: {ex.Message}");
+            }
 
             string finalPath = string.IsNullOrWhiteSpace(ftpPath)
                 ? "/wwwroot/Images/SliderRegistration"
@@ -509,12 +595,12 @@ namespace NormalAccountProject.Controllers
 
             Console.WriteLine($"📂 FTP Path: {finalPath}");
 
-            // ✅ CREATE DIRECTORY IF NOT EXISTS
+            // Create directory if not exists
+            Console.WriteLine("📁 Checking/Creating FTP directory...");
             await CreateFtpDirectoryIfNotExists(ftpServer, ftpPort, ftpUser, ftpPassword, finalPath);
 
             string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalPath}/{fileName}";
-
-            Console.WriteLine($"📤 Uploading To: {ftpUrl}");
+            Console.WriteLine($"🌐 Full FTP URL: {ftpUrl}");
 
             try
             {
@@ -527,48 +613,69 @@ namespace NormalAccountProject.Controllers
                 request.ContentLength = fileBytes.Length;
                 request.Timeout = 30000;
 
+                Console.WriteLine($"📤 Uploading {fileBytes.Length} bytes...");
+
                 using (Stream stream = await request.GetRequestStreamAsync())
                 {
                     await stream.WriteAsync(fileBytes, 0, fileBytes.Length);
+                    Console.WriteLine("✅ Data written to FTP stream");
                 }
 
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
-                    Console.WriteLine($"✅ FTP Upload Success: {response.StatusDescription}");
+                    Console.WriteLine("========================================");
+                    Console.WriteLine($"✅ ✅ ✅ UPLOAD SUCCESS! ✅ ✅ ✅");
+                    Console.WriteLine($"Status: {response.StatusCode} - {response.StatusDescription}");
+                    Console.WriteLine($"File: {fileName}");
+                    Console.WriteLine($"Size: {fileBytes.Length / 1024.0:F2} KB");
+                    Console.WriteLine("========================================");
                 }
             }
             catch (WebException webEx)
             {
-                string errorDetails = "";
+                Console.WriteLine("========================================");
+                Console.WriteLine("❌ FTP UPLOAD FAILED");
+                Console.WriteLine("========================================");
+
+                string errorDetails = $"WebException: {webEx.Message}";
 
                 if (webEx.Response is FtpWebResponse ftpResponse)
                 {
-                    errorDetails = $"FTP Status: {ftpResponse.StatusCode} - {ftpResponse.StatusDescription}";
+                    errorDetails += $"\nFTP Status: {ftpResponse.StatusCode} - {ftpResponse.StatusDescription}";
 
                     try
                     {
                         using (Stream responseStream = ftpResponse.GetResponseStream())
                         using (StreamReader reader = new StreamReader(responseStream))
                         {
-                            errorDetails += "\nServer Response: " + await reader.ReadToEndAsync();
+                            string serverResponse = await reader.ReadToEndAsync();
+                            if (!string.IsNullOrEmpty(serverResponse))
+                            {
+                                errorDetails += $"\nServer Response: {serverResponse}";
+                            }
                         }
                     }
                     catch { }
                 }
 
-                Console.WriteLine($"❌ WebException: {webEx.Message}");
-                Console.WriteLine($"❌ Details: {errorDetails}");
+                Console.WriteLine(errorDetails);
+                Console.WriteLine($"Stack Trace: {webEx.StackTrace}");
+                Console.WriteLine("========================================");
 
-                throw new Exception($"FTP Upload Failed: {errorDetails}", webEx);
+                throw new Exception($"FTP Upload Failed:\n{errorDetails}", webEx);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ FTP Upload Error: {ex.Message}");
+                Console.WriteLine("========================================");
+                Console.WriteLine("❌ UNEXPECTED ERROR");
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                Console.WriteLine("========================================");
                 throw;
             }
         }
 
-        // ✅ FIXED Generic Data Fetcher with Nullable Type Handling
+        // ✅ Generic Data Fetcher
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
             List<T> list = new();
@@ -622,16 +729,12 @@ namespace NormalAccountProject.Controllers
                             if (value == null || value == DBNull.Value)
                                 continue;
 
-                            // ✅ Handle Nullable Types
                             Type targetType = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
-
-                            // ✅ Convert and Set
                             object convertedValue = Convert.ChangeType(value, targetType);
                             prop.SetValue(obj, convertedValue);
                         }
                         catch (Exception ex)
                         {
-                            // ✅ Silent fail - log if needed
                             Console.WriteLine($"Property {prop.Name} error: {ex.Message}");
                         }
                     }
@@ -643,35 +746,4 @@ namespace NormalAccountProject.Controllers
             return list;
         }
     }
-
-    // ❌ REMOVED - Extension class deleted to avoid ambiguity
-    // This extension method is already defined in ProductRegistrationController.cs
-    // Extension methods work globally, so one definition is enough
 }
-//```
-
-//---
-
-//## **Key Changes:**
-
-//1. ✅ **Added `CreateFtpDirectoryIfNotExists` method** - Automatically creates directories
-//2. ✅ **Updated `UploadToFtp`** - Calls directory creation before upload
-//3. ✅ **Better error messages** - User ko proper error dikhega
-//4. ✅ **Detailed console logging** - Debugging ke liye
-
-//---
-
-//## **Testing:**
-
-//Run karo aur console output dekho:
-//```
-//🔧 FTP Config - Server: your - server.com, Port: 21, User: youruser
-//📂 FTP Path: / wwwroot / Images / SliderRegistration
-//📁 Creating directory: / wwwroot
-//✅ Created directory: / wwwroot
-//📁 Creating directory: / wwwroot / Images
-//✅ Created directory: / wwwroot / Images
-//📁 Creating directory: / wwwroot / Images / SliderRegistration
-//✅ Created directory: / wwwroot / Images / SliderRegistration
-//📤 Uploading To: ftp://your-server.com:21/wwwroot/Images/SliderRegistration/Test_15022026.jpg
-//✅ FTP Upload Success: 226 Transfer complete
