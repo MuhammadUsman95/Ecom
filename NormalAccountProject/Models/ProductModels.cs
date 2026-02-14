@@ -26,6 +26,7 @@
         public string? Userid { get; set; }
         public string? ProductId { get; set; }
         public string? Product { get; set; }
+        public string? ProductDescription { get; set; }
         public bool IsActive { get; set; }
         public string? CategoryId { get; set; }
         public string? VendorId { get; set; }
@@ -37,13 +38,15 @@
         public string? ProductImageAttachmentfilename { get; set; }
         public string? ProductImageAttachmentfilenameold { get; set; }
         public string? ProductImageAttachmentbase64 { get; set; }
-        public string? FtpPath { get; set; }  // ✅ NEW
+        public string? FtpPath { get; set; }
     }
+
+    // ✅ Product Delete Request Model
     public class ProductDeleteRequest
     {
         public string? Userid { get; set; }
         public string? ProductId { get; set; }
         public string? ProductImageAttachmentfilenameold { get; set; }
-        public string? FtpPath { get; set; }  // ✅ NEW
+        public string? FtpPath { get; set; }
     }
 }

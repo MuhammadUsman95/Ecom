@@ -71,6 +71,11 @@ namespace NormalAccountProject.Controllers
                 return Ok(new { statusId = 0, message = "Product name is required" });
             }
 
+            //if (string.IsNullOrEmpty(nProductTabObj.ProductDescription))
+            //{
+            //    return Ok(new { statusId = 0, message = "Product description is required" });
+            //}
+
             if (string.IsNullOrEmpty(nProductTabObj.CategoryId))
             {
                 return Ok(new { statusId = 0, message = "Category is required" });
@@ -100,6 +105,7 @@ namespace NormalAccountProject.Controllers
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@nCategoryId", 0);
                     cmd.Parameters.AddWithValue("@nsCategoryId", 0);
+                    cmd.Parameters.AddWithValue("@ProductDescription", nProductTabObj.ProductDescription);  // ✅ FIXED!
                     cmd.Parameters.AddWithValue("@Product", nProductTabObj.Product);
                     cmd.Parameters.AddWithValue("@IsActive", nProductTabObj.IsActive ? "1" : "0");
                     cmd.Parameters.AddWithValue("@CategoryId", nProductTabObj.CategoryId);
@@ -123,21 +129,35 @@ namespace NormalAccountProject.Controllers
                         {
                             int statusId = Convert.ToInt32(dr["StatusId"]);
 
-                            // FTP Upload/Delete Logic - Only execute if DB operation succeeded
+                            // ✅ FTP Upload/Delete Logic - Only execute if DB operation succeeded
                             if (statusId == 1)
                             {
-                                // If new image is uploaded
+                                // ✅ Only process images if a NEW image was uploaded
                                 if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
                                 {
-                                    // Delete old image if exists (during update)
-                                    if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
+                                    try
                                     {
-                                        string oldFileName = Path.GetFileName(nProductTabObj.ProductImageAttachmentfilenameold);
-                                        await DeleteFromFtp(oldFileName, nProductTabObj.FtpPath);
-                                    }
+                                        // ✅ Delete old image ONLY if updating AND old image exists
+                                        if (nProductTabObj.IsUpdate && !string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
+                                        {
+                                            Console.WriteLine($"Deleting old image: {nProductTabObj.ProductImageAttachmentfilenameold}");
+                                            await DeleteFromFtp(nProductTabObj.ProductImageAttachmentfilenameold, nProductTabObj.FtpPath);
+                                        }
 
-                                    // Upload new image
-                                    await UploadToFtp(nProductTabObj.ProductImageAttachmentfilename, nProductTabObj.ProductImageAttachmentbase64, nProductTabObj.FtpPath);
+                                        // ✅ Upload new image
+                                        Console.WriteLine($"Uploading new image: {nProductTabObj.ProductImageAttachmentfilename}");
+                                        await UploadToFtp(
+                                            nProductTabObj.ProductImageAttachmentfilename,
+                                            nProductTabObj.ProductImageAttachmentbase64,
+                                            nProductTabObj.FtpPath
+                                        );
+                                    }
+                                    catch (Exception ftpEx)
+                                    {
+                                        Console.WriteLine($"FTP Operation Warning: {ftpEx.Message}");
+                                        // ✅ Don't fail the entire operation for FTP errors
+                                        // Data is already saved in DB
+                                    }
                                 }
                             }
 
@@ -158,6 +178,8 @@ namespace NormalAccountProject.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Save Error: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
                 return Ok(new
                 {
                     statusId = 0,
@@ -224,27 +246,21 @@ namespace NormalAccountProject.Controllers
 
                             Console.WriteLine($"SP Response - StatusId: {statusId}, Message: {message}");
 
-                            // Delete image from FTP if delete succeeded
+                            // ✅ Delete image from FTP if delete succeeded
                             if (statusId == 1)
                             {
                                 if (!string.IsNullOrEmpty(deleteRequest.ProductImageAttachmentfilenameold))
                                 {
                                     try
                                     {
-                                        string fileName = deleteRequest.ProductImageAttachmentfilenameold;
-
-                                        if (fileName.Contains("/"))
-                                        {
-                                            fileName = Path.GetFileName(fileName);
-                                        }
-
-                                        Console.WriteLine($"Attempting to delete file: {fileName}");
-                                        await DeleteFromFtp(fileName, deleteRequest.FtpPath);
-                                        Console.WriteLine($"File deleted successfully: {fileName}");
+                                        Console.WriteLine($"Attempting to delete file: {deleteRequest.ProductImageAttachmentfilenameold}");
+                                        await DeleteFromFtp(deleteRequest.ProductImageAttachmentfilenameold, deleteRequest.FtpPath);
+                                        Console.WriteLine($"File deleted successfully");
                                     }
                                     catch (Exception ftpEx)
                                     {
                                         Console.WriteLine($"FTP Delete Warning: {ftpEx.Message}");
+                                        // Don't fail the operation
                                     }
                                 }
                             }
@@ -288,7 +304,7 @@ namespace NormalAccountProject.Controllers
             }
         }
 
-        // ✅ Updated FTP Delete Function with FtpPath parameter
+        // ✅ IMPROVED FTP Delete Function with File Existence Check
         async Task DeleteFromFtp(string attachmentFileName, string ftpPath)
         {
             if (string.IsNullOrEmpty(attachmentFileName))
@@ -304,16 +320,32 @@ namespace NormalAccountProject.Controllers
                 // ✅ Use provided ftpPath or default
                 string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
 
-                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
+                // ✅ Extract just filename if full URL is passed
+                string fileName = attachmentFileName.Contains("/") || attachmentFileName.Contains("\\")
+                    ? Path.GetFileName(attachmentFileName)
+                    : attachmentFileName;
 
-                Console.WriteLine($"FTP Delete URL: {ftpUrl}");
+                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{fileName}";
 
+                Console.WriteLine($"FTP Delete Attempt - URL: {ftpUrl}");
+
+                // ✅ STEP 1: Check if file exists first
+                bool fileExists = await CheckFtpFileExists(ftpUrl, ftpUser, ftpPassword);
+
+                if (!fileExists)
+                {
+                    Console.WriteLine($"FTP Delete Skipped: File doesn't exist - {fileName}");
+                    return; // ✅ Don't throw error, just skip
+                }
+
+                // ✅ STEP 2: Delete the file
                 FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
                 request.Method = WebRequestMethods.Ftp.DeleteFile;
                 request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
                 request.UseBinary = true;
                 request.UsePassive = true;
                 request.KeepAlive = false;
+                request.Timeout = 10000; // 10 seconds timeout
 
                 using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
                 {
@@ -324,25 +356,63 @@ namespace NormalAccountProject.Controllers
             {
                 if (ex.Response is FtpWebResponse response)
                 {
+                    Console.WriteLine($"FTP Delete Error Code: {response.StatusCode}");
+                    Console.WriteLine($"FTP Delete Error Message: {response.StatusDescription}");
+
+                    // ✅ Don't throw error for file not found - just log it
                     if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
                     {
-                        Console.WriteLine($"FTP Delete: File not found - {attachmentFileName}");
-                    }
-                    else
-                    {
-                        Console.WriteLine($"FTP Delete Error: {response.StatusDescription}");
-                        throw;
+                        Console.WriteLine($"FTP Delete: File not found (already deleted or never existed) - {attachmentFileName}");
+                        return; // Don't propagate error
                     }
                 }
-                else
-                {
-                    Console.WriteLine($"FTP Delete Error: {ex.Message}");
-                    throw;
-                }
+
+                Console.WriteLine($"FTP Delete Exception: {ex.Message}");
+                // ✅ Don't throw - just log
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"FTP Delete General Error: {ex.Message}");
+                // ✅ Don't throw - just log
             }
         }
 
-        // ✅ Updated FTP Upload Function with FtpPath parameter
+        // ✅ NEW Helper Method - Check if file exists on FTP
+        async Task<bool> CheckFtpFileExists(string ftpUrl, string ftpUser, string ftpPassword)
+        {
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+                request.Method = WebRequestMethods.Ftp.GetFileSize; // Just check size
+                request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
+                request.UseBinary = true;
+                request.UsePassive = true;
+                request.KeepAlive = false;
+                request.Timeout = 5000; // 5 seconds timeout
+
+                using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
+                {
+                    return true; // File exists
+                }
+            }
+            catch (WebException ex)
+            {
+                if (ex.Response is FtpWebResponse response)
+                {
+                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                    {
+                        return false; // File doesn't exist
+                    }
+                }
+                return false; // Assume doesn't exist on any error
+            }
+            catch
+            {
+                return false; // Assume doesn't exist
+            }
+        }
+
+        // ✅ FTP Upload Function
         async Task UploadToFtp(string attachmentFileName, string attachmentBase64, string ftpPath)
         {
             if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
@@ -375,6 +445,7 @@ namespace NormalAccountProject.Controllers
                 request.UsePassive = true;
                 request.KeepAlive = false;
                 request.ContentLength = fileBytes.Length;
+                request.Timeout = 30000; // 30 seconds timeout
 
                 using (Stream requestStream = await request.GetRequestStreamAsync())
                 {
@@ -389,7 +460,7 @@ namespace NormalAccountProject.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine($"FTP Upload Error: {ex.Message}");
-                throw;
+                throw; // Propagate upload errors
             }
         }
 
