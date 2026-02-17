@@ -31,7 +31,7 @@ namespace NormalAccountProject.Controllers
                     { "@nCategoryId", 0 },
                     { "@nsCategoryId", 7 }
                 };
-                List<VendorDD> nVendorList = await nGetDataAsync<VendorDD>("Ecom_SilderSP", vendorParameters);
+                List<VendorDD> nVendorList = await nGetDataAsync<VendorDD>("Ecom_SliderSP", vendorParameters);
 
                 // Load Slider Type List
                 var sliderTypeParameters = new Dictionary<string, object>
@@ -39,7 +39,7 @@ namespace NormalAccountProject.Controllers
                     { "@nCategoryId", 0 },
                     { "@nsCategoryId", 8 }
                 };
-                List<SliderTypeDD> nSliderTypeList = await nGetDataAsync<SliderTypeDD>("Ecom_SilderSP", sliderTypeParameters);
+                List<SliderTypeDD> nSliderTypeList = await nGetDataAsync<SliderTypeDD>("Ecom_SliderSP", sliderTypeParameters);
 
                 var response = new
                 {
@@ -89,7 +89,7 @@ namespace NormalAccountProject.Controllers
             }
 
             // Manual validation
-            if (string.IsNullOrEmpty(nSliderTabObj.SilderName))
+            if (string.IsNullOrEmpty(nSliderTabObj.SliderName))
             {
                 return Ok(new { statusId = 0, message = "Slider name is required" });
             }
@@ -105,7 +105,7 @@ namespace NormalAccountProject.Controllers
             }
 
             // Validate image for new slider (not update)
-            if (!nSliderTabObj.IsUpdate && string.IsNullOrEmpty(nSliderTabObj.SilderImageAttachmentfilename))
+            if (!nSliderTabObj.IsUpdate && string.IsNullOrEmpty(nSliderTabObj.SliderImageAttachmentfilename))
             {
                 return Ok(new { statusId = 0, message = "Slider image is required" });
             }
@@ -113,12 +113,12 @@ namespace NormalAccountProject.Controllers
             try
             {
                 using (SqlConnection con = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand("Ecom_SilderSP", con))
+                using (SqlCommand cmd = new SqlCommand("Ecom_SliderSP", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@nCategoryId", 0);
                     cmd.Parameters.AddWithValue("@nsCategoryId", 0);
-                    cmd.Parameters.AddWithValue("@SilderName", nSliderTabObj.SilderName);
+                    cmd.Parameters.AddWithValue("@SliderName", nSliderTabObj.SliderName);
                     cmd.Parameters.AddWithValue("@IsActive", nSliderTabObj.IsActive ? "1" : "0");
                     cmd.Parameters.AddWithValue("@VendorId", nSliderTabObj.VendorId);
                     cmd.Parameters.AddWithValue("@SliderType", nSliderTabObj.SliderType);
@@ -126,11 +126,12 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@DescriptionSlider", nSliderTabObj.DescriptionSlider ?? "");
                     cmd.Parameters.AddWithValue("@UserId", nSliderTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nSliderTabObj.IsUpdate ? "1" : "0");
-                    cmd.Parameters.AddWithValue("@SilderImages", nSliderTabObj.SilderImageAttachmentfilename ?? "");
+                    cmd.Parameters.AddWithValue("@SliderImages", nSliderTabObj.SliderImageAttachmentfilename ?? "");
+                    cmd.Parameters.AddWithValue("@SliderMovingTimer", nSliderTabObj.SliderMovingTimer); // ✅ ADD THIS LINE
 
                     if (nSliderTabObj.IsUpdate)
                     {
-                        cmd.Parameters.AddWithValue("@SilderId", nSliderTabObj.SilderId);
+                        cmd.Parameters.AddWithValue("@SliderId", nSliderTabObj.SliderId);
                     }
 
                     await con.OpenAsync();
@@ -148,30 +149,30 @@ namespace NormalAccountProject.Controllers
                             if (statusId == 1)
                             {
                                 // Only process images if a NEW image was uploaded
-                                if (!string.IsNullOrEmpty(nSliderTabObj.SilderImageAttachmentfilename))
+                                if (!string.IsNullOrEmpty(nSliderTabObj.SliderImageAttachmentfilename))
                                 {
                                     try
                                     {
                                         Console.WriteLine("========================================");
                                         Console.WriteLine("📂 FTP OPERATION STARTING");
-                                        Console.WriteLine($"New File: {nSliderTabObj.SilderImageAttachmentfilename}");
-                                        Console.WriteLine($"Old File: {nSliderTabObj.SilderImageAttachmentfilenameold ?? "NONE"}");
+                                        Console.WriteLine($"New File: {nSliderTabObj.SliderImageAttachmentfilename}");
+                                        Console.WriteLine($"Old File: {nSliderTabObj.SliderImageAttachmentfilenameold ?? "NONE"}");
                                         Console.WriteLine($"FTP Path: {nSliderTabObj.FtpPath}");
-                                        Console.WriteLine($"Base64 Length: {nSliderTabObj.SilderImageAttachmentbase64?.Length ?? 0}");
+                                        Console.WriteLine($"Base64 Length: {nSliderTabObj.SliderImageAttachmentbase64?.Length ?? 0}");
                                         Console.WriteLine("========================================");
 
                                         // Delete old image ONLY if updating AND old image exists
-                                        if (nSliderTabObj.IsUpdate && !string.IsNullOrEmpty(nSliderTabObj.SilderImageAttachmentfilenameold))
+                                        if (nSliderTabObj.IsUpdate && !string.IsNullOrEmpty(nSliderTabObj.SliderImageAttachmentfilenameold))
                                         {
-                                            Console.WriteLine($"🗑️ Attempting to delete old image: {nSliderTabObj.SilderImageAttachmentfilenameold}");
-                                            await DeleteFromFtp(nSliderTabObj.SilderImageAttachmentfilenameold, nSliderTabObj.FtpPath);
+                                            Console.WriteLine($"🗑️ Attempting to delete old image: {nSliderTabObj.SliderImageAttachmentfilenameold}");
+                                            await DeleteFromFtp(nSliderTabObj.SliderImageAttachmentfilenameold, nSliderTabObj.FtpPath);
                                         }
 
                                         // Upload new image
-                                        Console.WriteLine($"📤 Uploading new image: {nSliderTabObj.SilderImageAttachmentfilename}");
+                                        Console.WriteLine($"📤 Uploading new image: {nSliderTabObj.SliderImageAttachmentfilename}");
                                         await UploadToFtp(
-                                            nSliderTabObj.SilderImageAttachmentfilename,
-                                            nSliderTabObj.SilderImageAttachmentbase64,
+                                            nSliderTabObj.SliderImageAttachmentfilename,
+                                            nSliderTabObj.SliderImageAttachmentbase64,
                                             nSliderTabObj.FtpPath
                                         );
 
@@ -244,7 +245,7 @@ namespace NormalAccountProject.Controllers
                     { "@nsCategoryId", 2 }
                 };
 
-                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("Ecom_SilderSP", parameters);
+                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("Ecom_SliderSP", parameters);
 
                 var response = new
                 {
@@ -268,17 +269,17 @@ namespace NormalAccountProject.Controllers
         {
             try
             {
-                Console.WriteLine($"🗑️ DELETE REQUEST - SilderId: {deleteRequest.SilderId}, UserId: {deleteRequest.Userid}");
-                Console.WriteLine($"Image filename: {deleteRequest.SilderImageAttachmentfilenameold}");
+                Console.WriteLine($"🗑️ DELETE REQUEST - SliderId: {deleteRequest.SliderId}, UserId: {deleteRequest.Userid}");
+                Console.WriteLine($"Image filename: {deleteRequest.SliderImageAttachmentfilenameold}");
 
                 using (SqlConnection con = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand("Ecom_SilderSP", con))
+                using (SqlCommand cmd = new SqlCommand("Ecom_SliderSP", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@nCategoryId", 0);
                     cmd.Parameters.AddWithValue("@nsCategoryId", 3);
                     cmd.Parameters.AddWithValue("@UserId", deleteRequest.Userid ?? "");
-                    cmd.Parameters.AddWithValue("@SilderId", deleteRequest.SilderId);
+                    cmd.Parameters.AddWithValue("@SliderId", deleteRequest.SliderId);
 
                     await con.OpenAsync();
 
@@ -294,12 +295,12 @@ namespace NormalAccountProject.Controllers
                             // Delete image from FTP if delete succeeded
                             if (statusId == 1)
                             {
-                                if (!string.IsNullOrEmpty(deleteRequest.SilderImageAttachmentfilenameold))
+                                if (!string.IsNullOrEmpty(deleteRequest.SliderImageAttachmentfilenameold))
                                 {
                                     try
                                     {
-                                        Console.WriteLine($"Attempting to delete file: {deleteRequest.SilderImageAttachmentfilenameold}");
-                                        await DeleteFromFtp(deleteRequest.SilderImageAttachmentfilenameold, deleteRequest.FtpPath);
+                                        Console.WriteLine($"Attempting to delete file: {deleteRequest.SliderImageAttachmentfilenameold}");
+                                        await DeleteFromFtp(deleteRequest.SliderImageAttachmentfilenameold, deleteRequest.FtpPath);
                                         Console.WriteLine($"File deleted successfully");
                                     }
                                     catch (Exception ftpEx)

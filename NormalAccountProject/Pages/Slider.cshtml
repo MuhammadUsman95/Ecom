@@ -1,750 +1,792 @@
-﻿    @page "/Slider"
-    @model NormalAccountProject.Pages.SliderModel
-    @{
-        ViewData["Title"] = "Slider Registration";
+﻿@page "/Slider"
+@model NormalAccountProject.Pages.SliderModel
+@{
+    ViewData["Title"] = "Slider Registration";
+}
+
+<div class="section__content section__content--p30">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="overview-wrap d-flex justify-content-between align-items-center">
+                    <h2 class="title-1">Slider Registration</h2>
+                    <div>
+                        <button class="btn btn-info" id="gridViewToggleBtn">
+                            <i class="fas fa-table me-2"></i>Grid View
+                        </button>
+                        <button class="btn btn-primary" id="formViewToggleBtn" style="display:none;">
+                            <i class="fas fa-form me-2"></i>Form View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- FORM VIEW -->
+        <div id="formViewContainer">
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <!-- Hidden Fields -->
+                    <input style="display:none;" type="text" id="SliderId">
+                    <input style="display:none;" type="text" id="SliderImageAttachmentOld">
+
+                    <!-- Row 1: Slider Name -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="SliderName">Slider Name *</label>
+                            <input type="text" id="SliderName" class="form-control" placeholder="Enter Slider Name">
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Heading Slider -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="HeadingSlider">Heading Slider</label>
+                            <input type="text" id="HeadingSlider" class="form-control" placeholder="Enter Heading">
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Description Slider -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="DescriptionSlider">Description Slider</label>
+                            <textarea id="DescriptionSlider" class="form-control" placeholder="Enter Description" rows="2" style="resize: vertical;"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- ✅ NEW: Row 4: Slider Moving Timer -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="SliderMovingTimer">Slider Moving Timer (Seconds) *</label>
+                            <input type="number" id="SliderMovingTimer" class="form-control" placeholder="Enter Timer in Seconds" min="0" value="0">
+                            <small class="text-muted">How long each slide displays (in seconds). Default: 0</small>
+                        </div>
+                    </div>
+
+@*                     <!-- Row 5: Slider Type -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="SliderType">Slider Type *</label>
+                            <select id="SliderType" class="form-control">
+                                <option value="">-- Select Slider Type --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 6: Vendor -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="VendorId">Vendor *</label>
+                            <select id="VendorId" class="form-control">
+                                <option value="">-- Select Vendor --</option>
+                            </select>
+                        </div>
+                    </div> *@
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="SliderType">Slider Type *</label>
+                            <select id="SliderType" class="form-control">
+                                <option value="">-- Select Slider Type --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="VendorId">Vendor *</label>
+                            <select id="VendorId" class="form-control">
+                                <option value="">-- Select Vendor --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Row 7: IsActive -->
+                    <div class="row mb-3">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <div class="form-check">
+                                <input type="checkbox" id="IsActive" class="form-check-input">
+                                <label class="form-check-label" for="IsActive">Is Active</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 8: Slider Image -->
+                    <div class="row mb-3">
+                        <div class="col-md-12" style="display: grid;">
+                            <label>Slider Image (Max Size 500KB)*</label>
+                            <input id="SliderImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png,.jpg" required>
+                        </div>
+                    </div>
+
+                    <!-- Row 9: Buttons -->
+                    <div class="row mb-3">
+                        <div class="col-md-12 d-flex align-items-end">
+                            <button class="btn btn-success me-2" id="saveBtn">Save</button>
+                            <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
+                            <a class="btn btn-warning" style="display:none;" id="ViewImageBtn" target="_blank">
+                                View Image
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GRID VIEW -->
+        <div id="gridViewContainer" style="display:none;">
+            <div class="row mt-5">
+                <div class="col-md-12">
+                    <div id="SliderGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
+                    <div class="mt-3" style="text-align:center;">
+                        <p>Total Sliders (<span id="TotalSlidersCount">0</span>)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="copyright">
+                    <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">UT Designer</span></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Variable Declaration
+    let userId = localStorage.getItem("userId") || "";
+    let GridViewDataList = [];
+    let IsUpdate = false;
+
+    // VIEW TOGGLE FUNCTIONS
+    function showFormView() {
+        document.getElementById("formViewContainer").style.display = "block";
+        document.getElementById("gridViewContainer").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "none";
+        document.getElementById("gridViewToggleBtn").style.display = "inline-block";
+        document.getElementById("SliderName").focus();
     }
 
-    <div class="section__content section__content--p30">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="overview-wrap d-flex justify-content-between align-items-center">
-                        <h2 class="title-1">Slider Registration</h2>
-                        <div>
-                            <button class="btn btn-info" id="gridViewToggleBtn">
-                                <i class="fas fa-table me-2"></i>Grid View
-                            </button>
-                            <button class="btn btn-primary" id="formViewToggleBtn" style="display:none;">
-                                <i class="fas fa-form me-2"></i>Form View
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    function showGridView() {
+        document.getElementById("formViewContainer").style.display = "none";
+        document.getElementById("gridViewContainer").style.display = "block";
+        document.getElementById("gridViewToggleBtn").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "inline-block";
+    }
 
-            <hr>
+    document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
+    document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
 
-            <!-- FORM VIEW -->
-            <div id="formViewContainer">
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <!-- Hidden Fields -->
-                        <input style="display:none;" type="text" id="SilderId">
-                        <input style="display:none;" type="text" id="SilderImageAttachmentOld">
+    // Slider Image Validation
+    document.getElementById("SliderImageAttachment").addEventListener("change", async function () {
+        const file = this.files[0];
+        if (!file) return;
 
-                        <!-- Row 1: Slider Name -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="SilderName">Slider Name *</label>
-                                <input type="text" id="SilderName" class="form-control" placeholder="Enter Slider Name">
-                            </div>
-                        </div>
-
-                        <!-- Row 2: Heading Slider -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="HeadingSlider">Heading Slider</label>
-                                <input type="text" id="HeadingSlider" class="form-control" placeholder="Enter Heading">
-                            </div>
-                        </div>
-
-                        <!-- Row 3: Description Slider (2 ROWS TEXTAREA) -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="DescriptionSlider">Description Slider</label>
-                                <textarea id="DescriptionSlider" class="form-control" placeholder="Enter Description" rows="2" style="resize: vertical;"></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Row 4: Slider Type -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="SliderType">Slider Type *</label>
-                                <select id="SliderType" class="form-control">
-                                    <option value="">-- Select Slider Type --</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Row 5: Vendor -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="VendorId">Vendor *</label>
-                                <select id="VendorId" class="form-control">
-                                    <option value="">-- Select Vendor --</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Row 6: IsActive -->
-                        <div class="row mb-3">
-                            <div class="col-md-6 d-flex align-items-center">
-                                <div class="form-check">
-                                    <input type="checkbox" id="IsActive" class="form-check-input">
-                                    <label class="form-check-label" for="IsActive">Is Active</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Row 7: Slider Image -->
-                        <div class="row mb-3">
-                            <div class="col-md-12" style="display: grid;">
-                                <label>Slider Image (Max Size 500KB)*</label>
-                                <input id="SilderImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png,.jpg" required>
-                            </div>
-                        </div>
-
-                        <!-- Row 8: Buttons -->
-                        <div class="row mb-3">
-                            <div class="col-md-12 d-flex align-items-end">
-                                <button class="btn btn-success me-2" id="saveBtn">Save</button>
-                                <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
-                                <a class="btn btn-warning" style="display:none;" id="ViewImageBtn" target="_blank">
-                                    View Image
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GRID VIEW -->
-            <div id="gridViewContainer" style="display:none;">
-                <div class="row mt-5">
-                    <div class="col-md-12">
-                        <div id="SliderGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
-                        <div class="mt-3" style="text-align:center;">
-                            <p>Total Sliders (<span id="TotalSlidersCount">0</span>)</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <hr>
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="copyright">
-                    <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">UT Designer</span></p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        // Variable Declaration
-        let userId = localStorage.getItem("userId") || "";
-        let GridViewDataList = [];
-        let IsUpdate = false;
-
-        // VIEW TOGGLE FUNCTIONS
-        function showFormView() {
-            document.getElementById("formViewContainer").style.display = "block";
-            document.getElementById("gridViewContainer").style.display = "none";
-            document.getElementById("formViewToggleBtn").style.display = "none";
-            document.getElementById("gridViewToggleBtn").style.display = "inline-block";
-            document.getElementById("SilderName").focus();
-        }
-
-        function showGridView() {
-            document.getElementById("formViewContainer").style.display = "none";
-            document.getElementById("gridViewContainer").style.display = "block";
-            document.getElementById("gridViewToggleBtn").style.display = "none";
-            document.getElementById("formViewToggleBtn").style.display = "inline-block";
-        }
-
-        document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
-        document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
-
-        // Slider Image Validation
-        document.getElementById("SilderImageAttachment").addEventListener("change", async function () {
-            const file = this.files[0];
-            if (!file) return;
-
-            const maxSize = 500 * 1024;
-            if (file.size > maxSize) {
-                this.value = "";
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation',
-                    text: 'Image size must be less than 500 KB.',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("SilderImageAttachment").focus();
-                    }
-                });
-            }
-        });
-
-        function GetSilderImageAttachmentFile() {
-            return new Promise((resolve, reject) => {
-                const fileInput = document.getElementById("SilderImageAttachment");
-                const file = fileInput.files[0];
-
-                if (!file) {
-                    resolve({ SilderImageAttachmentfilename: "", SilderImageAttachmentbase64: "" });
-                    return;
+        const maxSize = 500 * 1024;
+        if (file.size > maxSize) {
+            this.value = "";
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Image size must be less than 500 KB.',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("SliderImageAttachment").focus();
                 }
-
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    const silderName = document.getElementById("SilderName").value.trim();
-                    const now = new Date();
-                    const pad = (num) => num.toString().padStart(2, "0");
-
-                    const dd = pad(now.getDate());
-                    const MM = pad(now.getMonth() + 1);
-                    const yyyy = now.getFullYear();
-                    const hh = pad(now.getHours());
-                    const mm = pad(now.getMinutes());
-                    const timestamp = `${dd}${MM}${yyyy}${hh}${mm}`;
-
-                    const extension = file.name.split('.').pop();
-                    const filename = `${silderName}_${timestamp}.${extension}`;
-
-                    resolve({
-                        SilderImageAttachmentfilename: filename,
-                        SilderImageAttachmentbase64: e.target.result
-                    });
-                };
-
-                reader.onerror = function () {
-                    reject(new Error("File read error"));
-                };
-
-                reader.readAsDataURL(file);
             });
         }
+    });
 
-        // PAGE LOAD
-        window.addEventListener("load", async function () {
-            await LoadSliderRegistrationData();
-            await LoadGridViewData();
-        });
+    function GetSliderImageAttachmentFile() {
+        return new Promise((resolve, reject) => {
+            const fileInput = document.getElementById("SliderImageAttachment");
+            const file = fileInput.files[0];
 
-        // Load Slider Registration Data
-        async function LoadSliderRegistrationData() {
-            const nInfoTab = {
-                Userid: userId,
-            };
-
-            try {
-                const response = await jQuery.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("nLoadSliderRegistrationData", "SliderRegistration")',
-                    data: JSON.stringify(nInfoTab),
-                    contentType: 'application/json'
-                });
-
-                if (response.statusId === 1) {
-                    // Populate Vendor Dropdown
-                    const vendorSelect = document.getElementById("VendorId");
-                    vendorSelect.innerHTML = '<option value="">-- Select Vendor --</option>';
-                    response.VendorList.forEach(item => {
-                        vendorSelect.innerHTML += `<option value="${item.VendorId}">${item.Vendor}</option>`;
-                    });
-
-                    // Populate Slider Type Dropdown
-                    const sliderTypeSelect = document.getElementById("SliderType");
-                    sliderTypeSelect.innerHTML = '<option value="">-- Select Slider Type --</option>';
-                    response.SliderTypeList.forEach(item => {
-                        sliderTypeSelect.innerHTML += `<option value="${item.SliderType}">${item.SliderType}</option>`;
-                    });
-
-                } else {
-                    await Swal.fire({
-                        icon: 'warning',
-                        title: 'Slider Registration',
-                        text: response.message || 'Failed to load data'
-                    });
-                }
-
-            } catch (xhr) {
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while loading data'
-                });
-                console.error("LoadSliderRegistrationData Error:", xhr);
-            }
-        }
-
-        // Load Grid View Data
-        async function LoadGridViewData() {
-            const nInfoTab = {
-                Userid: userId,
-            };
-
-            try {
-                const response = await jQuery.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("nLoadGridViewData", "SliderRegistration")',
-                    data: JSON.stringify(nInfoTab),
-                    contentType: 'application/json'
-                });
-
-                if (response.statusId === 1) {
-                    GridViewDataList = response.GridViewDataList || [];
-
-                    // Debug: Check what columns are available
-                    if (GridViewDataList.length > 0) {
-                        console.log("Available columns:", Object.keys(GridViewDataList[0]));
-                        console.log("First row data:", GridViewDataList[0]);
-                    }
-
-                    document.getElementById("TotalSlidersCount").textContent = GridViewDataList.length;
-                    RenderGridView();
-
-                } else {
-                    await Swal.fire({
-                        icon: 'warning',
-                        title: 'Grid View',
-                        text: response.message || 'Failed to load grid data'
-                    });
-                }
-
-            } catch (xhr) {
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'An error occurred while loading grid view'
-                });
-                console.error("LoadGridViewData Error:", xhr);
-            }
-        }
-
-        // Render Grid View
-        function RenderGridView() {
-            const container = document.getElementById("SliderGridContainer");
-
-            if (GridViewDataList.length === 0) {
-                container.innerHTML = `<p style="text-align:center; margin-top:20px;">No sliders available</p>`;
+            if (!file) {
+                resolve({ SliderImageAttachmentfilename: "", SliderImageAttachmentbase64: "" });
                 return;
             }
 
-            // Helper function to get value from multiple possible column names
-            function getValue(item, possibleNames, defaultValue = '') {
-                for (let name of possibleNames) {
-                    if (item[name] !== undefined && item[name] !== null) {
-                        return item[name];
-                    }
-                }
-                return defaultValue;
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const SliderName = document.getElementById("SliderName").value.trim();
+                const now = new Date();
+                const pad = (num) => num.toString().padStart(2, "0");
+
+                const dd = pad(now.getDate());
+                const MM = pad(now.getMonth() + 1);
+                const yyyy = now.getFullYear();
+                const hh = pad(now.getHours());
+                const mm = pad(now.getMinutes());
+                const timestamp = `${dd}${MM}${yyyy}${hh}${mm}`;
+
+                const extension = file.name.split('.').pop();
+                const filename = `${SliderName}_${timestamp}.${extension}`;
+
+                resolve({
+                    SliderImageAttachmentfilename: filename,
+                    SliderImageAttachmentbase64: e.target.result
+                });
+            };
+
+            reader.onerror = function () {
+                reject(new Error("File read error"));
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // PAGE LOAD
+    window.addEventListener("load", async function () {
+        await LoadSliderRegistrationData();
+        await LoadGridViewData();
+    });
+
+    // Load Slider Registration Data
+    async function LoadSliderRegistrationData() {
+        const nInfoTab = {
+            Userid: userId,
+        };
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadSliderRegistrationData", "SliderRegistration")',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            if (response.statusId === 1) {
+                // Populate Vendor Dropdown
+                const vendorSelect = document.getElementById("VendorId");
+                vendorSelect.innerHTML = '<option value="">-- Select Vendor --</option>';
+                response.VendorList.forEach(item => {
+                    vendorSelect.innerHTML += `<option value="${item.VendorId}">${item.Vendor}</option>`;
+                });
+
+                // Populate Slider Type Dropdown
+                const sliderTypeSelect = document.getElementById("SliderType");
+                sliderTypeSelect.innerHTML = '<option value="">-- Select Slider Type --</option>';
+                response.SliderTypeList.forEach(item => {
+                    sliderTypeSelect.innerHTML += `<option value="${item.SliderType}">${item.SliderType}</option>`;
+                });
+
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Slider Registration',
+                    text: response.message || 'Failed to load data'
+                });
             }
 
-            let tableHTML = `
-                <table class="table table-bordered table-striped">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Actions</th>
-                            <th>Slider ID</th>
-                            <th>Slider Name</th>
-                            <th>Heading</th>
-                            <th>Description</th>
-                            <th>Vendor</th>
-                            <th>Slider Type</th>
-                            <th>Is Active</th>
-                            <th>Slider Image</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-            `;
-
-            GridViewDataList.forEach(item => {
-                const heading = getValue(item, ['HeadingSlider', 'Heading Slider', 'Heading'], 'N/A');
-                const description = getValue(item, ['DescriptionSlider', 'Description Slider', 'Description'], 'N/A');
-                const sliderType = getValue(item, ['SliderType', 'Slider Type'], 'N/A');
-
-                tableHTML += `
-                    <tr>
-                        <td>
-                            <button class="btn btn-sm btn-primary" onclick='EditSlider(${item.SilderId})'>Edit</button>
-                            <button class="btn btn-sm btn-danger" onclick='DeleteSlider(${item.SilderId})'>Delete</button>
-                        </td>
-                        <td>${item.SilderId || ''}</td>
-                        <td>${getValue(item, ['SilderName', 'Slider Name'])}</td>
-                        <td>${heading}</td>
-                        <td>${description}</td>
-                        <td>${getValue(item, ['Vendor', 'VendorId Name'])}</td>
-                        <td>${sliderType}</td>
-                        <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
-                        <td>
-                            ${item.SilderImages ? `<a href="${item.SilderImages}" target="_blank">View Image</a>` : 'No Image'}
-                        </td>
-                    </tr>
-                `;
+        } catch (xhr) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while loading data'
             });
+            console.error("LoadSliderRegistrationData Error:", xhr);
+        }
+    }
+
+    // Load Grid View Data
+    async function LoadGridViewData() {
+        const nInfoTab = {
+            Userid: userId,
+        };
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadGridViewData", "SliderRegistration")',
+                data: JSON.stringify(nInfoTab),
+                contentType: 'application/json'
+            });
+
+            if (response.statusId === 1) {
+                GridViewDataList = response.GridViewDataList || [];
+
+                if (GridViewDataList.length > 0) {
+                    console.log("Available columns:", Object.keys(GridViewDataList[0]));
+                    console.log("First row data:", GridViewDataList[0]);
+                }
+
+                document.getElementById("TotalSlidersCount").textContent = GridViewDataList.length;
+                RenderGridView();
+
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Grid View',
+                    text: response.message || 'Failed to load grid data'
+                });
+            }
+
+        } catch (xhr) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error occurred while loading grid view'
+            });
+            console.error("LoadGridViewData Error:", xhr);
+        }
+    }
+
+    // Render Grid View
+    function RenderGridView() {
+        const container = document.getElementById("SliderGridContainer");
+
+        if (GridViewDataList.length === 0) {
+            container.innerHTML = `<p style="text-align:center; margin-top:20px;">No sliders available</p>`;
+            return;
+        }
+
+        function getValue(item, possibleNames, defaultValue = '') {
+            for (let name of possibleNames) {
+                if (item[name] !== undefined && item[name] !== null) {
+                    return item[name];
+                }
+            }
+            return defaultValue;
+        }
+
+        let tableHTML = `
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Actions</th>
+                        <th>Slider ID</th>
+                        <th>Slider Name</th>
+                        <th>Heading</th>
+                        <th>Description</th>
+                        <th>Timer (Sec)</th>
+                        <th>Vendor</th>
+                        <th>Slider Type</th>
+                        <th>Is Active</th>
+                        <th>Slider Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        GridViewDataList.forEach(item => {
+            const heading = getValue(item, ['HeadingSlider', 'Heading Slider', 'Heading'], 'N/A');
+            const description = getValue(item, ['DescriptionSlider', 'Description Slider', 'Description'], 'N/A');
+            const sliderType = getValue(item, ['SliderType', 'Slider Type'], 'N/A');
+            const movingTimer = getValue(item, ['SliderMovingTimer', 'Slider Moving Timer'], '0');
 
             tableHTML += `
-                    </tbody>
-                </table>
+                <tr>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick='EditSlider(${item.SliderId})'>Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick='DeleteSlider(${item.SliderId})'>Delete</button>
+                    </td>
+                    <td>${item.SliderId || ''}</td>
+                    <td>${getValue(item, ['SliderName', 'Slider Name'])}</td>
+                    <td>${heading}</td>
+                    <td>${description}</td>
+                    <td>${movingTimer}</td>
+                    <td>${getValue(item, ['Vendor', 'VendorId Name'])}</td>
+                    <td>${sliderType}</td>
+                    <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
+                    <td>
+                        ${item.SliderImages ? `<a href="${item.SliderImages}" target="_blank">View Image</a>` : 'No Image'}
+                    </td>
+                </tr>
             `;
+        });
 
-            container.innerHTML = tableHTML;
+        tableHTML += `
+                </tbody>
+            </table>
+        `;
+
+        container.innerHTML = tableHTML;
+    }
+
+    // Edit Slider Function
+    function EditSlider(SliderId) {
+        console.log("Edit clicked for SliderId:", SliderId);
+
+        const slider = GridViewDataList.find(c => parseInt(c.SliderId) === parseInt(SliderId));
+
+        if (!slider) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Slider not found. SliderId: ' + SliderId
+            });
+            console.error("Slider not found:", SliderId);
+            return;
         }
 
-        // Edit Slider Function
-        function EditSlider(silderId) {
-            console.log("Edit clicked for SilderId:", silderId);
+        console.log("Found slider:", slider);
 
-            const slider = GridViewDataList.find(c => parseInt(c.SilderId) === parseInt(silderId));
-
-            if (!slider) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Slider not found. SilderId: ' + silderId
-                });
-                console.error("Slider not found:", silderId);
-                return;
-            }
-
-            console.log("Found slider:", slider);
-
-            // Helper function to get value from multiple possible column names
-            function getValue(possibleNames, defaultValue = '') {
-                for (let name of possibleNames) {
-                    if (slider[name] !== undefined && slider[name] !== null) {
-                        return slider[name];
-                    }
+        function getValue(possibleNames, defaultValue = '') {
+            for (let name of possibleNames) {
+                if (slider[name] !== undefined && slider[name] !== null) {
+                    return slider[name];
                 }
-                return defaultValue;
             }
+            return defaultValue;
+        }
 
-            document.getElementById("SilderId").value = slider.SilderId || '';
-            document.getElementById("SilderName").value = getValue(['SilderName', 'Slider Name']);
-            document.getElementById("HeadingSlider").value = getValue(['HeadingSlider', 'Heading Slider', 'Heading']);
-            document.getElementById("DescriptionSlider").value = getValue(['DescriptionSlider', 'Description Slider', 'Description']);
-            document.getElementById("SliderType").value = getValue(['SliderType', 'Slider Type']);
-            document.getElementById("VendorId").value = slider.VendorId || '';
-            document.getElementById("IsActive").checked = slider['Is Active'] === true || slider['Is Active'] === 1;
+        document.getElementById("SliderId").value = slider.SliderId || '';
+        document.getElementById("SliderName").value = getValue(['SliderName', 'Slider Name']);
+        document.getElementById("HeadingSlider").value = getValue(['HeadingSlider', 'Heading Slider', 'Heading']);
+        document.getElementById("DescriptionSlider").value = getValue(['DescriptionSlider', 'Description Slider', 'Description']);
+        document.getElementById("SliderMovingTimer").value = getValue(['SliderMovingTimer', 'Slider Moving Timer'], '0'); // ✅ NEW
+        document.getElementById("SliderType").value = getValue(['SliderType', 'Slider Type']);
+        document.getElementById("VendorId").value = slider.VendorId || '';
+        document.getElementById("IsActive").checked = slider['Is Active'] === true || slider['Is Active'] === 1;
 
-            if (slider.SilderImages) {
-                document.getElementById("SilderImageAttachmentOld").value = slider.SilderImages;
-                document.getElementById("ViewImageBtn").href = slider.SilderImages;
-                document.getElementById("ViewImageBtn").style.display = "inline-block";
+        if (slider.SliderImages) {
+            document.getElementById("SliderImageAttachmentOld").value = slider.SliderImages;
+            document.getElementById("ViewImageBtn").href = slider.SliderImages;
+            document.getElementById("ViewImageBtn").style.display = "inline-block";
+        } else {
+            document.getElementById("SliderImageAttachmentOld").value = "";
+            document.getElementById("ViewImageBtn").style.display = "none";
+        }
+
+        IsUpdate = true;
+        document.getElementById("saveBtn").textContent = "Update";
+        showFormView();
+    }
+
+    // Delete Slider Function
+    async function DeleteSlider(SliderId) {
+        console.log("Delete clicked for SliderId:", SliderId);
+
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        });
+
+        if (!result.isConfirmed) return;
+
+        const slider = GridViewDataList.find(c => parseInt(c.SliderId) === parseInt(SliderId));
+
+        if (!slider) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Slider not found for deletion'
+            });
+            console.error("Slider not found:", SliderId);
+            return;
+        }
+
+        let imageFilename = "";
+        if (slider.SliderImages) {
+            const urlParts = slider.SliderImages.split('/');
+            imageFilename = urlParts[urlParts.length - 1];
+        }
+
+        const nSliderTab = {
+            Userid: userId,
+            SliderId: `${SliderId}`,
+            SliderImageAttachmentfilenameold: imageFilename,
+            FtpPath: "/wwwroot/Images/SliderRegistration"
+        };
+
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Deleting slider...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nDeleteSliderRegistrationData", "SliderRegistration")',
+                data: JSON.stringify(nSliderTab),
+                contentType: 'application/json'
+            });
+
+            Swal.close();
+
+            if (response.statusId === 1) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Slider Deleted',
+                    text: response.message || 'Slider deleted successfully'
+                });
+
+                await LoadGridViewData();
             } else {
-                document.getElementById("SilderImageAttachmentOld").value = "";
-                document.getElementById("ViewImageBtn").style.display = "none";
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Delete Failed',
+                    text: response.message || 'Failed to delete slider'
+                });
             }
 
-            IsUpdate = true;
-            document.getElementById("saveBtn").textContent = "Update";
-            showFormView();
+        } catch (error) {
+            Swal.close();
+            console.error("DeleteSlider Error:", error);
+
+            let errorMessage = 'An error occurred while deleting slider';
+
+            if (error.responseJSON && error.responseJSON.message) {
+                errorMessage = error.responseJSON.message;
+            } else if (error.responseText) {
+                errorMessage = error.responseText;
+            } else if (error.statusText) {
+                errorMessage = error.statusText;
+            }
+
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+                footer: 'Check browser console for details (Press F12)'
+            });
         }
+    }
 
-        // Delete Slider Function
-        async function DeleteSlider(silderId) {
-            console.log("Delete clicked for SilderId:", silderId);
+    // ✅ UPDATED Save Button click
+    document.getElementById("saveBtn").addEventListener("click", async function () {
+        const SliderId = document.getElementById("SliderId").value.trim();
+        const SliderName = document.getElementById("SliderName").value.trim();
+        const HeadingSlider = document.getElementById("HeadingSlider").value.trim();
+        const DescriptionSlider = document.getElementById("DescriptionSlider").value.trim();
+        const SliderMovingTimer = document.getElementById("SliderMovingTimer").value.trim(); // ✅ NEW
+        const SliderType = document.getElementById("SliderType").value.trim();
+        const VendorId = document.getElementById("VendorId").value.trim();
+        const isActive = document.getElementById("IsActive").checked;
+        const SliderImageAttachment = document.getElementById("SliderImageAttachment").files.length > 0;
+        const SliderImageAttachmentold = document.getElementById("SliderImageAttachmentOld").value.trim();
 
-            const result = await Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+        // Validations
+        if (!SliderName) {
+            await Swal.fire({
                 icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            });
-
-            if (!result.isConfirmed) return;
-
-            const slider = GridViewDataList.find(c => parseInt(c.SilderId) === parseInt(silderId));
-
-            if (!slider) {
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Slider not found for deletion'
-                });
-                console.error("Slider not found:", silderId);
-                return;
-            }
-
-            // Extract only filename from full URL
-            let imageFilename = "";
-            if (slider.SilderImages) {
-                const urlParts = slider.SilderImages.split('/');
-                imageFilename = urlParts[urlParts.length - 1];
-            }
-
-            const nSliderTab = {
-                Userid: userId,
-                SilderId: `${silderId}`,
-                SilderImageAttachmentfilenameold: imageFilename,
-                FtpPath: "/wwwroot/Images/SilderNameRegistration"
-            };
-
-            Swal.fire({
-                title: 'Please wait',
-                text: 'Deleting slider...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => Swal.showLoading()
-            });
-
-            try {
-                const response = await jQuery.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("nDeleteSliderRegistrationData", "SliderRegistration")',
-                    data: JSON.stringify(nSliderTab),
-                    contentType: 'application/json'
-                });
-
-                Swal.close();
-
-                if (response.statusId === 1) {
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'Slider Deleted',
-                        text: response.message || 'Slider deleted successfully'
-                    });
-
-                    await LoadGridViewData();
-                } else {
-                    await Swal.fire({
-                        icon: 'warning',
-                        title: 'Delete Failed',
-                        text: response.message || 'Failed to delete slider'
-                    });
+                title: 'Validation',
+                text: 'Slider name is required',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("SliderName").focus();
                 }
-
-            } catch (error) {
-                Swal.close();
-                console.error("DeleteSlider Error:", error);
-
-                let errorMessage = 'An error occurred while deleting slider';
-
-                if (error.responseJSON && error.responseJSON.message) {
-                    errorMessage = error.responseJSON.message;
-                } else if (error.responseText) {
-                    errorMessage = error.responseText;
-                } else if (error.statusText) {
-                    errorMessage = error.statusText;
-                }
-
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: errorMessage,
-                    footer: 'Check browser console for details (Press F12)'
-                });
-            }
+            });
+            return;
         }
 
-        // Save Button click
-        document.getElementById("saveBtn").addEventListener("click", async function () {
-            const SilderId = document.getElementById("SilderId").value.trim();
-            const SilderName = document.getElementById("SilderName").value.trim();
-            const HeadingSlider = document.getElementById("HeadingSlider").value.trim();
-            const DescriptionSlider = document.getElementById("DescriptionSlider").value.trim();
-            const SliderType = document.getElementById("SliderType").value.trim();
-            const VendorId = document.getElementById("VendorId").value.trim();
-            const isActive = document.getElementById("IsActive").checked;
-            const silderImageAttachment = document.getElementById("SilderImageAttachment").files.length > 0;
-            const silderImageAttachmentold = document.getElementById("SilderImageAttachmentOld").value.trim();
+        // ✅ NEW VALIDATION
+        if (!SliderMovingTimer || isNaN(SliderMovingTimer) || parseInt(SliderMovingTimer) < 0) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please enter a valid slider moving timer (0 or greater)',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("SliderMovingTimer").focus();
+                }
+            });
+            return;
+        }
 
-            // Validations
-            if (!SilderName) {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation',
-                    text: 'Slider name is required',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("SilderName").focus();
-                    }
-                });
-                return;
-            }
+        if (!SliderType) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please select slider type',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("SliderType").focus();
+                }
+            });
+            return;
+        }
 
-            if (!SliderType) {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation',
-                    text: 'Please select slider type',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("SliderType").focus();
-                    }
-                });
-                return;
-            }
+        if (!VendorId) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please select vendor',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("VendorId").focus();
+                }
+            });
+            return;
+        }
 
-            if (!VendorId) {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation',
-                    text: 'Please select vendor',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("VendorId").focus();
-                    }
-                });
-                return;
-            }
+        if (!IsUpdate && !SliderImageAttachment) {
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Validation',
+                text: 'Please select slider image',
+                returnFocus: false,
+                didClose: () => {
+                    document.getElementById("SliderImageAttachment").focus();
+                }
+            });
+            return;
+        }
 
-            if (!IsUpdate && !silderImageAttachment) {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Validation',
-                    text: 'Please select slider image',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("SilderImageAttachment").focus();
-                    }
-                });
-                return;
-            }
+        const { SliderImageAttachmentfilename, SliderImageAttachmentbase64 } = await GetSliderImageAttachmentFile();
 
-            const { SilderImageAttachmentfilename, SilderImageAttachmentbase64 } = await GetSilderImageAttachmentFile();
-    // Change this line in Save button click handler:
-    const nSliderTab = {
-        Userid: userId || "",
-        SilderId: SilderId,
-        SilderName: SilderName,
-        HeadingSlider: HeadingSlider || "",
-        DescriptionSlider: DescriptionSlider || "",
-        SliderType: SliderType,
-        VendorId: VendorId,
-        SilderImageAttachmentfilename: SilderImageAttachmentfilename,
-        SilderImageAttachmentfilenameold: silderImageAttachmentold,
-        SilderImageAttachmentbase64: SilderImageAttachmentbase64,
-        IsActive: isActive,
-        IsUpdate: IsUpdate,
-        FtpPath: "/wwwroot/Images/SliderRegistration"  // ✅ CHANGE TO YOUR EXISTING FTP PATH
-    };
+        // ✅ UPDATED: Added SliderMovingTimer
+        const nSliderTab = {
+            Userid: userId || "",
+            SliderId: SliderId,
+            SliderName: SliderName,
+            HeadingSlider: HeadingSlider || "",
+            DescriptionSlider: DescriptionSlider || "",
+            SliderMovingTimer: parseInt(SliderMovingTimer) || 0, // ✅ NEW
+            SliderType: SliderType,
+            VendorId: VendorId,
+            SliderImageAttachmentfilename: SliderImageAttachmentfilename,
+            SliderImageAttachmentfilenameold: SliderImageAttachmentold,
+            SliderImageAttachmentbase64: SliderImageAttachmentbase64,
+            IsActive: isActive,
+            IsUpdate: IsUpdate,
+            FtpPath: "/wwwroot/Images/SliderRegistration"
+        };
 
-            console.log("Sending data:", nSliderTab);
+        console.log("Sending data:", nSliderTab);
 
-            Swal.fire({
-                title: 'Please wait',
-                text: 'Slider registration is in process...',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => Swal.showLoading()
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Slider registration is in process...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        try {
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nSaveSliderRegistrationData", "SliderRegistration")',
+                data: JSON.stringify(nSliderTab),
+                contentType: 'application/json'
             });
 
-            try {
-                const response = await jQuery.ajax({
-                    type: 'POST',
-                    url: '@Url.Action("nSaveSliderRegistrationData", "SliderRegistration")',
-                    data: JSON.stringify(nSliderTab),
-                    contentType: 'application/json'
+            console.log("Server response:", response);
+
+            Swal.close();
+
+            if (response.statusId === 1) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Slider Registration',
+                    text: response.message || 'Slider saved successfully',
+                    returnFocus: false,
+                    didClose: () => {
+                        document.getElementById("SliderName").focus();
+                    }
                 });
 
-                console.log("Server response:", response);
+                nClearForm();
 
-                Swal.close();
+            } else {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Slider Registration',
+                    text: response.message || 'Slider save failed'
+                });
+            }
 
-                if (response.statusId === 1) {
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'Slider Registration',
-                        text: response.message || 'Slider saved successfully',
-                        returnFocus: false,
-                        didClose: () => {
-                            document.getElementById("SilderName").focus();
-                        }
-                    });
+        } catch (xhr) {
+            Swal.close();
 
-                    nClearForm();
+            console.error("SaveData Error:", xhr);
 
+            let errorMessage = 'An error occurred while saving slider';
+
+            if (xhr.responseJSON) {
+                if (xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                } else if (xhr.responseJSON.errors) {
+                    const errors = Object.values(xhr.responseJSON.errors).flat();
+                    errorMessage = errors.join('\n');
+                } else if (xhr.responseJSON.title) {
+                    errorMessage = xhr.responseJSON.title;
                 } else {
-                    await Swal.fire({
-                        icon: 'warning',
-                        title: 'Slider Registration',
-                        text: response.message || 'Slider save failed'
-                    });
+                    errorMessage = JSON.stringify(xhr.responseJSON);
                 }
-
-            } catch (xhr) {
-                Swal.close();
-
-                console.error("SaveData Error:", xhr);
-
-                let errorMessage = 'An error occurred while saving slider';
-
-                if (xhr.responseJSON) {
-                    if (xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    } else if (xhr.responseJSON.errors) {
-                        const errors = Object.values(xhr.responseJSON.errors).flat();
-                        errorMessage = errors.join('\n');
-                    } else if (xhr.responseJSON.title) {
-                        errorMessage = xhr.responseJSON.title;
+            } else if (xhr.responseText) {
+                try {
+                    const parsed = JSON.parse(xhr.responseText);
+                    if (parsed.message) {
+                        errorMessage = parsed.message;
+                    } else if (parsed.title) {
+                        errorMessage = parsed.title;
                     } else {
-                        errorMessage = JSON.stringify(xhr.responseJSON);
-                    }
-                } else if (xhr.responseText) {
-                    try {
-                        const parsed = JSON.parse(xhr.responseText);
-                        if (parsed.message) {
-                            errorMessage = parsed.message;
-                        } else if (parsed.title) {
-                            errorMessage = parsed.title;
-                        } else {
-                            errorMessage = xhr.responseText.substring(0, 200);
-                        }
-                    } catch {
                         errorMessage = xhr.responseText.substring(0, 200);
                     }
-                } else if (xhr.statusText) {
-                    errorMessage = `${xhr.status}: ${xhr.statusText}`;
+                } catch {
+                    errorMessage = xhr.responseText.substring(0, 200);
                 }
-
-                await Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    html: errorMessage.replace(/\n/g, '<br>'),
-                    footer: '<small>Check browser console (F12) for more details</small>'
-                });
+            } else if (xhr.statusText) {
+                errorMessage = `${xhr.status}: ${xhr.statusText}`;
             }
-        });
 
-        // Cancel Button click
-        document.getElementById("cancelBtn").addEventListener("click", function () {
-            nClearForm();
-        });
-
-        async function nClearForm() {
-            document.getElementById("SilderId").value = "";
-            document.getElementById("SilderImageAttachmentOld").value = "";
-            document.getElementById("SilderName").value = "";
-            document.getElementById("HeadingSlider").value = "";
-            document.getElementById("DescriptionSlider").value = "";
-            document.getElementById("SliderType").value = "";
-            document.getElementById("VendorId").value = "";
-            document.getElementById("IsActive").checked = false;
-            document.getElementById("SilderImageAttachment").value = "";
-            IsUpdate = false;
-            document.getElementById("saveBtn").textContent = "Save";
-            document.getElementById("SilderName").focus();
-            document.getElementById("ViewImageBtn").style.display = "none";
-            await LoadGridViewData();
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                html: errorMessage.replace(/\n/g, '<br>'),
+                footer: '<small>Check browser console (F12) for more details</small>'
+            });
         }
-    </script>
+    });
 
-    <style>
-        select.form-control {
-            appearance: auto;
-            -webkit-appearance: auto;
-            -moz-appearance: auto;
-        }
+    // Cancel Button click
+    document.getElementById("cancelBtn").addEventListener("click", function () {
+        nClearForm();
+    });
 
-        .table-responsive {
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-        }
+    // ✅ UPDATED Clear Form Function
+    async function nClearForm() {
+        document.getElementById("SliderId").value = "";
+        document.getElementById("SliderImageAttachmentOld").value = "";
+        document.getElementById("SliderName").value = "";
+        document.getElementById("HeadingSlider").value = "";
+        document.getElementById("DescriptionSlider").value = "";
+        document.getElementById("SliderMovingTimer").value = "0"; // ✅ NEW - Reset to 0
+        document.getElementById("SliderType").value = "";
+        document.getElementById("VendorId").value = "";
+        document.getElementById("IsActive").checked = false;
+        document.getElementById("SliderImageAttachment").value = "";
+        IsUpdate = false;
+        document.getElementById("saveBtn").textContent = "Save";
+        document.getElementById("SliderName").focus();
+        document.getElementById("ViewImageBtn").style.display = "none";
+        await LoadGridViewData();
+    }
+</script>
 
-        .table thead th {
-            position: sticky;
-            top: 0;
-            background-color: #343a40;
-            color: white;
-            z-index: 10;
-        }
-    </style>
+<style>
+    select.form-control {
+        appearance: auto;
+        -webkit-appearance: auto;
+        -moz-appearance: auto;
+    }
+
+    .table-responsive {
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+    }
+
+    .table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #343a40;
+        color: white;
+        z-index: 10;
+    }
+</style>

@@ -3,8 +3,8 @@
     // Slider Tab Model
     public class SliderTab
     {
-        public string? SilderId { get; set; }
-        public string? SilderName { get; set; }
+        public string? SliderId { get; set; }
+        public string? SliderName { get; set; }
         public string? HeadingSlider { get; set; }
         public string? DescriptionSlider { get; set; }
         public string? SliderType { get; set; }
@@ -12,18 +12,19 @@
         public bool IsActive { get; set; }
         public bool IsUpdate { get; set; }
         public string? Userid { get; set; }
-        public string? SilderImageAttachmentfilename { get; set; }
-        public string? SilderImageAttachmentfilenameold { get; set; }
-        public string? SilderImageAttachmentbase64 { get; set; }
+        public string? SliderImageAttachmentfilename { get; set; }
+        public string? SliderImageAttachmentfilenameold { get; set; }
+        public string? SliderImageAttachmentbase64 { get; set; }
         public string? FtpPath { get; set; }
+        public int SliderMovingTimer { get; set; } = 0;
     }
 
     // Slider Delete Request Model
     public class SliderDeleteRequest
     {
-        public string? SilderId { get; set; }
+        public string? SliderId { get; set; }
         public string? Userid { get; set; }
-        public string? SilderImageAttachmentfilenameold { get; set; }
+        public string? SliderImageAttachmentfilenameold { get; set; }
         public string? FtpPath { get; set; }
     }
 
