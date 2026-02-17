@@ -1,804 +1,654 @@
 ﻿@page
 @model NormalAccountProject.Pages.HomeModel
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="section__content section__content--p30">
+<div class="dash-wrap">
     <div class="container-fluid">
-        <!-- Dashboard Header -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="dashboard-header">
-                    <div class="header-left">
-                        <h2 class="dashboard-title">
-                            <i class="fas fa-chart-line"></i> Dashboard Overview
-                        </h2>
-                        @* <p class="dashboard-subtitle">Welcome back! Here's what's happening today</p> *@
-                    </div>
-                    <button id="refreshBtn" class="btn-refresh">
-                        <i class="fa fa-refresh" id="refreshIcon"></i>
-                        <span>Refresh Data</span>
-                    </button>
-                    <div class="auto-refresh-timer">
-                        <i class="fas fa-clock"></i>
-                        <span id="refreshTimer">Next refresh in 5:00</span>
-                    </div>
+
+        <!-- ===== HEADER ===== -->
+        <div class="dash-header">
+            <div>
+                <h1 class="dash-title"><span class="title-accent">◈</span> Dashboard</h1>
+                <p class="dash-sub">Live business overview</p>
+            </div>
+            <div class="header-right">
+                <div class="timer-pill">
+                    <span class="timer-dot"></span>
+                    <span id="refreshTimer">Refresh in 5:00</span>
                 </div>
+                <button id="refreshBtn" class="refresh-btn">
+                    <i class="fa fa-refresh" id="refreshIcon"></i> Refresh
+                </button>
             </div>
         </div>
 
-        <!-- Stats Cards -->
-        <div class="row mb-4">
-            <div class="col-sm-6 col-lg-3 mb-3">
-                <div class="stat-card stat-card-1">
-                    <div class="stat-icon">
-                        <i class="zmdi zmdi-account-o"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h2 id="Card1TotalValue" class="stat-value">0</h2>
-                        <span id="Card1Caption" class="stat-label">Loading...</span>
-                    </div>
-                    <div class="stat-chart">
-                        <canvas id="widgetChart1"></canvas>
-                    </div>
-                    <div class="stat-overlay"></div>
-                    <div class="stat-glow"></div>
+        <!-- ===== 5 STAT CARDS ===== -->
+        <div class="cards-grid">
+            <div class="stat-card c1">
+                <div class="card-top">
+                    <div class="card-icon"><i class="zmdi zmdi-account-o"></i></div>
+                    <canvas class="spark" id="spark1"></canvas>
                 </div>
+                <div class="card-val" id="Card1TotalValue">0</div>
+                <div class="card-lbl" id="Card1Caption">Loading…</div>
             </div>
-
-            <div class="col-sm-6 col-lg-3 mb-3">
-                <div class="stat-card stat-card-2">
-                    <div class="stat-icon">
-                        <i class="zmdi zmdi-shopping-cart"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h2 id="Card2TotalValue" class="stat-value">0</h2>
-                        <span id="Card2Caption" class="stat-label">Loading...</span>
-                    </div>
-                    <div class="stat-chart">
-                        <canvas id="widgetChart2"></canvas>
-                    </div>
-                    <div class="stat-overlay"></div>
-                    <div class="stat-glow"></div>
+            <div class="stat-card c2">
+                <div class="card-top">
+                    <div class="card-icon"><i class="zmdi zmdi-store"></i></div>
+                    <canvas class="spark" id="spark2"></canvas>
                 </div>
+                <div class="card-val" id="Card2TotalValue">0</div>
+                <div class="card-lbl" id="Card2Caption">Loading…</div>
             </div>
-
-            <div class="col-sm-6 col-lg-3 mb-3">
-                <div class="stat-card stat-card-3">
-                    <div class="stat-icon">
-                        <i class="zmdi zmdi-calendar-note"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h2 id="Card3TotalValue" class="stat-value">0</h2>
-                        <span id="Card3Caption" class="stat-label">Loading...</span>
-                    </div>
-                    <div class="stat-chart">
-                        <canvas id="widgetChart3"></canvas>
-                    </div>
-                    <div class="stat-overlay"></div>
-                    <div class="stat-glow"></div>
+            <div class="stat-card c3">
+                <div class="card-top">
+                    <div class="card-icon"><i class="zmdi zmdi-shopping-cart"></i></div>
+                    <canvas class="spark" id="spark3"></canvas>
                 </div>
+                <div class="card-val" id="Card3TotalValue">0</div>
+                <div class="card-lbl" id="Card3Caption">Loading…</div>
             </div>
-
-            <div class="col-sm-6 col-lg-3 mb-3">
-                <div class="stat-card stat-card-4">
-                    <div class="stat-icon">
-                        <i class="zmdi zmdi-money"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h2 id="Card4TotalValue" class="stat-value">0</h2>
-                        <span id="Card4Caption" class="stat-label">Loading...</span>
-                    </div>
-                    <div class="stat-chart">
-                        <canvas id="widgetChart4"></canvas>
-                    </div>
-                    <div class="stat-overlay"></div>
-                    <div class="stat-glow"></div>
+            <div class="stat-card c4">
+                <div class="card-top">
+                    <div class="card-icon"><i class="zmdi zmdi-check-circle"></i></div>
+                    <canvas class="spark" id="spark4"></canvas>
                 </div>
+                <div class="card-val" id="Card4TotalValue">0</div>
+                <div class="card-lbl" id="Card4Caption">Loading…</div>
+            </div>
+            <div class="stat-card c5">
+                <div class="card-top">
+                    <div class="card-icon"><i class="zmdi zmdi-trending-up"></i></div>
+                    <canvas class="spark" id="spark5"></canvas>
+                </div>
+                <div class="card-val" id="Card5TotalValue">0</div>
+                <div class="card-lbl" id="Card5Caption">Loading…</div>
             </div>
         </div>
 
-        <!-- Data Tables Section -->
-        <div class="row">
-            <div class="col-lg-9 mb-4">
-                <div class="data-card">
-                    <div class="card-header">
-                        <h3 id="Grid1Caption" class="card-title">
-                            <i class="fas fa-table"></i> Recent Activity
-                        </h3>
-                        <div class="card-actions">
-                            <button class="btn-icon" title="Download">
-                                <i class="fas fa-download"></i>
-                            </button>
-                            <button class="btn-icon" title="Filter">
-                                <i class="fas fa-filter"></i>
-                            </button>
-                        </div>
+        <!-- ===== MAIN CONTENT ROW ===== -->
+        <div class="content-row">
+
+            <!-- Main Grid -->
+            <div class="panel panel-wide">
+                <div class="panel-head">
+                    <span class="panel-title"><i class="fas fa-table"></i> Recent Vendors</span>
+                    <div class="panel-actions">
+                        <button class="act-btn" title="Download"><i class="fas fa-download"></i></button>
+                        <button class="act-btn" title="Filter"><i class="fas fa-sliders-h"></i></button>
                     </div>
-                    <div class="card-body">
-                        <div class="table-container custom-table-scroll">
-                            <table class="modern-table">
-                                <thead id="gridThead"></thead>
-                                <tbody id="gridTbody"></tbody>
-                            </table>
-                        </div>
+                </div>
+                <div class="panel-body">
+                    <div class="tbl-wrap">
+                        <table class="data-table">
+                            <thead id="gridThead"></thead>
+                            <tbody id="gridTbody"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-3 mb-4">
-                <div class="data-card summary-card">
-                    <div class="card-header">
-                        <h3 id="Grid2Caption" class="card-title">
-                            <i class="fas fa-chart-pie"></i> Summary
-                        </h3>
+            <!-- Summary + Chart -->
+            <div class="right-col">
+                <!-- Donut Chart -->
+                <div class="panel panel-chart">
+                    <div class="panel-head">
+                        <span class="panel-title"><i class="fas fa-chart-pie"></i> Distribution</span>
                     </div>
-                    <div class="card-body">
-                        <div class="summary-container custom-table2-scroll">
-                            <table class="summary-table">
-                                <tbody id="grid2Tbody"></tbody>
-                            </table>
-                        </div>
+                    <div class="panel-body chart-body">
+                        <canvas id="donutChart"></canvas>
+                        <div id="chartLegend" class="chart-legend"></div>
+                    </div>
+                </div>
+
+                <!-- Summary Table -->
+                <div class="panel panel-summary">
+                    <div class="panel-head">
+                        <span class="panel-title"><i class="fas fa-list"></i> Summary</span>
+                    </div>
+                    <div class="panel-body">
+                        <table class="sum-table">
+                            <tbody id="grid2Tbody"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Footer -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="dashboard-footer">
-                    <p>Software Developed By <span>UT Designer</span></p>
-                </div>
-            </div>
+        <div class="dash-footer">
+            Developed by <strong>UT Designer</strong>
         </div>
     </div>
 </div>
 
+<!-- ============================================================ STYLES -->
 <style>
-    /* ========== FIXED: Remove All Scrolling ========== */
+    /* ---------- Google Fonts — Theme Matched ---------- */
+    @@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap');
+
+    /* ---------- Variables ---------- */
+    :root {
+        --bg: #f0f2f7;
+        --white: #ffffff;
+        --dark: #1a1d27;
+        --mid: #374151;
+        --muted: #8a94a6;
+        --border: #e5e8f0;
+        --c1: #6c63ff;
+        --c2: #f43f74;
+        --c3: #0ea5e9;
+        --c4: #10b981;
+        --c5: #f59e0b;
+        --radius: 16px;
+        --shadow: 0 4px 24px rgba(0,0,0,.07);
+        /* ---- Font Stack ---- */
+        --font-body: 'Manrope', sans-serif;
+        --font-heading: 'Outfit', sans-serif;
+        --font-number: 'Bebas Neue', sans-serif;
+    }
+
+    /* ---------- Reset ---------- */
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
     body {
-        overflow: hidden !important;
+        background: var(--bg);
+        font-family: var(--font-body);
+        color: var(--dark);
     }
 
-    .page-container {
-        overflow: hidden !important;
+    /* ---------- Wrap + Scroll ---------- */
+    .dash-wrap {
+        padding: 24px 20px 10px;
+        height: calc(100vh - 60px); /* adjust 60px = your topbar height */
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: #d1d5db #f0f2f7;
     }
 
-    .main-content {
-        overflow: hidden !important;
-    }
+        .dash-wrap::-webkit-scrollbar {
+            width: 6px;
+        }
 
-    .section__content--p30 {
-        overflow: visible !important;
-    }
+        .dash-wrap::-webkit-scrollbar-track {
+            background: #f0f2f7;
+        }
 
-    /* ========== Global Smooth Animations ========== */
-    * {
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+        .dash-wrap::-webkit-scrollbar-thumb {
+            background: #c4c9d4;
+            border-radius: 10px;
+        }
 
-    /* ========== Dashboard Header ========== */
-    .dashboard-header {
+            .dash-wrap::-webkit-scrollbar-thumb:hover {
+                background: #6c63ff;
+            }
+
+    /* ---------- Header ---------- */
+    .dash-header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 10px 0;
-        animation: slideInFromTop 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        justify-content: space-between;
+        margin-bottom: 26px;
+        animation: fadeDown .6s ease both;
     }
 
-    .header-left {
-        flex: 1;
-    }
-
-    .dashboard-title {
-        font-size: 28px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin: 0 0 5px 0;
+    .dash-title {
+        font-family: var(--font-heading);
+        font-size: 26px;
+        font-weight: 800;
+        color: var(--dark);
         display: flex;
         align-items: center;
         gap: 10px;
+        letter-spacing: -.3px;
     }
 
-        .dashboard-title i {
-            color: #2d2e31;
-            font-size: 26px;
-            animation: iconPulse 2s ease-in-out infinite;
-        }
-
-    .dashboard-subtitle {
-        color: #7f8c8d;
-        font-size: 14px;
-        margin: 0;
-        font-weight: 500;
-        animation: fadeIn 1s ease 0.3s both;
+    .title-accent {
+        color: var(--c1);
+        font-size: 22px;
     }
 
-    .btn-refresh {
-        background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
-        color: white;
-        border: none;
-        padding: 11px 22px;
-        border-radius: 10px;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        position: relative;
-        overflow: hidden;
-    }
-
-        .btn-refresh::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn-refresh:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-refresh:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
-        }
-
-        .btn-refresh:active {
-            transform: translateY(-1px) scale(0.98);
-        }
-
-        .btn-refresh span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn-refresh i {
-            position: relative;
-            z-index: 1;
-        }
-
-    .auto-refresh-timer {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-left: 15px;
-        padding: 8px 16px;
-        background: rgba(45, 46, 49, 0.05);
-        border-radius: 8px;
+    .dash-sub {
         font-size: 13px;
-        color: #7f8c8d;
-        font-weight: 500;
-        animation: fadeIn 1s ease 0.5s both;
+        color: var(--muted);
+        margin-top: 3px;
     }
 
-        .auto-refresh-timer i {
-            font-size: 12px;
-            animation: iconPulse 2s ease-in-out infinite;
-        }
-
-        .auto-refresh-timer span {
-            font-family: 'Courier New', monospace;
-        }
-
-    /* ========== Stats Cards ========== */
-    .stat-card {
-        background: white;
-        border-radius: 16px;
-        padding: 22px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        animation: cardSlideUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
-        animation-fill-mode: both;
-        height: 100%;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s;
-        }
-
-        .stat-card:hover::before {
-            left: 100%;
-        }
-
-        .stat-card:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .stat-card:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .stat-card:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .stat-card:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-        }
-
-            .stat-card:hover .stat-overlay {
-                transform: scale(1.2);
-                opacity: 0.18;
-            }
-
-            .stat-card:hover .stat-glow {
-                opacity: 0.6;
-            }
-
-            .stat-card:hover .stat-icon {
-                transform: rotate(5deg) scale(1.1);
-            }
-
-    .stat-overlay {
-        position: absolute;
-        top: -30px;
-        right: -30px;
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        opacity: 0.12;
-        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .stat-glow {
-        position: absolute;
-        bottom: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        opacity: 0;
-        transition: opacity 0.5s ease;
-        pointer-events: none;
-    }
-
-    .stat-card-1 .stat-overlay {
-        background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
-    }
-
-    .stat-card-1 .stat-glow {
-        background: radial-gradient(circle, rgba(45, 46, 49, 0.3) 0%, transparent 70%);
-    }
-
-    .stat-card-2 .stat-overlay {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    }
-
-    .stat-card-2 .stat-glow {
-        background: radial-gradient(circle, rgba(240, 147, 251, 0.3) 0%, transparent 70%);
-    }
-
-    .stat-card-3 .stat-overlay {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    }
-
-    .stat-card-3 .stat-glow {
-        background: radial-gradient(circle, rgba(79, 172, 254, 0.3) 0%, transparent 70%);
-    }
-
-    .stat-card-4 .stat-overlay {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    }
-
-    .stat-card-4 .stat-glow {
-        background: radial-gradient(circle, rgba(67, 233, 123, 0.3) 0%, transparent 70%);
-    }
-
-    .stat-icon {
-        width: 56px;
-        height: 56px;
-        border-radius: 14px;
+    .header-right {
         display: flex;
         align-items: center;
-        justify-content: center;
-        font-size: 26px;
-        color: white;
-        margin-bottom: 16px;
-        position: relative;
-        z-index: 2;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        gap: 12px;
     }
 
-    .stat-card-1 .stat-icon {
-        background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
-    }
-
-    .stat-card-2 .stat-icon {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    }
-
-    .stat-card-3 .stat-icon {
-        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    }
-
-    .stat-card-4 .stat-icon {
-        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    }
-
-    .stat-content {
-        position: relative;
-        z-index: 2;
-    }
-
-    .stat-value {
-        font-size: 32px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin: 0 0 6px 0;
-        line-height: 1;
-        transition: all 0.3s ease;
-    }
-
-    .stat-card:hover .stat-value {
-        transform: scale(1.05);
-        color: #1a252f;
-    }
-
-    .stat-label {
-        color: #7f8c8d;
+    .timer-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 7px 14px;
         font-size: 12px;
         font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        display: block;
+        color: var(--mid);
     }
 
-    .stat-chart {
-        margin-top: 16px;
-        position: relative;
-        z-index: 2;
-        height: 60px;
-        opacity: 0.9;
-        transition: opacity 0.3s ease;
+    .timer-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--c4);
+        animation: blink 1.4s ease-in-out infinite;
     }
 
-    .stat-card:hover .stat-chart {
-        opacity: 1;
+    .refresh-btn {
+        background: var(--dark);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 9px 20px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transition: .25s ease;
+        font-family: var(--font-heading);
+        letter-spacing: .3px;
     }
 
-    /* ========== Data Cards ========== */
-    .data-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        overflow: visible;
-        animation: cardSlideUp 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s both;
-        height: auto;
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        transition: all 0.4s ease;
-    }
-
-        .data-card:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        .refresh-btn:hover {
+            background: var(--c1);
             transform: translateY(-2px);
         }
 
-    .card-header {
-        padding: 20px 24px;
-        border-bottom: 1px solid #ecf0f1;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-    }
-
-    .card-title {
-        font-size: 17px;
-        font-weight: 700;
-        color: #2c3e50;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-        .card-title i {
-            color: #2d2e31;
-            font-size: 18px;
-            animation: iconBounce 2s ease-in-out infinite;
+        .refresh-btn i {
+            font-size: 13px;
         }
 
-    .card-actions {
+    /* ---------- 5-Card Grid ---------- */
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+        margin-bottom: 22px;
+    }
+
+    .stat-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 20px 20px 18px;
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+        transition: transform .3s ease, box-shadow .3s ease;
+        animation: fadeUp .6s ease both;
+    }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+    .c1::after {
+        background: var(--c1);
+    }
+
+    .c2::after {
+        background: var(--c2);
+    }
+
+    .c3::after {
+        background: var(--c3);
+    }
+
+    .c4::after {
+        background: var(--c4);
+    }
+
+    .c5::after {
+        background: var(--c5);
+    }
+
+    .stat-card:nth-child(1) {
+        animation-delay: .05s;
+    }
+
+    .stat-card:nth-child(2) {
+        animation-delay: .10s;
+    }
+
+    .stat-card:nth-child(3) {
+        animation-delay: .15s;
+    }
+
+    .stat-card:nth-child(4) {
+        animation-delay: .20s;
+    }
+
+    .stat-card:nth-child(5) {
+        animation-delay: .25s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    }
+
+    .card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 14px;
+    }
+
+    .card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: #fff;
+    }
+
+    .c1 .card-icon {
+        background: linear-gradient(135deg, #6c63ff, #8b80ff);
+    }
+
+    .c2 .card-icon {
+        background: linear-gradient(135deg, #f43f74, #ff6b9d);
+    }
+
+    .c3 .card-icon {
+        background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    }
+
+    .c4 .card-icon {
+        background: linear-gradient(135deg, #10b981, #34d399);
+    }
+
+    .c5 .card-icon {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    }
+
+    .spark {
+        width: 80px !important;
+        height: 40px !important;
+    }
+
+    .card-val {
+        font-family: var(--font-number);
+        font-size: 42px;
+        font-weight: 400;
+        line-height: 1;
+        color: var(--dark);
+        letter-spacing: 1px;
+    }
+
+    .card-lbl {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        color: var(--muted);
+        margin-top: 5px;
+        font-family: var(--font-heading);
+    }
+
+    /* ---------- Content Row ---------- */
+    .content-row {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 18px;
+        margin-bottom: 20px;
+    }
+
+    /* ---------- Panels ---------- */
+    .panel {
+        background: var(--white);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        animation: fadeUp .7s ease .3s both;
+    }
+
+    .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 22px;
+        border-bottom: 1px solid var(--border);
+        background: linear-gradient(90deg, #fafbff, #fff);
+    }
+
+    .panel-title {
+        font-family: var(--font-heading);
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--dark);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        letter-spacing: -.2px;
+    }
+
+        .panel-title i {
+            color: var(--c1);
+        }
+
+    .panel-actions {
         display: flex;
         gap: 8px;
     }
 
-    .btn-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        border: 1px solid #e0e0e0;
-        background: white;
-        color: #7f8c8d;
+    .act-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 9px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--muted);
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 13px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 13px;
-        position: relative;
-        overflow: hidden;
+        transition: .2s ease;
     }
 
-        .btn-icon::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(45, 46, 49, 0.1);
-            transform: translate(-50%, -50%);
-            transition: width 0.4s, height 0.4s;
+        .act-btn:hover {
+            background: var(--dark);
+            color: #fff;
+            border-color: var(--dark);
         }
 
-        .btn-icon:hover::before {
-            width: 120px;
-            height: 120px;
-        }
-
-        .btn-icon:hover {
-            background: #2d2e31;
-            color: white;
-            border-color: #2d2e31;
-            transform: translateY(-3px) rotate(5deg);
-            box-shadow: 0 4px 12px rgba(45, 46, 49, 0.3);
-        }
-
-        .btn-icon:active {
-            transform: translateY(-1px) rotate(0deg);
-        }
-
-    .card-body {
+    .panel-body {
         padding: 0;
-        overflow: visible;
     }
 
-    /* ========== Modern Table - NO SCROLL ========== */
-    .table-container {
-        overflow: visible;
+    /* ---------- Data Table ---------- */
+    .tbl-wrap {
+        overflow-x: auto;
     }
 
-    .modern-table {
+    .data-table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
     }
 
-        .modern-table thead th {
-            background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
-            color: white;
-            padding: 16px 20px;
-            font-weight: 600;
-            font-size: 12px;
+        .data-table thead th {
+            background: var(--dark);
+            color: #fff;
+            padding: 13px 18px;
+            font-size: 11px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border: none;
+            letter-spacing: 1px;
             white-space: nowrap;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-family: var(--font-heading);
         }
 
-        .modern-table tbody tr {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border-bottom: 1px solid #f0f0f0;
-            animation: tableRowFadeIn 0.4s ease;
-            animation-fill-mode: both;
+            .data-table thead th:first-child {
+                border-radius: 0;
+            }
+
+        .data-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: .2s ease;
+            animation: rowIn .3s ease both;
         }
 
-            .modern-table tbody tr:nth-child(1) {
-                animation-delay: 0.05s;
+            .data-table tbody tr:hover {
+                background: #f5f7ff;
+                transform: translateX(3px);
+                box-shadow: -3px 0 0 var(--c1);
             }
 
-            .modern-table tbody tr:nth-child(2) {
-                animation-delay: 0.1s;
-            }
-
-            .modern-table tbody tr:nth-child(3) {
-                animation-delay: 0.15s;
-            }
-
-            .modern-table tbody tr:nth-child(4) {
-                animation-delay: 0.2s;
-            }
-
-            .modern-table tbody tr:nth-child(5) {
-                animation-delay: 0.25s;
-            }
-
-            .modern-table tbody tr:hover {
-                background: linear-gradient(90deg, #f8f9fa 0%, #ffffff 100%);
-                transform: translateX(4px) scale(1.002);
-                box-shadow: -3px 0 0 0 #2d2e31, 0 2px 8px rgba(0, 0, 0, 0.08);
-            }
-
-        .modern-table tbody td {
-            padding: 16px 20px;
-            color: #2c3e50;
+        .data-table tbody td {
+            padding: 13px 18px;
             font-size: 13px;
-            font-weight: 500;
+            color: var(--mid);
             white-space: nowrap;
         }
 
-        .modern-table tbody tr:last-child {
+        .data-table tbody tr:last-child {
             border-bottom: none;
         }
 
-    /* REMOVED SCROLL - No max-height */
-    .custom-table-scroll {
-        overflow: visible;
+    /* ---------- Right Column ---------- */
+    .right-col {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
     }
 
-    /* ========== Summary Card - NO SCROLL ========== */
-    .summary-card {
-        background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
-        color: white;
-        position: relative;
-        overflow: hidden;
+    .panel-chart .chart-body {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
     }
 
-        .summary-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            animation: summaryGlow 6s ease-in-out infinite;
-        }
-
-        .summary-card .card-header {
-            border-bottom-color: rgba(255, 255, 255, 0.2);
-            background: transparent;
-            position: relative;
-            z-index: 1;
-        }
-
-        .summary-card .card-title {
-            color: white;
-        }
-
-            .summary-card .card-title i {
-                color: white;
-            }
-
-    .summary-container {
-        overflow: visible;
+    #donutChart {
+        width: 200px !important;
+        height: 200px !important;
+        max-width: 200px;
+        max-height: 200px;
     }
 
-    .summary-table {
+    .chart-legend {
         width: 100%;
-        position: relative;
-        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
 
-        .summary-table tbody tr {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: tableRowFadeIn 0.5s ease;
-            animation-fill-mode: both;
+    .legend-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--mid);
+    }
+
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 3px;
+        margin-right: 8px;
+        flex-shrink: 0;
+    }
+
+    .legend-left {
+        display: flex;
+        align-items: center;
+    }
+
+    /* ---------- Summary Table ---------- */
+    .sum-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .sum-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: .2s ease;
         }
 
-            .summary-table tbody tr:nth-child(1) {
-                animation-delay: 0.1s;
+            .sum-table tbody tr:hover {
+                background: #f5f7ff;
             }
 
-            .summary-table tbody tr:nth-child(2) {
-                animation-delay: 0.2s;
-            }
-
-            .summary-table tbody tr:nth-child(3) {
-                animation-delay: 0.3s;
-            }
-
-            .summary-table tbody tr:nth-child(4) {
-                animation-delay: 0.4s;
-            }
-
-            .summary-table tbody tr:hover {
-                background: rgba(255, 255, 255, 0.15);
-                transform: translateX(4px);
-                box-shadow: -3px 0 0 0 rgba(255, 255, 255, 0.5);
-            }
-
-            .summary-table tbody tr:last-child {
+            .sum-table tbody tr:last-child {
                 border-bottom: none;
             }
 
-        .summary-table tbody td {
-            padding: 14px 20px;
-            color: white;
+        .sum-table tbody td {
+            padding: 13px 22px;
             font-size: 13px;
-            font-weight: 500;
+            color: var(--mid);
+            font-weight: 600;
+            font-family: var(--font-body);
         }
 
-            .summary-table tbody td:last-child {
+            .sum-table tbody td:last-child {
                 text-align: right;
-                font-weight: 700;
-                font-size: 14px;
+                font-weight: 400;
+                color: var(--dark);
+                font-size: 22px;
+                font-family: var(--font-number);
+                letter-spacing: .5px;
             }
 
-    /* REMOVED SCROLL - No max-height */
-    .custom-table2-scroll {
-        overflow: visible;
-    }
-
-    /* ========== Footer ========== */
-    .dashboard-footer {
+    /* ---------- Footer ---------- */
+    .dash-footer {
         text-align: center;
-        padding: 18px 0;
-        margin-top: 20px;
-        border-top: 1px solid #ecf0f1;
-        animation: fadeIn 1s ease 1s both;
+        padding: 14px 0;
+        margin-top: 4px;
+        font-size: 12px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
     }
 
-        .dashboard-footer p {
-            color: #7f8c8d;
-            font-size: 13px;
-            margin: 0;
-            font-weight: 500;
+        .dash-footer strong {
+            color: var(--c1);
         }
 
-        .dashboard-footer span {
-            background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 700;
-            position: relative;
-            display: inline-block;
-        }
+    /* ---------- Utilities ---------- */
+    .text-end {
+        text-align: right !important;
+    }
 
-            .dashboard-footer span::after {
-                content: '';
-                position: absolute;
-                bottom: -2px;
-                left: 0;
-                width: 0;
-                height: 2px;
-                background: linear-gradient(135deg, #2d2e31 0%, #68646d 100%);
-                transition: width 0.3s ease;
-            }
+    .rotate {
+        animation: spin 1s linear infinite !important;
+    }
 
-            .dashboard-footer span:hover::after {
-                width: 100%;
-            }
+    /* =============================================
+       ANIMATION KEYFRAMES
+    ============================================= */
 
-    /* ========== Advanced Animations ========== */
-    @@keyframes slideInFromTop {
+    /* Page Load */
+    @@keyframes fadeDown {
         from {
             opacity: 0;
-            transform: translateY(-30px);
+            transform: translateY(-28px);
         }
 
         to {
@@ -807,10 +657,10 @@
         }
     }
 
-    @@keyframes cardSlideUp {
+    @@keyframes fadeUp {
         from {
             opacity: 0;
-            transform: translateY(40px) scale(0.95);
+            transform: translateY(40px) scale(.96);
         }
 
         to {
@@ -819,50 +669,73 @@
         }
     }
 
-    @@keyframes fadeIn {
-        from {
+    /* Card Spring Entrance */
+    @@keyframes cardSpring {
+        0% {
+            opacity: 0;
+            transform: translateY(50px) scale(.9) rotateX(8deg);
+        }
+
+        60% {
+            opacity: 1;
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        80% {
+            transform: translateY(3px) scale(.99);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Icon float */
+    @@keyframes iconFloat {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-4px) rotate(6deg);
+        }
+    }
+
+    /* Shimmer skeleton */
+    @@keyframes shimmer {
+        0% {
+            background-position: -600px 0;
+        }
+
+        100% {
+            background-position: 600px 0;
+        }
+    }
+
+    /* Number pop */
+    @@keyframes numPop {
+        0% {
+            transform: scale(.7);
             opacity: 0;
         }
 
-        to {
+        70% {
+            transform: scale(1.08);
+            opacity: 1;
+        }
+
+        100% {
+            transform: scale(1);
             opacity: 1;
         }
     }
 
-    @@keyframes rotateIcon {
-        from {
-            transform: rotate(0deg);
-        }
-
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @@keyframes iconPulse {
-        0%, 100% {
-            transform: scale(1);
-        }
-
-        50% {
-            transform: scale(1.1);
-        }
-    }
-
-    @@keyframes iconBounce {
-        0%, 100% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(-3px);
-        }
-    }
-
-    @@keyframes tableRowFadeIn {
+    /* Label slide */
+    @@keyframes lblSlide {
         from {
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateX(-10px);
         }
 
         to {
@@ -871,501 +744,672 @@
         }
     }
 
-    @@keyframes summaryGlow {
-        0%, 100% {
-            transform: rotate(0deg);
+    /* Table row slide */
+    @@keyframes rowSlide {
+        from {
+            opacity: 0;
+            transform: translateX(-18px);
         }
 
-        50% {
-            transform: rotate(180deg);
+        to {
+            opacity: 1;
+            transform: translateX(0);
         }
     }
 
-    .rotate {
-        animation: rotateIcon 1s linear infinite;
+    /* Ripple expand */
+    @@keyframes rippleOut {
+        to {
+            transform: scale(3.5);
+            opacity: 0;
+        }
     }
 
-    .pulse-update {
-        animation: pulseValue 0.6s ease;
+    /* Card shine sweep */
+    @@keyframes shineSweep {
+        0% {
+            left: -100%;
+        }
+
+        100% {
+            left: 200%;
+        }
     }
 
-    @@keyframes pulseValue {
+    /* Panel slide-up */
+    @@keyframes panelUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Dot pulse */
+    @@keyframes blink {
         0%, 100% {
+            opacity: 1;
             transform: scale(1);
         }
 
         50% {
-            transform: scale(1.15);
-            color: #2d2e31;
+            opacity: .4;
+            transform: scale(.7);
         }
     }
 
-    /* ========== Responsive Design ========== */
-    @@media (max-width: 991px) {
-        .dashboard-header {
+    /* Spin */
+    @@keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Glow pulse on card top bar */
+    @@keyframes barGlow {
+        0%, 100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: .55;
+        }
+    }
+
+    /* Summary row pop */
+    @@keyframes sumRowPop {
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    /* Legend item fade */
+    @@keyframes legendIn {
+        from {
+            opacity: 0;
+            transform: translateX(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* =============================================
+       ANIMATION CLASSES
+    ============================================= */
+
+    /* Cards */
+    .stat-card {
+        animation: cardSpring .7s cubic-bezier(.22,.68,0,1.2) both;
+    }
+
+        .stat-card:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: .15s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: .25s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: .35s;
+        }
+
+        .stat-card:nth-child(5) {
+            animation-delay: .45s;
+        }
+
+        /* Card shine on hover */
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+            transform: skewX(-20deg);
+            pointer-events: none;
+            transition: none;
+        }
+
+        .stat-card:hover::before {
+            animation: shineSweep .55s ease;
+        }
+
+        /* Top bar glow */
+        .stat-card::after {
+            animation: barGlow 2.5s ease-in-out infinite;
+        }
+
+        /* Card icon float on hover */
+        .stat-card:hover .card-icon {
+            animation: iconFloat 1.2s ease-in-out infinite;
+        }
+
+    /* Panels */
+    .panel {
+        animation: panelUp .7s ease both;
+    }
+
+    .panel-wide {
+        animation-delay: .3s;
+    }
+
+    .panel-chart {
+        animation-delay: .4s;
+    }
+
+    .panel-summary {
+        animation-delay: .5s;
+    }
+
+    /* Header */
+    .dash-header {
+        animation: fadeDown .65s cubic-bezier(.22,.68,0,1.15) both;
+    }
+
+    .dash-sub {
+        animation: fadeDown .65s ease .15s both;
+    }
+
+    /* Shimmer skeleton */
+    .skeleton {
+        background: linear-gradient(90deg, #e8eaed 25%, #f5f6fa 50%, #e8eaed 75%);
+        background-size: 600px 100%;
+        animation: shimmer 1.4s infinite linear;
+        border-radius: 6px;
+    }
+
+    /* Table row */
+    .data-table tbody tr {
+        animation: rowSlide .35s ease both;
+    }
+
+        .data-table tbody tr:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .data-table tbody tr:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .data-table tbody tr:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .data-table tbody tr:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        .data-table tbody tr:nth-child(5) {
+            animation-delay: .25s;
+        }
+
+        .data-table tbody tr:nth-child(6) {
+            animation-delay: .30s;
+        }
+
+        .data-table tbody tr:nth-child(7) {
+            animation-delay: .35s;
+        }
+
+        .data-table tbody tr:nth-child(8) {
+            animation-delay: .40s;
+        }
+
+        .data-table tbody tr:nth-child(9) {
+            animation-delay: .45s;
+        }
+
+        .data-table tbody tr:nth-child(10) {
+            animation-delay: .50s;
+        }
+
+    /* Summary rows */
+    .sum-table tbody tr {
+        animation: sumRowPop .4s ease both;
+    }
+
+        .sum-table tbody tr:nth-child(1) {
+            animation-delay: .35s;
+        }
+
+        .sum-table tbody tr:nth-child(2) {
+            animation-delay: .45s;
+        }
+
+        .sum-table tbody tr:nth-child(3) {
+            animation-delay: .55s;
+        }
+
+        .sum-table tbody tr:nth-child(4) {
+            animation-delay: .65s;
+        }
+
+        .sum-table tbody tr:nth-child(5) {
+            animation-delay: .75s;
+        }
+
+    /* Legend items */
+    .legend-item {
+        animation: legendIn .4s ease both;
+    }
+
+        .legend-item:nth-child(1) {
+            animation-delay: .6s;
+        }
+
+        .legend-item:nth-child(2) {
+            animation-delay: .7s;
+        }
+
+        .legend-item:nth-child(3) {
+            animation-delay: .8s;
+        }
+
+    /* Ripple button */
+    .refresh-btn {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ripple-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,.35);
+        width: 8px;
+        height: 8px;
+        margin-top: -4px;
+        margin-left: -4px;
+        animation: rippleOut .6s ease forwards;
+        pointer-events: none;
+    }
+
+    /* act-btn hover lift */
+    .act-btn {
+        transition: all .25s cubic-bezier(.34,1.56,.64,1);
+    }
+
+        .act-btn:hover {
+            transform: translateY(-3px) scale(1.12);
+        }
+
+    /* ---------- Responsive ---------- */
+    @@media (max-width: 1200px) {
+        .cards-grid {
+            grid-template-columns: repeat(3,1fr);
+        }
+    }
+
+    @@media (max-width: 900px) {
+        .content-row {
+            grid-template-columns: 1fr;
+        }
+
+        .right-col {
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .panel-chart, .panel-summary {
+            flex: 1 1 280px;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .cards-grid {
+            grid-template-columns: repeat(2,1fr);
+        }
+
+        .dash-header {
             flex-direction: column;
             align-items: flex-start;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .btn-refresh {
+        .header-right {
             width: 100%;
-            justify-content: center;
         }
-
-        .auto-refresh-timer {
-            width: 100%;
-            justify-content: center;
-            margin-left: 0;
-        }
-
-        .card-actions {
-            display: none;
-        }
-    }
-
-    @@media (max-width: 768px) {
-        .dashboard-title {
-            font-size: 24px;
-        }
-
-        .stat-value {
-            font-size: 28px;
-        }
-
-        .stat-card {
-            padding: 18px;
-        }
-
-        .card-header {
-            padding: 16px 18px;
-        }
-
-        .modern-table thead th,
-        .modern-table tbody td {
-            padding: 12px 16px;
-            font-size: 12px;
-        }
-    }
-
-    /* ========== Text Alignment Utilities ========== */
-    .text-end {
-        text-align: right !important;
     }
 </style>
 
+<!-- ============================================================ SCRIPT -->
 <script>
     let userId = localStorage.getItem("userId") || "";
-    let autoRefreshInterval = null;
-    let countdownInterval = null;
-    let nextRefreshTime = null;
+    let autoTimer = null, countTimer = null, nextRefresh = null;
+    let donutInstance = null;
 
-    document.addEventListener("DOMContentLoaded", async function () {
+    const COLORS = ['#6c63ff','#f43f74','#0ea5e9','#10b981','#f59e0b','#8b5cf6','#ef4444'];
+
+    document.addEventListener("DOMContentLoaded", async () => {
+        showSkeletonCards();
         await LoadData();
-
-        // Auto-refresh every 5 minutes (300000 milliseconds)
         startAutoRefresh();
     });
 
-    function updateCountdownDisplay() {
-        const timerElement = document.getElementById("refreshTimer");
+    // ---- Ripple + Refresh on ONE listener ----
+    document.getElementById("refreshBtn").addEventListener("click", async function(e) {
+        // Ripple effect
+        const ripple = document.createElement("span");
+        ripple.className = "ripple-circle";
+        ripple.style.left = e.offsetX + "px";
+        ripple.style.top  = e.offsetY + "px";
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 700);
 
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
+        // Refresh logic
+        const icon = document.getElementById("refreshIcon");
+        icon.classList.add("rotate");
+        this.disabled = true;
+        showSkeletonCards();
+        try {
+            await LoadData();
+            startAutoRefresh();
+            notify("Refreshed successfully", "success");
+        } catch (err) {
+            console.error("Refresh error:", err);
+            notify("Refresh failed", "error");
+        } finally {
+            setTimeout(() => { icon.classList.remove("rotate"); this.disabled = false; }, 900);
         }
+    });
 
-        countdownInterval = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = nextRefreshTime - now;
+    // ---- Skeleton shimmer on cards while loading ----
+    function showSkeletonCards() {
+        for (let i = 1; i <= 5; i++) {
+            const v = document.getElementById(`Card${i}TotalValue`);
+            const l = document.getElementById(`Card${i}Caption`);
+            if (v) { v.innerHTML = '<span class="skeleton" style="width:80px;height:36px;display:block;"></span>'; }
+            if (l) { l.innerHTML = '<span class="skeleton" style="width:110px;height:10px;display:block;margin-top:8px;"></span>'; }
+        }
+    }
 
-            if (distance < 0) {
-                timerElement.textContent = "Refreshing...";
-                return;
-            }
-
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            timerElement.textContent = `Next refresh in ${minutes}:${seconds.toString().padStart(2, '0')}`;
+    // ---- Countdown ----
+    function startCountdown() {
+        clearInterval(countTimer);
+        countTimer = setInterval(() => {
+            const diff = nextRefresh - Date.now();
+            if (diff <= 0) { document.getElementById("refreshTimer").textContent = "Refreshing…"; return; }
+            const m = Math.floor(diff / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById("refreshTimer").textContent = `Refresh in ${m}:${s.toString().padStart(2,'0')}`;
         }, 1000);
     }
 
     function startAutoRefresh() {
-        // Clear any existing intervals
-        if (autoRefreshInterval) {
-            clearInterval(autoRefreshInterval);
-        }
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-        }
-
-        // Set next refresh time
-        nextRefreshTime = new Date().getTime() + 300000; // 5 minutes from now
-        updateCountdownDisplay();
-
-        // Set new interval for 5 minutes
-        autoRefreshInterval = setInterval(async function() {
-            console.log("Auto-refreshing dashboard data...");
-
-            // Add visual feedback
-            const refreshBtn = document.getElementById("refreshBtn");
-            const icon = document.getElementById("refreshIcon");
-
-            icon.classList.add("rotate");
-            refreshBtn.style.opacity = "0.7";
-
-            try {
-                await LoadData();
-
-                // Reset timer for next refresh
-                nextRefreshTime = new Date().getTime() + 300000;
-
-                // Show success notification
-                if (typeof toastr !== 'undefined') {
-                    toastr.success("Dashboard data refreshed automatically", "", {
-                        timeOut: 2000,
-                        positionClass: "toast-bottom-right"
-                    });
-                }
-            } catch (error) {
-                console.error("Auto-refresh failed:", error);
-
-                if (typeof toastr !== 'undefined') {
-                    toastr.error("Failed to refresh dashboard data", "", {
-                        timeOut: 2000,
-                        positionClass: "toast-bottom-right"
-                    });
-                }
-            } finally {
-                setTimeout(() => {
-                    icon.classList.remove("rotate");
-                    refreshBtn.style.opacity = "1";
-                }, 1000);
-            }
-        }, 300000); // 5 minutes = 300000 milliseconds
-
-        console.log("Auto-refresh enabled: Dashboard will reload every 5 minutes");
+        clearInterval(autoTimer);
+        nextRefresh = Date.now() + 300000;
+        startCountdown();
+        autoTimer = setInterval(async () => {
+            await LoadData();
+            nextRefresh = Date.now() + 300000;
+            notify("Dashboard auto-refreshed", "success");
+        }, 300000);
     }
 
-    document.getElementById("refreshBtn").addEventListener("click", async function() {
-        const icon = document.getElementById("refreshIcon");
-        const btn = this;
 
-        // Add rotating animation
-        icon.classList.add("rotate");
-        btn.style.pointerEvents = 'none';
-
-        try {
-            await LoadData();
-
-            // Restart auto-refresh timer after manual refresh
-            startAutoRefresh();
-
-            if (typeof toastr !== 'undefined') {
-                toastr.success("Dashboard refreshed successfully", "", {
-                    timeOut: 2000,
-                    positionClass: "toast-bottom-right"
-                });
-            }
-        } catch (error) {
-            console.error(error);
-
-            if (typeof toastr !== 'undefined') {
-                toastr.error("Failed to refresh dashboard", "", {
-                    timeOut: 2000,
-                    positionClass: "toast-bottom-right"
-                });
-            }
-        } finally {
-            // Remove rotation after animation completes
-            setTimeout(() => {
-                icon.classList.remove("rotate");
-                btn.style.pointerEvents = 'auto';
-            }, 1000);
-        }
-    });
-
+    // ---- AJAX Load ----
     async function LoadData() {
-        const nInfoTab = {
-            Userid: userId
-        };
-
         return new Promise((resolve, reject) => {
             jQuery.ajax({
                 type: 'POST',
-                url:'@Url.Action("nLoadDashboardData", "Dashboard")',
-                data: JSON.stringify(nInfoTab),
+                url: '@Url.Action("nLoadDashboardData", "Dashboard")',
+                data: JSON.stringify({ Userid: userId }),
                 contentType: 'application/json',
-                success: function (response) {
-                    if (response.statusId === 1) {
-                        // Animate cards with pulse effect
-                        animateValue("Card1TotalValue", 0, response.Card1TotalValue, 1500);
-                        animateValue("Card2TotalValue", 0, response.Card2TotalValue, 1500);
-                        animateValue("Card3TotalValue", 0, response.Card3TotalValue, 1500);
-                        animateValue("Card4TotalValue", 0, response.Card4TotalValue, 1500);
-
-                        // Set captions with fade effect
-                        fadeInElement("Card1Caption", response.Card1Caption);
-                        fadeInElement("Card2Caption", response.Card2Caption);
-                        fadeInElement("Card3Caption", response.Card3Caption);
-                        fadeInElement("Card4Caption", response.Card4Caption);
-                        fadeInElement("Grid1Caption", response.Grid1Caption);
-                        fadeInElement("Grid2Caption", response.Grid2Caption);
-
-                        renderGrid(response.Grid1Data);
-                        renderGrid2(response.Grid2Data);
-                        nLoadChartsCards(response.chart2Data, response.chart3Data, response.chart4Data);
-
-                        resolve();
-                    } else {
-                        toastr.warning("No data found for dashboard.");
-                        reject();
+                success(res) {
+                    if (res.statusId !== 1) {
+                        console.error("Dashboard SP Error:", res.message || "statusId != 1", res);
+                        notify("Data load failed: " + (res.message || "Unknown error"), "error");
+                        reject(res.message);
+                        return;
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error LoadData details: ", xhr, status, error);
-                    reject();
-                }
-            });
-        });
-    }
 
-    function fadeInElement(id, value) {
-        const element = document.getElementById(id);
-        element.style.opacity = '0';
-        element.innerHTML = value;
+                    // Staggered card entrance
+                    const cardDelay = [0, 80, 160, 240, 320];
+                    [1,2,3,4,5].forEach((n, i) => {
+                        setTimeout(() => {
+                            animNum(`Card${n}TotalValue`, res[`Card${n}TotalValue`] || 0);
+                            setLabel(`Card${n}Caption`, res[`Card${n}Caption`] || '');
+                            drawSparkline(`spark${n}`, COLORS[i]);
+                        }, cardDelay[i]);
+                    });
 
-        setTimeout(() => {
-            element.style.transition = 'opacity 0.5s ease';
-            element.style.opacity = '1';
-        }, 100);
-    }
+                    // Grid & chart with slight delay so cards animate first
+                    setTimeout(() => {
+                        renderGrid(res.Grid1Data);
+                        renderSummary(res.Grid2Data);
 
-    function animateValue(id, start, end, duration) {
-        let obj = document.getElementById(id);
-        let startTimestamp = null;
-
-        // Add pulse class
-        obj.classList.add('pulse-update');
-
-        const step = (timestamp) => {
-            if (!startTimestamp) startTimestamp = timestamp;
-            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-
-            // Easing function for smooth animation
-            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-            obj.innerHTML = Math.floor(easeOutQuart * (end - start) + start).toLocaleString();
-
-            if (progress < 1) {
-                window.requestAnimationFrame(step);
-            } else {
-                // Remove pulse class when done
-                setTimeout(() => {
-                    obj.classList.remove('pulse-update');
-                }, 100);
-            }
-        };
-
-        window.requestAnimationFrame(step);
-    }
-
-    // Global chart references
-    let widgetChart2Instance = null;
-    let widgetChart3Instance = null;
-    let widgetChart4Instance = null;
-
-    function nLoadChartsCards(chart2Data, chart3Data, chart4Data) {
-        // Enhanced Chart configurations
-        const chartOptions = {
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.85)',
-                    padding: 12,
-                    cornerRadius: 8,
-                    titleFont: { size: 13, weight: '600' },
-                    bodyFont: { size: 12 },
-                    displayColors: false,
-                    callbacks: {
-                        label: function(context) {
-                            return context.parsed.y.toLocaleString();
+                        // RS4: GraphData → Donut Chart
+                        if (res.GraphData && res.GraphData.length) {
+                            drawDonut(res.GraphData);
                         }
-                    }
-                }
-            },
-            responsive: true,
-            interaction: {
-                intersect: false,
-                mode: 'index'
-            },
-            scales: {
-                x: { display: false },
-                y: { display: false }
-            }
-        };
+                    }, 400);
 
-        // WidgetChart 2
-        const chart2Texts = chart2Data.map(x => x.Text);
-        const chart2Values = chart2Data.map(x => x.Value);
-        const ctx2 = document.getElementById("widgetChart2");
-        if (ctx2) {
-            ctx2.height = 60;
-            if (widgetChart2Instance) widgetChart2Instance.destroy();
-
-            widgetChart2Instance = new Chart(ctx2, {
-                type: 'line',
-                data: {
-                    labels: chart2Texts,
-                    datasets: [{
-                        data: chart2Values,
-                        label: 'Amount',
-                        backgroundColor: 'rgba(240, 147, 251, 0.15)',
-                        borderColor: '#f093fb',
-                        borderWidth: 2.5,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#f093fb',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2
-                    }]
+                    resolve();
                 },
-                options: {
-                    ...chartOptions,
-                    elements: {
-                        point: { radius: 3, hoverRadius: 5 }
-                    }
+                error(xhr, status, err) {
+                    console.error("AJAX Error:", status, err, xhr.responseText);
+                    notify("Server error: " + status, "error");
+                    reject(err);
                 }
             });
-        }
-
-        // WidgetChart 3
-        const chart3Texts = chart3Data.map(x => x.Text);
-        const chart3Values = chart3Data.map(x => x.Value);
-        const ctx3 = document.getElementById("widgetChart3");
-        if (ctx3) {
-            ctx3.height = 60;
-            if (widgetChart3Instance) widgetChart3Instance.destroy();
-
-            widgetChart3Instance = new Chart(ctx3, {
-                type: 'line',
-                data: {
-                    labels: chart3Texts,
-                    datasets: [{
-                        data: chart3Values,
-                        label: 'Amount',
-                        backgroundColor: 'rgba(79, 172, 254, 0.15)',
-                        borderColor: '#4facfe',
-                        borderWidth: 2.5,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#4facfe',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2
-                    }]
-                },
-                options: {
-                    ...chartOptions,
-                    elements: {
-                        point: { radius: 3, hoverRadius: 5 }
-                    }
-                }
-            });
-        }
-
-        // WidgetChart 4
-        const chart4Texts = chart4Data.map(x => x.Text);
-        const chart4Values = chart4Data.map(x => x.Value);
-        const ctx4 = document.getElementById("widgetChart4");
-        if (ctx4) {
-            ctx4.height = 60;
-            if (widgetChart4Instance) widgetChart4Instance.destroy();
-
-            widgetChart4Instance = new Chart(ctx4, {
-                type: 'bar',
-                data: {
-                    labels: chart4Texts,
-                    datasets: [{
-                        label: "Amount",
-                        data: chart4Values,
-                        backgroundColor: 'rgba(67, 233, 123, 0.85)',
-                        borderRadius: 6,
-                        borderSkipped: false,
-                        hoverBackgroundColor: 'rgba(67, 233, 123, 1)'
-                    }]
-                },
-                options: {
-                    ...chartOptions,
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeInOutQuart'
-                    }
-                }
-            });
-        }
+        });
     }
 
-    function renderGrid(gridData) {
-        if (!gridData || gridData.length === 0) return;
+    // ---- Smooth elastic counter ----
+    function animNum(id, end) {
+        const el = document.getElementById(id);
+        el.innerHTML = '';  // clear skeleton
+        el.style.animation = 'numPop .5s cubic-bezier(.34,1.56,.64,1) both';
 
-        const thead = document.getElementById("gridThead");
-        const tbody = document.getElementById("gridTbody");
-
-        thead.innerHTML = "";
-        tbody.innerHTML = "";
-
-        // THEAD
-        const headerRow = document.createElement("tr");
-        Object.keys(gridData[0]).forEach(key => {
-            const th = document.createElement("th");
-            th.innerText = key.replace(/([A-Z])/g, ' $1').trim();
-
-            if (["price", "quantity", "total", "amount"].some(k => key.toLowerCase().includes(k))) {
-                th.classList.add("text-end");
-            }
-
-            headerRow.appendChild(th);
+        let t0 = null;
+        const dur = 1400;
+        requestAnimationFrame(function step(t) {
+            if (!t0) t0 = t;
+            const p = Math.min((t - t0) / dur, 1);
+            // easeOutExpo
+            const ease = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+            el.textContent = Math.floor(ease * end).toLocaleString();
+            if (p < 1) requestAnimationFrame(step);
         });
-        thead.appendChild(headerRow);
+    }
 
-        // TBODY with staggered animation
-        gridData.forEach((row, index) => {
-            const tr = document.createElement("tr");
-            tr.style.animationDelay = `${index * 0.05}s`;
+    function setLabel(id, text) {
+        const el = document.getElementById(id);
+        el.innerHTML = '';
+        el.style.animation = 'lblSlide .4s ease both';
+        el.textContent = text;
+    }
 
-            Object.entries(row).forEach(([key, value]) => {
-                const td = document.createElement("td");
-                td.innerText = value;
+    // ---- Animated Sparkline (draws progressively) ----
+    function drawSparkline(canvasId, color) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width = 88, H = canvas.height = 42;
+        const pts = Array.from({length: 10}, (_, i) => {
+            return 6 + Math.abs(Math.sin(i * 1.3 + Math.random())) * 28;
+        });
 
-                if (["price", "quantity", "total", "amount"].some(k => key.toLowerCase().includes(k))) {
-                    td.classList.add("text-end");
+        const grad = ctx.createLinearGradient(0, 0, 0, H);
+        grad.addColorStop(0, color + '44');
+        grad.addColorStop(1, color + '00');
+
+        let progress = 0;
+        const totalFrames = 40;
+
+        function frame() {
+            ctx.clearRect(0, 0, W, H);
+            const drawn = Math.ceil((progress / totalFrames) * (pts.length - 1));
+            const subPts = pts.slice(0, drawn + 1);
+
+            if (subPts.length < 2) { progress++; if (progress <= totalFrames) requestAnimationFrame(frame); return; }
+
+            ctx.beginPath();
+            subPts.forEach((v, i) => {
+                const x = (i / (pts.length - 1)) * W;
+                const y = H - v;
+                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+            });
+            ctx.strokeStyle = color; ctx.lineWidth = 2.2;
+            ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+            ctx.stroke();
+
+            // Fill
+            const lastX = ((subPts.length - 1) / (pts.length - 1)) * W;
+            ctx.lineTo(lastX, H); ctx.lineTo(0, H); ctx.closePath();
+            ctx.fillStyle = grad; ctx.fill();
+
+            // Moving dot at tip
+            const tipX = ((subPts.length - 1) / (pts.length - 1)) * W;
+            const tipY = H - subPts[subPts.length - 1];
+            ctx.beginPath();
+            ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
+            ctx.fillStyle = color; ctx.fill();
+            ctx.beginPath();
+            ctx.arc(tipX, tipY, 5, 0, Math.PI * 2);
+            ctx.fillStyle = color + '33'; ctx.fill();
+
+            progress++;
+            if (progress <= totalFrames) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+    }
+
+    // ---- Donut Chart ----
+    // SP columns: GraphValue=Label(name), GraphCaption=Number(value) — swapped!
+    function drawDonut(data) {
+        const canvas = document.getElementById('donutChart');
+        if (!canvas) return;
+        if (donutInstance) donutInstance.destroy();
+
+        console.log("GraphData received:", data); // debug
+
+        // GraphValue = restaurant name (text), GraphCaption = amount (number)
+        const labels = data.map(d => d.graphValue   || d.GraphValue   || '');
+        const values = data.map(d => Number(d.graphCaption || d.GraphCaption || 0));
+        donutInstance = new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels,
+                datasets: [{ data: values,
+                    backgroundColor: COLORS.slice(0, values.length),
+                    borderWidth: 3, borderColor: '#fff',
+                    hoverBorderWidth: 5,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                cutout: '72%',
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1a1d27',
+                        padding: 12, cornerRadius: 10,
+                        titleFont: { size: 13, weight: '700', family: 'Outfit' },
+                        bodyFont:  { size: 12, family: 'Manrope' },
+                        displayColors: true, boxPadding: 4
+                    }
+                },
+                animation: {
+                    animateRotate: true,
+                    animateScale: true,
+                    duration: 1000,
+                    easing: 'easeInOutBack'
                 }
+            }
+        });
 
+        // Legend with stagger
+        const legend = document.getElementById('chartLegend');
+        legend.innerHTML = '';
+        const total = values.reduce((a,b) => a + b, 0);
+        labels.forEach((lbl, i) => {
+            const pct = total > 0 ? ((values[i] / total) * 100).toFixed(1) : 0;
+            const item = document.createElement('div');
+            item.className = 'legend-item';
+            item.style.animationDelay = `${.6 + i * .1}s`;
+            item.innerHTML = `
+              <div class="legend-left">
+                <span class="legend-dot" style="background:${COLORS[i]}"></span>${lbl}
+              </div>
+              <strong>${Number(values[i]).toLocaleString()} <span style="color:var(--muted);font-weight:500">(${pct}%)</span></strong>`;
+            legend.appendChild(item);
+        });
+    }
+
+    // ---- Main Grid ----
+    function renderGrid(data) {
+        if (!data || !data.length) return;
+        const thead = document.getElementById('gridThead');
+        const tbody = document.getElementById('gridTbody');
+        thead.innerHTML = ''; tbody.innerHTML = '';
+
+        const hRow = document.createElement('tr');
+        Object.keys(data[0]).forEach(k => {
+            const th = document.createElement('th');
+            th.textContent = k.replace(/([A-Z])/g, ' $1').trim();
+            if (/amount|price|total|qty/i.test(k)) th.classList.add('text-end');
+            hRow.appendChild(th);
+        });
+        thead.appendChild(hRow);
+
+        data.forEach((row, idx) => {
+            const tr = document.createElement('tr');
+            tr.style.animationDelay = `${0.5 + idx * 0.07}s`;
+            Object.entries(row).forEach(([k, v]) => {
+                const td = document.createElement('td');
+                td.textContent = v ?? '';
+                if (/amount|price|total|qty/i.test(k)) td.classList.add('text-end');
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
         });
     }
 
-    function renderGrid2(gridData) {
-        if (!gridData || gridData.length === 0) return;
-
-        const tbody = document.getElementById("grid2Tbody");
-        tbody.innerHTML = "";
-
-        gridData.forEach((row, index) => {
-            const tr = document.createElement("tr");
-            tr.style.animationDelay = `${(index + 1) * 0.1}s`;
-
-            const td1 = document.createElement("td");
-            td1.innerText = Object.values(row)[0];
-            tr.appendChild(td1);
-
-            const td2 = document.createElement("td");
-            td2.innerText = Object.values(row)[1];
-            tr.appendChild(td2);
-
+    // ---- Summary Table (RS2: Text + Value) ----
+    function renderSummary(data) {
+        if (!data || !data.length) return;
+        const tbody = document.getElementById('grid2Tbody');
+        tbody.innerHTML = '';
+        data.forEach((row, idx) => {
+            const keys = Object.keys(row);
+            const tr = document.createElement('tr');
+            tr.style.animationDelay = `${0.6 + idx * 0.1}s`;
+            // RS2 columns: Text, Value — use first two keys if names differ
+            const td1 = document.createElement('td');
+            td1.textContent = row['Text'] ?? row[keys[0]] ?? '';
+            const td2 = document.createElement('td');
+            td2.textContent = row['Value'] ?? row[keys[1]] ?? '';
+            tr.appendChild(td1); tr.appendChild(td2);
             tbody.appendChild(tr);
         });
     }
+
+    // ---- Toast ----
+    function notify(msg, type) {
+        if (typeof toastr === 'undefined') return;
+        toastr[type](msg, '', { timeOut: 2000, positionClass: 'toast-bottom-right' });
+    }
 </script>
+
+
