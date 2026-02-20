@@ -80,11 +80,11 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@UserId", nEcom_VendorTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nEcom_VendorTabObj.IsUpdate ? "1" : "0");
                     cmd.Parameters.AddWithValue("@ImagePath", nEcom_VendorTabObj.VendorImageAttachmentfilename);
-
                     cmd.Parameters.AddWithValue("@TimeIn", nEcom_VendorTabObj.TimeIn);
                     cmd.Parameters.AddWithValue("@TimeOut", nEcom_VendorTabObj.TimeOut);
                     cmd.Parameters.AddWithValue("@DeliveryCharges", nEcom_VendorTabObj.DeliveryCharges);
                     cmd.Parameters.AddWithValue("@PerProductAmount", nEcom_VendorTabObj.PerProductAmount);
+                    cmd.Parameters.AddWithValue("@Address", nEcom_VendorTabObj.Address ?? ""); // ✅ Address
 
                     if (nEcom_VendorTabObj.IsUpdate)
                     {
@@ -106,14 +106,14 @@ namespace NormalAccountProject.Controllers
                                       $"@TimeIn='{nEcom_VendorTabObj.TimeIn}', " +
                                       $"@TimeOut='{nEcom_VendorTabObj.TimeOut}', " +
                                       $"@DeliveryCharges='{nEcom_VendorTabObj.DeliveryCharges}', " +
-                                      $"@PerProductAmount='{nEcom_VendorTabObj.PerProductAmount}'";
+                                      $"@PerProductAmount='{nEcom_VendorTabObj.PerProductAmount}', " +
+                                      $"@Address='{nEcom_VendorTabObj.Address}'"; // ✅ Address
 
                     if (nEcom_VendorTabObj.IsUpdate)
                     {
                         sqlDebug += $", @VendorId='{nEcom_VendorTabObj.VendorId}'";
                     }
 
-                    // 🔹 You can now log or store sqlDebug for SQL Server testing
                     Console.WriteLine(sqlDebug);
 
                     await con.OpenAsync();
@@ -164,7 +164,6 @@ namespace NormalAccountProject.Controllers
         {
             try
             {
-
                 var parameters = new Dictionary<string, object>
                 {
                     { "@nType", 0 },
@@ -251,7 +250,7 @@ namespace NormalAccountProject.Controllers
             if (string.IsNullOrEmpty(attachmentFileName))
                 return;
 
-            string ftpPath = "/wwwroot/Images/VendorRegistration/";  // ✅ Hardcoded
+            string ftpPath = "/wwwroot/Images/VendorRegistration/";
             string ftpServer = _configuration["Config:ftpServer"];
             string ftpUser = _configuration["Config:ftpUser"];
             string ftpPassword = _configuration["Config:ftpPassword"];
@@ -282,20 +281,19 @@ namespace NormalAccountProject.Controllers
                 }
                 else
                 {
-                    throw; // rethrow other exceptions
+                    throw;
                 }
             }
         }
 
         async Task UploadToFtp(string attachmentFileName, string attachmentBase64)
         {
-            string ftpPath = "/wwwroot/Images/VendorRegistration/";  // ✅ Hardcoded
+            string ftpPath = "/wwwroot/Images/VendorRegistration/";
             string ftpServer = _configuration["Config:ftpServer"];
             string ftpUser = _configuration["Config:ftpUser"];
             string ftpPassword = _configuration["Config:ftpPassword"];
             string ftpPort = _configuration["Config:ftpPort"];
 
-            // Remove base64 header if exists
             if (attachmentBase64.Contains(","))
                 attachmentBase64 = attachmentBase64.Split(',')[1];
 
@@ -321,6 +319,7 @@ namespace NormalAccountProject.Controllers
                 // Optional: log response.StatusDescription
             }
         }
+
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
             List<T> list = new();
@@ -342,7 +341,6 @@ namespace NormalAccountProject.Controllers
 
             if (typeof(T) == typeof(ExpandoObject))
             {
-                // ExpandoObject handling
                 while (await dr.ReadAsync())
                 {
                     IDictionary<string, object> expando = new ExpandoObject();
@@ -357,7 +355,6 @@ namespace NormalAccountProject.Controllers
             }
             else
             {
-                // Normal class handling via reflection
                 var props = typeof(T).GetProperties();
 
                 while (await dr.ReadAsync())

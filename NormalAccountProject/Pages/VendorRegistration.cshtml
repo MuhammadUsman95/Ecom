@@ -25,7 +25,7 @@
         <hr>
 
         <!-- FORM VIEW -->
-        <div id="formViewContainer">
+        <div id="formViewContainer" style="max-height: 75vh; overflow-y: auto; padding-right: 5px;">
             <div class="row mt-3">
                 <div class="col-md-6">
                     <!-- Row 1: Vendor Name + Contact No -->
@@ -43,6 +43,7 @@
                         </div>
                     </div>
 
+                    <!-- Row 2: Time In + Time Out -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="TimeIn">Time In</label>
@@ -53,6 +54,8 @@
                             <input type="time" id="TimeOut" class="form-control" placeholder="Enter Time Out">
                         </div>
                     </div>
+
+                    <!-- Row 3: Delivery Charges + Per Product Amount -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="DeliveryCharges">Delivery Charges</label>
@@ -64,7 +67,15 @@
                         </div>
                     </div>
 
-                    <!-- Row 2: Type + Department -->
+                    <!-- Row 4: Address -->
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <label for="Address">Address</label>
+                            <textarea id="Address" class="form-control" placeholder="Enter Address" rows="2" style="resize: vertical;"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Row 5: Type + Department -->
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="TypeId">Type</label>
@@ -80,7 +91,7 @@
                         </div>
                     </div>
 
-                    <!-- Row 3: IsActive -->
+                    <!-- Row 6: IsActive -->
                     <div class="row mb-3">
                         <div class="col-md-6 d-flex align-items-center">
                             <div class="form-check">
@@ -89,12 +100,16 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Row 7: Vendor Image -->
                     <div class="row mb-3">
                         <div class="col-md-12" style="display: grid;">
                             <label>Vendor Image (Max Size 500KB)*</label>
                             <input id="VendorImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png" required>
                         </div>
                     </div>
+
+                    <!-- Row 8: Buttons -->
                     <div class="row mb-3">
                         <div class="col-md-4 d-flex align-items-end">
                             <button class="btn btn-success me-2" id="saveBtn">Save</button>
@@ -169,7 +184,6 @@
 
         const maxSize = 500 * 1024; // 500 KB
         if (file.size > maxSize) {
-            // Clear file input
             this.value = "";
 
             await Swal.fire({
@@ -198,7 +212,6 @@
             reader.onload = function (e) {
                 const Vendor = document.getElementById("Vendor").value.trim();
 
-                // 🔹 Generate timestamp ddMMyyyyhhmm
                 const now = new Date();
                 const pad = (num) => num.toString().padStart(2, "0");
                 const timestamp = `${pad(now.getDate())}${pad(now.getMonth() + 1)}${now.getFullYear()}${pad(now.getHours())}${pad(now.getMinutes())}`;
@@ -207,7 +220,6 @@
                 const fileExtension = originalNameParts.pop();
                 const newFileName = `${Vendor}_${timestamp}_VendorRegistrationLogo.${fileExtension}`;
 
-                // Convert ArrayBuffer to Base64
                 const arrayBuffer = e.target.result;
                 const uint8Array = new Uint8Array(arrayBuffer);
                 let binaryString = "";
@@ -218,7 +230,7 @@
 
                 resolve({
                     VendorImageAttachmentfilename: newFileName,
-                    VendorImageAttachmentbase64: base64String // ✅ only Base64 part
+                    VendorImageAttachmentbase64: base64String
                 });
             };
 
@@ -226,7 +238,7 @@
                 resolve({ VendorImageAttachmentfilename: "", VendorImageAttachmentbase64: "" });
             };
 
-            reader.readAsArrayBuffer(file); // ✅ this is important
+            reader.readAsArrayBuffer(file);
         });
     }
     // Vendor Image
@@ -242,21 +254,14 @@
         document.getElementById("TimeIn").value = currentTime;
         document.getElementById("TimeOut").value = currentTime;
 
-        // initial store bhi karwa dete hain
         storeTime("TimeIn");
         storeTime("TimeOut");
     }
     function storeTime(inputId) {
         const timeValue = document.getElementById(inputId).value;
-
         if (!timeValue) return;
-
-        // format: 1900-01-01 HH:mm:00.000
         const formattedTime = `1900-01-01 ${timeValue}:00.000`;
-
         console.log(inputId + " => ", formattedTime);
-
-        // future ke liye variables
         if (inputId === "TimeIn") {
             window.TimeInValue = formattedTime;
         } else if (inputId === "TimeOut") {
@@ -265,23 +270,16 @@
     }
     function getTimeFromTextbox(inputId) {
         const timeValue = document.getElementById(inputId).value;
-
         if (!timeValue) {
             console.log(inputId + " is empty");
             return;
         }
-
-        // Same backend-ready format
         const formattedTime = `1900-01-01 ${timeValue}:00.000`;
-
         return formattedTime;
     }
     function setTimeToTextbox(inputId, dateTimeValue) {
         if (!dateTimeValue) return;
-
-        // "1900-01-01T18:30:00" → "18:30"
         const time = dateTimeValue.split("T")[1].substring(0, 5);
-
         document.getElementById(inputId).value = time;
     }
     // Time In - Time Out Textbox
@@ -306,11 +304,9 @@
             field.addEventListener("keydown", function (e) {
                 if (e.key === "Enter") {
                     e.preventDefault();
-
                     if (index < fields.length - 1) {
                         fields[index + 1].focus();
                     } else {
-                        // Last field → trigger save
                         document.getElementById("saveBtn").click();
                     }
                 }
@@ -319,7 +315,6 @@
         document.getElementById("Vendor").focus();
     });
     // Form Load
-
 
 
     // Load Type & Department DropDown
@@ -334,7 +329,6 @@
                 contentType: 'application/json',
                 success: function (response) {
                     if (response.statusId === 1) {
-
                         TypeDropdown(response.TypeList);
                         DepartmentDropdown(response.DepartmentList);
                         resolve();
@@ -351,35 +345,26 @@
         });
     }
     function TypeDropdown(typeList) {
-
         const ddl = document.getElementById("TypeId");
-
-        // Clear existing options
         ddl.innerHTML = '<option value="">-- Select Type --</option>';
-
         typeList.forEach(item => {
             const option = document.createElement("option");
-            option.value = item.TypeId;   // backend value
-            option.text = item.Type;      // display text
+            option.value = item.TypeId;
+            option.text = item.Type;
             ddl.appendChild(option);
         });
     }
     function DepartmentDropdown(departmentList) {
-
         const ddl = document.getElementById("DepartmentId");
-
-        // Clear existing options
         ddl.innerHTML = '<option value="">-- Select Department --</option>';
-
         departmentList.forEach(item => {
             const option = document.createElement("option");
-            option.value = item.DepartmentId;   // backend value
-            option.text = item.Department;      // display text
+            option.value = item.DepartmentId;
+            option.text = item.Department;
             ddl.appendChild(option);
         });
     }
     // Load Type & Department DropDown
-
 
 
     // Grid View
@@ -394,10 +379,8 @@
                 contentType: 'application/json',
                 success: function (response) {
                     if (response.statusId === 1) {
-
                         console.log(response.GridViewDataList);
                         GridViewDataList = response.GridViewDataList;
-                        // Render Grid
                         renderVendorGrid(GridViewDataList);
                         resolve();
                     } else {
@@ -414,8 +397,6 @@
     }
     function renderVendorGrid(gridData) {
         const container = document.getElementById("VendorGridContainer");
-
-        // Clear previous grid
         container.innerHTML = "";
 
         if (!gridData || gridData.length === 0) {
@@ -424,24 +405,22 @@
             return;
         }
 
-        // Determine columns dynamically (skip 'Userid', 'Type', 'VendorId', 'DepartmentId')
-        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "VendorId" && col !== "DepartmentId" && col !== "ImagePath" && col !== "TimeIn" && col !== "TimeOut");
+        const columns = Object.keys(gridData[0]).filter(col =>
+            col !== "Userid" && col !== "Type" && col !== "VendorId" &&
+            col !== "DepartmentId" && col !== "ImagePath" &&
+            col !== "TimeIn" && col !== "TimeOut"
+        );
 
-        // Table creation
         const table = document.createElement("table");
         table.className = "table table-bordered table-striped table-sm mb-0";
 
-        // Table Header
         const thead = document.createElement("thead");
         thead.style.position = "sticky";
         thead.style.top = "0";
         thead.style.backgroundColor = "#fff";
         thead.style.zIndex = "10";
 
-        // Header Row
         const headerRow = document.createElement("tr");
-
-        // Actions column
         const actionTh = document.createElement("th");
         actionTh.textContent = "";
         headerRow.appendChild(actionTh);
@@ -453,7 +432,6 @@
         });
         thead.appendChild(headerRow);
 
-        // Filter Row
         const filterRow = document.createElement("tr");
         const emptyTh = document.createElement("th");
         filterRow.appendChild(emptyTh);
@@ -471,16 +449,13 @@
             filterRow.appendChild(th);
         });
         thead.appendChild(filterRow);
-
         table.appendChild(thead);
 
-        // Table Body
         const tbody = document.createElement("tbody");
 
         gridData.forEach(row => {
             const tr = document.createElement("tr");
 
-            // Actions column
             const actionTd = document.createElement("td");
 
             const editBtn = document.createElement("button");
@@ -502,7 +477,6 @@
 
             tr.appendChild(actionTd);
 
-            // Other columns
             columns.forEach(col => {
                 const td = document.createElement("td");
                 if (col === "Is Active") {
@@ -519,7 +493,6 @@
         table.appendChild(tbody);
         container.appendChild(table);
 
-        // 🔹 Initial total Vendors count
         document.getElementById("TotalVendorsCount").textContent = tbody.rows.length;
     }
     function filterTable(input, column) {
@@ -542,7 +515,6 @@
             }
         });
 
-        // 🔹 Update total Vendors count based on visible rows
         document.getElementById("TotalVendorsCount").textContent = visibleCount;
     }
     function onEditRow(rowData) {
@@ -558,7 +530,8 @@
         document.getElementById("IsActive").checked = rowData["Is Active"] || false;
         document.getElementById("DeliveryCharges").value = rowData["Delivery Charges"] || "";
         document.getElementById("PerProductAmount").value = rowData["PerProductAmount"] || "";
-        // ✅ TIME SET ON EDIT
+        document.getElementById("Address").value = rowData["Address"] || "";  // ✅ Address
+
         setTimeToTextbox("TimeIn", rowData["TimeIn"]);
         setTimeToTextbox("TimeOut", rowData["TimeOut"]);
 
@@ -573,7 +546,6 @@
     async function onDeleteRow(rowData) {
         console.log("Delete clicked", rowData);
 
-        // 🔵 Step 1: Confirmation Swal
         const result = await Swal.fire({
             title: 'Are you sure?',
             text: `Do you really want to delete this Vendor (${rowData["Vendor Name"]}) ?`,
@@ -583,10 +555,7 @@
             cancelButtonText: 'No'
         });
 
-        if (!result.isConfirmed) {
-            // User clicked "No", exit function
-            return;
-        }
+        if (!result.isConfirmed) return;
 
         const nInfoTab = {
             Userid: userId.toString(),
@@ -594,13 +563,12 @@
             VendorImageAttachmentfilenameold: rowData["ImagePath"].toString()
         };
 
-        // 🔵 Step 2: Loader Swal
         Swal.fire({
             title: 'Please wait',
             text: 'Vendor Delete is in process...',
             allowOutsideClick: false,
             allowEscapeKey: false,
-            returnFocus: false,      // Prevent focus issues
+            returnFocus: false,
             didOpen: () => Swal.showLoading()
         });
 
@@ -625,7 +593,6 @@
                     }
                 });
 
-                // ✅ Clear Form
                 nClearForm();
             } else {
                 await Swal.fire({
@@ -649,15 +616,13 @@
             console.error("Delete Error:", xhr);
         }
     }
-    function ViewImage(Link)
-    {
+    function ViewImage(Link) {
         const viewBtn = document.getElementById("ViewImageBtn");
         viewBtn.style.display = "";
         viewBtn.href = Link;
         viewBtn.target = "_blank";
     }
     // Grid View
-
 
 
     // Save Button click
@@ -679,8 +644,7 @@
         const nTimeOut = getTimeFromTextbox("TimeOut");
         const nDeliveryCharges = document.getElementById("DeliveryCharges").value.trim();
         const nPerProductAmount = document.getElementById("PerProductAmount").value.trim();
-
-
+        const nAddress = document.getElementById("Address").value.trim(); // ✅ Address
 
         // 🔴 Vendor Name Validation
         if (!Vendor) {
@@ -689,9 +653,7 @@
                 title: 'Validation',
                 text: 'Vendor name is required',
                 returnFocus: false,
-                didClose: () => {
-                    document.getElementById("Vendor").focus();
-                }
+                didClose: () => { document.getElementById("Vendor").focus(); }
             });
             return;
         }
@@ -703,9 +665,7 @@
                 title: 'Validation',
                 text: 'Contact number is required',
                 returnFocus: false,
-                didClose: () => {
-                    document.getElementById("ContactNo").focus();
-                }
+                didClose: () => { document.getElementById("ContactNo").focus(); }
             });
             return;
         }
@@ -716,9 +676,7 @@
                 title: 'Validation',
                 text: 'Contact number must be at least 10 digits',
                 returnFocus: false,
-                didClose: () => {
-                    document.getElementById("ContactNo").focus();
-                }
+                didClose: () => { document.getElementById("ContactNo").focus(); }
             });
             return;
         }
@@ -730,9 +688,7 @@
                 title: 'Validation',
                 text: 'Please select Vendor type',
                 returnFocus: false,
-                didClose: () => {
-                    document.getElementById("TypeId").focus();
-                }
+                didClose: () => { document.getElementById("TypeId").focus(); }
             });
             return;
         }
@@ -744,9 +700,7 @@
                 title: 'Validation',
                 text: 'Please select department',
                 returnFocus: false,
-                didClose: () => {
-                    document.getElementById("DepartmentId").focus();
-                }
+                didClose: () => { document.getElementById("DepartmentId").focus(); }
             });
             return;
         }
@@ -758,19 +712,16 @@
                 title: 'Validation',
                 text: 'Please select Vendor image',
                 returnFocus: false,
-                didClose: () => {
-                    document.getElementById("VendorImageAttachment").focus();
-                }
+                didClose: () => { document.getElementById("VendorImageAttachment").focus(); }
             });
             return;
         }
 
         const { VendorImageAttachmentfilename, VendorImageAttachmentbase64 } = await GetVendorImageAttachmentFile();
 
-
         const nInfoTab = {
             Userid: userId,
-            VendorId:VendorId,
+            VendorId: VendorId,
             Vendor: Vendor,
             ContactNo: contactNo,
             Type: type,
@@ -782,11 +733,11 @@
             TimeOut: nTimeOut,
             DeliveryCharges: nDeliveryCharges,
             PerProductAmount: nPerProductAmount,
+            Address: nAddress,   // ✅ Address
             IsActive: isActive,
             IsUpdate: IsUpdate,
         };
 
-        // 🔵 Loader
         Swal.fire({
             title: 'Please wait',
             text: 'Vendor creation is in process...',
@@ -811,12 +762,9 @@
                     title: 'Vendor Registration',
                     text: response.message || 'Vendor saved successfully',
                     returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("Vendor").focus();
-                    }
+                    didClose: () => { document.getElementById("Vendor").focus(); }
                 });
 
-                // ✅ Clear Form
                 nClearForm();
 
             } else {
@@ -842,13 +790,11 @@
     // Save Button click
 
 
-
     // Cancel Button click
     document.getElementById("cancelBtn").addEventListener("click", function () {
         nClearForm();
     });
-    async function nClearForm()
-    {
+    async function nClearForm() {
         document.getElementById("VendorId").value = "";
         document.getElementById("VendorImageAttachmentOld").value = "";
         document.getElementById("Vendor").value = "";
@@ -857,6 +803,7 @@
         document.getElementById("DepartmentId").value = "";
         document.getElementById("IsActive").checked = false;
         document.getElementById("VendorImageAttachment").value = "";
+        document.getElementById("Address").value = "";  // ✅ Address
         IsUpdate = false;
         document.getElementById("saveBtn").textContent = "Save";
         document.getElementById("Vendor").focus();
@@ -869,16 +816,15 @@
     // Cancel Button click
 
 
-
     // Contact Input
     const contactInput = document.getElementById("ContactNo");
     contactInput.addEventListener("keydown", function (e) {
         if (
-            e.ctrlKey || e.metaKey || // Ctrl / Cmd
+            e.ctrlKey || e.metaKey ||
             (e.key >= '0' && e.key <= '9') ||
             ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)
         ) {
-            return; // allow
+            return;
         }
         e.preventDefault();
     });
