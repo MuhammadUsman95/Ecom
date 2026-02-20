@@ -9,6 +9,8 @@
         public string? Type { get; set; }
         public string? Userid { get; set; }
         public bool IsUpdate { get; set; }
+
+        public string? Address { get; set; }
         public string? VendorImageAttachmentfilename { get; set; }
         public string? VendorImageAttachmentfilenameold { get; set; }
         public string? VendorImageAttachmentbase64 { get; set; }
