@@ -4,790 +4,882 @@
     ViewData["Title"] = "Slider Registration";
 }
 
-<div class="section__content section__content--p30">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="overview-wrap d-flex justify-content-between align-items-center">
-                    <h2 class="title-1">Slider Registration</h2>
-                    <div>
-                        <button class="btn btn-info" id="gridViewToggleBtn">
-                            <i class="fas fa-table me-2"></i>Grid View
-                        </button>
-                        <button class="btn btn-primary" id="formViewToggleBtn" style="display:none;">
-                            <i class="fas fa-form me-2"></i>Form View
-                        </button>
-                    </div>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #1a2030;
+        --bg2: #151c2b;
+        --surface: #252d3e;
+        --surface2: #1e2535;
+        --surface3: #2a3347;
+        --border: rgba(255,255,255,.06);
+        --border2: rgba(255,255,255,.10);
+        --accent: #4f7cff;
+        --accent-dim: rgba(79,124,255,.14);
+        --accent-glow: rgba(79,124,255,.28);
+        --active-nav: #2e4275;
+        --text: #e4eaf5;
+        --text2: #8d9bb5;
+        --text3: #4a5878;
+        --danger: #f43f5e;
+        --success: #22c55e;
+        --amber: #f59e0b;
+        --font-head: 'Syne',sans-serif;
+        --font-body: 'Plus Jakarta Sans',sans-serif;
+        --font-mono: 'JetBrains Mono',monospace;
+        --shadow: 0 8px 32px rgba(0,0,0,.45);
+        --r: 8px;
+        --rl: 14px;
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .vr-wrap {
+        font-family: var(--font-body);
+        color: var(--text);
+        background: var(--bg);
+        min-height: calc(100vh - 60px);
+    }
+
+    .vr-inner {
+        padding: 22px 26px;
+    }
+
+    .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 22px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--border2);
+    }
+
+    .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .icon-box {
+        width: 42px;
+        height: 42px;
+        background: var(--active-nav);
+        border: 1px solid rgba(79,124,255,.28);
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 17px;
+        box-shadow: 0 0 18px rgba(79,124,255,.18);
+    }
+
+    .page-title {
+        font-family: var(--font-head);
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--text);
+    }
+
+        .page-title span {
+            color: var(--accent);
+        }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--text3);
+        margin-top: 3px;
+    }
+
+        .breadcrumb i {
+            font-size: 7px;
+        }
+
+        .breadcrumb span {
+            color: var(--accent);
+        }
+
+    .toggle-group {
+        display: flex;
+        gap: 5px;
+        background: var(--surface2);
+        padding: 5px;
+        border-radius: var(--r);
+        border: 1px solid var(--border2);
+    }
+
+    .toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 16px;
+        font-family: var(--font-body);
+        font-size: 12.5px;
+        font-weight: 600;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .toggle-btn-outline {
+        background: transparent;
+        color: var(--text2);
+    }
+
+        .toggle-btn-outline:hover {
+            background: var(--surface3);
+            color: var(--accent);
+        }
+
+    .toggle-btn-solid {
+        background: var(--active-nav);
+        color: #c5d4ff;
+        font-weight: 700;
+        border: 1px solid rgba(79,124,255,.3);
+    }
+
+        .toggle-btn-solid:hover {
+            background: #354e8a;
+            transform: translateY(-1px);
+        }
+
+    .form-card {
+        background: var(--surface);
+        border-radius: var(--rl);
+        border: 1px solid var(--border2);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        animation: fadeUp .28s ease both;
+    }
+
+    .form-card-header {
+        padding: 13px 22px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .form-card-title {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text2);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .form-body {
+        padding: 22px 24px;
+        max-height: 65vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .form-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .form-body::-webkit-scrollbar-thumb {
+            background: var(--surface3);
+            border-radius: 10px;
+        }
+
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        color: var(--accent);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+    }
+
+        .section-label::before {
+            content: '';
+            width: 3px;
+            height: 13px;
+            background: var(--accent);
+            border-radius: 3px;
+            box-shadow: 0 0 7px var(--accent-glow);
+            flex-shrink: 0;
+        }
+
+    .form-row {
+        display: grid;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .form-row-1 {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── Floating Label ── */
+    .float-group {
+        position: relative;
+    }
+
+        .float-group .form-control {
+            padding: 22px 13px 7px;
+        }
+
+        .float-group select.form-control, .float-group textarea.form-control {
+            padding: 22px 13px 7px;
+        }
+
+    .float-label {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--text3);
+        pointer-events: none;
+        transition: top .18s,transform .18s,font-size .18s,color .18s,letter-spacing .18s;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 26px);
+    }
+
+    .float-group.is-area .float-label {
+        top: 16px;
+        transform: none;
+    }
+
+    .float-group .form-control:focus ~ .float-label, .float-group.has-value .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-mono);
+        color: var(--accent);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.is-area .form-control:focus ~ .float-label, .float-group.is-area.has-value .float-label {
+        top: 5px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-mono);
+        color: var(--accent);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-mono);
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .form-control:focus ~ .float-label {
+        color: var(--accent);
+    }
+
+    .float-group .form-control::placeholder {
+        color: transparent;
+    }
+
+    .hint-text {
+        font-size: 10px;
+        color: var(--text3);
+        font-family: var(--font-mono);
+        margin-top: 4px;
+        padding-left: 2px;
+    }
+
+    .form-control {
+        border: 1.5px solid var(--border2);
+        border-radius: var(--r);
+        font-size: 13.5px;
+        font-family: var(--font-body);
+        color: var(--text);
+        background: var(--surface2);
+        transition: border-color .18s,box-shadow .18s;
+        outline: none;
+        width: 100%;
+    }
+
+        .form-control:focus {
+            border-color: rgba(255,255,255,.7);
+            box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+            background: rgba(255,255,255,.7);
+        }
+
+    textarea.form-control {
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    select.form-control {
+        appearance: auto;
+        cursor: pointer;
+    }
+
+        select.form-control option {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+    .status-meta {
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+    }
+
+    .check-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 15px;
+        background: var(--active-nav);
+        border-radius: var(--r);
+        border: 1px solid rgba(79,124,255,.3);
+        cursor: pointer;
+        transition: background .2s;
+        width: fit-content;
+    }
+
+        .check-group:hover {
+            background: #354e8a;
+        }
+
+    .check-input {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: var(--accent);
+    }
+
+    .check-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #a0b8ff;
+        cursor: pointer;
+        font-family: var(--font-body);
+    }
+
+    .file-upload-zone {
+        border: 1.5px dashed var(--border2);
+        border-radius: var(--r);
+        padding: 11px 14px;
+        background: var(--surface2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        transition: border-color .2s,background .2s;
+    }
+
+        .file-upload-zone:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+    .file-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--active-nav);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    .file-info-title {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text2);
+        font-family: var(--font-body);
+    }
+
+    .file-info-sub {
+        font-size: 10px;
+        color: var(--text3);
+        font-family: var(--font-mono);
+        margin-top: 2px;
+    }
+
+    .form-control-file {
+        display: none;
+    }
+
+    .media-label {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+        font-weight: 500;
+    }
+
+    .btn-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        margin-top: 4px;
+    }
+
+    .btn-pro {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 22px;
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: var(--r);
+        border: none;
+        cursor: pointer;
+        transition: all .2s ease;
+        letter-spacing: .2px;
+    }
+
+    .btn-save {
+        background: var(--active-nav);
+        color: #c5d4ff;
+        border: 1px solid rgba(79,124,255,.35);
+        box-shadow: 0 2px 14px rgba(46,66,117,.5);
+    }
+
+        .btn-save:hover {
+            background: #354e8a;
+            transform: translateY(-1px);
+        }
+
+    .btn-cancel {
+        background: var(--surface3);
+        color: var(--text2);
+        border: 1px solid var(--border2);
+    }
+
+        .btn-cancel:hover {
+            background: var(--surface2);
+            color: var(--text);
+        }
+
+    .btn-view-img {
+        background: rgba(245,158,11,.1);
+        color: var(--amber);
+        border: 1px solid rgba(245,158,11,.22);
+        font-family: var(--font-body);
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: var(--r);
+        padding: 9px 18px;
+        text-decoration: none;
+        display: none;
+        align-items: center;
+        gap: 7px;
+        transition: .2s ease;
+    }
+
+        .btn-view-img:hover {
+            background: rgba(245,158,11,.18);
+        }
+
+    .grid-card {
+        background: var(--surface);
+        border-radius: var(--rl);
+        border: 1px solid var(--border2);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        animation: fadeUp .28s ease both;
+    }
+
+    .grid-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 20px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .grid-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .grid-header-title {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .grid-badge {
+        background: var(--active-nav);
+        color: #a0b8ff;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 1px solid rgba(79,124,255,.25);
+    }
+
+    .grid-scroll {
+        height: 57vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .grid-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .grid-scroll::-webkit-scrollbar-thumb {
+            background: var(--surface3);
+            border-radius: 10px;
+        }
+
+    .pro-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .pro-table thead th {
+            background: var(--bg2);
+            color: var(--text3);
+            padding: 11px 15px;
+            font-size: 9.5px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            white-space: nowrap;
+            font-family: var(--font-mono);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+            .pro-table thead th:last-child {
+                border-right: none;
+            }
+
+        .pro-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .12s;
+        }
+
+            .pro-table tbody tr:hover {
+                background: var(--surface2);
+            }
+
+        .pro-table tbody td {
+            padding: 11px 15px;
+            font-size: 13px;
+            color: var(--text2);
+            font-family: var(--font-body);
+            white-space: nowrap;
+        }
+
+    .tbl-btn {
+        width: 29px;
+        height: 29px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        transition: all .15s;
+    }
+
+    .tbl-btn-edit {
+        background: var(--active-nav);
+        color: #a0b8ff;
+        border-color: rgba(79,124,255,.2);
+    }
+
+        .tbl-btn-edit:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+    .tbl-btn-del {
+        background: rgba(244,63,94,.1);
+        color: var(--danger);
+        border-color: rgba(244,63,94,.2);
+        margin-left: 5px;
+    }
+
+        .tbl-btn-del:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+
+    .badge-active {
+        background: rgba(34,197,94,.1);
+        color: var(--success);
+        border: 1px solid rgba(34,197,94,.2);
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-mono);
+        display: inline-block;
+    }
+
+    .badge-inactive {
+        background: rgba(244,63,94,.1);
+        color: var(--danger);
+        border: 1px solid rgba(244,63,94,.2);
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-mono);
+        display: inline-block;
+    }
+
+    .link-btn {
+        color: var(--accent);
+        font-size: 11px;
+        font-family: var(--font-mono);
+        text-decoration: none;
+        padding: 3px 8px;
+        background: var(--accent-dim);
+        border-radius: 5px;
+        border: 1px solid rgba(79,124,255,.2);
+    }
+
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 52px;
+        height: 52px;
+        background: var(--surface3);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text3);
+        font-size: 20px;
+        margin: 0 auto 12px;
+        border: 1px solid var(--border2);
+    }
+
+    .empty-text {
+        font-size: 13.5px;
+        color: var(--text3);
+        font-family: var(--font-body);
+    }
+
+    .page-footer {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--text3);
+        letter-spacing: .5px;
+    }
+
+        .page-footer strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+    @@keyframes fadeUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+</style>
+
+<div class="vr-wrap">
+    <div class="vr-inner">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="icon-box"><i class="fas fa-images"></i></div>
+                <div>
+                    <div class="page-title">Slider <span>Registration</span></div>
+                    <div class="breadcrumb">Setup <i class="fas fa-chevron-right"></i> <span>Slider</span></div>
                 </div>
+            </div>
+            <div class="toggle-group">
+                <button class="toggle-btn toggle-btn-outline" id="gridViewToggleBtn"><i class="fas fa-table-cells"></i> Grid View</button>
+                <button class="toggle-btn toggle-btn-solid" id="formViewToggleBtn" style="display:none;"><i class="fas fa-pen-to-square"></i> Form View</button>
             </div>
         </div>
 
-        <hr>
-
-        <!-- FORM VIEW -->
-        @* <div id="formViewContainer"> *@
-        <div id="formViewContainer" style="max-height: 75vh; overflow-y: auto; padding-right: 5px;">
-            <div class="row mt-3">
-                <div class="col-md-6">
-                    <!-- Hidden Fields -->
+        <div id="formViewContainer">
+            <div class="form-card">
+                <div class="form-card-header"><div class="header-dot"></div><div class="form-card-title">Slider Information</div></div>
+                <div class="form-body">
                     <input style="display:none;" type="text" id="SliderId">
                     <input style="display:none;" type="text" id="SliderImageAttachmentOld">
 
-                    <!-- Row 1: Slider Name -->
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="SliderName">Slider Name *</label>
-                            <input type="text" id="SliderName" class="form-control" placeholder="Enter Slider Name">
+                    <div class="section-label">Basic Details</div>
+                    <div class="form-row form-row-1">
+                        <div class="float-group">
+                            <input type="text" id="SliderName" class="form-control" placeholder=" ">
+                            <label class="float-label" for="SliderName">Slider Name</label>
+                        </div>
+                    </div>
+                    <div class="form-row form-row-1">
+                        <div class="float-group">
+                            <input type="text" id="HeadingSlider" class="form-control" placeholder=" ">
+                            <label class="float-label" for="HeadingSlider">Heading</label>
+                        </div>
+                    </div>
+                    <div class="form-row form-row-1">
+                        <div class="float-group is-area">
+                            <textarea id="DescriptionSlider" class="form-control" placeholder=" " rows="2"></textarea>
+                            <label class="float-label" for="DescriptionSlider">Description</label>
+                        </div>
+                    </div>
+                    <div class="form-row form-row-1">
+                        <div class="float-group">
+                            <input type="number" id="SliderMovingTimer" class="form-control" placeholder=" " min="0" value="0">
+                            <label class="float-label" for="SliderMovingTimer">Moving Timer (Seconds)</label>
+                        </div>
+                        <div class="hint-text">How long each slide displays. Default: 0</div>
+                    </div>
+
+                    <div class="section-label" style="margin-top:4px;">Configuration</div>
+                    <div class="form-row form-row-2">
+                        <div class="float-group always-float">
+                            <select id="SliderType" class="form-control"><option value="">— Select Type —</option></select>
+                            <label class="float-label" for="SliderType">Slider Type</label>
+                        </div>
+                        <div class="float-group always-float">
+                            <select id="VendorId" class="form-control"><option value="">— Select Vendor —</option></select>
+                            <label class="float-label" for="VendorId">Vendor</label>
                         </div>
                     </div>
 
-                    <!-- Row 2: Heading Slider -->
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="HeadingSlider">Heading Slider</label>
-                            <input type="text" id="HeadingSlider" class="form-control" placeholder="Enter Heading">
-                        </div>
-                    </div>
-
-                    <!-- Row 3: Description Slider -->
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="DescriptionSlider">Description Slider</label>
-                            <textarea id="DescriptionSlider" class="form-control" placeholder="Enter Description" rows="2" style="resize: vertical;"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- ✅ NEW: Row 4: Slider Moving Timer -->
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="SliderMovingTimer">Slider Moving Timer (Seconds) *</label>
-                            <input type="number" id="SliderMovingTimer" class="form-control" placeholder="Enter Timer in Seconds" min="0" value="0">
-                            <small class="text-muted">How long each slide displays (in seconds). Default: 0</small>
-                        </div>
-                    </div>
-
-@*                     <!-- Row 5: Slider Type -->
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="SliderType">Slider Type *</label>
-                            <select id="SliderType" class="form-control">
-                                <option value="">-- Select Slider Type --</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Row 6: Vendor -->
-                    <div class="row mb-3">
-                        <div class="col-md-12">
-                            <label for="VendorId">Vendor *</label>
-                            <select id="VendorId" class="form-control">
-                                <option value="">-- Select Vendor --</option>
-                            </select>
-                        </div>
-                    </div> *@
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="SliderType">Slider Type *</label>
-                            <select id="SliderType" class="form-control">
-                                <option value="">-- Select Slider Type --</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="VendorId">Vendor *</label>
-                            <select id="VendorId" class="form-control">
-                                <option value="">-- Select Vendor --</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Row 7: IsActive -->
-                    <div class="row mb-3">
-                        <div class="col-md-6 d-flex align-items-center">
-                            <div class="form-check">
-                                <input type="checkbox" id="IsActive" class="form-check-input">
-                                <label class="form-check-label" for="IsActive">Is Active</label>
+                    <div class="section-label" style="margin-top:4px;">Status & Media</div>
+                    <div class="form-row form-row-2" style="margin-bottom:18px;">
+                        <div>
+                            <div class="status-meta">Status</div>
+                            <div class="check-group">
+                                <input type="checkbox" id="IsActive" class="check-input">
+                                <label class="check-label" for="IsActive">Mark as Active</label>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Row 8: Slider Image -->
-                    <div class="row mb-3">
-                        <div class="col-md-12" style="display: grid;">
-                            <label>Slider Image (Max Size 500KB)*</label>
-                            <input id="SliderImageAttachment" style="height: fit-content;background: white;padding: 5px;" type="file" accept=".jpeg,.png,.jpg" required>
+                        <div>
+                            <div class="media-label"><i class="fas fa-image"></i> Slider Image <span style="font-size:8px;color:var(--text3);text-transform:none;letter-spacing:0;">(Max 500 KB · JPEG/PNG)</span></div>
+                            <label for="SliderImageAttachment" class="file-upload-zone">
+                                <div class="file-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+                                <div><div class="file-info-title" id="fileNameDisplay">Click to browse</div><div class="file-info-sub">JPEG or PNG · max 500 KB</div></div>
+                            </label>
+                            <input id="SliderImageAttachment" class="form-control-file" type="file" accept=".jpeg,.png,.jpg">
                         </div>
                     </div>
-
-                    <!-- Row 9: Buttons -->
-                    <div class="row mb-3">
-                        <div class="col-md-12 d-flex align-items-end">
-                            <button class="btn btn-success me-2" id="saveBtn">Save</button>
-                            <button class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
-                            <a class="btn btn-warning" style="display:none;" id="ViewImageBtn" target="_blank">
-                                View Image
-                            </a>
-                        </div>
+                    <div class="btn-row">
+                        <button class="btn-pro btn-save" id="saveBtn"><i class="fas fa-floppy-disk"></i> Save Slider</button>
+                        <button class="btn-pro btn-cancel" id="cancelBtn"><i class="fas fa-xmark"></i> Cancel</button>
+                        <a class="btn-view-img" id="ViewImageBtn" target="_blank"><i class="fas fa-eye"></i> View Image</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- GRID VIEW -->
         <div id="gridViewContainer" style="display:none;">
-            <div class="row mt-5">
-                <div class="col-md-12">
-                    <div id="SliderGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
-                    <div class="mt-3" style="text-align:center;">
-                        <p>Total Sliders (<span id="TotalSlidersCount">0</span>)</p>
-                    </div>
+            <div class="grid-card">
+                <div class="grid-header">
+                    <div class="grid-header-left"><div class="grid-header-title">All Sliders</div><div class="grid-badge" id="TotalSlidersCount">0 records</div></div>
                 </div>
+                <div class="grid-scroll"><div id="SliderGridContainer"></div></div>
             </div>
         </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="copyright">
-                    <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">UT Designer</span></p>
-                </div>
-            </div>
-        </div>
-
+        <div class="page-footer">Software Developed By: <strong>UT Designer</strong></div>
     </div>
 </div>
 
 <script>
-    // Variable Declaration
-    let userId = localStorage.getItem("userId") || "";
-    let GridViewDataList = [];
-    let IsUpdate = false;
-
-    // VIEW TOGGLE FUNCTIONS
-    function showFormView() {
-        document.getElementById("formViewContainer").style.display = "block";
-        document.getElementById("gridViewContainer").style.display = "none";
-        document.getElementById("formViewToggleBtn").style.display = "none";
-        document.getElementById("gridViewToggleBtn").style.display = "inline-block";
-        document.getElementById("SliderName").focus();
-    }
-
-    function showGridView() {
-        document.getElementById("formViewContainer").style.display = "none";
-        document.getElementById("gridViewContainer").style.display = "block";
-        document.getElementById("gridViewToggleBtn").style.display = "none";
-        document.getElementById("formViewToggleBtn").style.display = "inline-block";
-    }
-
-    document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
-    document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
-
-    // Slider Image Validation
-    document.getElementById("SliderImageAttachment").addEventListener("change", async function () {
-        const file = this.files[0];
-        if (!file) return;
-
-        const maxSize = 500 * 1024;
-        if (file.size > maxSize) {
-            this.value = "";
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Image size must be less than 500 KB.',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("SliderImageAttachment").focus();
-                }
-            });
-        }
-    });
-
-    function GetSliderImageAttachmentFile() {
-        return new Promise((resolve, reject) => {
-            const fileInput = document.getElementById("SliderImageAttachment");
-            const file = fileInput.files[0];
-
-            if (!file) {
-                resolve({ SliderImageAttachmentfilename: "", SliderImageAttachmentbase64: "" });
-                return;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const SliderName = document.getElementById("SliderName").value.trim();
-                const now = new Date();
-                const pad = (num) => num.toString().padStart(2, "0");
-
-                const dd = pad(now.getDate());
-                const MM = pad(now.getMonth() + 1);
-                const yyyy = now.getFullYear();
-                const hh = pad(now.getHours());
-                const mm = pad(now.getMinutes());
-                const timestamp = `${dd}${MM}${yyyy}${hh}${mm}`;
-
-                const extension = file.name.split('.').pop();
-                const filename = `${SliderName}_${timestamp}.${extension}`;
-
-                resolve({
-                    SliderImageAttachmentfilename: filename,
-                    SliderImageAttachmentbase64: e.target.result
-                });
-            };
-
-            reader.onerror = function () {
-                reject(new Error("File read error"));
-            };
-
-            reader.readAsDataURL(file);
-        });
-    }
-
-    // PAGE LOAD
-    window.addEventListener("load", async function () {
-        await LoadSliderRegistrationData();
-        await LoadGridViewData();
-    });
-
-    // Load Slider Registration Data
-    async function LoadSliderRegistrationData() {
-        const nInfoTab = {
-            Userid: userId,
-        };
-
-        try {
-            const response = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadSliderRegistrationData", "SliderRegistration")',
-                data: JSON.stringify(nInfoTab),
-                contentType: 'application/json'
-            });
-
-            if (response.statusId === 1) {
-                // Populate Vendor Dropdown
-                const vendorSelect = document.getElementById("VendorId");
-                vendorSelect.innerHTML = '<option value="">-- Select Vendor --</option>';
-                response.VendorList.forEach(item => {
-                    vendorSelect.innerHTML += `<option value="${item.VendorId}">${item.Vendor}</option>`;
-                });
-
-                // Populate Slider Type Dropdown
-                const sliderTypeSelect = document.getElementById("SliderType");
-                sliderTypeSelect.innerHTML = '<option value="">-- Select Slider Type --</option>';
-                response.SliderTypeList.forEach(item => {
-                    sliderTypeSelect.innerHTML += `<option value="${item.SliderType}">${item.SliderType}</option>`;
-                });
-
-            } else {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Slider Registration',
-                    text: response.message || 'Failed to load data'
-                });
-            }
-
-        } catch (xhr) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while loading data'
-            });
-            console.error("LoadSliderRegistrationData Error:", xhr);
-        }
-    }
-
-    // Load Grid View Data
-    async function LoadGridViewData() {
-        const nInfoTab = {
-            Userid: userId,
-        };
-
-        try {
-            const response = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadGridViewData", "SliderRegistration")',
-                data: JSON.stringify(nInfoTab),
-                contentType: 'application/json'
-            });
-
-            if (response.statusId === 1) {
-                GridViewDataList = response.GridViewDataList || [];
-
-                if (GridViewDataList.length > 0) {
-                    console.log("Available columns:", Object.keys(GridViewDataList[0]));
-                    console.log("First row data:", GridViewDataList[0]);
-                }
-
-                document.getElementById("TotalSlidersCount").textContent = GridViewDataList.length;
-                RenderGridView();
-
-            } else {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Grid View',
-                    text: response.message || 'Failed to load grid data'
-                });
-            }
-
-        } catch (xhr) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while loading grid view'
-            });
-            console.error("LoadGridViewData Error:", xhr);
-        }
-    }
-
-    // Render Grid View
-    function RenderGridView() {
-        const container = document.getElementById("SliderGridContainer");
-
-        if (GridViewDataList.length === 0) {
-            container.innerHTML = `<p style="text-align:center; margin-top:20px;">No sliders available</p>`;
-            return;
-        }
-
-        function getValue(item, possibleNames, defaultValue = '') {
-            for (let name of possibleNames) {
-                if (item[name] !== undefined && item[name] !== null) {
-                    return item[name];
-                }
-            }
-            return defaultValue;
-        }
-
-        let tableHTML = `
-            <table class="table table-bordered table-striped">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Actions</th>
-                        <th>Slider ID</th>
-                        <th>Slider Name</th>
-                        <th>Heading</th>
-                        <th>Description</th>
-                        <th>Timer (Sec)</th>
-                        <th>Vendor</th>
-                        <th>Slider Type</th>
-                        <th>Is Active</th>
-                        <th>Slider Image</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        GridViewDataList.forEach(item => {
-            const heading = getValue(item, ['HeadingSlider', 'Heading Slider', 'Heading'], 'N/A');
-            const description = getValue(item, ['DescriptionSlider', 'Description Slider', 'Description'], 'N/A');
-            const sliderType = getValue(item, ['SliderType', 'Slider Type'], 'N/A');
-            const movingTimer = getValue(item, ['SliderMovingTimer', 'Slider Moving Timer'], '0');
-
-            tableHTML += `
-                <tr>
-                    <td>
-                        <button class="btn btn-sm btn-primary" onclick='EditSlider(${item.SliderId})'>Edit</button>
-                        <button class="btn btn-sm btn-danger" onclick='DeleteSlider(${item.SliderId})'>Delete</button>
-                    </td>
-                    <td>${item.SliderId || ''}</td>
-                    <td>${getValue(item, ['SliderName', 'Slider Name'])}</td>
-                    <td>${heading}</td>
-                    <td>${description}</td>
-                    <td>${movingTimer}</td>
-                    <td>${getValue(item, ['Vendor', 'VendorId Name'])}</td>
-                    <td>${sliderType}</td>
-                    <td>${item['Is Active'] ? 'Yes' : 'No'}</td>
-                    <td>
-                        ${item.SliderImages ? `<a href="${item.SliderImages}" target="_blank">View Image</a>` : 'No Image'}
-                    </td>
-                </tr>
-            `;
-        });
-
-        tableHTML += `
-                </tbody>
-            </table>
-        `;
-
-        container.innerHTML = tableHTML;
-    }
-
-    // Edit Slider Function
-    function EditSlider(SliderId) {
-        console.log("Edit clicked for SliderId:", SliderId);
-
-        const slider = GridViewDataList.find(c => parseInt(c.SliderId) === parseInt(SliderId));
-
-        if (!slider) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Slider not found. SliderId: ' + SliderId
-            });
-            console.error("Slider not found:", SliderId);
-            return;
-        }
-
-        console.log("Found slider:", slider);
-
-        function getValue(possibleNames, defaultValue = '') {
-            for (let name of possibleNames) {
-                if (slider[name] !== undefined && slider[name] !== null) {
-                    return slider[name];
-                }
-            }
-            return defaultValue;
-        }
-
-        document.getElementById("SliderId").value = slider.SliderId || '';
-        document.getElementById("SliderName").value = getValue(['SliderName', 'Slider Name']);
-        document.getElementById("HeadingSlider").value = getValue(['HeadingSlider', 'Heading Slider', 'Heading']);
-        document.getElementById("DescriptionSlider").value = getValue(['DescriptionSlider', 'Description Slider', 'Description']);
-        document.getElementById("SliderMovingTimer").value = getValue(['SliderMovingTimer', 'Slider Moving Timer'], '0'); // ✅ NEW
-        document.getElementById("SliderType").value = getValue(['SliderType', 'Slider Type']);
-        document.getElementById("VendorId").value = slider.VendorId || '';
-        document.getElementById("IsActive").checked = slider['Is Active'] === true || slider['Is Active'] === 1;
-
-        if (slider.SliderImages) {
-            document.getElementById("SliderImageAttachmentOld").value = slider.SliderImages;
-            document.getElementById("ViewImageBtn").href = slider.SliderImages;
-            document.getElementById("ViewImageBtn").style.display = "inline-block";
-        } else {
-            document.getElementById("SliderImageAttachmentOld").value = "";
-            document.getElementById("ViewImageBtn").style.display = "none";
-        }
-
-        IsUpdate = true;
-        document.getElementById("saveBtn").textContent = "Update";
-        showFormView();
-    }
-
-    // Delete Slider Function
-    async function DeleteSlider(SliderId) {
-        console.log("Delete clicked for SliderId:", SliderId);
-
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
-        });
-
-        if (!result.isConfirmed) return;
-
-        const slider = GridViewDataList.find(c => parseInt(c.SliderId) === parseInt(SliderId));
-
-        if (!slider) {
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Slider not found for deletion'
-            });
-            console.error("Slider not found:", SliderId);
-            return;
-        }
-
-        let imageFilename = "";
-        if (slider.SliderImages) {
-            const urlParts = slider.SliderImages.split('/');
-            imageFilename = urlParts[urlParts.length - 1];
-        }
-
-        const nSliderTab = {
-            Userid: userId,
-            SliderId: `${SliderId}`,
-            SliderImageAttachmentfilenameold: imageFilename,
-            FtpPath: "/wwwroot/Images/SliderRegistration"
-        };
-
-        Swal.fire({
-            title: 'Please wait',
-            text: 'Deleting slider...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => Swal.showLoading()
-        });
-
-        try {
-            const response = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nDeleteSliderRegistrationData", "SliderRegistration")',
-                data: JSON.stringify(nSliderTab),
-                contentType: 'application/json'
-            });
-
-            Swal.close();
-
-            if (response.statusId === 1) {
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Slider Deleted',
-                    text: response.message || 'Slider deleted successfully'
-                });
-
-                await LoadGridViewData();
-            } else {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Delete Failed',
-                    text: response.message || 'Failed to delete slider'
-                });
-            }
-
-        } catch (error) {
-            Swal.close();
-            console.error("DeleteSlider Error:", error);
-
-            let errorMessage = 'An error occurred while deleting slider';
-
-            if (error.responseJSON && error.responseJSON.message) {
-                errorMessage = error.responseJSON.message;
-            } else if (error.responseText) {
-                errorMessage = error.responseText;
-            } else if (error.statusText) {
-                errorMessage = error.statusText;
-            }
-
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: errorMessage,
-                footer: 'Check browser console for details (Press F12)'
-            });
-        }
-    }
-
-    // ✅ UPDATED Save Button click
-    document.getElementById("saveBtn").addEventListener("click", async function () {
-        const SliderId = document.getElementById("SliderId").value.trim();
-        const SliderName = document.getElementById("SliderName").value.trim();
-        const HeadingSlider = document.getElementById("HeadingSlider").value.trim();
-        const DescriptionSlider = document.getElementById("DescriptionSlider").value.trim();
-        const SliderMovingTimer = document.getElementById("SliderMovingTimer").value.trim(); // ✅ NEW
-        const SliderType = document.getElementById("SliderType").value.trim();
-        const VendorId = document.getElementById("VendorId").value.trim();
-        const isActive = document.getElementById("IsActive").checked;
-        const SliderImageAttachment = document.getElementById("SliderImageAttachment").files.length > 0;
-        const SliderImageAttachmentold = document.getElementById("SliderImageAttachmentOld").value.trim();
-
-        // Validations
-        if (!SliderName) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Slider name is required',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("SliderName").focus();
-                }
-            });
-            return;
-        }
-
-        // ✅ NEW VALIDATION
-        if (!SliderMovingTimer || isNaN(SliderMovingTimer) || parseInt(SliderMovingTimer) < 0) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Please enter a valid slider moving timer (0 or greater)',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("SliderMovingTimer").focus();
-                }
-            });
-            return;
-        }
-
-        if (!SliderType) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Please select slider type',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("SliderType").focus();
-                }
-            });
-            return;
-        }
-
-        if (!VendorId) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Please select vendor',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("VendorId").focus();
-                }
-            });
-            return;
-        }
-
-        if (!IsUpdate && !SliderImageAttachment) {
-            await Swal.fire({
-                icon: 'warning',
-                title: 'Validation',
-                text: 'Please select slider image',
-                returnFocus: false,
-                didClose: () => {
-                    document.getElementById("SliderImageAttachment").focus();
-                }
-            });
-            return;
-        }
-
-        const { SliderImageAttachmentfilename, SliderImageAttachmentbase64 } = await GetSliderImageAttachmentFile();
-
-        // ✅ UPDATED: Added SliderMovingTimer
-        const nSliderTab = {
-            Userid: userId || "",
-            SliderId: SliderId,
-            SliderName: SliderName,
-            HeadingSlider: HeadingSlider || "",
-            DescriptionSlider: DescriptionSlider || "",
-            SliderMovingTimer: parseInt(SliderMovingTimer) || 0, // ✅ NEW
-            SliderType: SliderType,
-            VendorId: VendorId,
-            SliderImageAttachmentfilename: SliderImageAttachmentfilename,
-            SliderImageAttachmentfilenameold: SliderImageAttachmentold,
-            SliderImageAttachmentbase64: SliderImageAttachmentbase64,
-            IsActive: isActive,
-            IsUpdate: IsUpdate,
-            FtpPath: "/wwwroot/Images/SliderRegistration"
-        };
-
-        console.log("Sending data:", nSliderTab);
-
-        Swal.fire({
-            title: 'Please wait',
-            text: 'Slider registration is in process...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => Swal.showLoading()
-        });
-
-        try {
-            const response = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nSaveSliderRegistrationData", "SliderRegistration")',
-                data: JSON.stringify(nSliderTab),
-                contentType: 'application/json'
-            });
-
-            console.log("Server response:", response);
-
-            Swal.close();
-
-            if (response.statusId === 1) {
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Slider Registration',
-                    text: response.message || 'Slider saved successfully',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("SliderName").focus();
-                    }
-                });
-
-                nClearForm();
-
-            } else {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Slider Registration',
-                    text: response.message || 'Slider save failed'
-                });
-            }
-
-        } catch (xhr) {
-            Swal.close();
-
-            console.error("SaveData Error:", xhr);
-
-            let errorMessage = 'An error occurred while saving slider';
-
-            if (xhr.responseJSON) {
-                if (xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-                } else if (xhr.responseJSON.errors) {
-                    const errors = Object.values(xhr.responseJSON.errors).flat();
-                    errorMessage = errors.join('\n');
-                } else if (xhr.responseJSON.title) {
-                    errorMessage = xhr.responseJSON.title;
-                } else {
-                    errorMessage = JSON.stringify(xhr.responseJSON);
-                }
-            } else if (xhr.responseText) {
-                try {
-                    const parsed = JSON.parse(xhr.responseText);
-                    if (parsed.message) {
-                        errorMessage = parsed.message;
-                    } else if (parsed.title) {
-                        errorMessage = parsed.title;
-                    } else {
-                        errorMessage = xhr.responseText.substring(0, 200);
-                    }
-                } catch {
-                    errorMessage = xhr.responseText.substring(0, 200);
-                }
-            } else if (xhr.statusText) {
-                errorMessage = `${xhr.status}: ${xhr.statusText}`;
-            }
-
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                html: errorMessage.replace(/\n/g, '<br>'),
-                footer: '<small>Check browser console (F12) for more details</small>'
-            });
-        }
-    });
-
-    // Cancel Button click
-    document.getElementById("cancelBtn").addEventListener("click", function () {
-        nClearForm();
-    });
-
-    // ✅ UPDATED Clear Form Function
-    async function nClearForm() {
-        document.getElementById("SliderId").value = "";
-        document.getElementById("SliderImageAttachmentOld").value = "";
-        document.getElementById("SliderName").value = "";
-        document.getElementById("HeadingSlider").value = "";
-        document.getElementById("DescriptionSlider").value = "";
-        document.getElementById("SliderMovingTimer").value = "0"; // ✅ NEW - Reset to 0
-        document.getElementById("SliderType").value = "";
-        document.getElementById("VendorId").value = "";
-        document.getElementById("IsActive").checked = false;
-        document.getElementById("SliderImageAttachment").value = "";
-        IsUpdate = false;
-        document.getElementById("saveBtn").textContent = "Save";
-        document.getElementById("SliderName").focus();
-        document.getElementById("ViewImageBtn").style.display = "none";
-        await LoadGridViewData();
-    }
+    let userId=localStorage.getItem("userId")||"",GridViewDataList=[],IsUpdate=false;
+    const SW={background:'#252d3e',color:'#e4eaf5'};
+    function initFloatLabels(){document.querySelectorAll('.float-group').forEach(g=>{if(g.classList.contains('always-float'))return;const el=g.querySelector('input:not([type="checkbox"]):not([type="file"]):not([style*="display:none"]),textarea,select');if(!el)return;const chk=()=>g.classList.toggle('has-value',el.value!=='');el.addEventListener('input',chk);el.addEventListener('change',chk);chk();});}
+    function showFormView(){document.getElementById("formViewContainer").style.display="block";document.getElementById("gridViewContainer").style.display="none";document.getElementById("formViewToggleBtn").style.display="none";document.getElementById("gridViewToggleBtn").style.display="inline-flex";document.getElementById("SliderName").focus();}
+    function showGridView(){document.getElementById("formViewContainer").style.display="none";document.getElementById("gridViewContainer").style.display="block";document.getElementById("gridViewToggleBtn").style.display="none";document.getElementById("formViewToggleBtn").style.display="inline-flex";}
+    document.getElementById("gridViewToggleBtn").addEventListener("click",showGridView);
+    document.getElementById("formViewToggleBtn").addEventListener("click",showFormView);
+    document.getElementById("SliderImageAttachment").addEventListener("change",async function(){const file=this.files[0];if(!file)return;if(file.size>500*1024){this.value="";document.getElementById("fileNameDisplay").textContent="Click to browse";await Swal.fire({icon:'warning',title:'Validation',text:'Image must be under 500 KB.',returnFocus:false,...SW});}else{document.getElementById("fileNameDisplay").textContent=file.name;}});
+    function GetSliderImageAttachmentFile(){return new Promise((resolve)=>{const fileInput=document.getElementById("SliderImageAttachment"),file=fileInput.files[0];if(!file){resolve({SliderImageAttachmentfilename:"",SliderImageAttachmentbase64:""});return;}const reader=new FileReader();reader.onload=function(e){const n=document.getElementById("SliderName").value.trim(),now=new Date(),pad=n=>n.toString().padStart(2,"0"),ts=`${pad(now.getDate())}${pad(now.getMonth()+1)}${now.getFullYear()}${pad(now.getHours())}${pad(now.getMinutes())}`,ext=file.name.split(".").pop();resolve({SliderImageAttachmentfilename:`${n}_${ts}.${ext}`,SliderImageAttachmentbase64:e.target.result});};reader.onerror=()=>resolve({SliderImageAttachmentfilename:"",SliderImageAttachmentbase64:""});reader.readAsDataURL(file);});}
+    window.addEventListener("load",async function(){initFloatLabels();await LoadSliderRegistrationData();await LoadGridViewData();});
+    async function LoadSliderRegistrationData(){try{const r=await jQuery.ajax({type:'POST',url:'@Url.Action("nLoadSliderRegistrationData", "SliderRegistration")',data:JSON.stringify({Userid:userId}),contentType:'application/json'});if(r.statusId===1){const vs=document.getElementById("VendorId");vs.innerHTML='<option value="">— Select Vendor —</option>';r.VendorList.forEach(i=>{vs.innerHTML+=`<option value="${i.VendorId}">${i.Vendor}</option>`;});const st=document.getElementById("SliderType");st.innerHTML='<option value="">— Select Type —</option>';r.SliderTypeList.forEach(i=>{st.innerHTML+=`<option value="${i.SliderType}">${i.SliderType}</option>`;});}else await Swal.fire({icon:'warning',title:'Warning',text:r.message||'Failed',...SW});}catch{await Swal.fire({icon:'error',title:'Error',text:'Error loading data',...SW});}}
+    async function LoadGridViewData(){try{const r=await jQuery.ajax({type:'POST',url:'@Url.Action("nLoadGridViewData", "SliderRegistration")',data:JSON.stringify({Userid:userId}),contentType:'application/json'});if(r.statusId===1){GridViewDataList=r.GridViewDataList||[];RenderGridView();}else await Swal.fire({icon:'warning',title:'Warning',text:r.message||'Failed',...SW});}catch{await Swal.fire({icon:'error',title:'Error',text:'Error loading grid',...SW});}}
+    function gv(item,names,def=''){for(let n of names){if(item[n]!==undefined&&item[n]!==null)return item[n];}return def;}
+    function RenderGridView(){const c=document.getElementById("SliderGridContainer"),cnt=document.getElementById("TotalSlidersCount");if(!GridViewDataList.length){c.innerHTML=`<div class="empty-state"><div class="empty-icon"><i class="fas fa-images"></i></div><div class="empty-text">No sliders found.</div></div>`;cnt.textContent="0 records";return;}const t=document.createElement("table");t.className="pro-table";t.innerHTML=`<thead><tr><th>Actions</th><th>Slider ID</th><th>Slider Name</th><th>Heading</th><th>Description</th><th>Timer(s)</th><th>Vendor</th><th>Type</th><th>Status</th><th>Image</th></tr></thead>`;const tb=document.createElement("tbody");GridViewDataList.forEach(item=>{const tr=document.createElement("tr");tr.innerHTML=`<td><button class="tbl-btn tbl-btn-edit" onclick="EditSlider(${item.SliderId})" title="Edit"><i class="fas fa-pen"></i></button><button class="tbl-btn tbl-btn-del" onclick="DeleteSlider(${item.SliderId})" title="Delete"><i class="fas fa-trash-can"></i></button></td><td>${item.SliderId||''}</td><td>${gv(item,['SliderName','Slider Name'])}</td><td>${gv(item,['HeadingSlider','Heading Slider','Heading'],'—')}</td><td>${gv(item,['DescriptionSlider','Description Slider','Description'],'—')}</td><td>${gv(item,['SliderMovingTimer','Slider Moving Timer'],'0')}</td><td>${gv(item,['Vendor','VendorId Name'])}</td><td>${gv(item,['SliderType','Slider Type'],'—')}</td><td>${item['Is Active']?'<span class="badge-active">Active</span>':'<span class="badge-inactive">Inactive</span>'}</td><td>${item.SliderImages?`<a class="link-btn" href="${item.SliderImages}" target="_blank"><i class="fas fa-eye"></i> View</a>`:'<span style="color:var(--text3);font-size:11px;">—</span>'}</td>`;tb.appendChild(tr);});t.appendChild(tb);c.innerHTML="";c.appendChild(t);cnt.textContent=`${tb.rows.length} records`;}
+    function EditSlider(SliderId){const s=GridViewDataList.find(c=>parseInt(c.SliderId)===parseInt(SliderId));if(!s){Swal.fire({icon:'error',title:'Error',text:'Not found.',...SW});return;}const g=(names,def='')=>{for(let n of names){if(s[n]!==undefined&&s[n]!==null)return s[n];}return def;};document.getElementById("SliderId").value=s.SliderId||'';document.getElementById("SliderName").value=g(['SliderName','Slider Name']);document.getElementById("HeadingSlider").value=g(['HeadingSlider','Heading Slider','Heading']);document.getElementById("DescriptionSlider").value=g(['DescriptionSlider','Description Slider','Description']);document.getElementById("SliderMovingTimer").value=g(['SliderMovingTimer','Slider Moving Timer'],'0');document.getElementById("SliderType").value=g(['SliderType','Slider Type']);document.getElementById("VendorId").value=s.VendorId||'';document.getElementById("IsActive").checked=s['Is Active']===true||s['Is Active']===1;if(s.SliderImages){document.getElementById("SliderImageAttachmentOld").value=s.SliderImages;const vb=document.getElementById("ViewImageBtn");vb.href=s.SliderImages;vb.style.display="inline-flex";}else{document.getElementById("SliderImageAttachmentOld").value="";document.getElementById("ViewImageBtn").style.display="none";}IsUpdate=true;document.getElementById("saveBtn").innerHTML='<i class="fas fa-floppy-disk"></i> Update Slider';initFloatLabels();showFormView();}
+    async function DeleteSlider(SliderId){const r=await Swal.fire({title:'Confirm Delete',text:"Cannot be undone.",icon:'warning',showCancelButton:true,confirmButtonText:'Yes, delete',cancelButtonText:'Cancel',confirmButtonColor:'#f43f5e',...SW});if(!r.isConfirmed)return;const s=GridViewDataList.find(c=>parseInt(c.SliderId)===parseInt(SliderId));if(!s){await Swal.fire({icon:'error',title:'Error',text:'Not found.',...SW});return;}let img="";if(s.SliderImages){const p=s.SliderImages.split('/');img=p[p.length-1];}Swal.fire({title:'Please wait',text:'Deleting...',allowOutsideClick:false,allowEscapeKey:false,didOpen:()=>Swal.showLoading(),...SW});try{const res=await jQuery.ajax({type:'POST',url:'@Url.Action("nDeleteSliderRegistrationData", "SliderRegistration")',data:JSON.stringify({Userid:userId,SliderId:`${SliderId}`,SliderImageAttachmentfilenameold:img,FtpPath:"/wwwroot/Images/SliderRegistration"}),contentType:'application/json'});Swal.close();if(res.statusId===1){await Swal.fire({icon:'success',title:'Deleted',text:res.message||'Deleted.',...SW});await LoadGridViewData();}else await Swal.fire({icon:'warning',title:'Failed',text:res.message||'Could not delete.',...SW});}catch{Swal.close();await Swal.fire({icon:'error',title:'Error',text:'An error occurred.',...SW});}}
+    document.getElementById("saveBtn").addEventListener("click",async function(){const SliderId=document.getElementById("SliderId").value.trim(),SliderName=document.getElementById("SliderName").value.trim(),HeadingSlider=document.getElementById("HeadingSlider").value.trim(),DescriptionSlider=document.getElementById("DescriptionSlider").value.trim(),SliderMovingTimer=document.getElementById("SliderMovingTimer").value.trim(),SliderType=document.getElementById("SliderType").value.trim(),VendorId=document.getElementById("VendorId").value.trim(),isActive=document.getElementById("IsActive").checked,hasImage=document.getElementById("SliderImageAttachment").files.length>0,SliderImageAttachmentold=document.getElementById("SliderImageAttachmentOld").value.trim();
+    const validations=[{cond:!SliderName,text:'Slider name is required',focus:'SliderName'},{cond:!SliderMovingTimer||isNaN(SliderMovingTimer)||parseInt(SliderMovingTimer)<0,text:'Enter a valid timer (0 or more)',focus:'SliderMovingTimer'},{cond:!SliderType,text:'Please select slider type',focus:'SliderType'},{cond:!VendorId,text:'Please select vendor',focus:'VendorId'},{cond:!IsUpdate&&!hasImage,text:'Please select slider image',focus:'SliderImageAttachment'}];
+    for(const v of validations){if(v.cond){await Swal.fire({icon:'warning',title:'Validation',text:v.text,returnFocus:false,...SW,didClose:()=>document.getElementById(v.focus).focus()});return;}}
+    const{SliderImageAttachmentfilename,SliderImageAttachmentbase64}=await GetSliderImageAttachmentFile();
+    const nSliderTab={Userid:userId,SliderId,SliderName,HeadingSlider:HeadingSlider||"",DescriptionSlider:DescriptionSlider||"",SliderMovingTimer:parseInt(SliderMovingTimer)||0,SliderType,VendorId,SliderImageAttachmentfilename,SliderImageAttachmentfilenameold:SliderImageAttachmentold,SliderImageAttachmentbase64,IsActive:isActive,IsUpdate,FtpPath:"/wwwroot/Images/SliderRegistration"};
+    Swal.fire({title:'Please wait',text:'Saving...',allowOutsideClick:false,allowEscapeKey:false,didOpen:()=>Swal.showLoading(),...SW});
+    try{const res=await jQuery.ajax({type:'POST',url:'@Url.Action("nSaveSliderRegistrationData", "SliderRegistration")',data:JSON.stringify(nSliderTab),contentType:'application/json'});Swal.close();if(res.statusId===1){await Swal.fire({icon:'success',title:'Saved',text:res.message||'Saved.',returnFocus:false,...SW,didClose:()=>document.getElementById("SliderName").focus()});nClearForm();}else await Swal.fire({icon:'warning',title:'Failed',text:res.message||'Could not save.',...SW});}catch{Swal.close();await Swal.fire({icon:'error',title:'Error',text:'An error occurred.',...SW});}});
+    document.getElementById("cancelBtn").addEventListener("click",function(){nClearForm();});
+    async function nClearForm(){["SliderId","SliderImageAttachmentOld","SliderName","HeadingSlider","DescriptionSlider"].forEach(id=>document.getElementById(id).value="");document.getElementById("SliderMovingTimer").value="0";document.getElementById("SliderType").value="";document.getElementById("VendorId").value="";document.getElementById("IsActive").checked=false;document.getElementById("SliderImageAttachment").value="";document.getElementById("fileNameDisplay").textContent="Click to browse";IsUpdate=false;document.getElementById("saveBtn").innerHTML='<i class="fas fa-floppy-disk"></i> Save Slider';document.getElementById("ViewImageBtn").style.display="none";initFloatLabels();document.getElementById("SliderName").focus();await LoadGridViewData();}
 </script>
-
-<style>
-    select.form-control {
-        appearance: auto;
-        -webkit-appearance: auto;
-        -moz-appearance: auto;
-    }
-
-    .table-responsive {
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-    }
-
-    .table thead th {
-        position: sticky;
-        top: 0;
-        background-color: #343a40;
-        color: white;
-        z-index: 10;
-    }
-</style>

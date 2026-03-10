@@ -4,10 +4,12 @@
     ViewData["Title"] = "Dashboard";
 }
 
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
 <div class="dash-wrap">
     <div class="container-fluid">
 
-        <!-- ===== HEADER ===== -->
+        <!-- HEADER -->
         <div class="dash-header">
             <div>
                 <h1 class="dash-title"><span class="title-accent">◈</span> Dashboard</h1>
@@ -24,54 +26,37 @@
             </div>
         </div>
 
-        <!-- ===== 5 STAT CARDS ===== -->
+        <!-- 5 STAT CARDS -->
         <div class="cards-grid">
             <div class="stat-card c1">
-                <div class="card-top">
-                    <div class="card-icon"><i class="zmdi zmdi-account-o"></i></div>
-                    <canvas class="spark" id="spark1"></canvas>
-                </div>
+                <div class="card-top"><div class="card-icon"><i class="zmdi zmdi-account-o"></i></div><canvas class="spark" id="spark1"></canvas></div>
                 <div class="card-val" id="Card1TotalValue">0</div>
                 <div class="card-lbl" id="Card1Caption">Loading…</div>
             </div>
             <div class="stat-card c2">
-                <div class="card-top">
-                    <div class="card-icon"><i class="zmdi zmdi-store"></i></div>
-                    <canvas class="spark" id="spark2"></canvas>
-                </div>
+                <div class="card-top"><div class="card-icon"><i class="zmdi zmdi-store"></i></div><canvas class="spark" id="spark2"></canvas></div>
                 <div class="card-val" id="Card2TotalValue">0</div>
                 <div class="card-lbl" id="Card2Caption">Loading…</div>
             </div>
             <div class="stat-card c3">
-                <div class="card-top">
-                    <div class="card-icon"><i class="zmdi zmdi-shopping-cart"></i></div>
-                    <canvas class="spark" id="spark3"></canvas>
-                </div>
+                <div class="card-top"><div class="card-icon"><i class="zmdi zmdi-shopping-cart"></i></div><canvas class="spark" id="spark3"></canvas></div>
                 <div class="card-val" id="Card3TotalValue">0</div>
                 <div class="card-lbl" id="Card3Caption">Loading…</div>
             </div>
             <div class="stat-card c4">
-                <div class="card-top">
-                    <div class="card-icon"><i class="zmdi zmdi-check-circle"></i></div>
-                    <canvas class="spark" id="spark4"></canvas>
-                </div>
+                <div class="card-top"><div class="card-icon"><i class="zmdi zmdi-check-circle"></i></div><canvas class="spark" id="spark4"></canvas></div>
                 <div class="card-val" id="Card4TotalValue">0</div>
                 <div class="card-lbl" id="Card4Caption">Loading…</div>
             </div>
             <div class="stat-card c5">
-                <div class="card-top">
-                    <div class="card-icon"><i class="zmdi zmdi-trending-up"></i></div>
-                    <canvas class="spark" id="spark5"></canvas>
-                </div>
+                <div class="card-top"><div class="card-icon"><i class="zmdi zmdi-trending-up"></i></div><canvas class="spark" id="spark5"></canvas></div>
                 <div class="card-val" id="Card5TotalValue">0</div>
                 <div class="card-lbl" id="Card5Caption">Loading…</div>
             </div>
         </div>
 
-        <!-- ===== MAIN CONTENT ROW ===== -->
+        <!-- MAIN CONTENT ROW -->
         <div class="content-row">
-
-            <!-- Main Grid -->
             <div class="panel panel-wide">
                 <div class="panel-head">
                     <span class="panel-title"><i class="fas fa-table"></i> Recent Vendors</span>
@@ -90,46 +75,28 @@
                 </div>
             </div>
 
-            <!-- Summary + Chart -->
             <div class="right-col">
-                <!-- Donut Chart -->
                 <div class="panel panel-chart">
-                    <div class="panel-head">
-                        <span class="panel-title"><i class="fas fa-chart-pie"></i> Distribution</span>
-                    </div>
+                    <div class="panel-head"><span class="panel-title"><i class="fas fa-chart-pie"></i> Distribution</span></div>
                     <div class="panel-body chart-body">
                         <canvas id="donutChart"></canvas>
                         <div id="chartLegend" class="chart-legend"></div>
                     </div>
                 </div>
-
-                <!-- Summary Table -->
                 <div class="panel panel-summary">
-                    <div class="panel-head">
-                        <span class="panel-title"><i class="fas fa-list"></i> Summary</span>
-                    </div>
+                    <div class="panel-head"><span class="panel-title"><i class="fas fa-list"></i> Summary</span></div>
                     <div class="panel-body">
-                        <table class="sum-table">
-                            <tbody id="grid2Tbody"></tbody>
-                        </table>
+                        <table class="sum-table"><tbody id="grid2Tbody"></tbody></table>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Footer -->
-        <div class="dash-footer">
-            Developed by <strong>UT Designer</strong>
-        </div>
+        <div class="dash-footer">Developed by <strong>UT Designer</strong></div>
     </div>
 </div>
 
-<!-- ============================================================ STYLES -->
 <style>
-    /* ---------- Google Fonts — Theme Matched ---------- */
-    @@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&display=swap');
-
-    /* ---------- Variables ---------- */
     :root {
         --bg: #f0f2f7;
         --white: #ffffff;
@@ -144,13 +111,11 @@
         --c5: #f59e0b;
         --radius: 16px;
         --shadow: 0 4px 24px rgba(0,0,0,.07);
-        /* ---- Font Stack ---- */
-        --font-body: 'Manrope', sans-serif;
-        --font-heading: 'Outfit', sans-serif;
+        --font-body: 'Plus Jakarta Sans', sans-serif;
+        --font-heading: 'Syne', sans-serif;
         --font-number: 'Bebas Neue', sans-serif;
     }
 
-    /* ---------- Reset ---------- */
     *, *::before, *::after {
         box-sizing: border-box;
         margin: 0;
@@ -163,10 +128,9 @@
         color: var(--dark);
     }
 
-    /* ---------- Wrap + Scroll ---------- */
     .dash-wrap {
         padding: 24px 20px 10px;
-        height: calc(100vh - 60px); /* adjust 60px = your topbar height */
+        height: calc(100vh - 60px);
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-width: thin;
@@ -190,7 +154,7 @@
                 background: #6c63ff;
             }
 
-    /* ---------- Header ---------- */
+    /* Header */
     .dash-header {
         display: flex;
         align-items: center;
@@ -219,6 +183,7 @@
         font-size: 13px;
         color: var(--muted);
         margin-top: 3px;
+        font-family: var(--font-body);
     }
 
     .header-right {
@@ -238,6 +203,7 @@
         font-size: 12px;
         font-weight: 600;
         color: var(--mid);
+        font-family: var(--font-body);
     }
 
     .timer-dot {
@@ -261,8 +227,10 @@
         align-items: center;
         gap: 7px;
         transition: .25s ease;
-        font-family: var(--font-heading);
+        font-family: var(--font-body);
         letter-spacing: .3px;
+        position: relative;
+        overflow: hidden;
     }
 
         .refresh-btn:hover {
@@ -270,11 +238,7 @@
             transform: translateY(-2px);
         }
 
-        .refresh-btn i {
-            font-size: 13px;
-        }
-
-    /* ---------- 5-Card Grid ---------- */
+    /* Cards */
     .cards-grid {
         display: grid;
         grid-template-columns: repeat(5, 1fr);
@@ -289,8 +253,8 @@
         box-shadow: var(--shadow);
         position: relative;
         overflow: hidden;
-        transition: transform .3s ease, box-shadow .3s ease;
-        animation: fadeUp .6s ease both;
+        transition: transform .3s, box-shadow .3s;
+        animation: cardSpring .7s cubic-bezier(.22,.68,0,1.2) both;
     }
 
         .stat-card::after {
@@ -300,6 +264,7 @@
             left: 0;
             right: 0;
             height: 3px;
+            animation: barGlow 2.5s ease-in-out infinite;
         }
 
     .c1::after {
@@ -327,24 +292,44 @@
     }
 
     .stat-card:nth-child(2) {
-        animation-delay: .10s;
-    }
-
-    .stat-card:nth-child(3) {
         animation-delay: .15s;
     }
 
+    .stat-card:nth-child(3) {
+        animation-delay: .25s;
+    }
+
     .stat-card:nth-child(4) {
-        animation-delay: .20s;
+        animation-delay: .35s;
     }
 
     .stat-card:nth-child(5) {
-        animation-delay: .25s;
+        animation-delay: .45s;
     }
 
     .stat-card:hover {
         transform: translateY(-6px);
         box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 60%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
+        transform: skewX(-20deg);
+        pointer-events: none;
+    }
+
+    .stat-card:hover::before {
+        animation: shineSweep .55s ease;
+    }
+
+    .stat-card:hover .card-icon {
+        animation: iconFloat 1.2s ease-in-out infinite;
     }
 
     .card-top {
@@ -366,23 +351,23 @@
     }
 
     .c1 .card-icon {
-        background: linear-gradient(135deg, #6c63ff, #8b80ff);
+        background: linear-gradient(135deg,#6c63ff,#8b80ff);
     }
 
     .c2 .card-icon {
-        background: linear-gradient(135deg, #f43f74, #ff6b9d);
+        background: linear-gradient(135deg,#f43f74,#ff6b9d);
     }
 
     .c3 .card-icon {
-        background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+        background: linear-gradient(135deg,#0ea5e9,#38bdf8);
     }
 
     .c4 .card-icon {
-        background: linear-gradient(135deg, #10b981, #34d399);
+        background: linear-gradient(135deg,#10b981,#34d399);
     }
 
     .c5 .card-icon {
-        background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        background: linear-gradient(135deg,#f59e0b,#fbbf24);
     }
 
     .spark {
@@ -406,10 +391,10 @@
         letter-spacing: 1.2px;
         color: var(--muted);
         margin-top: 5px;
-        font-family: var(--font-heading);
+        font-family: var(--font-body);
     }
 
-    /* ---------- Content Row ---------- */
+    /* Content Row */
     .content-row {
         display: grid;
         grid-template-columns: 1fr 320px;
@@ -417,13 +402,12 @@
         margin-bottom: 20px;
     }
 
-    /* ---------- Panels ---------- */
     .panel {
         background: var(--white);
         border-radius: var(--radius);
         box-shadow: var(--shadow);
         overflow: hidden;
-        animation: fadeUp .7s ease .3s both;
+        animation: panelUp .7s ease both;
     }
 
     .panel-head {
@@ -467,20 +451,33 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: .2s ease;
+        transition: all .25s cubic-bezier(.34,1.56,.64,1);
     }
 
         .act-btn:hover {
             background: var(--dark);
             color: #fff;
             border-color: var(--dark);
+            transform: translateY(-3px) scale(1.12);
         }
 
     .panel-body {
         padding: 0;
     }
 
-    /* ---------- Data Table ---------- */
+    .panel-wide {
+        animation-delay: .3s;
+    }
+
+    .panel-chart {
+        animation-delay: .4s;
+    }
+
+    .panel-summary {
+        animation-delay: .5s;
+    }
+
+    /* Table */
     .tbl-wrap {
         overflow-x: auto;
     }
@@ -500,17 +497,13 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             white-space: nowrap;
-            font-family: var(--font-heading);
+            font-family: var(--font-body);
         }
-
-            .data-table thead th:first-child {
-                border-radius: 0;
-            }
 
         .data-table tbody tr {
             border-bottom: 1px solid var(--border);
             transition: .2s ease;
-            animation: rowIn .3s ease both;
+            animation: rowSlide .35s ease both;
         }
 
             .data-table tbody tr:hover {
@@ -524,13 +517,38 @@
             font-size: 13px;
             color: var(--mid);
             white-space: nowrap;
+            font-family: var(--font-body);
         }
 
         .data-table tbody tr:last-child {
             border-bottom: none;
         }
 
-    /* ---------- Right Column ---------- */
+        .data-table tbody tr:nth-child(1) {
+            animation-delay: .05s;
+        }
+
+        .data-table tbody tr:nth-child(2) {
+            animation-delay: .10s;
+        }
+
+        .data-table tbody tr:nth-child(3) {
+            animation-delay: .15s;
+        }
+
+        .data-table tbody tr:nth-child(4) {
+            animation-delay: .20s;
+        }
+
+        .data-table tbody tr:nth-child(5) {
+            animation-delay: .25s;
+        }
+
+        .data-table tbody tr:nth-child(6) {
+            animation-delay: .30s;
+        }
+
+    /* Right Col */
     .right-col {
         display: flex;
         flex-direction: column;
@@ -566,7 +584,21 @@
         font-size: 12px;
         font-weight: 500;
         color: var(--mid);
+        animation: legendIn .4s ease both;
+        font-family: var(--font-body);
     }
+
+        .legend-item:nth-child(1) {
+            animation-delay: .6s;
+        }
+
+        .legend-item:nth-child(2) {
+            animation-delay: .7s;
+        }
+
+        .legend-item:nth-child(3) {
+            animation-delay: .8s;
+        }
 
     .legend-dot {
         width: 10px;
@@ -581,7 +613,7 @@
         align-items: center;
     }
 
-    /* ---------- Summary Table ---------- */
+    /* Summary */
     .sum-table {
         width: 100%;
         border-collapse: collapse;
@@ -590,6 +622,7 @@
         .sum-table tbody tr {
             border-bottom: 1px solid var(--border);
             transition: .2s ease;
+            animation: sumRowPop .4s ease both;
         }
 
             .sum-table tbody tr:hover {
@@ -598,6 +631,18 @@
 
             .sum-table tbody tr:last-child {
                 border-bottom: none;
+            }
+
+            .sum-table tbody tr:nth-child(1) {
+                animation-delay: .35s;
+            }
+
+            .sum-table tbody tr:nth-child(2) {
+                animation-delay: .45s;
+            }
+
+            .sum-table tbody tr:nth-child(3) {
+                animation-delay: .55s;
             }
 
         .sum-table tbody td {
@@ -617,7 +662,7 @@
                 letter-spacing: .5px;
             }
 
-    /* ---------- Footer ---------- */
+    /* Footer */
     .dash-footer {
         text-align: center;
         padding: 14px 0;
@@ -625,13 +670,14 @@
         font-size: 12px;
         color: var(--muted);
         border-top: 1px solid var(--border);
+        font-family: var(--font-body);
     }
 
         .dash-footer strong {
             color: var(--c1);
         }
 
-    /* ---------- Utilities ---------- */
+    /* Utils */
     .text-end {
         text-align: right !important;
     }
@@ -640,11 +686,26 @@
         animation: spin 1s linear infinite !important;
     }
 
-    /* =============================================
-       ANIMATION KEYFRAMES
-    ============================================= */
+    .skeleton {
+        background: linear-gradient(90deg, #e8eaed 25%, #f5f6fa 50%, #e8eaed 75%);
+        background-size: 600px 100%;
+        animation: shimmer 1.4s infinite linear;
+        border-radius: 6px;
+    }
 
-    /* Page Load */
+    .ripple-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,.35);
+        width: 8px;
+        height: 8px;
+        margin-top: -4px;
+        margin-left: -4px;
+        animation: rippleOut .6s ease forwards;
+        pointer-events: none;
+    }
+
+    /* Keyframes */
     @@keyframes fadeDown {
         from {
             opacity: 0;
@@ -669,7 +730,6 @@
         }
     }
 
-    /* Card Spring Entrance */
     @@keyframes cardSpring {
         0% {
             opacity: 0;
@@ -691,7 +751,6 @@
         }
     }
 
-    /* Icon float */
     @@keyframes iconFloat {
         0%, 100% {
             transform: translateY(0) rotate(0deg);
@@ -702,7 +761,6 @@
         }
     }
 
-    /* Shimmer skeleton */
     @@keyframes shimmer {
         0% {
             background-position: -600px 0;
@@ -713,7 +771,6 @@
         }
     }
 
-    /* Number pop */
     @@keyframes numPop {
         0% {
             transform: scale(.7);
@@ -731,7 +788,6 @@
         }
     }
 
-    /* Label slide */
     @@keyframes lblSlide {
         from {
             opacity: 0;
@@ -744,7 +800,6 @@
         }
     }
 
-    /* Table row slide */
     @@keyframes rowSlide {
         from {
             opacity: 0;
@@ -757,7 +812,6 @@
         }
     }
 
-    /* Ripple expand */
     @@keyframes rippleOut {
         to {
             transform: scale(3.5);
@@ -765,7 +819,6 @@
         }
     }
 
-    /* Card shine sweep */
     @@keyframes shineSweep {
         0% {
             left: -100%;
@@ -776,7 +829,6 @@
         }
     }
 
-    /* Panel slide-up */
     @@keyframes panelUp {
         from {
             opacity: 0;
@@ -789,7 +841,6 @@
         }
     }
 
-    /* Dot pulse */
     @@keyframes blink {
         0%, 100% {
             opacity: 1;
@@ -802,14 +853,12 @@
         }
     }
 
-    /* Spin */
     @@keyframes spin {
         to {
             transform: rotate(360deg);
         }
     }
 
-    /* Glow pulse on card top bar */
     @@keyframes barGlow {
         0%, 100% {
             opacity: 1;
@@ -820,7 +869,6 @@
         }
     }
 
-    /* Summary row pop */
     @@keyframes sumRowPop {
         from {
             opacity: 0;
@@ -833,7 +881,6 @@
         }
     }
 
-    /* Legend item fade */
     @@keyframes legendIn {
         from {
             opacity: 0;
@@ -846,219 +893,14 @@
         }
     }
 
-    /* =============================================
-       ANIMATION CLASSES
-    ============================================= */
-
-    /* Cards */
-    .stat-card {
-        animation: cardSpring .7s cubic-bezier(.22,.68,0,1.2) both;
-    }
-
-        .stat-card:nth-child(1) {
-            animation-delay: .05s;
-        }
-
-        .stat-card:nth-child(2) {
-            animation-delay: .15s;
-        }
-
-        .stat-card:nth-child(3) {
-            animation-delay: .25s;
-        }
-
-        .stat-card:nth-child(4) {
-            animation-delay: .35s;
-        }
-
-        .stat-card:nth-child(5) {
-            animation-delay: .45s;
-        }
-
-        /* Card shine on hover */
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 60%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,.35), transparent);
-            transform: skewX(-20deg);
-            pointer-events: none;
-            transition: none;
-        }
-
-        .stat-card:hover::before {
-            animation: shineSweep .55s ease;
-        }
-
-        /* Top bar glow */
-        .stat-card::after {
-            animation: barGlow 2.5s ease-in-out infinite;
-        }
-
-        /* Card icon float on hover */
-        .stat-card:hover .card-icon {
-            animation: iconFloat 1.2s ease-in-out infinite;
-        }
-
-    /* Panels */
-    .panel {
-        animation: panelUp .7s ease both;
-    }
-
-    .panel-wide {
-        animation-delay: .3s;
-    }
-
-    .panel-chart {
-        animation-delay: .4s;
-    }
-
-    .panel-summary {
-        animation-delay: .5s;
-    }
-
-    /* Header */
-    .dash-header {
-        animation: fadeDown .65s cubic-bezier(.22,.68,0,1.15) both;
-    }
-
-    .dash-sub {
-        animation: fadeDown .65s ease .15s both;
-    }
-
-    /* Shimmer skeleton */
-    .skeleton {
-        background: linear-gradient(90deg, #e8eaed 25%, #f5f6fa 50%, #e8eaed 75%);
-        background-size: 600px 100%;
-        animation: shimmer 1.4s infinite linear;
-        border-radius: 6px;
-    }
-
-    /* Table row */
-    .data-table tbody tr {
-        animation: rowSlide .35s ease both;
-    }
-
-        .data-table tbody tr:nth-child(1) {
-            animation-delay: .05s;
-        }
-
-        .data-table tbody tr:nth-child(2) {
-            animation-delay: .10s;
-        }
-
-        .data-table tbody tr:nth-child(3) {
-            animation-delay: .15s;
-        }
-
-        .data-table tbody tr:nth-child(4) {
-            animation-delay: .20s;
-        }
-
-        .data-table tbody tr:nth-child(5) {
-            animation-delay: .25s;
-        }
-
-        .data-table tbody tr:nth-child(6) {
-            animation-delay: .30s;
-        }
-
-        .data-table tbody tr:nth-child(7) {
-            animation-delay: .35s;
-        }
-
-        .data-table tbody tr:nth-child(8) {
-            animation-delay: .40s;
-        }
-
-        .data-table tbody tr:nth-child(9) {
-            animation-delay: .45s;
-        }
-
-        .data-table tbody tr:nth-child(10) {
-            animation-delay: .50s;
-        }
-
-    /* Summary rows */
-    .sum-table tbody tr {
-        animation: sumRowPop .4s ease both;
-    }
-
-        .sum-table tbody tr:nth-child(1) {
-            animation-delay: .35s;
-        }
-
-        .sum-table tbody tr:nth-child(2) {
-            animation-delay: .45s;
-        }
-
-        .sum-table tbody tr:nth-child(3) {
-            animation-delay: .55s;
-        }
-
-        .sum-table tbody tr:nth-child(4) {
-            animation-delay: .65s;
-        }
-
-        .sum-table tbody tr:nth-child(5) {
-            animation-delay: .75s;
-        }
-
-    /* Legend items */
-    .legend-item {
-        animation: legendIn .4s ease both;
-    }
-
-        .legend-item:nth-child(1) {
-            animation-delay: .6s;
-        }
-
-        .legend-item:nth-child(2) {
-            animation-delay: .7s;
-        }
-
-        .legend-item:nth-child(3) {
-            animation-delay: .8s;
-        }
-
-    /* Ripple button */
-    .refresh-btn {
-        position: relative;
-        overflow: hidden;
-    }
-
-    .ripple-circle {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255,255,255,.35);
-        width: 8px;
-        height: 8px;
-        margin-top: -4px;
-        margin-left: -4px;
-        animation: rippleOut .6s ease forwards;
-        pointer-events: none;
-    }
-
-    /* act-btn hover lift */
-    .act-btn {
-        transition: all .25s cubic-bezier(.34,1.56,.64,1);
-    }
-
-        .act-btn:hover {
-            transform: translateY(-3px) scale(1.12);
-        }
-
-    /* ---------- Responsive ---------- */
-    @@media (max-width: 1200px) {
+    /* Responsive */
+    @@media(max-width:1200px) {
         .cards-grid {
             grid-template-columns: repeat(3,1fr);
         }
     }
 
-    @@media (max-width: 900px) {
+    @@media(max-width:900px) {
         .content-row {
             grid-template-columns: 1fr;
         }
@@ -1073,7 +915,7 @@
         }
     }
 
-    @@media (max-width: 600px) {
+    @@media(max-width:600px) {
         .cards-grid {
             grid-template-columns: repeat(2,1fr);
         }
@@ -1090,12 +932,10 @@
     }
 </style>
 
-<!-- ============================================================ SCRIPT -->
 <script>
     let userId = localStorage.getItem("userId") || "";
     let autoTimer = null, countTimer = null, nextRefresh = null;
     let donutInstance = null;
-
     const COLORS = ['#6c63ff','#f43f74','#0ea5e9','#10b981','#f59e0b','#8b5cf6','#ef4444'];
 
     document.addEventListener("DOMContentLoaded", async () => {
@@ -1104,312 +944,152 @@
         startAutoRefresh();
     });
 
-    // ---- Ripple + Refresh on ONE listener ----
     document.getElementById("refreshBtn").addEventListener("click", async function(e) {
-        // Ripple effect
         const ripple = document.createElement("span");
         ripple.className = "ripple-circle";
-        ripple.style.left = e.offsetX + "px";
-        ripple.style.top  = e.offsetY + "px";
-        this.appendChild(ripple);
-        setTimeout(() => ripple.remove(), 700);
-
-        // Refresh logic
+        ripple.style.left = e.offsetX + "px"; ripple.style.top = e.offsetY + "px";
+        this.appendChild(ripple); setTimeout(() => ripple.remove(), 700);
         const icon = document.getElementById("refreshIcon");
-        icon.classList.add("rotate");
-        this.disabled = true;
-        showSkeletonCards();
-        try {
-            await LoadData();
-            startAutoRefresh();
-            notify("Refreshed successfully", "success");
-        } catch (err) {
-            console.error("Refresh error:", err);
-            notify("Refresh failed", "error");
-        } finally {
-            setTimeout(() => { icon.classList.remove("rotate"); this.disabled = false; }, 900);
-        }
+        icon.classList.add("rotate"); this.disabled = true; showSkeletonCards();
+        try { await LoadData(); startAutoRefresh(); notify("Refreshed successfully","success"); }
+        catch(err) { notify("Refresh failed","error"); }
+        finally { setTimeout(() => { icon.classList.remove("rotate"); this.disabled = false; }, 900); }
     });
 
-    // ---- Skeleton shimmer on cards while loading ----
     function showSkeletonCards() {
         for (let i = 1; i <= 5; i++) {
             const v = document.getElementById(`Card${i}TotalValue`);
             const l = document.getElementById(`Card${i}Caption`);
-            if (v) { v.innerHTML = '<span class="skeleton" style="width:80px;height:36px;display:block;"></span>'; }
-            if (l) { l.innerHTML = '<span class="skeleton" style="width:110px;height:10px;display:block;margin-top:8px;"></span>'; }
+            if (v) v.innerHTML = '<span class="skeleton" style="width:80px;height:36px;display:block;"></span>';
+            if (l) l.innerHTML = '<span class="skeleton" style="width:110px;height:10px;display:block;margin-top:8px;"></span>';
         }
     }
 
-    // ---- Countdown ----
     function startCountdown() {
         clearInterval(countTimer);
         countTimer = setInterval(() => {
             const diff = nextRefresh - Date.now();
             if (diff <= 0) { document.getElementById("refreshTimer").textContent = "Refreshing…"; return; }
-            const m = Math.floor(diff / 60000);
-            const s = Math.floor((diff % 60000) / 1000);
+            const m = Math.floor(diff / 60000), s = Math.floor((diff % 60000) / 1000);
             document.getElementById("refreshTimer").textContent = `Refresh in ${m}:${s.toString().padStart(2,'0')}`;
         }, 1000);
     }
 
     function startAutoRefresh() {
-        clearInterval(autoTimer);
-        nextRefresh = Date.now() + 300000;
-        startCountdown();
-        autoTimer = setInterval(async () => {
-            await LoadData();
-            nextRefresh = Date.now() + 300000;
-            notify("Dashboard auto-refreshed", "success");
-        }, 300000);
+        clearInterval(autoTimer); nextRefresh = Date.now() + 300000; startCountdown();
+        autoTimer = setInterval(async () => { await LoadData(); nextRefresh = Date.now() + 300000; notify("Dashboard auto-refreshed","success"); }, 300000);
     }
 
-
-    // ---- AJAX Load ----
     async function LoadData() {
         return new Promise((resolve, reject) => {
             jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadDashboardData", "Dashboard")',
-                data: JSON.stringify({ Userid: userId }),
-                contentType: 'application/json',
+                type: 'POST', url: '@Url.Action("nLoadDashboardData", "Dashboard")',
+                data: JSON.stringify({ Userid: userId }), contentType: 'application/json',
                 success(res) {
-                    if (res.statusId !== 1) {
-                        console.error("Dashboard SP Error:", res.message || "statusId != 1", res);
-                        notify("Data load failed: " + (res.message || "Unknown error"), "error");
-                        reject(res.message);
-                        return;
-                    }
-
-                    // Staggered card entrance
-                    const cardDelay = [0, 80, 160, 240, 320];
-                    [1,2,3,4,5].forEach((n, i) => {
+                    if (res.statusId !== 1) { notify("Data load failed: " + (res.message||"Unknown error"),"error"); reject(res.message); return; }
+                    const cardDelay = [0,80,160,240,320];
+                    [1,2,3,4,5].forEach((n,i) => {
                         setTimeout(() => {
-                            animNum(`Card${n}TotalValue`, res[`Card${n}TotalValue`] || 0);
-                            setLabel(`Card${n}Caption`, res[`Card${n}Caption`] || '');
+                            animNum(`Card${n}TotalValue`, res[`Card${n}TotalValue`]||0);
+                            setLabel(`Card${n}Caption`, res[`Card${n}Caption`]||'');
                             drawSparkline(`spark${n}`, COLORS[i]);
                         }, cardDelay[i]);
                     });
-
-                    // Grid & chart with slight delay so cards animate first
                     setTimeout(() => {
-                        renderGrid(res.Grid1Data);
-                        renderSummary(res.Grid2Data);
-
-                        // RS4: GraphData → Donut Chart
-                        if (res.GraphData && res.GraphData.length) {
-                            drawDonut(res.GraphData);
-                        }
+                        renderGrid(res.Grid1Data); renderSummary(res.Grid2Data);
+                        if (res.GraphData && res.GraphData.length) drawDonut(res.GraphData);
                     }, 400);
-
                     resolve();
                 },
-                error(xhr, status, err) {
-                    console.error("AJAX Error:", status, err, xhr.responseText);
-                    notify("Server error: " + status, "error");
-                    reject(err);
-                }
+                error(xhr,status,err) { notify("Server error: " + status,"error"); reject(err); }
             });
         });
     }
 
-    // ---- Smooth elastic counter ----
     function animNum(id, end) {
-        const el = document.getElementById(id);
-        el.innerHTML = '';  // clear skeleton
+        const el = document.getElementById(id); el.innerHTML = '';
         el.style.animation = 'numPop .5s cubic-bezier(.34,1.56,.64,1) both';
-
-        let t0 = null;
-        const dur = 1400;
+        let t0 = null; const dur = 1400;
         requestAnimationFrame(function step(t) {
             if (!t0) t0 = t;
-            const p = Math.min((t - t0) / dur, 1);
-            // easeOutExpo
-            const ease = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
-            el.textContent = Math.floor(ease * end).toLocaleString();
-            if (p < 1) requestAnimationFrame(step);
+            const p = Math.min((t-t0)/dur, 1), ease = p===1?1:1-Math.pow(2,-10*p);
+            el.textContent = Math.floor(ease*end).toLocaleString();
+            if (p<1) requestAnimationFrame(step);
         });
     }
 
     function setLabel(id, text) {
-        const el = document.getElementById(id);
-        el.innerHTML = '';
-        el.style.animation = 'lblSlide .4s ease both';
-        el.textContent = text;
+        const el = document.getElementById(id); el.innerHTML = '';
+        el.style.animation = 'lblSlide .4s ease both'; el.textContent = text;
     }
 
-    // ---- Animated Sparkline (draws progressively) ----
     function drawSparkline(canvasId, color) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const W = canvas.width = 88, H = canvas.height = 42;
-        const pts = Array.from({length: 10}, (_, i) => {
-            return 6 + Math.abs(Math.sin(i * 1.3 + Math.random())) * 28;
-        });
-
-        const grad = ctx.createLinearGradient(0, 0, 0, H);
-        grad.addColorStop(0, color + '44');
-        grad.addColorStop(1, color + '00');
-
-        let progress = 0;
-        const totalFrames = 40;
-
+        const canvas = document.getElementById(canvasId); if (!canvas) return;
+        const ctx = canvas.getContext('2d'), W = canvas.width = 88, H = canvas.height = 42;
+        const pts = Array.from({length:10},(_,i)=>6+Math.abs(Math.sin(i*1.3+Math.random()))*28);
+        const grad = ctx.createLinearGradient(0,0,0,H);
+        grad.addColorStop(0,color+'44'); grad.addColorStop(1,color+'00');
+        let progress = 0; const totalFrames = 40;
         function frame() {
-            ctx.clearRect(0, 0, W, H);
-            const drawn = Math.ceil((progress / totalFrames) * (pts.length - 1));
-            const subPts = pts.slice(0, drawn + 1);
-
-            if (subPts.length < 2) { progress++; if (progress <= totalFrames) requestAnimationFrame(frame); return; }
-
-            ctx.beginPath();
-            subPts.forEach((v, i) => {
-                const x = (i / (pts.length - 1)) * W;
-                const y = H - v;
-                i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
-            });
-            ctx.strokeStyle = color; ctx.lineWidth = 2.2;
-            ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-            ctx.stroke();
-
-            // Fill
-            const lastX = ((subPts.length - 1) / (pts.length - 1)) * W;
-            ctx.lineTo(lastX, H); ctx.lineTo(0, H); ctx.closePath();
-            ctx.fillStyle = grad; ctx.fill();
-
-            // Moving dot at tip
-            const tipX = ((subPts.length - 1) / (pts.length - 1)) * W;
-            const tipY = H - subPts[subPts.length - 1];
-            ctx.beginPath();
-            ctx.arc(tipX, tipY, 3, 0, Math.PI * 2);
-            ctx.fillStyle = color; ctx.fill();
-            ctx.beginPath();
-            ctx.arc(tipX, tipY, 5, 0, Math.PI * 2);
-            ctx.fillStyle = color + '33'; ctx.fill();
-
-            progress++;
-            if (progress <= totalFrames) requestAnimationFrame(frame);
+            ctx.clearRect(0,0,W,H);
+            const drawn = Math.ceil((progress/totalFrames)*(pts.length-1));
+            const subPts = pts.slice(0,drawn+1);
+            if (subPts.length<2){progress++;if(progress<=totalFrames)requestAnimationFrame(frame);return;}
+            ctx.beginPath(); subPts.forEach((v,i)=>{const x=(i/(pts.length-1))*W,y=H-v;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
+            ctx.strokeStyle=color;ctx.lineWidth=2.2;ctx.lineJoin='round';ctx.lineCap='round';ctx.stroke();
+            const lastX=((subPts.length-1)/(pts.length-1))*W;ctx.lineTo(lastX,H);ctx.lineTo(0,H);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+            const tipX=((subPts.length-1)/(pts.length-1))*W,tipY=H-subPts[subPts.length-1];
+            ctx.beginPath();ctx.arc(tipX,tipY,3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+            ctx.beginPath();ctx.arc(tipX,tipY,5,0,Math.PI*2);ctx.fillStyle=color+'33';ctx.fill();
+            progress++;if(progress<=totalFrames)requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
     }
 
-    // ---- Donut Chart ----
-    // SP columns: GraphValue=Label(name), GraphCaption=Number(value) — swapped!
     function drawDonut(data) {
-        const canvas = document.getElementById('donutChart');
-        if (!canvas) return;
+        const canvas = document.getElementById('donutChart'); if (!canvas) return;
         if (donutInstance) donutInstance.destroy();
-
-        console.log("GraphData received:", data); // debug
-
-        // GraphValue = restaurant name (text), GraphCaption = amount (number)
-        const labels = data.map(d => d.graphValue   || d.GraphValue   || '');
-        const values = data.map(d => Number(d.graphCaption || d.GraphCaption || 0));
+        const labels = data.map(d=>d.graphValue||d.GraphValue||'');
+        const values = data.map(d=>Number(d.graphCaption||d.GraphCaption||0));
         donutInstance = new Chart(canvas, {
-            type: 'doughnut',
-            data: {
-                labels,
-                datasets: [{ data: values,
-                    backgroundColor: COLORS.slice(0, values.length),
-                    borderWidth: 3, borderColor: '#fff',
-                    hoverBorderWidth: 5,
-                    hoverOffset: 8
-                }]
-            },
-            options: {
-                cutout: '72%',
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#1a1d27',
-                        padding: 12, cornerRadius: 10,
-                        titleFont: { size: 13, weight: '700', family: 'Outfit' },
-                        bodyFont:  { size: 12, family: 'Manrope' },
-                        displayColors: true, boxPadding: 4
-                    }
-                },
-                animation: {
-                    animateRotate: true,
-                    animateScale: true,
-                    duration: 1000,
-                    easing: 'easeInOutBack'
-                }
-            }
+            type:'doughnut',
+            data:{labels,datasets:[{data:values,backgroundColor:COLORS.slice(0,values.length),borderWidth:3,borderColor:'#fff',hoverBorderWidth:5,hoverOffset:8}]},
+            options:{cutout:'72%',responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1a1d27',padding:12,cornerRadius:10,titleFont:{size:13,weight:'700',family:'Syne'},bodyFont:{size:12,family:'Plus Jakarta Sans'},displayColors:true,boxPadding:4}},animation:{animateRotate:true,animateScale:true,duration:1000,easing:'easeInOutBack'}}
         });
-
-        // Legend with stagger
-        const legend = document.getElementById('chartLegend');
-        legend.innerHTML = '';
-        const total = values.reduce((a,b) => a + b, 0);
-        labels.forEach((lbl, i) => {
-            const pct = total > 0 ? ((values[i] / total) * 100).toFixed(1) : 0;
-            const item = document.createElement('div');
-            item.className = 'legend-item';
-            item.style.animationDelay = `${.6 + i * .1}s`;
-            item.innerHTML = `
-              <div class="legend-left">
-                <span class="legend-dot" style="background:${COLORS[i]}"></span>${lbl}
-              </div>
-              <strong>${Number(values[i]).toLocaleString()} <span style="color:var(--muted);font-weight:500">(${pct}%)</span></strong>`;
+        const legend = document.getElementById('chartLegend'); legend.innerHTML = '';
+        const total = values.reduce((a,b)=>a+b,0);
+        labels.forEach((lbl,i)=>{
+            const pct = total>0?((values[i]/total)*100).toFixed(1):0;
+            const item = document.createElement('div'); item.className='legend-item'; item.style.animationDelay=`${.6+i*.1}s`;
+            item.innerHTML=`<div class="legend-left"><span class="legend-dot" style="background:${COLORS[i]}"></span>${lbl}</div><strong>${Number(values[i]).toLocaleString()} <span style="color:var(--muted);font-weight:500">(${pct}%)</span></strong>`;
             legend.appendChild(item);
         });
     }
 
-    // ---- Main Grid ----
     function renderGrid(data) {
-        if (!data || !data.length) return;
-        const thead = document.getElementById('gridThead');
-        const tbody = document.getElementById('gridTbody');
-        thead.innerHTML = ''; tbody.innerHTML = '';
-
-        const hRow = document.createElement('tr');
-        Object.keys(data[0]).forEach(k => {
-            const th = document.createElement('th');
-            th.textContent = k.replace(/([A-Z])/g, ' $1').trim();
-            if (/amount|price|total|qty/i.test(k)) th.classList.add('text-end');
-            hRow.appendChild(th);
-        });
+        if (!data||!data.length) return;
+        const thead=document.getElementById('gridThead'),tbody=document.getElementById('gridTbody');
+        thead.innerHTML='';tbody.innerHTML='';
+        const hRow=document.createElement('tr');
+        Object.keys(data[0]).forEach(k=>{const th=document.createElement('th');th.textContent=k.replace(/([A-Z])/g,' $1').trim();if(/amount|price|total|qty/i.test(k))th.classList.add('text-end');hRow.appendChild(th);});
         thead.appendChild(hRow);
-
-        data.forEach((row, idx) => {
-            const tr = document.createElement('tr');
-            tr.style.animationDelay = `${0.5 + idx * 0.07}s`;
-            Object.entries(row).forEach(([k, v]) => {
-                const td = document.createElement('td');
-                td.textContent = v ?? '';
-                if (/amount|price|total|qty/i.test(k)) td.classList.add('text-end');
-                tr.appendChild(td);
-            });
+        data.forEach((row,idx)=>{
+            const tr=document.createElement('tr'); tr.style.animationDelay=`${0.5+idx*0.07}s`;
+            Object.entries(row).forEach(([k,v])=>{const td=document.createElement('td');td.textContent=v??'';if(/amount|price|total|qty/i.test(k))td.classList.add('text-end');tr.appendChild(td);});
             tbody.appendChild(tr);
         });
     }
 
-    // ---- Summary Table (RS2: Text + Value) ----
     function renderSummary(data) {
-        if (!data || !data.length) return;
-        const tbody = document.getElementById('grid2Tbody');
-        tbody.innerHTML = '';
-        data.forEach((row, idx) => {
-            const keys = Object.keys(row);
-            const tr = document.createElement('tr');
-            tr.style.animationDelay = `${0.6 + idx * 0.1}s`;
-            // RS2 columns: Text, Value — use first two keys if names differ
-            const td1 = document.createElement('td');
-            td1.textContent = row['Text'] ?? row[keys[0]] ?? '';
-            const td2 = document.createElement('td');
-            td2.textContent = row['Value'] ?? row[keys[1]] ?? '';
-            tr.appendChild(td1); tr.appendChild(td2);
-            tbody.appendChild(tr);
+        if (!data||!data.length) return;
+        const tbody=document.getElementById('grid2Tbody'); tbody.innerHTML='';
+        data.forEach((row,idx)=>{
+            const keys=Object.keys(row),tr=document.createElement('tr'); tr.style.animationDelay=`${0.6+idx*0.1}s`;
+            const td1=document.createElement('td'); td1.textContent=row['Text']??row[keys[0]]??'';
+            const td2=document.createElement('td'); td2.textContent=row['Value']??row[keys[1]]??'';
+            tr.appendChild(td1);tr.appendChild(td2);tbody.appendChild(tr);
         });
     }
 
-    // ---- Toast ----
-    function notify(msg, type) {
-        if (typeof toastr === 'undefined') return;
-        toastr[type](msg, '', { timeOut: 2000, positionClass: 'toast-bottom-right' });
-    }
+    function notify(msg,type){if(typeof toastr==='undefined')return;toastr[type](msg,'',{timeOut:2000,positionClass:'toast-bottom-right'});}
 </script>
-
-

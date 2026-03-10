@@ -4,154 +4,264 @@
     ViewData["Title"] = "Vendor Registration";
 }
 
-
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
+    /* ════════════════════════════════════════
+           THEME — Matched to Sidebar
+           Sidebar BG:     #252d3e
+           Sidebar Header: #1e2535
+           Active Item:    #2e4275 (blue-navy)
+           Accent Blue:    #4f7cff
+        ════════════════════════════════════════ */
     :root {
-        --bg: #eef1f8;
-        --surface: #ffffff;
-        --navy: #0d1b2e;
-        --navy2: #152642;
-        --blue: #1a5fd4;
-        --blue-lt: #e8f0fd;
-        --blue-dim: rgba(26,95,212,.08);
-        --mid: #334155;
-        --muted: #94a3b8;
-        --border: #dde3ee;
-        --danger: #dc2626;
-        --success: #16a34a;
-        --radius: 10px;
-        --shadow: 0 2px 14px rgba(13,27,46,.07);
-        --font-body: 'DM Sans', sans-serif;
-        --font-ui: 'Plus Jakarta Sans', sans-serif;
-        --font-num: 'Barlow Condensed', sans-serif;
+        --bg: #1a2030;
+        --bg2: #151c2b;
+        --surface: #252d3e;
+        --surface2: #1e2535;
+        --surface3: #2a3347;
+        --border: rgba(255,255,255,.06);
+        --border2: rgba(255,255,255,.10);
+        --accent: #4f7cff;
+        --accent-dim: rgba(79,124,255,.14);
+        --accent-glow: rgba(79,124,255,.28);
+        --active-nav: #2e4275;
+        --text: #e4eaf5;
+        --text2: #8d9bb5;
+        --text3: #4a5878;
+        --danger: #f43f5e;
+        --success: #22c55e;
+        --amber: #f59e0b;
+        --radius-sm: 8px;
+        --radius: 12px;
+        --radius-lg: 14px;
+        --font-head: 'Syne', sans-serif;
+        --font-body: 'Plus Jakarta Sans', sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+        --shadow: 0 8px 32px rgba(0,0,0,.45);
     }
 
-    /* ---- Page wrap ---- */
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
     .vr-wrap {
-        padding: 24px 28px 24px;
         font-family: var(--font-body);
-        color: var(--navy);
+        color: var(--text);
         background: var(--bg);
         min-height: calc(100vh - 60px);
+        position: relative;
     }
 
-    /* ---- Page header ---- */
-    .page-header {
+        .vr-wrap::before {
+            content: '';
+            position: fixed;
+            top: -180px;
+            right: -180px;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(79,124,255,.055) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+    .vr-inner {
+        position: relative;
+        z-index: 1;
+        padding: 22px 26px;
+    }
+
+    /* ─── Top Bar ─── */
+    .top-bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 18px;
+        margin-bottom: 22px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--border2);
     }
 
-    .page-header-left {
+    .top-bar-left {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 14px;
     }
 
-    .page-badge {
-        background: var(--blue);
-        color: #fff;
-        font-family: var(--font-ui);
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 1.8px;
-        padding: 5px 10px;
-        border-radius: 6px;
-        text-transform: uppercase;
+    .icon-box {
+        width: 42px;
+        height: 42px;
+        background: var(--active-nav);
+        border: 1px solid rgba(79,124,255,.28);
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 17px;
+        box-shadow: 0 0 18px rgba(79,124,255,.18);
+        flex-shrink: 0;
     }
 
     .page-title {
-        font-family: var(--font-ui);
+        font-family: var(--font-head);
         font-size: 20px;
         font-weight: 800;
-        color: var(--navy);
+        color: var(--text);
         letter-spacing: -.3px;
+        line-height: 1.1;
     }
 
-    .page-sub {
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 1px;
-        font-weight: 500;
+        .page-title span {
+            color: var(--accent);
+        }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--text3);
+        letter-spacing: .4px;
+        margin-top: 3px;
     }
 
-    /* ---- Toggle buttons ---- */
+        .breadcrumb i {
+            font-size: 7px;
+        }
+
+        .breadcrumb span {
+            color: var(--accent);
+        }
+
+    /* ─── Toggle Group ─── */
     .toggle-group {
         display: flex;
-        gap: 8px;
+        gap: 5px;
+        background: var(--surface2);
+        padding: 5px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border2);
     }
 
     .toggle-btn {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 7px;
         padding: 8px 16px;
-        font-family: var(--font-ui);
+        font-family: var(--font-body);
         font-size: 12.5px;
-        font-weight: 700;
-        border-radius: 8px;
+        font-weight: 600;
+        border-radius: 6px;
         border: none;
         cursor: pointer;
-        transition: .2s ease;
+        transition: all .2s ease;
     }
 
     .toggle-btn-outline {
-        background: var(--surface);
-        color: var(--mid);
-        border: 1.5px solid var(--border);
+        background: transparent;
+        color: var(--text2);
     }
 
         .toggle-btn-outline:hover {
-            border-color: var(--blue);
-            color: var(--blue);
+            background: var(--surface3);
+            color: var(--accent);
         }
 
     .toggle-btn-solid {
-        background: var(--blue);
-        color: #fff;
+        background: var(--active-nav);
+        color: #c5d4ff;
+        font-weight: 700;
+        border: 1px solid rgba(79,124,255,.3);
+        box-shadow: 0 2px 10px rgba(46,66,117,.5);
     }
 
         .toggle-btn-solid:hover {
-            background: #1450b8;
-            box-shadow: 0 3px 12px rgba(26,95,212,.3);
+            background: #354e8a;
+            transform: translateY(-1px);
         }
 
-    /* ---- Divider ---- */
-    .vr-divider {
-        height: 1px;
-        background: var(--border);
-        margin: 0 0 20px;
-    }
-
-    /* ---- Form Container ---- */
+    /* ─── Form Card ─── */
     .form-card {
         background: var(--surface);
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border2);
         box-shadow: var(--shadow);
-        padding: 24px 26px;
-        max-height: 72vh;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: #c2cbd8 transparent;
+        overflow: hidden;
+        animation: fadeUp .28s ease both;
     }
 
-        .form-card::-webkit-scrollbar {
+    .form-card-header {
+        padding: 13px 22px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    .form-card-title {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text2);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .form-body {
+        padding: 22px 24px;
+        max-height: 65vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .form-body::-webkit-scrollbar {
             width: 4px;
         }
 
-        .form-card::-webkit-scrollbar-thumb {
-            background: #c2cbd8;
+        .form-body::-webkit-scrollbar-thumb {
+            background: var(--surface3);
             border-radius: 10px;
         }
 
-    /* ---- Form elements ---- */
-    .form-section {
-        margin-bottom: 0;
+    /* Section label */
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        color: var(--accent);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
     }
 
+        .section-label::before {
+            content: '';
+            width: 3px;
+            height: 13px;
+            background: var(--accent);
+            border-radius: 3px;
+            box-shadow: 0 0 7px var(--accent-glow);
+            flex-shrink: 0;
+        }
+
+    /* Form grid */
     .form-row {
         display: grid;
         gap: 14px;
@@ -169,186 +279,348 @@
     .form-group {
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 6px;
     }
 
-    .form-label {
-        font-family: var(--font-ui);
-        font-size: 11.5px;
-        font-weight: 700;
-        color: var(--mid);
-        letter-spacing: .5px;
+    /* ── Floating Label ── */
+    .float-group {
+        position: relative;
+    }
+
+        .float-group .form-control {
+            padding: 22px 13px 7px;
+        }
+
+        .float-group select.form-control, .float-group textarea.form-control {
+            padding: 22px 13px 7px;
+        }
+
+    .float-label {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-body);
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--text3);
+        pointer-events: none;
+        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 26px);
+    }
+
+    .float-group.is-area .float-label {
+        top: 16px;
+        transform: none;
+    }
+
+    .float-group .form-control:focus ~ .float-label,
+    .float-group.has-value .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-mono);
+        color: var(--accent);
+        letter-spacing: 1px;
         text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.is-area .form-control:focus ~ .float-label,
+    .float-group.is-area.has-value .float-label {
+        top: 5px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-mono);
+        color: var(--accent);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-mono);
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .form-control:focus ~ .float-label {
+        color: var(--accent);
+    }
+
+    .float-group .form-control::placeholder {
+        color: transparent;
     }
 
     .form-control {
-        border: 1.5px solid var(--border);
-        border-radius: 8px;
-        padding: 9px 12px;
+        border: 1.5px solid var(--border2);
+        border-radius: var(--radius-sm);
+        padding: 9px 13px;
         font-size: 13.5px;
         font-family: var(--font-body);
-        color: var(--navy);
-        background: #fafbfe;
+        color: var(--text);
+        background: var(--surface2);
         transition: border-color .18s, box-shadow .18s;
         outline: none;
+        width: 100%;
     }
 
         .form-control:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px rgba(26,95,212,.1);
-            background: #fff;
+            border-color: rgba(255,255,255,.7);
+            box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+            background: rgba(255,255,255,.7);
         }
 
         .form-control::placeholder {
-            color: #b0bac8;
+            color: var(--text3);
         }
 
     textarea.form-control {
         resize: vertical;
+        line-height: 1.5;
     }
 
     select.form-control {
         appearance: auto;
-        -webkit-appearance: auto;
         cursor: pointer;
     }
 
-    /* ---- Checkbox ---- */
+        select.form-control option {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+    /* Checkbox */
     .check-group {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 10px 14px;
-        background: var(--blue-dim);
-        border-radius: 8px;
-        border: 1.5px solid rgba(26,95,212,.15);
+        padding: 10px 15px;
+        background: var(--active-nav);
+        border-radius: var(--radius-sm);
+        border: 1px solid rgba(79,124,255,.3);
+        cursor: pointer;
+        transition: background .2s;
+        width: fit-content;
     }
 
+        .check-group:hover {
+            background: #354e8a;
+        }
+
     .check-input {
-        width: 17px;
-        height: 17px;
+        width: 16px;
+        height: 16px;
         cursor: pointer;
-        accent-color: var(--blue);
-        border-radius: 4px;
+        accent-color: var(--accent);
     }
 
     .check-label {
-        font-family: var(--font-ui);
         font-size: 13px;
         font-weight: 600;
-        color: var(--mid);
+        color: #a0b8ff;
         cursor: pointer;
+        font-family: var(--font-body);
     }
 
-    /* ---- File input ---- */
-    .file-label {
-        font-family: var(--font-ui);
-        font-size: 11.5px;
-        font-weight: 700;
-        color: var(--mid);
-        letter-spacing: .5px;
-        text-transform: uppercase;
-        margin-bottom: 5px;
-        display: block;
+    /* File Upload */
+    .file-upload-zone {
+        border: 1.5px dashed var(--border2);
+        border-radius: var(--radius-sm);
+        padding: 11px 14px;
+        background: var(--surface2);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        transition: border-color .2s, background .2s;
     }
 
-    .file-note {
-        font-size: 11px;
-        color: var(--muted);
-        font-weight: 400;
+        .file-upload-zone:hover {
+            border-color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+    .file-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--active-nav);
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent);
+        font-size: 13px;
+        flex-shrink: 0;
+    }
+
+    .file-info-title {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text2);
+        font-family: var(--font-body);
+    }
+
+    .file-info-sub {
+        font-size: 10px;
+        color: var(--text3);
+        font-family: var(--font-mono);
+        margin-top: 2px;
     }
 
     .form-control-file {
-        display: block;
-        width: 100%;
-        padding: 8px 12px;
-        font-size: 13px;
-        font-family: var(--font-body);
-        border: 1.5px dashed var(--border);
-        border-radius: 8px;
-        background: #fafbfe;
-        cursor: pointer;
-        transition: border-color .18s;
+        display: none;
     }
 
-        .form-control-file:hover {
-            border-color: var(--blue);
-        }
+    .status-meta {
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+    }
 
-    /* ---- Buttons ---- */
+    .media-label {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+        font-weight: 500;
+    }
+
+    /* Buttons */
     .btn-row {
         display: flex;
         align-items: center;
         gap: 10px;
         flex-wrap: wrap;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        margin-top: 4px;
     }
 
     .btn-pro {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
+        gap: 7px;
         padding: 9px 22px;
-        font-family: var(--font-ui);
+        font-family: var(--font-body);
         font-size: 13px;
         font-weight: 700;
-        border-radius: 8px;
+        border-radius: var(--radius-sm);
         border: none;
         cursor: pointer;
-        transition: .2s ease;
+        transition: all .2s ease;
     }
 
     .btn-save {
-        background: var(--blue);
-        color: #fff;
+        background: var(--active-nav);
+        color: #c5d4ff;
+        border: 1px solid rgba(79,124,255,.35);
+        box-shadow: 0 2px 14px rgba(46,66,117,.5);
     }
 
         .btn-save:hover {
-            background: #1450b8;
-            box-shadow: 0 3px 12px rgba(26,95,212,.3);
+            background: #354e8a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+
+        .btn-save:active {
+            transform: translateY(0);
         }
 
     .btn-cancel {
-        background: var(--surface);
-        color: var(--mid);
-        border: 1.5px solid var(--border);
+        background: var(--surface3);
+        color: var(--text2);
+        border: 1px solid var(--border2);
     }
 
         .btn-cancel:hover {
-            background: var(--bg);
+            background: var(--surface2);
+            color: var(--text);
         }
 
     .btn-view-img {
-        background: #fff7ed;
-        color: #b45309;
-        border: 1.5px solid #fed7aa;
-        font-family: var(--font-ui);
+        background: rgba(245,158,11,.1);
+        color: var(--amber);
+        border: 1px solid rgba(245,158,11,.22);
+        font-family: var(--font-body);
         font-size: 13px;
         font-weight: 700;
-        border-radius: 8px;
+        border-radius: var(--radius-sm);
         padding: 9px 18px;
         text-decoration: none;
         display: none;
+        align-items: center;
+        gap: 7px;
         transition: .2s ease;
     }
 
         .btn-view-img:hover {
-            background: #ffedd5;
+            background: rgba(245,158,11,.18);
         }
 
-    /* ---- Grid View ---- */
+    /* ─── Grid Card ─── */
     .grid-card {
         background: var(--surface);
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border2);
         box-shadow: var(--shadow);
         overflow: hidden;
+        animation: fadeUp .28s ease both;
+    }
+
+    .grid-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 20px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .grid-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .grid-header-title {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .grid-badge {
+        background: var(--active-nav);
+        color: #a0b8ff;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 1px solid rgba(79,124,255,.25);
     }
 
     .grid-scroll {
-        height: 58vh;
+        height: 57vh;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: #c2cbd8 transparent;
+        scrollbar-color: var(--surface3) transparent;
     }
 
         .grid-scroll::-webkit-scrollbar {
@@ -356,82 +628,77 @@
         }
 
         .grid-scroll::-webkit-scrollbar-thumb {
-            background: #c2cbd8;
+            background: var(--surface3);
             border-radius: 10px;
         }
 
-    .grid-footer {
-        padding: 10px 18px;
-        border-top: 1px solid var(--border);
-        background: #fafbfe;
-        text-align: center;
-        font-family: var(--font-ui);
-        font-size: 12px;
-        font-weight: 600;
-        color: var(--muted);
-    }
-
-        .grid-footer span {
-            color: var(--blue);
-        }
-
-    /* Pro table overrides */
+    /* Table */
     .pro-table {
         width: 100%;
         border-collapse: collapse;
     }
 
         .pro-table thead th {
-            background: var(--navy);
-            color: rgba(255,255,255,.8);
-            padding: 11px 14px;
-            font-size: 10.5px;
-            font-weight: 700;
+            background: var(--bg2);
+            color: var(--text3);
+            padding: 11px 15px;
+            font-size: 9.5px;
+            font-weight: 500;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             white-space: nowrap;
-            font-family: var(--font-ui);
+            font-family: var(--font-mono);
             position: sticky;
             top: 0;
             z-index: 10;
-            border-right: 1px solid rgba(255,255,255,.05);
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
         }
 
             .pro-table thead th:last-child {
                 border-right: none;
             }
 
+            .pro-table thead th:first-child {
+                color: var(--accent);
+            }
+
         .pro-table thead tr:nth-child(2) th {
-            background: #f4f6fb;
+            background: var(--surface3);
             padding: 7px 10px;
             position: sticky;
-            top: 38px;
+            top: 39px;
             border-bottom: 1px solid var(--border);
         }
 
             .pro-table thead tr:nth-child(2) th input {
                 width: 100%;
                 padding: 5px 9px;
-                font-size: 12px;
-                border: 1.5px solid var(--border);
+                font-size: 11px;
+                border: 1.5px solid var(--border2);
                 border-radius: 6px;
                 font-family: var(--font-body);
-                background: #fff;
+                background: var(--surface2);
                 outline: none;
+                color: var(--text);
                 transition: border-color .15s;
             }
 
+                .pro-table thead tr:nth-child(2) th input::placeholder {
+                    color: var(--text3);
+                }
+
                 .pro-table thead tr:nth-child(2) th input:focus {
-                    border-color: var(--blue);
+                    border-color: rgba(255,255,255,.6);
                 }
 
         .pro-table tbody tr {
             border-bottom: 1px solid var(--border);
-            transition: .15s ease;
+            transition: background .12s;
         }
 
             .pro-table tbody tr:hover {
-                background: var(--blue-lt);
+                background: var(--surface2);
             }
 
             .pro-table tbody tr:last-child {
@@ -439,183 +706,269 @@
             }
 
         .pro-table tbody td {
-            padding: 10px 14px;
+            padding: 10px 15px;
             font-size: 13px;
-            color: var(--mid);
+            color: var(--text2);
             white-space: nowrap;
         }
 
-    /* Action buttons in table */
     .tbl-btn {
-        width: 28px;
-        height: 28px;
-        border-radius: 6px;
-        border: none;
+        width: 29px;
+        height: 29px;
+        border-radius: 7px;
+        border: 1px solid transparent;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 12px;
-        transition: .15s ease;
+        font-size: 11px;
+        transition: all .15s;
     }
 
     .tbl-btn-edit {
-        background: var(--blue-lt);
-        color: var(--blue);
+        background: var(--active-nav);
+        color: #a0b8ff;
+        border-color: rgba(79,124,255,.2);
     }
 
         .tbl-btn-edit:hover {
-            background: var(--blue);
+            background: var(--accent);
             color: #fff;
+            box-shadow: 0 2px 8px var(--accent-glow);
         }
 
     .tbl-btn-del {
-        background: #fee2e2;
+        background: rgba(244,63,94,.1);
         color: var(--danger);
-        margin-left: 4px;
+        border-color: rgba(244,63,94,.2);
+        margin-left: 5px;
     }
 
         .tbl-btn-del:hover {
             background: var(--danger);
             color: #fff;
+            box-shadow: 0 2px 8px rgba(244,63,94,.35);
         }
 
-    /* ---- Footer ---- */
+    .badge-active {
+        background: rgba(34,197,94,.1);
+        color: var(--success);
+        border: 1px solid rgba(34,197,94,.2);
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-mono);
+        display: inline-block;
+    }
+
+    .badge-inactive {
+        background: rgba(244,63,94,.1);
+        color: var(--danger);
+        border: 1px solid rgba(244,63,94,.2);
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-mono);
+        display: inline-block;
+    }
+
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 52px;
+        height: 52px;
+        background: var(--surface3);
+        border-radius: var(--radius);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text3);
+        font-size: 20px;
+        margin: 0 auto 12px;
+        border: 1px solid var(--border2);
+    }
+
+    .empty-text {
+        font-size: 13.5px;
+        color: var(--text3);
+    }
+
+    /* Footer */
     .page-footer {
-        margin-top: 20px;
+        margin-top: 18px;
         padding-top: 14px;
         border-top: 1px solid var(--border);
         text-align: center;
-        font-family: var(--font-ui);
-        font-size: 11.5px;
-        color: var(--muted);
-        letter-spacing: .3px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--text3);
+        letter-spacing: .5px;
     }
 
         .page-footer strong {
-            color: var(--blue);
+            color: var(--accent);
+            font-weight: 500;
         }
+
+    @@keyframes fadeUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
 </style>
 
 <div class="vr-wrap">
+    <div class="vr-inner">
 
-    <!-- Header -->
-    <div class="page-header">
-        <div class="page-header-left">
-            <span class="page-badge">Setup</span>
-            <div>
-                <div class="page-title">Vendor Registration</div>
-                <div class="page-sub">Manage vendor profiles and details</div>
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="icon-box"><i class="fas fa-store-alt"></i></div>
+                <div>
+                    <div class="page-title">Vendor <span>Registration</span></div>
+                    <div class="breadcrumb">
+                        Setup <i class="fas fa-chevron-right"></i> <span>Vendor</span>
+                    </div>
+                </div>
+            </div>
+            <div class="toggle-group">
+                <button class="toggle-btn toggle-btn-outline" id="gridViewToggleBtn">
+                    <i class="fas fa-table-cells"></i> Grid View
+                </button>
+                <button class="toggle-btn toggle-btn-solid" id="formViewToggleBtn" style="display:none;">
+                    <i class="fas fa-pen-to-square"></i> Form View
+                </button>
             </div>
         </div>
-        <div class="toggle-group">
-            <button class="toggle-btn toggle-btn-outline" id="gridViewToggleBtn">
-                <i class="fas fa-table"></i> Grid View
-            </button>
-            <button class="toggle-btn toggle-btn-solid" id="formViewToggleBtn" style="display:none;">
-                <i class="fas fa-wpforms"></i> Form View
-            </button>
+
+        <!-- FORM VIEW -->
+        <div id="formViewContainer">
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="header-dot"></div>
+                    <div class="form-card-title">Vendor Information</div>
+                </div>
+                <div class="form-body">
+                    <input style="display:none;" type="text" id="VendorId">
+                    <input style="display:none;" type="text" id="VendorImageAttachmentOld">
+
+                    <div class="section-label">Basic Details</div>
+
+                    <div class="form-row form-row-2">
+                        <div class="float-group">
+                            <input type="text" id="Vendor" class="form-control" placeholder=" ">
+                            <label class="float-label" for="Vendor">Vendor Name</label>
+                        </div>
+                        <div class="float-group">
+                            <input type="text" id="ContactNo" class="form-control" placeholder=" " inputmode="numeric" autocomplete="off">
+                            <label class="float-label" for="ContactNo">Contact Number</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row form-row-2">
+                        <div class="float-group always-float">
+                            <select id="TypeId" class="form-control"><option value="">— Select Type —</option></select>
+                            <label class="float-label" for="TypeId">Type</label>
+                        </div>
+                        <div class="float-group always-float">
+                            <select id="DepartmentId" class="form-control"><option value="">— Select Department —</option></select>
+                            <label class="float-label" for="DepartmentId">Department</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row form-row-1">
+                        <div class="float-group is-area">
+                            <textarea id="Address" class="form-control" placeholder=" " rows="2"></textarea>
+                            <label class="float-label" for="Address">Full Address</label>
+                        </div>
+                    </div>
+
+                    <div class="section-label" style="margin-top:4px;">Schedule & Charges</div>
+
+                    <div class="form-row form-row-2">
+                        <div class="float-group always-float">
+                            <input type="time" id="TimeIn" class="form-control">
+                            <label class="float-label" for="TimeIn">Time In</label>
+                        </div>
+                        <div class="float-group always-float">
+                            <input type="time" id="TimeOut" class="form-control">
+                            <label class="float-label" for="TimeOut">Time Out</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row form-row-2">
+                        <div class="float-group">
+                            <input type="text" id="DeliveryCharges" class="form-control" placeholder=" ">
+                            <label class="float-label" for="DeliveryCharges">Delivery Charges</label>
+                        </div>
+                        <div class="float-group">
+                            <input type="text" id="PerProductAmount" class="form-control" placeholder=" ">
+                            <label class="float-label" for="PerProductAmount">Per Product Amount</label>
+                        </div>
+                    </div>
+
+                    <div class="section-label" style="margin-top:4px;">Status & Media</div>
+
+                    <div class="form-row form-row-2" style="margin-bottom:18px;">
+                        <div class="form-group">
+                            <div class="status-meta"><i class="fas fa-circle-check" style="color:var(--accent);margin-right:5px;"></i>Status</div>
+                            <div class="check-group">
+                                <input type="checkbox" id="IsActive" class="check-input">
+                                <label class="check-label" for="IsActive">Mark as Active</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="media-label"><i class="fas fa-image" style="color:var(--accent);margin-right:5px;"></i>Vendor Logo <span style="color:var(--text3);text-transform:none;letter-spacing:0;font-size:9px;">(Max 500 KB · JPEG/PNG)</span></div>
+                            <label for="VendorImageAttachment" class="file-upload-zone">
+                                <div class="file-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+                                <div>
+                                    <div class="file-info-title" id="fileNameDisplay">Click to browse</div>
+                                    <div class="file-info-sub">JPEG or PNG · max 500 KB</div>
+                                </div>
+                            </label>
+                            <input id="VendorImageAttachment" class="form-control-file" type="file" accept=".jpeg,.png">
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button class="btn-pro btn-save" id="saveBtn"><i class="fas fa-floppy-disk"></i> Save Vendor</button>
+                        <button class="btn-pro btn-cancel" id="cancelBtn"><i class="fas fa-xmark"></i> Cancel</button>
+                        <a class="btn-view-img" id="ViewImageBtn" target="_blank"><i class="fas fa-eye"></i> View Image</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <div class="vr-divider"></div>
-
-    <!-- FORM VIEW -->
-    <div id="formViewContainer">
-        <div class="form-card">
-            <input style="display:none;" type="text" id="VendorId">
-            <input style="display:none;" type="text" id="VendorImageAttachmentOld">
-
-            <div class="form-row form-row-2">
-                <div class="form-group">
-                    <label class="form-label" for="Vendor">Vendor Name</label>
-                    <input type="text" id="Vendor" class="form-control" placeholder="Enter vendor name">
+        <!-- GRID VIEW -->
+        <div id="gridViewContainer" style="display:none;">
+            <div class="grid-card">
+                <div class="grid-header">
+                    <div class="grid-header-left">
+                        <div class="grid-header-title">All Vendors</div>
+                        <div class="grid-badge" id="TotalVendorsCount">0 records</div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="ContactNo">Contact Number</label>
-                    <input type="text" id="ContactNo" class="form-control" placeholder="e.g. 03001234567" inputmode="numeric" autocomplete="off">
+                <div class="grid-scroll">
+                    <div id="VendorGridContainer"></div>
                 </div>
-            </div>
-
-            <div class="form-row form-row-2">
-                <div class="form-group">
-                    <label class="form-label" for="TimeIn">Time In</label>
-                    <input type="time" id="TimeIn" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="TimeOut">Time Out</label>
-                    <input type="time" id="TimeOut" class="form-control">
-                </div>
-            </div>
-
-            <div class="form-row form-row-2">
-                <div class="form-group">
-                    <label class="form-label" for="DeliveryCharges">Delivery Charges</label>
-                    <input type="text" id="DeliveryCharges" class="form-control" placeholder="0.00">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="PerProductAmount">Per Product Amount</label>
-                    <input type="text" id="PerProductAmount" class="form-control" placeholder="0.00">
-                </div>
-            </div>
-
-            <div class="form-row form-row-1">
-                <div class="form-group">
-                    <label class="form-label" for="Address">Address</label>
-                    <textarea id="Address" class="form-control" placeholder="Enter full address" rows="2"></textarea>
-                </div>
-            </div>
-
-            <div class="form-row form-row-2">
-                <div class="form-group">
-                    <label class="form-label" for="TypeId">Type</label>
-                    <select id="TypeId" class="form-control">
-                        <option value="">— Select Type —</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="DepartmentId">Department</label>
-                    <select id="DepartmentId" class="form-control">
-                        <option value="">— Select Department —</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-row form-row-1" style="margin-bottom:16px;">
-                <div class="check-group" style="max-width:200px;">
-                    <input type="checkbox" id="IsActive" class="check-input">
-                    <label class="check-label" for="IsActive">Mark as Active</label>
-                </div>
-            </div>
-
-            <div class="form-row form-row-1" style="margin-bottom:20px;">
-                <div class="form-group">
-                    <label class="file-label">Vendor Logo <span class="file-note">(Max 500 KB · JPEG / PNG)</span></label>
-                    <input id="VendorImageAttachment" class="form-control-file" type="file" accept=".jpeg,.png">
-                </div>
-            </div>
-
-            <div class="btn-row">
-                <button class="btn-pro btn-save" id="saveBtn"><i class="fas fa-save"></i> Save</button>
-                <button class="btn-pro btn-cancel" id="cancelBtn"><i class="fas fa-times"></i> Cancel</button>
-                <a class="btn-view-img" id="ViewImageBtn" target="_blank"><i class="fas fa-image"></i> View Image</a>
             </div>
         </div>
-    </div>
 
-    <!-- GRID VIEW -->
-    <div id="gridViewContainer" style="display:none;">
-        <div class="grid-card">
-            <div class="grid-scroll">
-                <div id="VendorGridContainer"></div>
-            </div>
-            <div class="grid-footer">Total Vendors: <span id="TotalVendorsCount">0</span></div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="page-footer">
-        Software Developed By: <strong>UT Designer</strong>
+        <div class="page-footer">Software Developed By: <strong>UT Designer</strong></div>
     </div>
 </div>
 
@@ -623,6 +976,17 @@
     let userId = localStorage.getItem("userId") || "";
     let GridViewDataList = [];
     let IsUpdate = false;
+    const SW = { background:'#252d3e', color:'#e4eaf5' };
+
+    function initFloatLabels() {
+        document.querySelectorAll('.float-group').forEach(g => {
+            if (g.classList.contains('always-float')) return;
+            const el = g.querySelector('input:not([type="checkbox"]):not([type="file"]):not([style*="display:none"]),textarea,select');
+            if (!el) return;
+            const chk = () => g.classList.toggle('has-value', el.value !== '');
+            el.addEventListener('input', chk); el.addEventListener('change', chk); chk();
+        });
+    }
 
     function showFormView() {
         document.getElementById("formViewContainer").style.display = "block";
@@ -641,13 +1005,11 @@
     document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
 
     document.getElementById("VendorImageAttachment").addEventListener("change", async function () {
-        const file = this.files[0];
-        if (!file) return;
+        const file = this.files[0]; if (!file) return;
         if (file.size > 500 * 1024) {
-            this.value = "";
-            await Swal.fire({ icon:'warning', title:'Validation', text:'Image size must be less than 500 KB.', returnFocus:false,
-                didClose: () => document.getElementById("VendorImageAttachment").focus() });
-        }
+            this.value = ""; document.getElementById("fileNameDisplay").textContent = "Click to browse";
+            await Swal.fire({ icon:'warning', title:'Validation', text:'Image must be under 500 KB.', returnFocus:false, ...SW, didClose:()=>document.getElementById("VendorImageAttachment").focus() });
+        } else { document.getElementById("fileNameDisplay").textContent = file.name; }
     });
 
     function GetVendorImageAttachmentFile() {
@@ -660,7 +1022,7 @@
                 const Vendor = document.getElementById("Vendor").value.trim();
                 const now = new Date(); const pad = n => n.toString().padStart(2,"0");
                 const ts = `${pad(now.getDate())}${pad(now.getMonth()+1)}${now.getFullYear()}${pad(now.getHours())}${pad(now.getMinutes())}`;
-                const parts = file.name.split("."); const ext = parts.pop();
+                const ext = file.name.split(".").pop();
                 const newFileName = `${Vendor}_${ts}_VendorRegistrationLogo.${ext}`;
                 const uint8 = new Uint8Array(e.target.result);
                 let bin = ""; for (let i=0;i<uint8.length;i++) bin += String.fromCharCode(uint8[i]);
@@ -677,290 +1039,168 @@
         document.getElementById("TimeIn").value = t;
         document.getElementById("TimeOut").value = t;
     }
-    function getTimeFromTextbox(inputId) {
-        const v = document.getElementById(inputId).value;
-        if (!v) return;
-        return `1900-01-01 ${v}:00.000`;
-    }
-    function setTimeToTextbox(inputId, dateTimeValue) {
-        if (!dateTimeValue) return;
-        document.getElementById(inputId).value = dateTimeValue.split("T")[1].substring(0,5);
-    }
+    function getTimeFromTextbox(id) { const v=document.getElementById(id).value; if(!v)return; return `1900-01-01 ${v}:00.000`; }
+    function setTimeToTextbox(id, val) { if(!val)return; document.getElementById(id).value=val.split("T")[1].substring(0,5); }
 
     document.addEventListener("DOMContentLoaded", async function () {
-        await LoadData();
-        await LoadGridViewData();
+        initFloatLabels();
+        await LoadData(); await LoadGridViewData();
         setCurrentTime();
         document.getElementById("DeliveryCharges").value = "0";
         document.getElementById("PerProductAmount").value = "0";
-        const fields = [
-            document.getElementById("Vendor"), document.getElementById("ContactNo"),
-            document.getElementById("TypeId"), document.getElementById("DepartmentId"),
-            document.getElementById("IsActive")
-        ];
-        fields.forEach((field, index) => {
-            field.addEventListener("keydown", function(e) {
-                if (e.key === "Enter") {
-                    e.preventDefault();
-                    index < fields.length - 1 ? fields[index+1].focus() : document.getElementById("saveBtn").click();
-                }
-            });
-        });
+        const fields = [document.getElementById("Vendor"), document.getElementById("ContactNo"), document.getElementById("TypeId"), document.getElementById("DepartmentId"), document.getElementById("IsActive")];
+        fields.forEach((f,i) => f.addEventListener("keydown", function(e) {
+            if (e.key==="Enter") { e.preventDefault(); i<fields.length-1 ? fields[i+1].focus() : document.getElementById("saveBtn").click(); }
+        }));
         document.getElementById("Vendor").focus();
     });
 
     async function LoadData() {
-        return new Promise((resolve, reject) => {
-            jQuery.ajax({
-                type:'POST', url:'@Url.Action("nLoadVendorRegistrationData", "VendorRegistration")',
-                data: JSON.stringify({ Userid: userId }), contentType:'application/json',
-                success(response) {
-                    if (response.statusId === 1) {
-                        TypeDropdown(response.TypeList);
-                        DepartmentDropdown(response.DepartmentList);
-                        resolve();
-                    } else { toastr.warning("No data found."); reject(); }
-                },
-                error(xhr, status, error) { console.log("Error:", xhr, status, error); reject(); }
-            });
-        });
+        return new Promise((res,rej) => jQuery.ajax({ type:'POST', url:'@Url.Action("nLoadVendorRegistrationData", "VendorRegistration")', data:JSON.stringify({Userid:userId}), contentType:'application/json',
+            success(r) { if(r.statusId===1){TypeDropdown(r.TypeList);DepartmentDropdown(r.DepartmentList);res();}else{toastr.warning("No data.");rej();} },
+            error(x,s,e){console.log(x,s,e);rej();}
+        }));
     }
-    function TypeDropdown(list) {
-        const ddl = document.getElementById("TypeId");
-        ddl.innerHTML = '<option value="">— Select Type —</option>';
-        list.forEach(item => { const o=document.createElement("option"); o.value=item.TypeId; o.text=item.Type; ddl.appendChild(o); });
-    }
-    function DepartmentDropdown(list) {
-        const ddl = document.getElementById("DepartmentId");
-        ddl.innerHTML = '<option value="">— Select Department —</option>';
-        list.forEach(item => { const o=document.createElement("option"); o.value=item.DepartmentId; o.text=item.Department; ddl.appendChild(o); });
-    }
+    function TypeDropdown(list) { const d=document.getElementById("TypeId"); d.innerHTML='<option value="">— Select Type —</option>'; list.forEach(i=>{const o=document.createElement("option");o.value=i.TypeId;o.text=i.Type;d.appendChild(o);}); }
+    function DepartmentDropdown(list) { const d=document.getElementById("DepartmentId"); d.innerHTML='<option value="">— Select Department —</option>'; list.forEach(i=>{const o=document.createElement("option");o.value=i.DepartmentId;o.text=i.Department;d.appendChild(o);}); }
 
     async function LoadGridViewData() {
-        return new Promise((resolve, reject) => {
-            jQuery.ajax({
-                type:'POST', url:'@Url.Action("nLoadGridViewData", "VendorRegistration")',
-                data: JSON.stringify({ Userid: userId }), contentType:'application/json',
-                success(response) {
-                    if (response.statusId === 1) {
-                        GridViewDataList = response.GridViewDataList;
-                        renderVendorGrid(GridViewDataList);
-                        resolve();
-                    } else { toastr.warning("No data found."); reject(); }
-                },
-                error(xhr, status, error) { console.log("Error:", xhr, status, error); reject(); }
-            });
-        });
+        return new Promise((res,rej) => jQuery.ajax({ type:'POST', url:'@Url.Action("nLoadGridViewData", "VendorRegistration")', data:JSON.stringify({Userid:userId}), contentType:'application/json',
+            success(r) { if(r.statusId===1){GridViewDataList=r.GridViewDataList;renderVendorGrid(GridViewDataList);res();}else{toastr.warning("No data.");rej();} },
+            error(x,s,e){console.log(x,s,e);rej();}
+        }));
     }
 
     function renderVendorGrid(gridData) {
         const container = document.getElementById("VendorGridContainer");
         container.innerHTML = "";
         if (!gridData || gridData.length === 0) {
-            container.innerHTML = '<p style="padding:20px;color:#94a3b8;font-family:var(--font-ui);font-size:13px;">No records found.</p>';
-            document.getElementById("TotalVendorsCount").textContent = "0";
-            return;
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fas fa-store-slash"></i></div><div class="empty-text">No vendor records found.</div></div>`;
+            document.getElementById("TotalVendorsCount").textContent = "0 records"; return;
         }
-        const columns = Object.keys(gridData[0]).filter(col =>
-            col !== "Userid" && col !== "Type" && col !== "VendorId" &&
-            col !== "DepartmentId" && col !== "ImagePath" &&
-            col !== "TimeIn" && col !== "TimeOut"
-        );
-        const table = document.createElement("table");
-        table.className = "pro-table";
+        const columns = Object.keys(gridData[0]).filter(c => !["Userid","Type","VendorId","DepartmentId","ImagePath","TimeIn","TimeOut"].includes(c));
+        const table = document.createElement("table"); table.className = "pro-table";
         const thead = document.createElement("thead");
-        const headerRow = document.createElement("tr");
-        const actionTh = document.createElement("th");
-        actionTh.textContent = "Actions";
-        headerRow.appendChild(actionTh);
-        columns.forEach(col => {
-            const th = document.createElement("th");
-            th.textContent = col;
-            headerRow.appendChild(th);
+        const h1 = document.createElement("tr");
+        const ah = document.createElement("th"); ah.textContent = "Actions"; h1.appendChild(ah);
+        columns.forEach(c => { const th=document.createElement("th"); th.textContent=c; h1.appendChild(th); });
+        thead.appendChild(h1);
+        const h2 = document.createElement("tr");
+        h2.appendChild(document.createElement("th"));
+        columns.forEach(c => {
+            const th=document.createElement("th"); const inp=document.createElement("input");
+            inp.type="text"; inp.placeholder="Search...";
+            inp.addEventListener("input",function(){filterTable(this,c);}); th.appendChild(inp); h2.appendChild(th);
         });
-        thead.appendChild(headerRow);
-        const filterRow = document.createElement("tr");
-        const emptyTh = document.createElement("th");
-        filterRow.appendChild(emptyTh);
-        columns.forEach(col => {
-            const th = document.createElement("th");
-            const input = document.createElement("input");
-            input.type = "text";
-            input.placeholder = `Search ${col}`;
-            input.addEventListener("input", function() { filterTable(this, col); });
-            th.appendChild(input);
-            filterRow.appendChild(th);
-        });
-        thead.appendChild(filterRow);
-        table.appendChild(thead);
+        thead.appendChild(h2); table.appendChild(thead);
         const tbody = document.createElement("tbody");
         gridData.forEach(row => {
             const tr = document.createElement("tr");
-            const actionTd = document.createElement("td");
-            const editBtn = document.createElement("button");
-            editBtn.className = "tbl-btn tbl-btn-edit";
-            editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-            editBtn.addEventListener("click", () => { onEditRow(row); showFormView(); });
-            actionTd.appendChild(editBtn);
-            const deleteBtn = document.createElement("button");
-            deleteBtn.className = "tbl-btn tbl-btn-del";
-            deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-            deleteBtn.addEventListener("click", () => onDeleteRow(row));
-            actionTd.appendChild(deleteBtn);
-            tr.appendChild(actionTd);
-            columns.forEach(col => {
-                const td = document.createElement("td");
-                if (col === "Is Active") {
-                    td.innerHTML = row[col]
-                        ? '<span style="background:#dcfce7;color:#15803d;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;font-family:var(--font-ui);">Active</span>'
-                        : '<span style="background:#fee2e2;color:#dc2626;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;font-family:var(--font-ui);">Inactive</span>';
-                } else {
-                    td.textContent = row[col];
-                }
+            const atd = document.createElement("td");
+            const eb = document.createElement("button"); eb.className="tbl-btn tbl-btn-edit"; eb.innerHTML='<i class="fas fa-pen"></i>'; eb.title="Edit";
+            eb.addEventListener("click",()=>{onEditRow(row);showFormView();}); atd.appendChild(eb);
+            const db = document.createElement("button"); db.className="tbl-btn tbl-btn-del"; db.innerHTML='<i class="fas fa-trash-can"></i>'; db.title="Delete";
+            db.addEventListener("click",()=>onDeleteRow(row)); atd.appendChild(db);
+            tr.appendChild(atd);
+            columns.forEach(c => {
+                const td=document.createElement("td");
+                if(c==="Is Active") td.innerHTML=row[c]?'<span class="badge-active">Active</span>':'<span class="badge-inactive">Inactive</span>';
+                else td.textContent=row[c];
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
         });
-        table.appendChild(tbody);
-        container.appendChild(table);
-        document.getElementById("TotalVendorsCount").textContent = tbody.rows.length;
+        table.appendChild(tbody); container.appendChild(table);
+        document.getElementById("TotalVendorsCount").textContent = `${tbody.rows.length} records`;
     }
 
     function filterTable(input, column) {
-        const table = input.closest("table");
-        const tbody = table.querySelector("tbody");
-        const rows = Array.from(tbody.rows);
-        const filterValue = input.value.toLowerCase();
-        const colIndex = Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th => th.textContent === column);
-        let visibleCount = 0;
-        rows.forEach(row => {
-            const cellText = row.cells[colIndex]?.textContent.toLowerCase() || "";
-            if (cellText.includes(filterValue)) { row.style.display = ""; visibleCount++; }
-            else { row.style.display = "none"; }
-        });
-        document.getElementById("TotalVendorsCount").textContent = visibleCount;
+        const table=input.closest("table"); const tbody=table.querySelector("tbody");
+        const rows=Array.from(tbody.rows); const fv=input.value.toLowerCase();
+        const ci=Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th=>th.textContent===column);
+        let count=0;
+        rows.forEach(r=>{const m=(r.cells[ci]?.textContent.toLowerCase()||"").includes(fv); r.style.display=m?"":"none"; if(m)count++;});
+        document.getElementById("TotalVendorsCount").textContent=`${count} records`;
     }
 
-    function onEditRow(rowData) {
-        IsUpdate = true;
-        document.getElementById("saveBtn").innerHTML = '<i class="fas fa-save"></i> Update';
-        document.getElementById("VendorId").value = rowData["VendorId"] || "";
-        document.getElementById("VendorImageAttachmentOld").value = rowData["ImagePath"] || "";
-        document.getElementById("Vendor").value = rowData["Vendor Name"] || "";
-        document.getElementById("ContactNo").value = rowData["Contact #"] || "";
-        document.getElementById("TypeId").value = rowData["Type"] || "";
-        document.getElementById("DepartmentId").value = rowData["DepartmentId"] || "";
-        document.getElementById("IsActive").checked = rowData["Is Active"] || false;
-        document.getElementById("DeliveryCharges").value = rowData["Delivery Charges"] || "";
-        document.getElementById("PerProductAmount").value = rowData["PerProductAmount"] || "";
-        document.getElementById("Address").value = rowData["Address"] || "";
-        setTimeToTextbox("TimeIn", rowData["TimeIn"]);
-        setTimeToTextbox("TimeOut", rowData["TimeOut"]);
+    function onEditRow(row) {
+        IsUpdate=true;
+        document.getElementById("saveBtn").innerHTML='<i class="fas fa-floppy-disk"></i> Update Vendor';
+        document.getElementById("VendorId").value=row["VendorId"]||"";
+        document.getElementById("VendorImageAttachmentOld").value=row["ImagePath"]||"";
+        document.getElementById("Vendor").value=row["Vendor Name"]||"";
+        document.getElementById("ContactNo").value=row["Contact #"]||"";
+        document.getElementById("TypeId").value=row["Type"]||"";
+        document.getElementById("DepartmentId").value=row["DepartmentId"]||"";
+        document.getElementById("IsActive").checked=row["Is Active"]||false;
+        document.getElementById("DeliveryCharges").value=row["Delivery Charges"]||"";
+        document.getElementById("PerProductAmount").value=row["PerProductAmount"]||"";
+        document.getElementById("Address").value=row["Address"]||"";
+        setTimeToTextbox("TimeIn",row["TimeIn"]); setTimeToTextbox("TimeOut",row["TimeOut"]);
         document.getElementById("Vendor").focus();
-        ViewImage(rowData["ImagePath"] || "");
+        ViewImage(row["ImagePath"]||"");
+        initFloatLabels();
     }
 
-    async function onDeleteRow(rowData) {
-        const result = await Swal.fire({
-            title:'Confirm Delete', text:`Delete vendor "${rowData["Vendor Name"]}"?`,
-            icon:'warning', showCancelButton:true, confirmButtonText:'Yes, delete', cancelButtonText:'Cancel',
-            confirmButtonColor:'#dc2626'
-        });
-        if (!result.isConfirmed) return;
-        const nInfoTab = { Userid:userId.toString(), VendorId:rowData["VendorId"].toString(), VendorImageAttachmentfilenameold:rowData["ImagePath"].toString() };
-        Swal.fire({ title:'Please wait', text:'Deleting vendor...', allowOutsideClick:false, allowEscapeKey:false, returnFocus:false, didOpen:()=>Swal.showLoading() });
+    async function onDeleteRow(row) {
+        const r=await Swal.fire({title:'Confirm Delete',text:`Delete "${row["Vendor Name"]}"?`,icon:'warning',showCancelButton:true,confirmButtonText:'Yes, delete',cancelButtonText:'Cancel',confirmButtonColor:'#f43f5e',...SW});
+        if(!r.isConfirmed)return;
+        const nInfoTab={Userid:userId.toString(),VendorId:row["VendorId"].toString(),VendorImageAttachmentfilenameold:row["ImagePath"].toString()};
+        Swal.fire({title:'Please wait',text:'Deleting...',allowOutsideClick:false,allowEscapeKey:false,returnFocus:false,didOpen:()=>Swal.showLoading(),...SW});
         try {
-            const response = await jQuery.ajax({ type:'POST', url:'@Url.Action("nDeleteVendorRegistrationData", "VendorRegistration")', data:JSON.stringify(nInfoTab), contentType:'application/json' });
+            const res=await jQuery.ajax({type:'POST',url:'@Url.Action("nDeleteVendorRegistrationData", "VendorRegistration")',data:JSON.stringify(nInfoTab),contentType:'application/json'});
             Swal.close();
-            if (response.statusId === 1) {
-                await Swal.fire({ icon:'success', title:'Deleted', text:response.message||'Vendor deleted.', returnFocus:false, didClose:()=>document.getElementById("Vendor").focus() });
-                nClearForm();
-            } else {
-                await Swal.fire({ icon:'warning', title:'Delete Failed', text:response.message||'Could not delete.', returnFocus:false });
-            }
-        } catch(xhr) {
-            Swal.close();
-            await Swal.fire({ icon:'error', title:'Error', text:'An error occurred while deleting.', returnFocus:false });
-        }
+            if(res.statusId===1){await Swal.fire({icon:'success',title:'Deleted',text:res.message||'Vendor deleted.',returnFocus:false,...SW,didClose:()=>document.getElementById("Vendor").focus()});nClearForm();}
+            else await Swal.fire({icon:'warning',title:'Failed',text:res.message||'Could not delete.',...SW});
+        } catch(e){Swal.close();await Swal.fire({icon:'error',title:'Error',text:'An error occurred.',...SW});}
     }
 
-    function ViewImage(Link) {
-        const btn = document.getElementById("ViewImageBtn");
-        btn.style.display = "inline-flex"; btn.href = Link; btn.target = "_blank";
-    }
+    function ViewImage(Link){const b=document.getElementById("ViewImageBtn");b.style.display="inline-flex";b.href=Link;b.target="_blank";}
 
-    document.getElementById("saveBtn").addEventListener("click", async function() { await SaveData(); });
+    document.getElementById("saveBtn").addEventListener("click",async function(){await SaveData();});
     async function SaveData() {
-        const VendorId = document.getElementById("VendorId").value.trim();
-        const Vendor = document.getElementById("Vendor").value.trim();
-        const contactNo = document.getElementById("ContactNo").value.trim();
-        const type = document.getElementById("TypeId").value.trim();
-        const department = document.getElementById("DepartmentId").value.trim();
-        const isActive = document.getElementById("IsActive").checked;
-        const VendorImageAttachment = document.getElementById("VendorImageAttachment").value.trim();
-        const VendorImageAttachmentold = document.getElementById("VendorImageAttachmentOld").value.trim();
-        const nAddress = document.getElementById("Address").value.trim();
-
-        const validations = [
-            { cond:!Vendor, text:'Vendor name is required', focus:'Vendor' },
-            { cond:!contactNo, text:'Contact number is required', focus:'ContactNo' },
-            { cond:contactNo && contactNo.length<10, text:'Contact number must be at least 10 digits', focus:'ContactNo' },
-            { cond:!type, text:'Please select a vendor type', focus:'TypeId' },
-            { cond:!department, text:'Please select a department', focus:'DepartmentId' },
-            { cond:!VendorImageAttachment, text:'Please select a vendor image', focus:'VendorImageAttachment' }
+        const VendorId=document.getElementById("VendorId").value.trim();
+        const Vendor=document.getElementById("Vendor").value.trim();
+        const contactNo=document.getElementById("ContactNo").value.trim();
+        const type=document.getElementById("TypeId").value.trim();
+        const department=document.getElementById("DepartmentId").value.trim();
+        const isActive=document.getElementById("IsActive").checked;
+        const VendorImageAttachment=document.getElementById("VendorImageAttachment").value.trim();
+        const VendorImageAttachmentold=document.getElementById("VendorImageAttachmentOld").value.trim();
+        const nAddress=document.getElementById("Address").value.trim();
+        const validations=[
+            {cond:!Vendor,text:'Vendor name is required',focus:'Vendor'},
+            {cond:!contactNo,text:'Contact number is required',focus:'ContactNo'},
+            {cond:contactNo&&contactNo.length<10,text:'Contact number must be at least 10 digits',focus:'ContactNo'},
+            {cond:!type,text:'Please select a vendor type',focus:'TypeId'},
+            {cond:!department,text:'Please select a department',focus:'DepartmentId'},
+            {cond:!VendorImageAttachment,text:'Please select a vendor image',focus:'VendorImageAttachment'}
         ];
-        for (const v of validations) {
-            if (v.cond) {
-                await Swal.fire({ icon:'warning', title:'Validation', text:v.text, returnFocus:false, didClose:()=>document.getElementById(v.focus).focus() });
-                return;
-            }
-        }
-        const { VendorImageAttachmentfilename, VendorImageAttachmentbase64 } = await GetVendorImageAttachmentFile();
-        const nInfoTab = {
-            Userid:userId, VendorId, Vendor, ContactNo:contactNo, Type:type, DepartmentId:department,
-            VendorImageAttachmentfilename, VendorImageAttachmentfilenameold:VendorImageAttachmentold,
-            VendorImageAttachmentbase64, TimeIn:getTimeFromTextbox("TimeIn"), TimeOut:getTimeFromTextbox("TimeOut"),
-            DeliveryCharges:document.getElementById("DeliveryCharges").value.trim(),
-            PerProductAmount:document.getElementById("PerProductAmount").value.trim(),
-            Address:nAddress, IsActive:isActive, IsUpdate
-        };
-        Swal.fire({ title:'Please wait', text:'Saving vendor...', allowOutsideClick:false, allowEscapeKey:false, didOpen:()=>Swal.showLoading() });
-        try {
-            const response = await jQuery.ajax({ type:'POST', url:'@Url.Action("nSaveVendorRegistrationData", "VendorRegistration")', data:JSON.stringify(nInfoTab), contentType:'application/json' });
+        for(const v of validations){if(v.cond){await Swal.fire({icon:'warning',title:'Validation',text:v.text,returnFocus:false,...SW,didClose:()=>document.getElementById(v.focus).focus()});return;}}
+        const{VendorImageAttachmentfilename,VendorImageAttachmentbase64}=await GetVendorImageAttachmentFile();
+        const nInfoTab={Userid:userId,VendorId,Vendor,ContactNo:contactNo,Type:type,DepartmentId:department,VendorImageAttachmentfilename,VendorImageAttachmentfilenameold:VendorImageAttachmentold,VendorImageAttachmentbase64,TimeIn:getTimeFromTextbox("TimeIn"),TimeOut:getTimeFromTextbox("TimeOut"),DeliveryCharges:document.getElementById("DeliveryCharges").value.trim(),PerProductAmount:document.getElementById("PerProductAmount").value.trim(),Address:nAddress,IsActive:isActive,IsUpdate};
+        Swal.fire({title:'Please wait',text:'Saving...',allowOutsideClick:false,allowEscapeKey:false,didOpen:()=>Swal.showLoading(),...SW});
+        try{
+            const res=await jQuery.ajax({type:'POST',url:'@Url.Action("nSaveVendorRegistrationData", "VendorRegistration")',data:JSON.stringify(nInfoTab),contentType:'application/json'});
             Swal.close();
-            if (response.statusId === 1) {
-                await Swal.fire({ icon:'success', title:'Saved', text:response.message||'Vendor saved successfully.', returnFocus:false, didClose:()=>document.getElementById("Vendor").focus() });
-                nClearForm();
-            } else {
-                await Swal.fire({ icon:'warning', title:'Save Failed', text:response.message||'Could not save vendor.' });
-            }
-        } catch(xhr) {
-            Swal.close();
-            await Swal.fire({ icon:'error', title:'Error', text:'An error occurred while saving.' });
-        }
+            if(res.statusId===1){await Swal.fire({icon:'success',title:'Saved',text:res.message||'Vendor saved.',returnFocus:false,...SW,didClose:()=>document.getElementById("Vendor").focus()});nClearForm();}
+            else await Swal.fire({icon:'warning',title:'Failed',text:res.message||'Could not save.',...SW});
+        }catch(e){Swal.close();await Swal.fire({icon:'error',title:'Error',text:'An error occurred.',...SW});}
     }
 
-    document.getElementById("cancelBtn").addEventListener("click", function() { nClearForm(); });
-    async function nClearForm() {
-        ["VendorId","VendorImageAttachmentOld","Vendor","ContactNo","Address"].forEach(id => document.getElementById(id).value = "");
-        document.getElementById("TypeId").value = "";
-        document.getElementById("DepartmentId").value = "";
-        document.getElementById("IsActive").checked = false;
-        document.getElementById("VendorImageAttachment").value = "";
-        document.getElementById("DeliveryCharges").value = "0";
-        document.getElementById("PerProductAmount").value = "0";
-        IsUpdate = false;
-        document.getElementById("saveBtn").innerHTML = '<i class="fas fa-save"></i> Save';
-        document.getElementById("ViewImageBtn").style.display = "none";
-        document.getElementById("Vendor").focus();
-        setCurrentTime();
-        await LoadGridViewData();
+    document.getElementById("cancelBtn").addEventListener("click",function(){nClearForm();});
+    async function nClearForm(){
+        ["VendorId","VendorImageAttachmentOld","Vendor","ContactNo","Address"].forEach(id=>document.getElementById(id).value="");
+        document.getElementById("TypeId").value="";document.getElementById("DepartmentId").value="";
+        document.getElementById("IsActive").checked=false;document.getElementById("VendorImageAttachment").value="";
+        document.getElementById("fileNameDisplay").textContent="Click to browse";
+        document.getElementById("DeliveryCharges").value="0";document.getElementById("PerProductAmount").value="0";
+        IsUpdate=false;document.getElementById("saveBtn").innerHTML='<i class="fas fa-floppy-disk"></i> Save Vendor';
+        document.getElementById("ViewImageBtn").style.display="none";
+        document.getElementById("Vendor").focus();setCurrentTime();await LoadGridViewData();
     }
 
-    const contactInput = document.getElementById("ContactNo");
-    contactInput.addEventListener("keydown", function(e) {
-        if (e.ctrlKey || e.metaKey || (e.key>='0'&&e.key<='9') || ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key)) return;
-        e.preventDefault();
-    });
-    contactInput.addEventListener("input", function() { this.value = this.value.replace(/\D/g,''); });
+    const ci=document.getElementById("ContactNo");
+    ci.addEventListener("keydown",function(e){if(e.ctrlKey||e.metaKey||(e.key>='0'&&e.key<='9')||['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key))return;e.preventDefault();});
+    ci.addEventListener("input",function(){this.value=this.value.replace(/\D/g,'');});
 </script>
