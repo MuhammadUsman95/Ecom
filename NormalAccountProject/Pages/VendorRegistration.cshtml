@@ -4,35 +4,37 @@
     ViewData["Title"] = "Vendor Registration";
 }
 
-@* <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"> *@
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
     :root {
-        --bg: #FFFFFF;
-        --surface: #FFFFFF;
-        --bg2: #f5f5f5;
-        --surface2: #f0f0f0;
-        --surface3: #e0e0e0;
-        --border: rgba(0,0,0,.08);
-        --border2: rgba(0,0,0,.13);
-        --accent: #4f7cff;
-        --accent-dim: rgba(79,124,255,.10);
-        --accent-glow: rgba(79,124,255,.22);
-        --active-nav: #222222;
-        --text: #1a1a1a;
-        --text2: #444444;
-        --text3: #888888;
-        --danger: #e53e3e;
-        --success: #22c55e;
-        --amber: #d97706;
-        --radius-sm: 8px;
-        --radius: 12px;
-        --radius-lg: 14px;
-        --font-head: 'Montserrat', sans-serif;
-        --font-body: 'Montserrat', sans-serif;
-        --font-mono: 'JetBrains Mono', monospace;
-        --shadow: 0 4px 24px rgba(0,0,0,.10);
+        --bg: #0a0c12;
+        --bg2: #0f1220;
+        --surface: #141828;
+        --surface2: #1a2035;
+        --surface3: #1f2640;
+        --border: rgba(255,255,255,.06);
+        --border2: rgba(255,255,255,.11);
+        --border3: rgba(255,255,255,.18);
+        --accent: #6c63ff;
+        --accent2: #4f46e5;
+        --accent-g: rgba(108,99,255,.15);
+        --gold: #f0b429;
+        --gold-g: rgba(240,180,41,.12);
+        --teal: #14b8a6;
+        --danger: #f43f5e;
+        --success: #10b981;
+        --text: #e8eaf2;
+        --text2: #9198b0;
+        --text3: #5a6182;
+        --font-h: 'Syne', sans-serif;
+        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --font-m: 'JetBrains Mono', monospace;
+        --r: 10px;
+        --r2: 14px;
+        --r3: 18px;
+        --sh: 0 4px 32px rgba(0,0,0,.45);
+        --sh2: 0 8px 48px rgba(0,0,0,.6);
     }
 
     *, *::before, *::after {
@@ -41,40 +43,65 @@
         padding: 0;
     }
 
+    /* ── Root Wrap ── */
     .vr-wrap {
-        font-family: var(--font-body);
+        font-family: var(--font-b);
         color: var(--text);
         background: var(--bg);
         min-height: calc(100vh - 60px);
         position: relative;
+        overflow: hidden;
     }
 
+        /* Ambient orbs */
         .vr-wrap::before {
             content: '';
             position: fixed;
-            top: -180px;
-            right: -180px;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(79,124,255,.04) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(108,99,255,.07) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
 
+        .vr-wrap::after {
+            content: '';
+            position: fixed;
+            bottom: -150px;
+            left: -150px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(20,184,166,.05) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+    /* Grid texture */
+    .vr-bg-grid {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
     .vr-inner {
         position: relative;
         z-index: 1;
-        padding: 22px 26px;
+        padding: 20px 24px;
     }
 
-    /* ─── Top Bar ─── */
+    /* ── Top Bar ── */
     .top-bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 22px;
-        padding-bottom: 18px;
-        border-bottom: 1.5px solid var(--border2);
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border2);
     }
 
     .top-bar-left {
@@ -84,25 +111,24 @@
     }
 
     .icon-box {
-        width: 42px;
-        height: 42px;
-        background: #222222;
-        border: 1px solid rgba(0,0,0,.15);
-        border-radius: var(--radius-sm);
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        border-radius: var(--r);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #ffffff;
+        color: #fff;
         font-size: 17px;
-        box-shadow: 0 2px 10px rgba(0,0,0,.12);
+        box-shadow: 0 4px 20px rgba(108,99,255,.4);
         flex-shrink: 0;
     }
 
     .page-title {
-        font-family: var(--font-head);
-        font-size: 22px;
-        font-weight: 700;
-        color: #222222;
+        font-family: var(--font-h);
+        font-size: 21px;
+        font-weight: 800;
+        color: var(--text);
         letter-spacing: -.3px;
         line-height: 1.1;
     }
@@ -115,10 +141,10 @@
         display: flex;
         align-items: center;
         gap: 5px;
-        font-family: var(--font-mono);
-        font-size: 10.5px;
+        font-family: var(--font-m);
+        font-size: 10px;
         color: var(--text3);
-        letter-spacing: .4px;
+        letter-spacing: .5px;
         margin-top: 3px;
     }
 
@@ -127,16 +153,53 @@
         }
 
         .breadcrumb span {
-            color: var(--accent);
+            color: var(--gold);
         }
 
-    /* ─── Toggle Group ─── */
+    /* ── Pills / Badges ── */
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+
+    .pill-accent {
+        background: var(--accent-g);
+        color: #a09eff;
+        border-color: rgba(108,99,255,.25);
+    }
+
+    .pill-gold {
+        background: var(--gold-g);
+        color: var(--gold);
+        border-color: rgba(240,180,41,.25);
+    }
+
+    .pill-success {
+        background: rgba(16,185,129,.1);
+        color: #34d399;
+        border-color: rgba(16,185,129,.25);
+    }
+
+    .pill-danger {
+        background: rgba(244,63,94,.08);
+        color: #fb7185;
+        border-color: rgba(244,63,94,.2);
+    }
+
+    /* ── Toggle Group ── */
     .toggle-group {
         display: flex;
-        gap: 5px;
-        background: #f0f0f0;
-        padding: 5px;
-        border-radius: var(--radius-sm);
+        gap: 4px;
+        background: var(--surface2);
+        padding: 4px;
+        border-radius: var(--r);
         border: 1px solid var(--border2);
     }
 
@@ -144,11 +207,11 @@
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        padding: 8px 16px;
-        font-family: var(--font-body);
-        font-size: 12.5px;
+        padding: 7px 15px;
+        font-family: var(--font-b);
+        font-size: 12px;
         font-weight: 600;
-        border-radius: 6px;
+        border-radius: 7px;
         border: none;
         cursor: pointer;
         transition: all .2s ease;
@@ -156,59 +219,78 @@
 
     .toggle-btn-outline {
         background: transparent;
-        color: #555555;
+        color: var(--text2);
     }
 
         .toggle-btn-outline:hover {
-            background: #e0e0e0;
-            color: #222222;
+            background: var(--surface3);
+            color: var(--text);
         }
 
     .toggle-btn-solid {
-        background: #222222;
-        color: #ffffff;
-        font-weight: 700;
-        border: 1px solid rgba(0,0,0,.2);
-        box-shadow: 0 2px 8px rgba(0,0,0,.15);
+        background: var(--accent);
+        color: #fff;
+        box-shadow: 0 2px 12px rgba(108,99,255,.35);
     }
 
         .toggle-btn-solid:hover {
-            background: #333333;
+            background: var(--accent2);
             transform: translateY(-1px);
         }
 
-    /* ─── Form Card ─── */
+    /* ── Form Card ── */
     .form-card {
-        background: #FFFFFF;
-        border-radius: var(--radius-lg);
-        border: 1.5px solid var(--border2);
-        box-shadow: var(--shadow);
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
         overflow: hidden;
-        animation: fadeUp .28s ease both;
+        animation: fadeUp .3s ease both;
     }
 
     .form-card-header {
-        padding: 13px 22px;
-        background: #222222;
-        border-bottom: 1px solid rgba(0,0,0,.1);
+        padding: 12px 22px;
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(108,99,255,.08) 100%);
+        border-bottom: 1px solid var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-card-header-left {
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .header-dot {
+    .header-dots {
+        display: flex;
+        gap: 5px;
+    }
+
+    .h-dot {
         width: 7px;
         height: 7px;
         border-radius: 50%;
-        background: #ffffff;
-        box-shadow: 0 0 6px rgba(255,255,255,.4);
+    }
+
+    .h-dot-1 {
+        background: #f43f5e;
+    }
+
+    .h-dot-2 {
+        background: #f59e0b;
+    }
+
+    .h-dot-3 {
+        background: #10b981;
     }
 
     .form-card-title {
-        font-family: var(--font-mono);
+        font-family: var(--font-m);
         font-size: 10.5px;
         font-weight: 500;
-        color: #cccccc;
+        color: var(--text3);
         letter-spacing: 1.5px;
         text-transform: uppercase;
     }
@@ -218,8 +300,7 @@
         max-height: 65vh;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: #cccccc transparent;
-        background: #FFFFFF;
+        scrollbar-color: var(--surface3) transparent;
     }
 
         .form-body::-webkit-scrollbar {
@@ -227,7 +308,7 @@
         }
 
         .form-body::-webkit-scrollbar-thumb {
-            background: #cccccc;
+            background: var(--surface3);
             border-radius: 10px;
         }
 
@@ -235,32 +316,35 @@
     .section-label {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-family: var(--font-mono);
+        gap: 9px;
+        font-family: var(--font-m);
         font-size: 9.5px;
-        color: #222222;
+        color: var(--text3);
         letter-spacing: 2px;
         text-transform: uppercase;
         margin-bottom: 14px;
         padding-bottom: 10px;
-        border-bottom: 1.5px solid var(--border2);
-        font-weight: 700;
+        border-bottom: 1px solid var(--border);
+        font-weight: 500;
     }
 
-        .section-label::before {
-            content: '';
-            width: 3px;
-            height: 13px;
-            background: #222222;
-            border-radius: 3px;
-            flex-shrink: 0;
-        }
+    .section-label-bar {
+        width: 3px;
+        height: 12px;
+        background: linear-gradient(180deg, var(--accent), var(--teal));
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .section-label-text {
+        color: var(--text2);
+    }
 
     /* Form grid */
     .form-row {
         display: grid;
-        gap: 14px;
-        margin-bottom: 16px;
+        gap: 12px;
+        margin-bottom: 14px;
     }
 
     .form-row-2 {
@@ -271,13 +355,7 @@
         grid-template-columns: 1fr;
     }
 
-    .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    /* ── Floating Label ── */
+    /* ── Floating Label Fields ── */
     .float-group {
         position: relative;
     }
@@ -296,10 +374,10 @@
         left: 13px;
         top: 50%;
         transform: translateY(-50%);
-        font-family: var(--font-body);
-        font-size: 13.5px;
+        font-family: var(--font-b);
+        font-size: 13px;
         font-weight: 500;
-        color: #999999;
+        color: var(--text3);
         pointer-events: none;
         transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
         white-space: nowrap;
@@ -318,11 +396,11 @@
         top: 7px;
         transform: none;
         font-size: 9px;
-        font-family: var(--font-mono);
-        color: #222222;
+        font-family: var(--font-m);
+        color: var(--accent);
         letter-spacing: 1px;
         text-transform: uppercase;
-        font-weight: 700;
+        font-weight: 500;
     }
 
     .float-group.is-area .form-control:focus ~ .float-label,
@@ -330,53 +408,69 @@
         top: 5px;
         transform: none;
         font-size: 9px;
-        font-family: var(--font-mono);
-        color: #222222;
+        font-family: var(--font-m);
+        color: var(--accent);
         letter-spacing: 1px;
         text-transform: uppercase;
-        font-weight: 700;
+        font-weight: 500;
     }
 
     .float-group.always-float .float-label {
         top: 7px;
         transform: none;
         font-size: 9px;
-        font-family: var(--font-mono);
-        color: #888888;
+        font-family: var(--font-m);
+        color: var(--text3);
         letter-spacing: 1px;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 500;
     }
 
     .float-group.always-float .form-control:focus ~ .float-label {
-        color: #222222;
+        color: var(--accent);
     }
 
     .float-group .form-control::placeholder {
         color: transparent;
     }
 
+    /* Form Control */
     .form-control {
-        border: 1.5px solid #d0d0d0;
-        border-radius: var(--radius-sm);
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
         padding: 9px 13px;
         font-size: 13.5px;
-        font-family: var(--font-body);
-        color: #222222;
-        background: #f9f9f9;
-        transition: border-color .18s, box-shadow .18s;
+        font-family: var(--font-b);
+        color: #e8eaf2 !important;
+        background: var(--bg2);
+        transition: border-color .18s, box-shadow .18s, background .18s;
         outline: none;
         width: 100%;
+        -webkit-text-fill-color: #e8eaf2 !important;
+        caret-color: #6c63ff;
     }
 
         .form-control:focus {
-            border-color: #222222;
-            box-shadow: 0 0 0 3px rgba(34,34,34,.08);
-            background: #ffffff;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108,99,255,.14);
+            background: var(--surface);
+            color: #e8eaf2 !important;
+            -webkit-text-fill-color: #e8eaf2 !important;
         }
 
         .form-control::placeholder {
-            color: #aaaaaa;
+            color: var(--text3);
+            -webkit-text-fill-color: var(--text3);
+        }
+
+        .form-control:-webkit-autofill,
+        .form-control:-webkit-autofill:hover,
+        .form-control:-webkit-autofill:focus {
+            -webkit-text-fill-color: #e8eaf2 !important;
+            -webkit-box-shadow: 0 0 0px 1000px var(--bg2) inset !important;
+            box-shadow: 0 0 0px 1000px var(--bg2) inset !important;
+            caret-color: #6c63ff;
+            transition: background-color 5000s ease-in-out 0s;
         }
 
     textarea.form-control {
@@ -387,88 +481,120 @@
     select.form-control {
         appearance: auto;
         cursor: pointer;
+        color: #e8eaf2 !important;
     }
 
         select.form-control option {
-            background: #ffffff;
-            color: #222222;
+            background: var(--surface);
+            color: #e8eaf2;
         }
 
-    /* Checkbox */
+    input[type="time"].form-control::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        opacity: .5;
+        cursor: pointer;
+    }
+
+    /* Icon Input */
+    .input-icon-wrap {
+        position: relative;
+    }
+
+        .input-icon-wrap .form-control {
+            padding-left: 38px;
+        }
+
+    .input-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text3);
+        font-size: 13px;
+        pointer-events: none;
+    }
+
+    /* ── Checkbox ── */
     .check-group {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 10px 15px;
-        background: #222222;
-        border-radius: var(--radius-sm);
-        border: 1px solid rgba(0,0,0,.2);
+        padding: 10px 14px;
+        background: var(--bg2);
+        border-radius: var(--r);
+        border: 1px solid var(--border2);
         cursor: pointer;
-        transition: background .2s;
+        transition: all .2s;
         width: fit-content;
     }
 
         .check-group:hover {
-            background: #333333;
+            border-color: var(--accent);
+            background: var(--accent-g);
         }
 
     .check-input {
         width: 16px;
         height: 16px;
         cursor: pointer;
-        accent-color: #ffffff;
+        accent-color: var(--accent);
     }
 
     .check-label {
         font-size: 13px;
-        font-weight: 600;
-        color: #ffffff;
+        font-weight: 500;
+        color: var(--text2);
         cursor: pointer;
-        font-family: var(--font-body);
+        font-family: var(--font-b);
+        transition: color .2s;
     }
 
-    /* File Upload */
+    .check-group:hover .check-label {
+        color: var(--text);
+    }
+
+    /* ── File Upload ── */
     .file-upload-zone {
-        border: 1.5px dashed #cccccc;
-        border-radius: var(--radius-sm);
-        padding: 11px 14px;
-        background: #f9f9f9;
+        border: 1px dashed var(--border2);
+        border-radius: var(--r);
+        padding: 10px 14px;
+        background: var(--bg2);
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 11px;
-        transition: border-color .2s, background .2s;
+        gap: 12px;
+        transition: all .2s;
     }
 
         .file-upload-zone:hover {
-            border-color: #222222;
-            background: #f0f0f0;
+            border-color: var(--accent);
+            background: var(--accent-g);
         }
 
     .file-icon {
-        width: 32px;
-        height: 32px;
-        background: #222222;
-        border-radius: 7px;
+        width: 34px;
+        height: 34px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #ffffff;
+        color: #fff;
         font-size: 13px;
         flex-shrink: 0;
+        box-shadow: 0 3px 10px rgba(108,99,255,.35);
     }
 
     .file-info-title {
         font-size: 12.5px;
         font-weight: 600;
-        color: #444444;
-        font-family: var(--font-body);
+        color: var(--text2);
     }
 
     .file-info-sub {
         font-size: 10px;
-        color: #999999;
-        font-family: var(--font-mono);
+        color: var(--text3);
+        font-family: var(--font-m);
         margin-top: 2px;
     }
 
@@ -477,32 +603,32 @@
     }
 
     .status-meta {
-        font-family: var(--font-mono);
+        font-family: var(--font-m);
         font-size: 9.5px;
-        color: #888888;
+        color: var(--text3);
         letter-spacing: 1px;
         text-transform: uppercase;
         margin-bottom: 7px;
     }
 
     .media-label {
-        font-family: var(--font-mono);
+        font-family: var(--font-m);
         font-size: 9px;
-        color: #888888;
+        color: var(--text3);
         letter-spacing: 1px;
         text-transform: uppercase;
         margin-bottom: 7px;
         font-weight: 500;
     }
 
-    /* Buttons */
+    /* ── Buttons ── */
     .btn-row {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
         padding-top: 18px;
-        border-top: 1.5px solid var(--border2);
+        border-top: 1px solid var(--border);
         margin-top: 4px;
     }
 
@@ -510,27 +636,25 @@
         display: inline-flex;
         align-items: center;
         gap: 7px;
-        padding: 9px 22px;
-        font-family: var(--font-body);
+        padding: 9px 20px;
+        font-family: var(--font-b);
         font-size: 13px;
-        font-weight: 700;
-        border-radius: var(--radius-sm);
+        font-weight: 600;
+        border-radius: var(--r);
         border: none;
         cursor: pointer;
         transition: all .2s ease;
     }
 
     .btn-save {
-        background: #222222;
-        color: #ffffff;
-        border: 1px solid rgba(0,0,0,.2);
-        box-shadow: 0 2px 10px rgba(0,0,0,.15);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(108,99,255,.4);
     }
 
         .btn-save:hover {
-            background: #333333;
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(0,0,0,.2);
+            box-shadow: 0 6px 24px rgba(108,99,255,.5);
         }
 
         .btn-save:active {
@@ -538,53 +662,53 @@
         }
 
     .btn-cancel {
-        background: #f0f0f0;
-        color: #555555;
-        border: 1px solid #d0d0d0;
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border2);
     }
 
         .btn-cancel:hover {
-            background: #e0e0e0;
-            color: #222222;
+            background: var(--surface3);
+            color: var(--text);
         }
 
     .btn-view-img {
-        background: rgba(217,119,6,.08);
-        color: var(--amber);
-        border: 1px solid rgba(217,119,6,.22);
-        font-family: var(--font-body);
+        background: var(--gold-g);
+        color: var(--gold);
+        border: 1px solid rgba(240,180,41,.25);
+        font-family: var(--font-b);
         font-size: 13px;
-        font-weight: 700;
-        border-radius: var(--radius-sm);
-        padding: 9px 18px;
+        font-weight: 600;
+        border-radius: var(--r);
+        padding: 9px 16px;
         text-decoration: none;
         display: none;
         align-items: center;
         gap: 7px;
-        transition: .2s ease;
+        transition: all .2s ease;
     }
 
         .btn-view-img:hover {
-            background: rgba(217,119,6,.15);
+            background: rgba(240,180,41,.2);
         }
 
-    /* ─── Grid Card ─── */
+    /* ── Grid Card ── */
     .grid-card {
-        background: #FFFFFF;
-        border-radius: var(--radius-lg);
-        border: 1.5px solid var(--border2);
-        box-shadow: var(--shadow);
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
         overflow: hidden;
-        animation: fadeUp .28s ease both;
+        animation: fadeUp .3s ease both;
     }
 
     .grid-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 14px 20px;
-        background: #222222;
-        border-bottom: 1px solid rgba(0,0,0,.1);
+        padding: 13px 20px;
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(108,99,255,.06) 100%);
+        border-bottom: 1px solid var(--border2);
     }
 
     .grid-header-left {
@@ -594,29 +718,29 @@
     }
 
     .grid-header-title {
-        font-family: var(--font-mono);
+        font-family: var(--font-m);
         font-size: 10.5px;
         font-weight: 500;
-        color: #cccccc;
+        color: var(--text2);
         text-transform: uppercase;
         letter-spacing: 1.5px;
     }
 
     .grid-badge {
-        background: rgba(255,255,255,.12);
-        color: #ffffff;
-        font-family: var(--font-mono);
+        background: var(--accent-g);
+        color: #a09eff;
+        font-family: var(--font-m);
         font-size: 10.5px;
         padding: 3px 10px;
         border-radius: 20px;
-        border: 1px solid rgba(255,255,255,.2);
+        border: 1px solid rgba(108,99,255,.22);
     }
 
     .grid-scroll {
-        height: 57vh;
+        height: 58vh;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: #cccccc transparent;
+        scrollbar-color: var(--surface3) transparent;
     }
 
         .grid-scroll::-webkit-scrollbar {
@@ -624,30 +748,30 @@
         }
 
         .grid-scroll::-webkit-scrollbar-thumb {
-            background: #cccccc;
+            background: var(--surface3);
             border-radius: 10px;
         }
 
-    /* Table */
+    /* ── Table ── */
     .pro-table {
         width: 100%;
         border-collapse: collapse;
     }
 
         .pro-table thead th {
-            background: #f5f5f5;
-            color: #888888;
-            padding: 11px 15px;
+            background: var(--surface2);
+            color: var(--text3);
+            padding: 10px 14px;
             font-size: 9.5px;
-            font-weight: 600;
+            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             white-space: nowrap;
-            font-family: var(--font-mono);
+            font-family: var(--font-m);
             position: sticky;
             top: 0;
             z-index: 10;
-            border-bottom: 1.5px solid var(--border2);
+            border-bottom: 1px solid var(--border2);
             border-right: 1px solid var(--border);
         }
 
@@ -656,14 +780,14 @@
             }
 
             .pro-table thead th:first-child {
-                color: #222222;
+                color: var(--text2);
             }
 
         .pro-table thead tr:nth-child(2) th {
-            background: #efefef;
+            background: #101422;
             padding: 7px 10px;
             position: sticky;
-            top: 39px;
+            top: 38px;
             border-bottom: 1px solid var(--border2);
         }
 
@@ -671,21 +795,21 @@
                 width: 100%;
                 padding: 5px 9px;
                 font-size: 11px;
-                border: 1.5px solid #d0d0d0;
+                border: 1px solid var(--border2);
                 border-radius: 6px;
-                font-family: var(--font-body);
-                background: #ffffff;
+                font-family: var(--font-b);
+                background: var(--bg2);
                 outline: none;
-                color: #222222;
+                color: var(--text);
                 transition: border-color .15s;
             }
 
                 .pro-table thead tr:nth-child(2) th input::placeholder {
-                    color: #aaaaaa;
+                    color: var(--text3);
                 }
 
                 .pro-table thead tr:nth-child(2) th input:focus {
-                    border-color: #222222;
+                    border-color: var(--accent);
                 }
 
         .pro-table tbody tr {
@@ -694,7 +818,7 @@
         }
 
             .pro-table tbody tr:hover {
-                background: #f9f9f9;
+                background: var(--surface2);
             }
 
             .pro-table tbody tr:last-child {
@@ -702,15 +826,16 @@
             }
 
         .pro-table tbody td {
-            padding: 10px 15px;
-            font-size: 13px;
-            color: #444444;
+            padding: 10px 14px;
+            font-size: 12.5px;
+            color: var(--text2);
             white-space: nowrap;
         }
 
+    /* Action Buttons */
     .tbl-btn {
-        width: 29px;
-        height: 29px;
+        width: 28px;
+        height: 28px;
         border-radius: 7px;
         border: 1px solid transparent;
         cursor: pointer;
@@ -722,91 +847,147 @@
     }
 
     .tbl-btn-edit {
-        background: #f0f0f0;
-        color: #444444;
-        border-color: #d0d0d0;
+        background: var(--surface2);
+        color: var(--text2);
+        border-color: var(--border2);
     }
 
         .tbl-btn-edit:hover {
-            background: #222222;
-            color: #ffffff;
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
         }
 
     .tbl-btn-del {
-        background: rgba(229,62,62,.08);
-        color: var(--danger);
-        border-color: rgba(229,62,62,.2);
-        margin-left: 5px;
+        background: rgba(244,63,94,.08);
+        color: #fb7185;
+        border-color: rgba(244,63,94,.18);
+        margin-left: 4px;
     }
 
         .tbl-btn-del:hover {
             background: var(--danger);
             color: #fff;
+            border-color: var(--danger);
         }
 
+    /* Status Badges */
     .badge-active {
-        background: rgba(34,197,94,.1);
-        color: #16a34a;
-        border: 1px solid rgba(34,197,94,.25);
-        font-size: 10.5px;
+        background: rgba(16,185,129,.1);
+        color: #34d399;
+        border: 1px solid rgba(16,185,129,.22);
+        font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
         border-radius: 20px;
-        font-family: var(--font-mono);
+        font-family: var(--font-m);
         display: inline-block;
     }
 
     .badge-inactive {
-        background: rgba(229,62,62,.08);
-        color: var(--danger);
-        border: 1px solid rgba(229,62,62,.2);
-        font-size: 10.5px;
+        background: rgba(244,63,94,.08);
+        color: #fb7185;
+        border: 1px solid rgba(244,63,94,.18);
+        font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
         border-radius: 20px;
-        font-family: var(--font-mono);
+        font-family: var(--font-m);
         display: inline-block;
     }
 
+    /* Empty State */
     .empty-state {
         padding: 60px 20px;
         text-align: center;
     }
 
     .empty-icon {
-        width: 52px;
-        height: 52px;
-        background: #f0f0f0;
-        border-radius: var(--radius);
+        width: 54px;
+        height: 54px;
+        background: var(--surface2);
+        border-radius: var(--r2);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #aaaaaa;
+        color: var(--text3);
         font-size: 20px;
-        margin: 0 auto 12px;
+        margin: 0 auto 14px;
         border: 1px solid var(--border2);
     }
 
     .empty-text {
-        font-size: 13.5px;
-        color: #aaaaaa;
+        font-size: 13px;
+        color: var(--text3);
     }
+
+    /* Divider line accent */
+    .accent-line {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 18px;
+        height: 2px;
+    }
+
+        .accent-line span:nth-child(1) {
+            flex: 2;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .accent-line span:nth-child(2) {
+            flex: 1;
+            background: var(--teal);
+            border-radius: 2px;
+            opacity: .6;
+        }
+
+        .accent-line span:nth-child(3) {
+            flex: 3;
+            background: var(--border);
+            border-radius: 2px;
+        }
 
     /* Footer */
     .page-footer {
-        margin-top: 18px;
-        padding-top: 14px;
+        margin-top: 16px;
+        padding-top: 12px;
         border-top: 1px solid var(--border);
         text-align: center;
-        font-family: var(--font-mono);
-        font-size: 10.5px;
-        color: #aaaaaa;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
         letter-spacing: .5px;
     }
 
         .page-footer strong {
-            color: #222222;
-            font-weight: 600;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+    /* Stat bar above form */
+    .stat-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .stat-chip {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 13px;
+        background: var(--surface);
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
+        font-size: 11.5px;
+        color: var(--text2);
+        font-family: var(--font-b);
+    }
+
+        .stat-chip i {
+            color: var(--accent);
+            font-size: 11px;
         }
 
     @@keyframes fadeUp {
@@ -820,9 +1001,20 @@
             transform: translateY(0);
         }
     }
+
+    /* Form card bottom glow */
+    .form-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: var(--r3);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+        pointer-events: none;
+    }
 </style>
 
 <div class="vr-wrap">
+    <div class="vr-bg-grid"></div>
     <div class="vr-inner">
 
         <!-- Top Bar -->
@@ -830,34 +1022,57 @@
             <div class="top-bar-left">
                 <div class="icon-box"><i class="fas fa-store-alt"></i></div>
                 <div>
-                    <div class="page-title">Vendor <span>Registration</span></div>
+                    <div class="page-title">Vendor <span>Registry</span></div>
                     <div class="breadcrumb">
-                        Setup <i class="fas fa-chevron-right"></i> <span>Vendor</span>
+                        Setup <i class="fas fa-chevron-right"></i>
+                        <span>Vendors</span>
                     </div>
                 </div>
             </div>
-            <div class="toggle-group">
-                <button class="toggle-btn toggle-btn-outline" id="gridViewToggleBtn">
-                    <i class="fas fa-table-cells"></i> Grid View
-                </button>
-                <button class="toggle-btn toggle-btn-solid" id="formViewToggleBtn" style="display:none;">
-                    <i class="fas fa-pen-to-square"></i> Form View
-                </button>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div class="pill pill-accent" style="display:none;" id="updatePill">
+                    <i class="fas fa-pen" style="font-size:9px;"></i> Edit Mode
+                </div>
+                <div class="toggle-group">
+                    <button class="toggle-btn toggle-btn-outline" id="gridViewToggleBtn">
+                        <i class="fas fa-table-cells"></i> Grid
+                    </button>
+                    <button class="toggle-btn toggle-btn-solid" id="formViewToggleBtn" style="display:none;">
+                        <i class="fas fa-pen-to-square"></i> Form
+                    </button>
+                </div>
             </div>
         </div>
 
+        <!-- Accent line -->
+        <div class="accent-line"><span></span><span></span><span></span></div>
+
         <!-- FORM VIEW -->
         <div id="formViewContainer">
-            <div class="form-card">
+            <div class="form-card" style="position:relative;">
                 <div class="form-card-header">
-                    <div class="header-dot"></div>
-                    <div class="form-card-title">Vendor Information</div>
+                    <div class="form-card-header-left">
+                        <div class="header-dots">
+                            <div class="h-dot h-dot-1"></div>
+                            <div class="h-dot h-dot-2"></div>
+                            <div class="h-dot h-dot-3"></div>
+                        </div>
+                        <div class="form-card-title">vendor_registration.form</div>
+                    </div>
+                    <div class="pill pill-gold">
+                        <i class="fas fa-circle" style="font-size:6px;"></i> Live
+                    </div>
                 </div>
+
                 <div class="form-body">
                     <input style="display:none;" type="text" id="VendorId">
                     <input style="display:none;" type="text" id="VendorImageAttachmentOld">
 
-                    <div class="section-label">Basic Details</div>
+                    <!-- Basic Details -->
+                    <div class="section-label">
+                        <div class="section-label-bar"></div>
+                        <span class="section-label-text">Basic Details</span>
+                    </div>
 
                     <div class="form-row form-row-2">
                         <div class="float-group">
@@ -865,18 +1080,23 @@
                             <label class="float-label" for="Vendor">Vendor Name</label>
                         </div>
                         <div class="float-group">
-                            <input type="text" id="ContactNo" class="form-control" placeholder=" " inputmode="numeric" autocomplete="off">
+                            <input type="text" id="ContactNo" class="form-control" placeholder=" "
+                                   inputmode="numeric" autocomplete="off">
                             <label class="float-label" for="ContactNo">Contact Number</label>
                         </div>
                     </div>
 
                     <div class="form-row form-row-2">
                         <div class="float-group always-float">
-                            <select id="TypeId" class="form-control"><option value="">— Select Type —</option></select>
-                            <label class="float-label" for="TypeId">Type</label>
+                            <select id="TypeId" class="form-control">
+                                <option value="">— Select Type —</option>
+                            </select>
+                            <label class="float-label" for="TypeId">Vendor Type</label>
                         </div>
                         <div class="float-group always-float">
-                            <select id="DepartmentId" class="form-control"><option value="">— Select Department —</option></select>
+                            <select id="DepartmentId" class="form-control">
+                                <option value="">— Select Department —</option>
+                            </select>
                             <label class="float-label" for="DepartmentId">Department</label>
                         </div>
                     </div>
@@ -888,7 +1108,11 @@
                         </div>
                     </div>
 
-                    <div class="section-label" style="margin-top:4px;">Schedule & Charges</div>
+                    <!-- Schedule & Charges -->
+                    <div class="section-label" style="margin-top:4px;">
+                        <div class="section-label-bar" style="background:linear-gradient(180deg,var(--gold),var(--teal));"></div>
+                        <span class="section-label-text">Schedule &amp; Charges</span>
+                    </div>
 
                     <div class="form-row form-row-2">
                         <div class="float-group always-float">
@@ -912,18 +1136,28 @@
                         </div>
                     </div>
 
-                    <div class="section-label" style="margin-top:4px;">Status & Media</div>
+                    <!-- Status & Media -->
+                    <div class="section-label" style="margin-top:4px;">
+                        <div class="section-label-bar" style="background:linear-gradient(180deg,var(--teal),var(--accent));"></div>
+                        <span class="section-label-text">Status &amp; Media</span>
+                    </div>
 
                     <div class="form-row form-row-2" style="margin-bottom:18px;">
                         <div class="form-group">
-                            <div class="status-meta"><i class="fas fa-circle-check" style="color:var(--accent);margin-right:5px;"></i>Status</div>
+                            <div class="status-meta">
+                                <i class="fas fa-toggle-on" style="color:var(--accent);margin-right:5px;"></i>Vendor Status
+                            </div>
                             <div class="check-group">
                                 <input type="checkbox" id="IsActive" class="check-input">
                                 <label class="check-label" for="IsActive">Mark as Active</label>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="media-label"><i class="fas fa-image" style="color:var(--accent);margin-right:5px;"></i>Vendor Logo <span style="color:var(--text3);text-transform:none;letter-spacing:0;font-size:9px;">(Max 500 KB · JPEG/PNG)</span></div>
+                            <div class="media-label">
+                                <i class="fas fa-image" style="color:var(--gold);margin-right:5px;"></i>
+                                Vendor Logo
+                                <span style="color:var(--text3);text-transform:none;letter-spacing:0;font-size:9px;"> (Max 500 KB · JPEG/PNG)</span>
+                            </div>
                             <label for="VendorImageAttachment" class="file-upload-zone">
                                 <div class="file-icon"><i class="fas fa-cloud-arrow-up"></i></div>
                                 <div>
@@ -935,10 +1169,17 @@
                         </div>
                     </div>
 
+                    <!-- Actions -->
                     <div class="btn-row">
-                        <button class="btn-pro btn-save" id="saveBtn"><i class="fas fa-floppy-disk"></i> Save Vendor</button>
-                        <button class="btn-pro btn-cancel" id="cancelBtn"><i class="fas fa-xmark"></i> Cancel</button>
-                        <a class="btn-view-img" id="ViewImageBtn" target="_blank"><i class="fas fa-eye"></i> View Image</a>
+                        <button class="btn-pro btn-save" id="saveBtn">
+                            <i class="fas fa-floppy-disk"></i> Save Vendor
+                        </button>
+                        <button class="btn-pro btn-cancel" id="cancelBtn">
+                            <i class="fas fa-xmark"></i> Cancel
+                        </button>
+                        <a class="btn-view-img" id="ViewImageBtn" target="_blank">
+                            <i class="fas fa-eye"></i> View Image
+                        </a>
                     </div>
                 </div>
             </div>
@@ -949,8 +1190,16 @@
             <div class="grid-card">
                 <div class="grid-header">
                     <div class="grid-header-left">
+                        <div class="header-dots">
+                            <div class="h-dot h-dot-1"></div>
+                            <div class="h-dot h-dot-2"></div>
+                            <div class="h-dot h-dot-3"></div>
+                        </div>
                         <div class="grid-header-title">All Vendors</div>
                         <div class="grid-badge" id="TotalVendorsCount">0 records</div>
+                    </div>
+                    <div class="pill pill-accent">
+                        <i class="fas fa-circle-dot" style="font-size:7px;"></i> Live Data
                     </div>
                 </div>
                 <div class="grid-scroll">
@@ -959,7 +1208,9 @@
             </div>
         </div>
 
-        <div class="page-footer">Software Developed By: <strong>UT Designer</strong></div>
+        <div class="page-footer">
+            Developed with <span style="color:var(--danger);">♥</span> by <strong>UT Designer</strong>
+        </div>
     </div>
 </div>
 
@@ -967,7 +1218,12 @@
     let userId = localStorage.getItem("userId") || "";
     let GridViewDataList = [];
     let IsUpdate = false;
-    const SW = { background:'#252d3e', color:'#e4eaf5' };
+    const SW = {
+        background: '#0f1220',
+        color: '#e8eaf2',
+        confirmButtonColor: '#6c63ff',
+        cancelButtonColor: '#1a2035',
+    };
 
     function initFloatLabels() {
         document.querySelectorAll('.float-group').forEach(g => {
@@ -975,7 +1231,9 @@
             const el = g.querySelector('input:not([type="checkbox"]):not([type="file"]):not([style*="display:none"]),textarea,select');
             if (!el) return;
             const chk = () => g.classList.toggle('has-value', el.value !== '');
-            el.addEventListener('input', chk); el.addEventListener('change', chk); chk();
+            el.addEventListener('input', chk);
+            el.addEventListener('change', chk);
+            chk();
         });
     }
 
@@ -998,67 +1256,90 @@
     document.getElementById("VendorImageAttachment").addEventListener("change", async function () {
         const file = this.files[0]; if (!file) return;
         if (file.size > 500 * 1024) {
-            this.value = ""; document.getElementById("fileNameDisplay").textContent = "Click to browse";
-            await Swal.fire({ icon:'warning', title:'Validation', text:'Image must be under 500 KB.', returnFocus:false, ...SW, didClose:()=>document.getElementById("VendorImageAttachment").focus() });
-        } else { document.getElementById("fileNameDisplay").textContent = file.name; }
+            this.value = "";
+            document.getElementById("fileNameDisplay").textContent = "Click to browse";
+            await Swal.fire({ icon: 'warning', title: 'Validation', text: 'Image must be under 500 KB.', returnFocus: false, ...SW, didClose: () => document.getElementById("VendorImageAttachment").focus() });
+        } else {
+            document.getElementById("fileNameDisplay").textContent = file.name;
+        }
     });
 
     function GetVendorImageAttachmentFile() {
         return new Promise((resolve) => {
             const fileInput = document.getElementById("VendorImageAttachment");
             const file = fileInput.files[0];
-            if (!file) { resolve({ VendorImageAttachmentfilename:"", VendorImageAttachmentbase64:"" }); return; }
+            if (!file) { resolve({ VendorImageAttachmentfilename: "", VendorImageAttachmentbase64: "" }); return; }
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const Vendor = document.getElementById("Vendor").value.trim();
-                const now = new Date(); const pad = n => n.toString().padStart(2,"0");
-                const ts = `${pad(now.getDate())}${pad(now.getMonth()+1)}${now.getFullYear()}${pad(now.getHours())}${pad(now.getMinutes())}`;
+                const now = new Date(); const pad = n => n.toString().padStart(2, "0");
+                const ts = `${pad(now.getDate())}${pad(now.getMonth() + 1)}${now.getFullYear()}${pad(now.getHours())}${pad(now.getMinutes())}`;
                 const ext = file.name.split(".").pop();
                 const newFileName = `${Vendor}_${ts}_VendorRegistrationLogo.${ext}`;
                 const uint8 = new Uint8Array(e.target.result);
-                let bin = ""; for (let i=0;i<uint8.length;i++) bin += String.fromCharCode(uint8[i]);
+                let bin = ""; for (let i = 0; i < uint8.length; i++) bin += String.fromCharCode(uint8[i]);
                 resolve({ VendorImageAttachmentfilename: newFileName, VendorImageAttachmentbase64: btoa(bin) });
             };
-            reader.onerror = () => resolve({ VendorImageAttachmentfilename:"", VendorImageAttachmentbase64:"" });
+            reader.onerror = () => resolve({ VendorImageAttachmentfilename: "", VendorImageAttachmentbase64: "" });
             reader.readAsArrayBuffer(file);
         });
     }
 
     function setCurrentTime() {
         const now = new Date();
-        const t = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+        const t = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         document.getElementById("TimeIn").value = t;
         document.getElementById("TimeOut").value = t;
     }
-    function getTimeFromTextbox(id) { const v=document.getElementById(id).value; if(!v)return; return `1900-01-01 ${v}:00.000`; }
-    function setTimeToTextbox(id, val) { if(!val)return; document.getElementById(id).value=val.split("T")[1].substring(0,5); }
+    function getTimeFromTextbox(id) { const v = document.getElementById(id).value; if (!v) return; return `1900-01-01 ${v}:00.000`; }
+    function setTimeToTextbox(id, val) { if (!val) return; document.getElementById(id).value = val.split("T")[1].substring(0, 5); }
 
     document.addEventListener("DOMContentLoaded", async function () {
         initFloatLabels();
-        await LoadData(); await LoadGridViewData();
+        await LoadData();
+        await LoadGridViewData();
         setCurrentTime();
         document.getElementById("DeliveryCharges").value = "0";
         document.getElementById("PerProductAmount").value = "0";
-        const fields = [document.getElementById("Vendor"), document.getElementById("ContactNo"), document.getElementById("TypeId"), document.getElementById("DepartmentId"), document.getElementById("IsActive")];
-        fields.forEach((f,i) => f.addEventListener("keydown", function(e) {
-            if (e.key==="Enter") { e.preventDefault(); i<fields.length-1 ? fields[i+1].focus() : document.getElementById("saveBtn").click(); }
+        const fields = [
+            document.getElementById("Vendor"),
+            document.getElementById("ContactNo"),
+            document.getElementById("TypeId"),
+            document.getElementById("DepartmentId"),
+            document.getElementById("IsActive")
+        ];
+        fields.forEach((f, i) => f.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") { e.preventDefault(); i < fields.length - 1 ? fields[i + 1].focus() : document.getElementById("saveBtn").click(); }
         }));
         document.getElementById("Vendor").focus();
     });
 
     async function LoadData() {
-        return new Promise((res,rej) => jQuery.ajax({ type:'POST', url:'@Url.Action("nLoadVendorRegistrationData", "VendorRegistration")', data:JSON.stringify({Userid:userId}), contentType:'application/json',
-            success(r) { if(r.statusId===1){TypeDropdown(r.TypeList);DepartmentDropdown(r.DepartmentList);res();}else{toastr.warning("No data.");rej();} },
-            error(x,s,e){console.log(x,s,e);rej();}
+        return new Promise((res, rej) => jQuery.ajax({
+            type: 'POST', url: '@Url.Action("nLoadVendorRegistrationData", "VendorRegistration")',
+            data: JSON.stringify({ Userid: userId }), contentType: 'application/json',
+            success(r) { if (r.statusId === 1) { TypeDropdown(r.TypeList); DepartmentDropdown(r.DepartmentList); res(); } else { toastr.warning("No data."); rej(); } },
+            error(x, s, e) { console.log(x, s, e); rej(); }
         }));
     }
-    function TypeDropdown(list) { const d=document.getElementById("TypeId"); d.innerHTML='<option value="">— Select Type —</option>'; list.forEach(i=>{const o=document.createElement("option");o.value=i.TypeId;o.text=i.Type;d.appendChild(o);}); }
-    function DepartmentDropdown(list) { const d=document.getElementById("DepartmentId"); d.innerHTML='<option value="">— Select Department —</option>'; list.forEach(i=>{const o=document.createElement("option");o.value=i.DepartmentId;o.text=i.Department;d.appendChild(o);}); }
+
+    function TypeDropdown(list) {
+        const d = document.getElementById("TypeId");
+        d.innerHTML = '<option value="">— Select Type —</option>';
+        list.forEach(i => { const o = document.createElement("option"); o.value = i.TypeId; o.text = i.Type; d.appendChild(o); });
+    }
+    function DepartmentDropdown(list) {
+        const d = document.getElementById("DepartmentId");
+        d.innerHTML = '<option value="">— Select Department —</option>';
+        list.forEach(i => { const o = document.createElement("option"); o.value = i.DepartmentId; o.text = i.Department; d.appendChild(o); });
+    }
 
     async function LoadGridViewData() {
-        return new Promise((res,rej) => jQuery.ajax({ type:'POST', url:'@Url.Action("nLoadGridViewData", "VendorRegistration")', data:JSON.stringify({Userid:userId}), contentType:'application/json',
-            success(r) { if(r.statusId===1){GridViewDataList=r.GridViewDataList;renderVendorGrid(GridViewDataList);res();}else{toastr.warning("No data.");rej();} },
-            error(x,s,e){console.log(x,s,e);rej();}
+        return new Promise((res, rej) => jQuery.ajax({
+            type: 'POST', url: '@Url.Action("nLoadGridViewData", "VendorRegistration")',
+            data: JSON.stringify({ Userid: userId }), contentType: 'application/json',
+            success(r) { if (r.statusId === 1) { GridViewDataList = r.GridViewDataList; renderVendorGrid(GridViewDataList); res(); } else { toastr.warning("No data."); rej(); } },
+            error(x, s, e) { console.log(x, s, e); rej(); }
         }));
     }
 
@@ -1069,34 +1350,36 @@
             container.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fas fa-store-slash"></i></div><div class="empty-text">No vendor records found.</div></div>`;
             document.getElementById("TotalVendorsCount").textContent = "0 records"; return;
         }
-        const columns = Object.keys(gridData[0]).filter(c => !["Userid","Type","VendorId","DepartmentId","ImagePath","TimeIn","TimeOut"].includes(c));
+        const columns = Object.keys(gridData[0]).filter(c => !["Userid", "Type", "VendorId", "DepartmentId", "ImagePath", "TimeIn", "TimeOut"].includes(c));
         const table = document.createElement("table"); table.className = "pro-table";
         const thead = document.createElement("thead");
         const h1 = document.createElement("tr");
         const ah = document.createElement("th"); ah.textContent = "Actions"; h1.appendChild(ah);
-        columns.forEach(c => { const th=document.createElement("th"); th.textContent=c; h1.appendChild(th); });
+        columns.forEach(c => { const th = document.createElement("th"); th.textContent = c; h1.appendChild(th); });
         thead.appendChild(h1);
         const h2 = document.createElement("tr");
         h2.appendChild(document.createElement("th"));
         columns.forEach(c => {
-            const th=document.createElement("th"); const inp=document.createElement("input");
-            inp.type="text"; inp.placeholder="Search...";
-            inp.addEventListener("input",function(){filterTable(this,c);}); th.appendChild(inp); h2.appendChild(th);
+            const th = document.createElement("th");
+            const inp = document.createElement("input");
+            inp.type = "text"; inp.placeholder = "Filter...";
+            inp.addEventListener("input", function () { filterTable(this, c); });
+            th.appendChild(inp); h2.appendChild(th);
         });
         thead.appendChild(h2); table.appendChild(thead);
         const tbody = document.createElement("tbody");
         gridData.forEach(row => {
             const tr = document.createElement("tr");
             const atd = document.createElement("td");
-            const eb = document.createElement("button"); eb.className="tbl-btn tbl-btn-edit"; eb.innerHTML='<i class="fas fa-pen"></i>'; eb.title="Edit";
-            eb.addEventListener("click",()=>{onEditRow(row);showFormView();}); atd.appendChild(eb);
-            const db = document.createElement("button"); db.className="tbl-btn tbl-btn-del"; db.innerHTML='<i class="fas fa-trash-can"></i>'; db.title="Delete";
-            db.addEventListener("click",()=>onDeleteRow(row)); atd.appendChild(db);
+            const eb = document.createElement("button"); eb.className = "tbl-btn tbl-btn-edit"; eb.innerHTML = '<i class="fas fa-pen"></i>'; eb.title = "Edit";
+            eb.addEventListener("click", () => { onEditRow(row); showFormView(); }); atd.appendChild(eb);
+            const db = document.createElement("button"); db.className = "tbl-btn tbl-btn-del"; db.innerHTML = '<i class="fas fa-trash-can"></i>'; db.title = "Delete";
+            db.addEventListener("click", () => onDeleteRow(row)); atd.appendChild(db);
             tr.appendChild(atd);
             columns.forEach(c => {
-                const td=document.createElement("td");
-                if(c==="Is Active") td.innerHTML=row[c]?'<span class="badge-active">Active</span>':'<span class="badge-inactive">Inactive</span>';
-                else td.textContent=row[c];
+                const td = document.createElement("td");
+                if (c === "Is Active") td.innerHTML = row[c] ? '<span class="badge-active"><i class="fas fa-circle" style="font-size:6px;margin-right:4px;"></i>Active</span>' : '<span class="badge-inactive"><i class="fas fa-circle" style="font-size:6px;margin-right:4px;"></i>Inactive</span>';
+                else td.textContent = row[c];
                 tr.appendChild(td);
             });
             tbody.appendChild(tr);
@@ -1106,92 +1389,126 @@
     }
 
     function filterTable(input, column) {
-        const table=input.closest("table"); const tbody=table.querySelector("tbody");
-        const rows=Array.from(tbody.rows); const fv=input.value.toLowerCase();
-        const ci=Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th=>th.textContent===column);
-        let count=0;
-        rows.forEach(r=>{const m=(r.cells[ci]?.textContent.toLowerCase()||"").includes(fv); r.style.display=m?"":"none"; if(m)count++;});
-        document.getElementById("TotalVendorsCount").textContent=`${count} records`;
+        const table = input.closest("table"); const tbody = table.querySelector("tbody");
+        const rows = Array.from(tbody.rows); const fv = input.value.toLowerCase();
+        const ci = Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th => th.textContent === column);
+        let count = 0;
+        rows.forEach(r => { const m = (r.cells[ci]?.textContent.toLowerCase() || "").includes(fv); r.style.display = m ? "" : "none"; if (m) count++; });
+        document.getElementById("TotalVendorsCount").textContent = `${count} records`;
     }
 
     function onEditRow(row) {
-        IsUpdate=true;
-        document.getElementById("saveBtn").innerHTML='<i class="fas fa-floppy-disk"></i> Update Vendor';
-        document.getElementById("VendorId").value=row["VendorId"]||"";
-        document.getElementById("VendorImageAttachmentOld").value=row["ImagePath"]||"";
-        document.getElementById("Vendor").value=row["Vendor Name"]||"";
-        document.getElementById("ContactNo").value=row["Contact #"]||"";
-        document.getElementById("TypeId").value=row["Type"]||"";
-        document.getElementById("DepartmentId").value=row["DepartmentId"]||"";
-        document.getElementById("IsActive").checked=row["Is Active"]||false;
-        document.getElementById("DeliveryCharges").value=row["Delivery Charges"]||"";
-        document.getElementById("PerProductAmount").value=row["PerProductAmount"]||"";
-        document.getElementById("Address").value=row["Address"]||"";
-        setTimeToTextbox("TimeIn",row["TimeIn"]); setTimeToTextbox("TimeOut",row["TimeOut"]);
+        IsUpdate = true;
+        document.getElementById("updatePill").style.display = "inline-flex";
+        document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Update Vendor';
+        document.getElementById("VendorId").value = row["VendorId"] || "";
+        document.getElementById("VendorImageAttachmentOld").value = row["ImagePath"] || "";
+        document.getElementById("Vendor").value = row["Vendor Name"] || "";
+        document.getElementById("ContactNo").value = row["Contact #"] || "";
+        document.getElementById("TypeId").value = row["Type"] || "";
+        document.getElementById("DepartmentId").value = row["DepartmentId"] || "";
+        document.getElementById("IsActive").checked = row["Is Active"] || false;
+        document.getElementById("DeliveryCharges").value = row["Delivery Charges"] || "";
+        document.getElementById("PerProductAmount").value = row["PerProductAmount"] || "";
+        document.getElementById("Address").value = row["Address"] || "";
+        setTimeToTextbox("TimeIn", row["TimeIn"]);
+        setTimeToTextbox("TimeOut", row["TimeOut"]);
         document.getElementById("Vendor").focus();
-        ViewImage(row["ImagePath"]||"");
+        ViewImage(row["ImagePath"] || "");
         initFloatLabels();
     }
 
     async function onDeleteRow(row) {
-        const r=await Swal.fire({title:'Confirm Delete',text:`Delete "${row["Vendor Name"]}"?`,icon:'warning',showCancelButton:true,confirmButtonText:'Yes, delete',cancelButtonText:'Cancel',confirmButtonColor:'#f43f5e',...SW});
-        if(!r.isConfirmed)return;
-        const nInfoTab={Userid:userId.toString(),VendorId:row["VendorId"].toString(),VendorImageAttachmentfilenameold:row["ImagePath"].toString()};
-        Swal.fire({title:'Please wait',text:'Deleting...',allowOutsideClick:false,allowEscapeKey:false,returnFocus:false,didOpen:()=>Swal.showLoading(),...SW});
+        const r = await Swal.fire({
+            title: 'Confirm Delete', text: `Delete "${row["Vendor Name"]}"?`,
+            icon: 'warning', showCancelButton: true,
+            confirmButtonText: 'Yes, delete', cancelButtonText: 'Cancel',
+            confirmButtonColor: '#f43f5e', ...SW
+        });
+        if (!r.isConfirmed) return;
+        const nInfoTab = { Userid: userId.toString(), VendorId: row["VendorId"].toString(), VendorImageAttachmentfilenameold: row["ImagePath"].toString() };
+        Swal.fire({ title: 'Please wait', text: 'Deleting...', allowOutsideClick: false, allowEscapeKey: false, returnFocus: false, didOpen: () => Swal.showLoading(), ...SW });
         try {
-            const res=await jQuery.ajax({type:'POST',url:'@Url.Action("nDeleteVendorRegistrationData", "VendorRegistration")',data:JSON.stringify(nInfoTab),contentType:'application/json'});
+            const res = await jQuery.ajax({ type: 'POST', url: '@Url.Action("nDeleteVendorRegistrationData", "VendorRegistration")', data: JSON.stringify(nInfoTab), contentType: 'application/json' });
             Swal.close();
-            if(res.statusId===1){await Swal.fire({icon:'success',title:'Deleted',text:res.message||'Vendor deleted.',returnFocus:false,...SW,didClose:()=>document.getElementById("Vendor").focus()});nClearForm();}
-            else await Swal.fire({icon:'warning',title:'Failed',text:res.message||'Could not delete.',...SW});
-        } catch(e){Swal.close();await Swal.fire({icon:'error',title:'Error',text:'An error occurred.',...SW});}
+            if (res.statusId === 1) { await Swal.fire({ icon: 'success', title: 'Deleted', text: res.message || 'Vendor deleted.', returnFocus: false, ...SW, didClose: () => document.getElementById("Vendor").focus() }); nClearForm(); }
+            else await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not delete.', ...SW });
+        } catch (e) { Swal.close(); await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred.', ...SW }); }
     }
 
-    function ViewImage(Link){const b=document.getElementById("ViewImageBtn");b.style.display="inline-flex";b.href=Link;b.target="_blank";}
+    function ViewImage(Link) {
+        const b = document.getElementById("ViewImageBtn");
+        b.style.display = "inline-flex"; b.href = Link; b.target = "_blank";
+    }
 
-    document.getElementById("saveBtn").addEventListener("click",async function(){await SaveData();});
+    document.getElementById("saveBtn").addEventListener("click", async function () { await SaveData(); });
+
     async function SaveData() {
-        const VendorId=document.getElementById("VendorId").value.trim();
-        const Vendor=document.getElementById("Vendor").value.trim();
-        const contactNo=document.getElementById("ContactNo").value.trim();
-        const type=document.getElementById("TypeId").value.trim();
-        const department=document.getElementById("DepartmentId").value.trim();
-        const isActive=document.getElementById("IsActive").checked;
-        const VendorImageAttachment=document.getElementById("VendorImageAttachment").value.trim();
-        const VendorImageAttachmentold=document.getElementById("VendorImageAttachmentOld").value.trim();
-        const nAddress=document.getElementById("Address").value.trim();
-        const validations=[
-            {cond:!Vendor,text:'Vendor name is required',focus:'Vendor'},
-            {cond:!contactNo,text:'Contact number is required',focus:'ContactNo'},
-            {cond:contactNo&&contactNo.length<10,text:'Contact number must be at least 10 digits',focus:'ContactNo'},
-            {cond:!type,text:'Please select a vendor type',focus:'TypeId'},
-            {cond:!department,text:'Please select a department',focus:'DepartmentId'},
-            {cond:!VendorImageAttachment,text:'Please select a vendor image',focus:'VendorImageAttachment'}
+        const VendorId = document.getElementById("VendorId").value.trim();
+        const Vendor = document.getElementById("Vendor").value.trim();
+        const contactNo = document.getElementById("ContactNo").value.trim();
+        const type = document.getElementById("TypeId").value.trim();
+        const department = document.getElementById("DepartmentId").value.trim();
+        const isActive = document.getElementById("IsActive").checked;
+        const VendorImageAttachment = document.getElementById("VendorImageAttachment").value.trim();
+        const VendorImageAttachmentold = document.getElementById("VendorImageAttachmentOld").value.trim();
+        const nAddress = document.getElementById("Address").value.trim();
+        const validations = [
+            { cond: !Vendor, text: 'Vendor name is required', focus: 'Vendor' },
+            { cond: !contactNo, text: 'Contact number is required', focus: 'ContactNo' },
+            { cond: contactNo && contactNo.length < 10, text: 'Contact number must be at least 10 digits', focus: 'ContactNo' },
+            { cond: !type, text: 'Please select a vendor type', focus: 'TypeId' },
+            { cond: !department, text: 'Please select a department', focus: 'DepartmentId' },
+            { cond: !VendorImageAttachment, text: 'Please select a vendor image', focus: 'VendorImageAttachment' }
         ];
-        for(const v of validations){if(v.cond){await Swal.fire({icon:'warning',title:'Validation',text:v.text,returnFocus:false,...SW,didClose:()=>document.getElementById(v.focus).focus()});return;}}
-        const{VendorImageAttachmentfilename,VendorImageAttachmentbase64}=await GetVendorImageAttachmentFile();
-        const nInfoTab={Userid:userId,VendorId,Vendor,ContactNo:contactNo,Type:type,DepartmentId:department,VendorImageAttachmentfilename,VendorImageAttachmentfilenameold:VendorImageAttachmentold,VendorImageAttachmentbase64,TimeIn:getTimeFromTextbox("TimeIn"),TimeOut:getTimeFromTextbox("TimeOut"),DeliveryCharges:document.getElementById("DeliveryCharges").value.trim(),PerProductAmount:document.getElementById("PerProductAmount").value.trim(),Address:nAddress,IsActive:isActive,IsUpdate};
-        Swal.fire({title:'Please wait',text:'Saving...',allowOutsideClick:false,allowEscapeKey:false,didOpen:()=>Swal.showLoading(),...SW});
-        try{
-            const res=await jQuery.ajax({type:'POST',url:'@Url.Action("nSaveVendorRegistrationData", "VendorRegistration")',data:JSON.stringify(nInfoTab),contentType:'application/json'});
+        for (const v of validations) {
+            if (v.cond) {
+                await Swal.fire({ icon: 'warning', title: 'Validation', text: v.text, returnFocus: false, ...SW, didClose: () => document.getElementById(v.focus).focus() });
+                return;
+            }
+        }
+        const { VendorImageAttachmentfilename, VendorImageAttachmentbase64 } = await GetVendorImageAttachmentFile();
+        const nInfoTab = {
+            Userid: userId, VendorId, Vendor, ContactNo: contactNo,
+            Type: type, DepartmentId: department,
+            VendorImageAttachmentfilename, VendorImageAttachmentfilenameold: VendorImageAttachmentold,
+            VendorImageAttachmentbase64,
+            TimeIn: getTimeFromTextbox("TimeIn"), TimeOut: getTimeFromTextbox("TimeOut"),
+            DeliveryCharges: document.getElementById("DeliveryCharges").value.trim(),
+            PerProductAmount: document.getElementById("PerProductAmount").value.trim(),
+            Address: nAddress, IsActive: isActive, IsUpdate
+        };
+        Swal.fire({ title: 'Please wait', text: 'Saving...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), ...SW });
+        try {
+            const res = await jQuery.ajax({ type: 'POST', url: '@Url.Action("nSaveVendorRegistrationData", "VendorRegistration")', data: JSON.stringify(nInfoTab), contentType: 'application/json' });
             Swal.close();
-            if(res.statusId===1){await Swal.fire({icon:'success',title:'Saved',text:res.message||'Vendor saved.',returnFocus:false,...SW,didClose:()=>document.getElementById("Vendor").focus()});nClearForm();}
-            else await Swal.fire({icon:'warning',title:'Failed',text:res.message||'Could not save.',...SW});
-        }catch(e){Swal.close();await Swal.fire({icon:'error',title:'Error',text:'An error occurred.',...SW});}
+            if (res.statusId === 1) { await Swal.fire({ icon: 'success', title: 'Saved', text: res.message || 'Vendor saved.', returnFocus: false, ...SW, didClose: () => document.getElementById("Vendor").focus() }); nClearForm(); }
+            else await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not save.', ...SW });
+        } catch (e) { Swal.close(); await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred.', ...SW }); }
     }
 
-    document.getElementById("cancelBtn").addEventListener("click",function(){nClearForm();});
-    async function nClearForm(){
-        ["VendorId","VendorImageAttachmentOld","Vendor","ContactNo","Address"].forEach(id=>document.getElementById(id).value="");
-        document.getElementById("TypeId").value="";document.getElementById("DepartmentId").value="";
-        document.getElementById("IsActive").checked=false;document.getElementById("VendorImageAttachment").value="";
-        document.getElementById("fileNameDisplay").textContent="Click to browse";
-        document.getElementById("DeliveryCharges").value="0";document.getElementById("PerProductAmount").value="0";
-        IsUpdate=false;document.getElementById("saveBtn").innerHTML='<i class="fas fa-floppy-disk"></i> Save Vendor';
-        document.getElementById("ViewImageBtn").style.display="none";
-        document.getElementById("Vendor").focus();setCurrentTime();await LoadGridViewData();
+    document.getElementById("cancelBtn").addEventListener("click", function () { nClearForm(); });
+
+    async function nClearForm() {
+        ["VendorId", "VendorImageAttachmentOld", "Vendor", "ContactNo", "Address"].forEach(id => document.getElementById(id).value = "");
+        document.getElementById("TypeId").value = "";
+        document.getElementById("DepartmentId").value = "";
+        document.getElementById("IsActive").checked = false;
+        document.getElementById("VendorImageAttachment").value = "";
+        document.getElementById("fileNameDisplay").textContent = "Click to browse";
+        document.getElementById("DeliveryCharges").value = "0";
+        document.getElementById("PerProductAmount").value = "0";
+        IsUpdate = false;
+        document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Save Vendor';
+        document.getElementById("ViewImageBtn").style.display = "none";
+        document.getElementById("updatePill").style.display = "none";
+        document.getElementById("Vendor").focus();
+        setCurrentTime();
+        await LoadGridViewData();
+        initFloatLabels();
     }
 
-    const ci=document.getElementById("ContactNo");
-    ci.addEventListener("keydown",function(e){if(e.ctrlKey||e.metaKey||(e.key>='0'&&e.key<='9')||['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(e.key))return;e.preventDefault();});
-    ci.addEventListener("input",function(){this.value=this.value.replace(/\D/g,'');});
+    const ci = document.getElementById("ContactNo");
+    ci.addEventListener("keydown", function (e) { if (e.ctrlKey || e.metaKey || (e.key >= '0' && e.key <= '9') || ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) return; e.preventDefault(); });
+    ci.addEventListener("input", function () { this.value = this.value.replace(/\D/g, ''); });
 </script>
