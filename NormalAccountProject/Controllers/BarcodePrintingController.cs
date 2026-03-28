@@ -67,7 +67,7 @@ namespace NormalAccountProject.Controllers
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     // ✅ FIXED: "Product AS ProductName" — your DB column is "Product"
-                    string query = "SELECT ProductCode, Product AS ProductName FROM EcomProduct_Tab ORDER BY Product";
+                    string query = "SELECT ProductCode, Product AS ProductName FROM Inv_ProductsTab Where IsActive  = 1 ORDER BY Product";
 
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
