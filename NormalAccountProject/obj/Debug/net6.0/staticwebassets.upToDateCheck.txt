@@ -97,6 +97,7 @@ wwwroot\fonts\poppins\poppins-v5-latin-regular.woff2
 wwwroot\images\404-NotFound.png
 wwwroot\images\icon\avatar-01.jpg
 wwwroot\images\icon\logo.png
+wwwroot\images\logo.png
 wwwroot\javascript\disable-devtool.js
 wwwroot\js\aos.js
 wwwroot\js\bootstrap-datetimepicker.js
@@ -108,6 +109,7 @@ wwwroot\js\moment.js
 wwwroot\js\swiper-bundle-11.2.10.min.js
 wwwroot\js\swiper-bundle.min.js
 wwwroot\js\vanilla-utils.js
+wwwroot\logo.png
 wwwroot\vendor\bootstrap-5.3.7.bundle.min.js
 wwwroot\vendor\bootstrap-5.3.7.min.css
 wwwroot\vendor\bootstrap-5.3.8.bundle.min.js
