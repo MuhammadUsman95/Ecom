@@ -49,4 +49,10 @@
         public string? ProductImageAttachmentfilenameold { get; set; }
         public string? FtpPath { get; set; }
     }
+    public class EcomProduct_Tab
+    {
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+        public string UserId { get; set; }  // Assuming you're filtering by UserId
+    }
 }
