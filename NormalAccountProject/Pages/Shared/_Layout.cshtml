@@ -17,52 +17,60 @@
     <link href="css/swiper-bundle-11.2.10.min.css" rel="stylesheet" media="all">
     <link href="vendor/perfect-scrollbar/perfect-scrollbar-1.5.6.min.css" rel="stylesheet" media="all">
     <link href="css/theme.css" rel="stylesheet" media="all">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
         /* ════════════════════════════════════════
-                   THEME VARIABLES — Sidebar Colors
-                   BG:          #1a2030
-                   Surface:     #252d3e  ← sidebar body
-                   Header:      #1e2535  ← sidebar top
-                   Active Nav:  #2e4275  ← active item
-                   Accent:      #4f7cff  ← blue highlight
+                   UNIFIED DESIGN TOKENS — Category Theme
+                   Matches: Category.cshtml · Home.cshtml
                 ════════════════════════════════════════ */
         :root {
-            --bg: #1a2030;
-            --bg2: #151c2b;
-            --surface: #252d3e;
-            --surface2: #1e2535;
-            --surface3: #2a3347;
+            --bg: #0a0c12;
+            --bg2: #0f1220;
+            --surface: #141828;
+            --surface2: #1a2035;
+            --surface3: #1f2640;
             --border: rgba(255,255,255,.06);
-            --border2: rgba(255,255,255,.10);
-            --accent: #4f7cff;
-            --accent-dim: rgba(79,124,255,.14);
-            --accent-glow: rgba(79,124,255,.28);
-            --active-nav: #2e4275;
-            --text: #e4eaf5;
-            --text2: #8d9bb5;
-            --text3: #4a5878;
+            --border2: rgba(255,255,255,.11);
+            --border3: rgba(255,255,255,.18);
+            --accent: #6c63ff;
+            --accent2: #4f46e5;
+            --accent-g: rgba(108,99,255,.15);
+            --accent-glow: rgba(108,99,255,.28);
+            --accent-dim: rgba(108,99,255,.14);
+            --active-nav: rgba(108,99,255,.18);
+            --gold: #f0b429;
+            --gold-g: rgba(240,180,41,.12);
+            --teal: #14b8a6;
             --danger: #f43f5e;
+            --success: #10b981;
+            --text: #e8eaf2;
+            --text2: #9198b0;
+            --text3: #5a6182;
+            --font-h: 'Syne', sans-serif;
+            --font-b: 'Plus Jakarta Sans', sans-serif;
+            --font-m: 'JetBrains Mono', monospace;
+            --r: 10px;
+            --r2: 14px;
+            --r3: 18px;
+            --sh: 0 4px 32px rgba(0,0,0,.45);
+            --sh2: 0 8px 48px rgba(0,0,0,.6);
             --sidebar-w: 240px;
             --header-h: 56px;
-            --font-head: 'Syne', sans-serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
         }
 
         *, *::before, *::after {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: var(--font-body);
+            font-family: var(--font-b);
             background: var(--bg);
             color: var(--text);
             overflow: hidden !important;
-            margin: 0;
-            padding: 0;
         }
 
         /* ─── Scrollbar ─── */
@@ -93,15 +101,15 @@
             display: flex;
             flex-direction: column;
             border-right: 1px solid var(--border2);
-            box-shadow: 4px 0 24px rgba(0,0,0,.3);
+            box-shadow: 4px 0 32px rgba(0,0,0,.4);
             transition: transform .3s ease;
         }
 
-        /* Logo area */
+        /* ── Logo ── */
         .sidebar-logo {
             background: var(--surface2);
-            padding: 20px 18px;
-            border-bottom: 1px solid var(--border);
+            padding: 18px 18px;
+            border-bottom: 1px solid var(--border2);
             display: flex;
             align-items: center;
             gap: 12px;
@@ -117,35 +125,32 @@
                 left: -100%;
                 width: 200%;
                 height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255,255,255,.04), transparent);
-                animation: sheen 4s infinite;
+                background: linear-gradient(90deg, transparent, rgba(255,255,255,.03), transparent);
+                animation: sheen 5s infinite;
             }
+
         @@keyframes sheen {
-            0%
+            0% {
+                left: -100%
+            }
 
-        {
-            left: -100%
-        }
-
-        100% {
-            left: 100%
-        }
-
+            100% {
+                left: 100%
+            }
         }
 
         .sidebar-logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--active-nav);
-            border: 1px solid rgba(79,124,255,.3);
-            border-radius: 9px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+            border-radius: var(--r);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent);
-            font-size: 15px;
+            color: #fff;
+            font-size: 16px;
             flex-shrink: 0;
-            box-shadow: 0 0 14px rgba(79,124,255,.2);
+            box-shadow: 0 4px 20px rgba(108,99,255,.4);
             position: relative;
             z-index: 1;
         }
@@ -156,7 +161,7 @@
         }
 
             .sidebar-logo-text .name {
-                font-family: var(--font-head);
+                font-family: var(--font-h);
                 font-size: 16px;
                 font-weight: 800;
                 color: var(--text);
@@ -171,14 +176,14 @@
                 }
 
             .sidebar-logo-text .sub {
-                font-family: var(--font-mono);
+                font-family: var(--font-m);
                 font-size: 9px;
                 color: var(--text3);
                 letter-spacing: 1px;
                 margin-top: 3px;
             }
 
-        /* Nav list */
+        /* ── Nav ── */
         .menu-sidebar__content {
             flex: 1;
             overflow-y: auto;
@@ -186,6 +191,15 @@
             padding: 14px 0;
             scrollbar-width: thin;
             scrollbar-color: var(--surface3) transparent;
+        }
+
+        .nav-section-label {
+            font-family: var(--font-m);
+            font-size: 9px;
+            color: var(--text3);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 10px 22px 6px;
         }
 
         .navbar__list {
@@ -204,22 +218,22 @@
                     gap: 11px;
                     padding: 10px 14px;
                     color: var(--text2);
-                    font-size: 13.5px;
+                    font-size: 13px;
                     font-weight: 500;
-                    border-radius: 9px;
+                    border-radius: var(--r);
                     text-decoration: none;
                     transition: all .2s ease;
-                    position: relative;
                     border: 1px solid transparent;
+                    font-family: var(--font-b);
                 }
 
                     .navbar__list > li > a i {
-                        font-size: 15px;
+                        font-size: 14px;
                         width: 20px;
                         text-align: center;
                         flex-shrink: 0;
-                        opacity: .7;
-                        transition: opacity .2s;
+                        opacity: .65;
+                        transition: opacity .2s, color .2s;
                     }
 
                     .navbar__list > li > a:hover {
@@ -235,9 +249,9 @@
                 .navbar__list > li.active > a {
                     background: var(--active-nav);
                     color: #c5d4ff;
-                    border-color: rgba(79,124,255,.25);
+                    border-color: rgba(108,99,255,.3);
                     font-weight: 600;
-                    box-shadow: 0 2px 10px rgba(46,66,117,.4);
+                    box-shadow: 0 2px 14px rgba(108,99,255,.2);
                 }
 
                     .navbar__list > li.active > a i {
@@ -245,17 +259,7 @@
                         color: var(--accent);
                     }
 
-        /* Nav section label */
-        .nav-section-label {
-            font-family: var(--font-mono);
-            font-size: 9px;
-            color: var(--text3);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 10px 24px 6px;
-        }
-
-        /* Sidebar footer */
+        /* ── Sidebar footer ── */
         .sidebar-footer {
             padding: 12px 10px;
             border-top: 1px solid var(--border);
@@ -270,18 +274,19 @@
                 color: rgba(244,63,94,.7);
                 font-size: 13px;
                 font-weight: 600;
-                border-radius: 9px;
+                border-radius: var(--r);
                 text-decoration: none;
                 transition: all .2s;
+                font-family: var(--font-b);
             }
 
                 .sidebar-footer a:hover {
                     background: rgba(244,63,94,.1);
-                    color: #f43f5e;
+                    color: var(--danger);
                 }
 
                 .sidebar-footer a i {
-                    font-size: 15px;
+                    font-size: 14px;
                     width: 20px;
                     text-align: center;
                 }
@@ -294,6 +299,7 @@
             min-height: 100vh;
             overflow: hidden !important;
             transition: padding-left .3s ease;
+            animation: fadeIn .3s ease;
         }
 
         /* ════════════════════════════
@@ -301,14 +307,14 @@
                 ════════════════════════════ */
         .header-desktop {
             background: var(--surface2);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border2);
             height: var(--header-h);
             display: flex;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 999;
-            box-shadow: 0 2px 12px rgba(0,0,0,.2);
+            box-shadow: 0 2px 20px rgba(0,0,0,.3);
         }
 
         .header-wrap {
@@ -320,7 +326,6 @@
             gap: 12px;
         }
 
-        /* Page breadcrumb in header */
         .header-page-info {
             flex: 1;
             display: flex;
@@ -333,11 +338,11 @@
             height: 6px;
             border-radius: 50%;
             background: var(--accent);
-            box-shadow: 0 0 6px var(--accent-glow);
+            box-shadow: 0 0 8px var(--accent-glow);
         }
 
         .header-page-name {
-            font-family: var(--font-mono);
+            font-family: var(--font-m);
             font-size: 11px;
             color: var(--text3);
             letter-spacing: .5px;
@@ -347,7 +352,7 @@
                 color: var(--accent);
             }
 
-        /* Account wrap */
+        /* Account */
         .account-wrap {
             position: relative;
         }
@@ -357,7 +362,7 @@
             align-items: center;
             gap: 10px;
             padding: 7px 12px;
-            border-radius: 9px;
+            border-radius: var(--r);
             cursor: pointer;
             transition: all .2s;
             border: 1px solid var(--border2);
@@ -366,7 +371,7 @@
 
             .account-item:hover {
                 background: var(--active-nav);
-                border-color: rgba(79,124,255,.25);
+                border-color: rgba(108,99,255,.3);
             }
 
         .account-avatar {
@@ -374,7 +379,7 @@
             height: 30px;
             border-radius: 8px;
             background: var(--active-nav);
-            border: 1px solid rgba(79,124,255,.3);
+            border: 1px solid rgba(108,99,255,.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -387,7 +392,7 @@
             font-size: 13px;
             font-weight: 600;
             color: var(--text2);
-            font-family: var(--font-body);
+            font-family: var(--font-b);
         }
 
         .account-chevron {
@@ -407,8 +412,8 @@
             right: 0;
             background: var(--surface);
             border: 1px solid var(--border2);
-            border-radius: 12px;
-            box-shadow: 0 12px 40px rgba(0,0,0,.4);
+            border-radius: var(--r2);
+            box-shadow: var(--sh2);
             min-width: 220px;
             overflow: hidden;
             display: none;
@@ -432,9 +437,9 @@
         .dropdown-avatar {
             width: 38px;
             height: 38px;
-            border-radius: 10px;
+            border-radius: var(--r);
             background: var(--active-nav);
-            border: 1px solid rgba(79,124,255,.3);
+            border: 1px solid rgba(108,99,255,.3);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -444,14 +449,14 @@
         }
 
         .dropdown-user-name {
-            font-family: var(--font-head);
+            font-family: var(--font-h);
             font-size: 14px;
             font-weight: 700;
             color: var(--text);
         }
 
         .dropdown-user-role {
-            font-family: var(--font-mono);
+            font-family: var(--font-m);
             font-size: 9.5px;
             color: var(--text3);
             letter-spacing: .5px;
@@ -468,12 +473,12 @@
             font-weight: 600;
             text-decoration: none;
             transition: all .2s;
-            font-family: var(--font-body);
+            font-family: var(--font-b);
         }
 
             .dropdown-logout:hover {
                 background: rgba(244,63,94,.08);
-                color: #f43f5e;
+                color: var(--danger);
             }
 
             .dropdown-logout i {
@@ -485,7 +490,7 @@
                 ════════════════════════════ */
         .header-mobile {
             background: var(--surface2);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border2);
             position: fixed;
             top: 0;
             left: 0;
@@ -512,20 +517,20 @@
         }
 
         .mobile-logo-icon {
-            width: 32px;
-            height: 32px;
-            background: var(--active-nav);
-            border: 1px solid rgba(79,124,255,.3);
-            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+            border-radius: var(--r);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--accent);
+            color: #fff;
             font-size: 14px;
+            box-shadow: 0 3px 12px rgba(108,99,255,.35);
         }
 
         .mobile-logo-text {
-            font-family: var(--font-head);
+            font-family: var(--font-h);
             font-size: 15px;
             font-weight: 800;
             color: var(--text);
@@ -540,7 +545,7 @@
             padding: 6px;
             background: var(--surface3);
             border: 1px solid var(--border2);
-            border-radius: 8px;
+            border-radius: var(--r);
             cursor: pointer;
             display: inline-flex;
             flex-direction: column;
@@ -554,7 +559,7 @@
 
             .hamburger:hover {
                 background: var(--active-nav);
-                border-color: rgba(79,124,255,.3);
+                border-color: rgba(108,99,255,.3);
             }
 
             .hamburger span {
@@ -618,19 +623,20 @@
                     gap: 11px;
                     padding: 11px 14px;
                     color: var(--text2);
-                    font-size: 13.5px;
+                    font-size: 13px;
                     font-weight: 500;
-                    border-radius: 9px;
+                    border-radius: var(--r);
                     text-decoration: none;
                     transition: all .2s;
                     border: 1px solid transparent;
+                    font-family: var(--font-b);
                 }
 
                     .navbar-mobile__list li a i {
-                        font-size: 15px;
+                        font-size: 14px;
                         width: 20px;
                         text-align: center;
-                        opacity: .7;
+                        opacity: .65;
                     }
 
                     .navbar-mobile__list li a:hover {
@@ -642,7 +648,7 @@
                 .navbar-mobile__list li.active a {
                     background: var(--active-nav);
                     color: #c5d4ff;
-                    border-color: rgba(79,124,255,.25);
+                    border-color: rgba(108,99,255,.3);
                     font-weight: 600;
                 }
 
@@ -664,23 +670,23 @@
                 color: rgba(244,63,94,.7);
                 font-size: 13px;
                 font-weight: 600;
-                border-radius: 9px;
+                border-radius: var(--r);
                 text-decoration: none;
                 transition: all .2s;
+                font-family: var(--font-b);
             }
 
                 .mobile-nav-footer a:hover {
                     background: rgba(244,63,94,.1);
-                    color: #f43f5e;
+                    color: var(--danger);
                 }
 
                 .mobile-nav-footer a i {
-                    font-size: 15px;
+                    font-size: 14px;
                     width: 20px;
                     text-align: center;
                 }
 
-        /* Mobile overlay */
         .mobile-overlay {
             display: none;
             position: fixed;
@@ -688,9 +694,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,.6);
+            background: rgba(0,0,0,.65);
             z-index: 999;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px);
         }
 
             .mobile-overlay.show {
@@ -702,7 +708,7 @@
                 ════════════════════════════ */
         .main-content {
             overflow: visible !important;
-            display:contents;
+            display: contents;
         }
 
         .section__content--p30 {
@@ -711,85 +717,69 @@
         }
 
         /* ─── Animations ─── */
-        @@keyframes fadeUp {
-            from
-
-        {
-            opacity: 0;
-            transform: translateY(8px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        }
         @@keyframes fadeIn {
-            from
+            from {
+                opacity: 0
+            }
 
-        {
-            opacity: 0;
+            to {
+                opacity: 1
+            }
         }
 
-        to {
-            opacity: 1;
-        }
+        @@keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
 
-        }
-
-        .page-container {
-            animation: fadeIn .3s ease;
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
         }
 
         /* ════════════════════════════
                    RESPONSIVE
                 ════════════════════════════ */
         @@media (max-width: 1024px) {
-            .page-container
+            .page-container {
+                padding-left: 0;
+            }
 
-        {
-            padding-left: 0;
+            .menu-sidebar {
+                transform: translateX(-100%);
+            }
         }
 
-        .menu-sidebar {
-            transform: translateX(-100%);
-        }
-
-        }
         @@media (max-width: 991px) {
-            body
+            body {
+                padding-top: 56px;
+                overflow: auto !important;
+            }
 
-        {
-            padding-top: 56px;
-            overflow: auto !important;
+            .page-container {
+                padding-left: 0;
+                overflow: auto !important;
+            }
+
+            .header-desktop {
+                display: none !important;
+            }
         }
 
-        .page-container {
-            padding-left: 0;
-            overflow: auto !important;
-        }
-
-        .header-desktop {
-            display: none !important;
-        }
-
-        }
         @@media print {
-            .header-mobile, .menu-sidebar
+            .header-mobile, .menu-sidebar {
+                display: none !important;
+            }
 
-        {
-            display: none !important;
-        }
+            .page-container {
+                padding-left: 0 !important;
+            }
 
-        .page-container {
-            padding-left: 0 !important;
-        }
-
-        body {
-            padding-top: 0 !important;
-        }
-
+            body {
+                padding-top: 0 !important;
+            }
         }
     </style>
 </head>
@@ -816,7 +806,7 @@
                     <li><a href="/Category"><i class="fas fa-th-large"></i>Category</a></li>
                     <li><a href="/Product"><i class="fas fa-box-open"></i>Product</a></li>
                     <li><a href="/VendorRegistration"><i class="fas fa-store"></i>Vendor</a></li>
-                    <li><a href="/BarcodePrinting"><i class="fas fa-store"></i>BarcodePrinting</a></li>
+                    <li><a href="/BarcodePrinting"><i class="fas fa-barcode"></i>Barcode Printing</a></li>
                 </ul>
                 <div class="mobile-nav-footer">
                     <a href="#" id="mobileLogoutBtn"><i class="fas fa-arrow-right-from-bracket"></i>Logout</a>
@@ -839,27 +829,12 @@
                 <nav class="navbar-sidebar">
                     <div class="nav-section-label">Main Menu</div>
                     <ul class="list-unstyled navbar__list">
-                        <li>
-                            <a href="/Home"><i class="fas fa-gauge-high"></i>Dashboard</a>
-                        </li>
-                        <li>
-                            <a href="/Slider"><i class="fas fa-images"></i>Slider</a>
-                        </li>
-                        <li>
-                            <a href="/Category"><i class="fas fa-th-large"></i>Category</a>
-                        </li>
-                        <li>
-                            <a href="/Product"><i class="fas fa-box-open"></i>Product</a>
-                        </li>
-                        <li>
-                            <a href="/VendorRegistration"><i class="fas fa-store"></i>Vendor</a>
-                        </li>
-
-                        <li>
-                            <a href="/BarcodePrinting"><i class="fas fa-store"></i>BarcodePrinting</a>
-                        </li>
-
-                        
+                        <li><a href="/Home"><i class="fas fa-gauge-high"></i>Dashboard</a></li>
+                        <li><a href="/Slider"><i class="fas fa-images"></i>Slider</a></li>
+                        <li><a href="/Category"><i class="fas fa-th-large"></i>Category</a></li>
+                        <li><a href="/Product"><i class="fas fa-box-open"></i>Product</a></li>
+                        <li><a href="/VendorRegistration"><i class="fas fa-store"></i>Vendor</a></li>
+                        <li><a href="/BarcodePrinting"><i class="fas fa-barcode"></i>Barcode Printing</a></li>
                     </ul>
                 </nav>
             </div>
@@ -877,11 +852,8 @@
                 <div class="header-wrap">
                     <div class="header-page-info">
                         <div class="header-page-dot"></div>
-                        <div class="header-page-name" id="headerPageName">
-                            <span>Dashboard</span>
-                        </div>
+                        <div class="header-page-name" id="headerPageName"><span>Dashboard</span></div>
                     </div>
-
                     <div class="account-wrap">
                         <div class="account-item js-item-menu" id="accountToggle">
                             <div class="account-avatar"><i class="fas fa-user"></i></div>
@@ -945,19 +917,19 @@
                 '/category':           '/Category',
                 '/product':            '/Product',
                 '/vendorregistration': '/VendorRegistration',
-                '/BarcodePrinting': '/BarcodePrinting'
-
-                BarcodePrinting
+                '/barcodeprinting':    '/BarcodePrinting'
             };
 
             let activePage = 'Dashboard';
             for (const [path, label] of Object.entries(pathMap)) {
                 if (currentPath.startsWith(path)) {
                     const name = label.replace('/', '');
-                    activePage = name === 'VendorRegistration' ? 'Vendor' : name;
-                    document.querySelectorAll(`.navbar__list a[href="${label}"], .navbar-mobile__list a[href="${label}"]`).forEach(a => {
-                        a.closest('li')?.classList.add('active');
-                    });
+                    activePage = name === 'VendorRegistration' ? 'Vendor'
+                               : name === 'BarcodePrinting'   ? 'Barcode Printing'
+                               : name;
+                    document.querySelectorAll(
+                        `.navbar__list a[href="${label}"], .navbar-mobile__list a[href="${label}"]`
+                    ).forEach(a => a.closest('li')?.classList.add('active'));
                     break;
                 }
             }
@@ -965,7 +937,7 @@
             if (pageNameEl) pageNameEl.innerHTML = `<span>${activePage}</span>`;
 
             /* ── Desktop Account Dropdown ── */
-            const accountToggle = document.getElementById('accountToggle');
+            const accountToggle   = document.getElementById('accountToggle');
             const accountDropdown = document.getElementById('accountDropdown');
             if (accountToggle && accountDropdown) {
                 accountToggle.addEventListener('click', function (e) {
@@ -993,8 +965,8 @@
             document.getElementById('mobileLogoutBtn')?.addEventListener('click', doLogout);
 
             /* ── Mobile Menu ── */
-            const mobileToggle = document.getElementById('mobileMenuToggle');
-            const mobileMenu   = document.getElementById('mobileMenu');
+            const mobileToggle  = document.getElementById('mobileMenuToggle');
+            const mobileMenu    = document.getElementById('mobileMenu');
             const mobileOverlay = document.getElementById('mobileOverlay');
 
             function closeMobileMenu() {
@@ -1013,11 +985,9 @@
             });
 
             mobileOverlay?.addEventListener('click', closeMobileMenu);
-
             mobileMenu?.querySelectorAll('a:not(#mobileLogoutBtn)').forEach(a => {
                 a.addEventListener('click', closeMobileMenu);
             });
-
             window.addEventListener('orientationchange', closeMobileMenu);
 
             /* ── Prevent double-tap zoom iOS ── */
