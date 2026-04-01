@@ -21,9 +21,9 @@
 
     <style>
         /* ════════════════════════════════════════
-                   UNIFIED DESIGN TOKENS — Category Theme
-                   Matches: Category.cshtml · Home.cshtml
-                ════════════════════════════════════════ */
+                           UNIFIED DESIGN TOKENS — Category Theme
+                           Matches: Category.cshtml · Home.cshtml
+                        ════════════════════════════════════════ */
         :root {
             --bg: #0a0c12;
             --bg2: #0f1220;
@@ -88,8 +88,8 @@
         }
 
         /* ════════════════════════════
-                   SIDEBAR
-                ════════════════════════════ */
+                           SIDEBAR
+                        ════════════════════════════ */
         .menu-sidebar {
             background: var(--surface);
             width: var(--sidebar-w);
@@ -292,8 +292,8 @@
                 }
 
         /* ════════════════════════════
-                   PAGE CONTAINER
-                ════════════════════════════ */
+                           PAGE CONTAINER
+                        ════════════════════════════ */
         .page-container {
             padding-left: var(--sidebar-w);
             min-height: 100vh;
@@ -303,8 +303,8 @@
         }
 
         /* ════════════════════════════
-                   HEADER DESKTOP
-                ════════════════════════════ */
+                           HEADER DESKTOP
+                        ════════════════════════════ */
         .header-desktop {
             background: var(--surface2);
             border-bottom: 1px solid var(--border2);
@@ -486,8 +486,8 @@
             }
 
         /* ════════════════════════════
-                   MOBILE HEADER
-                ════════════════════════════ */
+                           MOBILE HEADER
+                        ════════════════════════════ */
         .header-mobile {
             background: var(--surface2);
             border-bottom: 1px solid var(--border2);
@@ -704,8 +704,8 @@
             }
 
         /* ════════════════════════════
-                   MAIN CONTENT
-                ════════════════════════════ */
+                           MAIN CONTENT
+                        ════════════════════════════ */
         .main-content {
             overflow: visible !important;
             display: contents;
@@ -740,8 +740,8 @@
         }
 
         /* ════════════════════════════
-                   RESPONSIVE
-                ════════════════════════════ */
+                           RESPONSIVE
+                        ════════════════════════════ */
         @@media (max-width: 1024px) {
             .page-container {
                 padding-left: 0;
@@ -799,14 +799,10 @@
                 </button>
             </div>
 
+            <!-- ② MOBILE NAV — SP se dynamically fill hoga -->
             <nav class="navbar-mobile" id="mobileMenu">
-                <ul class="navbar-mobile__list">
-                    <li><a href="/Home"><i class="fas fa-gauge-high"></i>Dashboard</a></li>
-                    <li><a href="/Slider"><i class="fas fa-images"></i>Slider</a></li>
-                    <li><a href="/Category"><i class="fas fa-th-large"></i>Category</a></li>
-                    <li><a href="/Product"><i class="fas fa-box-open"></i>Product</a></li>
-                    <li><a href="/VendorRegistration"><i class="fas fa-store"></i>Vendor</a></li>
-                    <li><a href="/BarcodePrinting"><i class="fas fa-barcode"></i>Barcode Printing</a></li>
+                <ul class="navbar-mobile__list" id="mobileNavList">
+                    <li class="nav-skeleton"><a href="#"><i class="fas fa-circle-notch fa-spin"></i>Loading...</a></li>
                 </ul>
                 <div class="mobile-nav-footer">
                     <a href="#" id="mobileLogoutBtn"><i class="fas fa-arrow-right-from-bracket"></i>Logout</a>
@@ -825,16 +821,12 @@
                 </div>
             </div>
 
+            <!-- ① DESKTOP NAV — SP se dynamically fill hoga -->
             <div class="menu-sidebar__content">
                 <nav class="navbar-sidebar">
                     <div class="nav-section-label">Main Menu</div>
-                    <ul class="list-unstyled navbar__list">
-                        <li><a href="/Home"><i class="fas fa-gauge-high"></i>Dashboard</a></li>
-                        <li><a href="/Slider"><i class="fas fa-images"></i>Slider</a></li>
-                        <li><a href="/Category"><i class="fas fa-th-large"></i>Category</a></li>
-                        <li><a href="/Product"><i class="fas fa-box-open"></i>Product</a></li>
-                        <li><a href="/VendorRegistration"><i class="fas fa-store"></i>Vendor</a></li>
-                        <li><a href="/BarcodePrinting"><i class="fas fa-barcode"></i>Barcode Printing</a></li>
+                    <ul class="list-unstyled navbar__list" id="desktopNavList">
+                        <li class="nav-skeleton"><a href="#"><i class="fas fa-circle-notch fa-spin"></i>Loading...</a></li>
                     </ul>
                 </nav>
             </div>
@@ -899,60 +891,131 @@
     <script src="js/modern-plugins.js"></script>
     <script src="js/Layout.js"></script>
 
+    <!-- ③ DYNAMIC MENU SCRIPT -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
 
-            /* ── User Info ── */
-            const userId = localStorage.getItem('userId') || 'Guest';
-            document.querySelectorAll('#userName, #userNameDropdown').forEach(el => el.textContent = userId);
+            /* ════════════════════════════════
+               1. USER INFO  (localStorage se)
+            ════════════════════════════════ */
+            const userId = localStorage.getItem('userId') || 'admin';
+            document.querySelectorAll('#userName, #userNameDropdown')
+                    .forEach(el => el.textContent = userId);
 
-            /* ── Active Nav Item ── */
-            const currentPath = window.location.pathname.toLowerCase();
-            const allNavItems = document.querySelectorAll('.navbar__list li, .navbar-mobile__list li');
-            allNavItems.forEach(li => li.classList.remove('active'));
 
-            const pathMap = {
-                '/home':               '/Home',
-                '/slider':             '/Slider',
-                '/category':           '/Category',
-                '/product':            '/Product',
-                '/vendorregistration': '/VendorRegistration',
-                '/barcodeprinting':    '/BarcodePrinting'
-            };
+            /* ════════════════════════════════
+               2. SP CALL  →  Menu build karo
+            ════════════════════════════════ */
+            async function loadUserMenu() {
+                try {
+                    const res  = await fetch(`/Login/GetMenu?userId=${encodeURIComponent(userId)}`);
+                    const json = await res.json();
 
-            let activePage = 'Dashboard';
-            for (const [path, label] of Object.entries(pathMap)) {
-                if (currentPath.startsWith(path)) {
-                    const name = label.replace('/', '');
-                    activePage = name === 'VendorRegistration' ? 'Vendor'
-                               : name === 'BarcodePrinting'   ? 'Barcode Printing'
-                               : name;
-                    document.querySelectorAll(
-                        `.navbar__list a[href="${label}"], .navbar-mobile__list a[href="${label}"]`
-                    ).forEach(a => a.closest('li')?.classList.add('active'));
-                    break;
+                    if (!json.success || !json.data?.length) {
+                        showFallbackMenu();
+                        return;
+                    }
+
+                    buildNavItems(json.data);
+
+                } catch (err) {
+                    console.error('Menu load error:', err);
+                    showFallbackMenu();
                 }
             }
-            const pageNameEl = document.getElementById('headerPageName');
-            if (pageNameEl) pageNameEl.innerHTML = `<span>${activePage}</span>`;
 
-            /* ── Desktop Account Dropdown ── */
+            /* ── Nav items DOM se banao ── */
+            function buildNavItems(items) {
+                const desktopUl = document.getElementById('desktopNavList');
+                const mobileUl  = document.getElementById('mobileNavList');
+
+                const makeItem = (item) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="${item.menuUrl}">
+                                        <i class="${item.menuIcon}"></i>
+                                        ${item.menuName}
+                                    </a>`;
+                    return li;
+                };
+
+                if (desktopUl) {
+                    desktopUl.innerHTML = '';
+                    items.forEach(item => desktopUl.appendChild(makeItem(item)));
+                }
+
+                if (mobileUl) {
+                    mobileUl.innerHTML = '';
+                    items.forEach(item => mobileUl.appendChild(makeItem(item)));
+                }
+
+                setActiveNavItem();
+            }
+
+            /* ── Fallback: SP fail ho to hardcoded menu ── */
+            function showFallbackMenu() {
+                const fallback = [
+                    { menuName: 'Dashboard',        menuUrl: '/Home',               menuIcon: 'fas fa-gauge-high' },
+                    { menuName: 'Slider',           menuUrl: '/Slider',             menuIcon: 'fas fa-images'     },
+                    { menuName: 'Category',         menuUrl: '/Category',           menuIcon: 'fas fa-th-large'   },
+                    { menuName: 'Product',          menuUrl: '/Product',            menuIcon: 'fas fa-box-open'   },
+                    { menuName: 'Vendor',           menuUrl: '/VendorRegistration', menuIcon: 'fas fa-store'      },
+                    { menuName: 'Barcode Printing', menuUrl: '/BarcodePrinting',    menuIcon: 'fas fa-barcode'    }
+                ];
+                buildNavItems(fallback);
+            }
+
+
+            /* ════════════════════════════════
+               3. ACTIVE NAV ITEM  highlight
+            ════════════════════════════════ */
+            function setActiveNavItem() {
+                const currentPath = window.location.pathname.toLowerCase();
+
+                document.querySelectorAll('.navbar__list li, .navbar-mobile__list li')
+                        .forEach(li => li.classList.remove('active'));
+
+                document.querySelectorAll('.navbar__list a, .navbar-mobile__list a')
+                        .forEach(a => {
+                            const href = a.getAttribute('href')?.toLowerCase();
+                            if (href && href !== '#' &&
+                                (currentPath === href || currentPath.startsWith(href))) {
+                                a.closest('li')?.classList.add('active');
+                                const el = document.getElementById('headerPageName');
+                                if (el) el.innerHTML = `<span>${a.textContent.trim()}</span>`;
+                            }
+                        });
+            }
+
+
+            /* ════════════════════════════════
+               4. MENU LOAD — YE PEHLE CHALEGA
+            ════════════════════════════════ */
+            await loadUserMenu();
+
+
+            /* ════════════════════════════════
+               5. DESKTOP DROPDOWN
+            ════════════════════════════════ */
             const accountToggle   = document.getElementById('accountToggle');
             const accountDropdown = document.getElementById('accountDropdown');
+
             if (accountToggle && accountDropdown) {
                 accountToggle.addEventListener('click', function (e) {
                     e.stopPropagation();
                     const isOpen = accountDropdown.classList.toggle('show');
                     accountToggle.classList.toggle('open', isOpen);
                 });
-                document.addEventListener('click', function () {
+                document.addEventListener('click', () => {
                     accountDropdown.classList.remove('show');
                     accountToggle.classList.remove('open');
                 });
                 accountDropdown.addEventListener('click', e => e.stopPropagation());
             }
 
-            /* ── Logout ── */
+
+            /* ════════════════════════════════
+               6. LOGOUT
+            ════════════════════════════════ */
             function doLogout(e) {
                 e.preventDefault();
                 if (confirm('Are you sure you want to logout?')) {
@@ -964,7 +1027,10 @@
             document.getElementById('logoutBtnDropdown')?.addEventListener('click', doLogout);
             document.getElementById('mobileLogoutBtn')?.addEventListener('click', doLogout);
 
-            /* ── Mobile Menu ── */
+
+            /* ════════════════════════════════
+               7. MOBILE MENU
+            ════════════════════════════════ */
             const mobileToggle  = document.getElementById('mobileMenuToggle');
             const mobileMenu    = document.getElementById('mobileMenu');
             const mobileOverlay = document.getElementById('mobileOverlay');
@@ -985,18 +1051,21 @@
             });
 
             mobileOverlay?.addEventListener('click', closeMobileMenu);
-            mobileMenu?.querySelectorAll('a:not(#mobileLogoutBtn)').forEach(a => {
-                a.addEventListener('click', closeMobileMenu);
-            });
+            mobileMenu?.querySelectorAll('a:not(#mobileLogoutBtn)')
+                      .forEach(a => a.addEventListener('click', closeMobileMenu));
             window.addEventListener('orientationchange', closeMobileMenu);
 
-            /* ── Prevent double-tap zoom iOS ── */
+
+            /* ════════════════════════════════
+               8. iOS double-tap fix
+            ════════════════════════════════ */
             let lastTouch = 0;
             document.addEventListener('touchend', function (e) {
                 const now = Date.now();
                 if (now - lastTouch <= 300) e.preventDefault();
                 lastTouch = now;
             }, { passive: false });
+
         });
     </script>
 
