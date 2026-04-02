@@ -12,7 +12,7 @@ namespace NormalAccountProject.Controllers
     public class ProductRegistrationController : Controller
     {
         private readonly IConfiguration _configuration;
-        private string connectionString;
+        private readonly string connectionString;
 
         public ProductRegistrationController(IConfiguration configuration)
         {
@@ -20,532 +20,289 @@ namespace NormalAccountProject.Controllers
             connectionString = _configuration.GetConnectionString("Connection1");
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Load Dropdowns (Category + Vendor)
+        // ─────────────────────────────────────────────────────────────
         [HttpPost("nLoadProductRegistrationData")]
         public async Task<IActionResult> nLoadProductRegistrationData([FromBody] nInfoTab nInfoTabObj)
         {
             try
             {
-                // Load Category List
-                var categoryParameters = new Dictionary<string, object>
-                {
-                    { "@nCategoryId", 0 },
-                    { "@nsCategoryId", 1 }
-                };
-                List<CategoryDD> nCategoryList = await nGetDataAsync<CategoryDD>("Ecom_ProductSP", categoryParameters);
+                var categoryParams = new Dictionary<string, object> { { "@nCategoryId", 0 }, { "@nsCategoryId", 1 } };
+                var vendorParams = new Dictionary<string, object> { { "@nCategoryId", 0 }, { "@nsCategoryId", 7 } };
 
-                // Load Vendor List
-                var vendorParameters = new Dictionary<string, object>
-                {
-                    { "@nCategoryId", 0 },
-                    { "@nsCategoryId", 7 }
-                };
-                List<VendorDD> nVendorList = await nGetDataAsync<VendorDD>("Ecom_ProductSP", vendorParameters);
+                var nCategoryList = await nGetDataAsync<CategoryDD>("Ecom_ProductSP", categoryParams);
+                var nVendorList = await nGetDataAsync<VendorDD>("Ecom_ProductSP", vendorParams);
 
-                var response = new
-                {
-                    statusId = 1,
-                    CategoryList = nCategoryList,
-                    VendorList = nVendorList
-                };
-                return Ok(response);
+                return Ok(new { statusId = 1, CategoryList = nCategoryList, VendorList = nVendorList });
             }
             catch (Exception ex)
             {
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = "Error: " + ex.Message
-                });
+                return Ok(new { statusId = 0, message = "Error: " + ex.Message });
             }
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Save / Update Product
+        // ─────────────────────────────────────────────────────────────
         [HttpPost("nSaveProductRegistrationData")]
         public async Task<IActionResult> nSaveProductRegistrationData([FromBody] ProductTab nProductTabObj)
         {
-            // ✅ Clear model state to bypass automatic validation
             ModelState.Clear();
 
-            // ✅ Manual validation
             if (string.IsNullOrEmpty(nProductTabObj.Product))
-            {
                 return Ok(new { statusId = 0, message = "Product name is required" });
-            }
-
-            //if (string.IsNullOrEmpty(nProductTabObj.ProductDescription))
-            //{
-            //    return Ok(new { statusId = 0, message = "Product description is required" });
-            //}
 
             if (string.IsNullOrEmpty(nProductTabObj.CategoryId))
-            {
                 return Ok(new { statusId = 0, message = "Category is required" });
-            }
 
             if (string.IsNullOrEmpty(nProductTabObj.VendorId))
-            {
                 return Ok(new { statusId = 0, message = "Vendor is required" });
-            }
 
             if (string.IsNullOrEmpty(nProductTabObj.Prices))
-            {
                 return Ok(new { statusId = 0, message = "Price is required" });
-            }
 
-            // ✅ Validate image for new product (not update)
             if (!nProductTabObj.IsUpdate && string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
-            {
                 return Ok(new { statusId = 0, message = "Product image is required" });
-            }
 
             try
             {
-                using (SqlConnection con = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand("Ecom_ProductSP", con))
+                using SqlConnection con = new(connectionString);
+                using SqlCommand cmd = new("Ecom_ProductSP", con) { CommandType = CommandType.StoredProcedure };
+
+                cmd.Parameters.AddWithValue("@nCategoryId", 0);
+                cmd.Parameters.AddWithValue("@nsCategoryId", 0);
+                cmd.Parameters.AddWithValue("@Product", nProductTabObj.Product);
+                cmd.Parameters.AddWithValue("@ProductDescription", nProductTabObj.ProductDescription ?? "");
+                cmd.Parameters.AddWithValue("@IsActive", nProductTabObj.IsActive ? "1" : "0");
+                cmd.Parameters.AddWithValue("@CategoryId", nProductTabObj.CategoryId);
+                cmd.Parameters.AddWithValue("@VendorId", nProductTabObj.VendorId);
+                cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid ?? "");
+                cmd.Parameters.AddWithValue("@IsUpdate", nProductTabObj.IsUpdate ? "1" : "0");
+                cmd.Parameters.AddWithValue("@ProductImage", nProductTabObj.ProductImageAttachmentfilename ?? "");
+                cmd.Parameters.AddWithValue("@Prices", nProductTabObj.Prices);
+                cmd.Parameters.AddWithValue("@DiscountAmount", nProductTabObj.DiscountAmount ?? "0");
+
+                if (nProductTabObj.IsUpdate)
+                    cmd.Parameters.AddWithValue("@ProductId", nProductTabObj.ProductId);
+
+                await con.OpenAsync();
+
+                using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+                if (await dr.ReadAsync())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@nCategoryId", 0);
-                    cmd.Parameters.AddWithValue("@nsCategoryId", 0);
-                    cmd.Parameters.AddWithValue("@ProductDescription", nProductTabObj.ProductDescription);  // ✅ FIXED!
-                    cmd.Parameters.AddWithValue("@Product", nProductTabObj.Product);
-                    cmd.Parameters.AddWithValue("@IsActive", nProductTabObj.IsActive ? "1" : "0");
-                    cmd.Parameters.AddWithValue("@CategoryId", nProductTabObj.CategoryId);
-                    cmd.Parameters.AddWithValue("@VendorId", nProductTabObj.VendorId);
-                    cmd.Parameters.AddWithValue("@UserId", nProductTabObj.Userid);
-                    cmd.Parameters.AddWithValue("@IsUpdate", nProductTabObj.IsUpdate ? "1" : "0");
-                    cmd.Parameters.AddWithValue("@ProductImage", nProductTabObj.ProductImageAttachmentfilename ?? "");
-                    cmd.Parameters.AddWithValue("@Prices", nProductTabObj.Prices);
-                    cmd.Parameters.AddWithValue("@DiscountAmount", nProductTabObj.DiscountAmount ?? "0");
+                    int statusId = Convert.ToInt32(dr["StatusId"]);
 
-                    if (nProductTabObj.IsUpdate)
+                    if (statusId == 1 && !string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
                     {
-                        cmd.Parameters.AddWithValue("@ProductId", nProductTabObj.ProductId);
-                    }
-
-                    await con.OpenAsync();
-
-                    using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
-                    {
-                        if (await dr.ReadAsync())
+                        try
                         {
-                            int statusId = Convert.ToInt32(dr["StatusId"]);
+                            if (nProductTabObj.IsUpdate && !string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
+                                await DeleteFromFtp(nProductTabObj.ProductImageAttachmentfilenameold, nProductTabObj.FtpPath);
 
-                            // ✅ FTP Upload/Delete Logic - Only execute if DB operation succeeded
-                            if (statusId == 1)
-                            {
-                                // ✅ Only process images if a NEW image was uploaded
-                                if (!string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
-                                {
-                                    try
-                                    {
-                                        // ✅ Delete old image ONLY if updating AND old image exists
-                                        if (nProductTabObj.IsUpdate && !string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilenameold))
-                                        {
-                                            Console.WriteLine($"Deleting old image: {nProductTabObj.ProductImageAttachmentfilenameold}");
-                                            await DeleteFromFtp(nProductTabObj.ProductImageAttachmentfilenameold, nProductTabObj.FtpPath);
-                                        }
-
-                                        // ✅ Upload new image
-                                        Console.WriteLine($"Uploading new image: {nProductTabObj.ProductImageAttachmentfilename}");
-                                        await UploadToFtp(
-                                            nProductTabObj.ProductImageAttachmentfilename,
-                                            nProductTabObj.ProductImageAttachmentbase64,
-                                            nProductTabObj.FtpPath
-                                        );
-                                    }
-                                    catch (Exception ftpEx)
-                                    {
-                                        Console.WriteLine($"FTP Operation Warning: {ftpEx.Message}");
-                                        // ✅ Don't fail the entire operation for FTP errors
-                                        // Data is already saved in DB
-                                    }
-                                }
-                            }
-
-                            return Ok(new
-                            {
-                                statusId = statusId,
-                                message = dr["MessageCaption"]?.ToString()
-                            });
+                            await UploadToFtp(nProductTabObj.ProductImageAttachmentfilename,
+                                              nProductTabObj.ProductImageAttachmentbase64,
+                                              nProductTabObj.FtpPath);
+                        }
+                        catch (Exception ftpEx)
+                        {
+                            Console.WriteLine($"FTP Warning: {ftpEx.Message}");
                         }
                     }
+
+                    return Ok(new { statusId, message = dr["MessageCaption"]?.ToString() });
                 }
 
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = "No response from database"
-                });
+                return Ok(new { statusId = 0, message = "No response from database" });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Save Error: {ex.Message}");
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = "Error: " + ex.Message
-                });
+                Console.WriteLine($"Save Error: {ex.Message}\n{ex.StackTrace}");
+                return Ok(new { statusId = 0, message = "Error: " + ex.Message });
             }
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Load Grid Data
+        // ─────────────────────────────────────────────────────────────
         [HttpPost("nLoadGridViewData")]
         public async Task<IActionResult> nLoadGridViewData([FromBody] nInfoTab nInfoTabObj)
         {
             try
             {
-                var parameters = new Dictionary<string, object>
-                {
-                    { "@nCategoryId", 0 },
-                    { "@nsCategoryId", 2 }
-                };
-
-                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("Ecom_ProductSP", parameters);
-
-                var response = new
-                {
-                    statusId = 1,
-                    GridViewDataList = nDataList
-                };
-                return Ok(response);
+                var parameters = new Dictionary<string, object> { { "@nCategoryId", 0 }, { "@nsCategoryId", 2 } };
+                var nDataList = await nGetDataAsync<ExpandoObject>("Ecom_ProductSP", parameters);
+                return Ok(new { statusId = 1, GridViewDataList = nDataList });
             }
             catch (Exception ex)
             {
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = "Error: " + ex.Message
-                });
+                return Ok(new { statusId = 0, message = "Error: " + ex.Message });
             }
         }
 
+        // ─────────────────────────────────────────────────────────────
+        // Delete Product
+        // ─────────────────────────────────────────────────────────────
         [HttpPost("nDeleteProductRegistrationData")]
         public async Task<IActionResult> nDeleteProductRegistrationData([FromBody] ProductDeleteRequest deleteRequest)
         {
             try
             {
-                Console.WriteLine($"Delete Request - ProductId: {deleteRequest.ProductId}, UserId: {deleteRequest.Userid}");
-                Console.WriteLine($"Image filename: {deleteRequest.ProductImageAttachmentfilenameold}");
+                using SqlConnection con = new(connectionString);
+                using SqlCommand cmd = new("Ecom_ProductSP", con) { CommandType = CommandType.StoredProcedure };
 
-                using (SqlConnection con = new SqlConnection(connectionString))
-                using (SqlCommand cmd = new SqlCommand("Ecom_ProductSP", con))
+                cmd.Parameters.AddWithValue("@nCategoryId", 0);
+                cmd.Parameters.AddWithValue("@nsCategoryId", 3);
+                cmd.Parameters.AddWithValue("@UserId", deleteRequest.Userid ?? "");
+                cmd.Parameters.AddWithValue("@ProductId", deleteRequest.ProductId);
+
+                await con.OpenAsync();
+
+                using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+                if (await dr.ReadAsync())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@nCategoryId", 0);
-                    cmd.Parameters.AddWithValue("@nsCategoryId", 3);
-                    cmd.Parameters.AddWithValue("@UserId", deleteRequest.Userid ?? "");
-                    cmd.Parameters.AddWithValue("@ProductId", deleteRequest.ProductId);
+                    int statusId = Convert.ToInt32(dr["StatusId"]);
+                    string message = dr["MessageCaption"]?.ToString() ?? "";
 
-                    await con.OpenAsync();
-
-                    using (SqlDataReader dr = await cmd.ExecuteReaderAsync())
+                    if (statusId == 1 && !string.IsNullOrEmpty(deleteRequest.ProductImageAttachmentfilenameold))
                     {
-                        if (await dr.ReadAsync())
-                        {
-                            int statusId = Convert.ToInt32(dr["StatusId"]);
-                            string message = dr["MessageCaption"]?.ToString() ?? "";
-
-                            Console.WriteLine($"SP Response - StatusId: {statusId}, Message: {message}");
-
-                            // ✅ Delete image from FTP if delete succeeded
-                            if (statusId == 1)
-                            {
-                                if (!string.IsNullOrEmpty(deleteRequest.ProductImageAttachmentfilenameold))
-                                {
-                                    try
-                                    {
-                                        Console.WriteLine($"Attempting to delete file: {deleteRequest.ProductImageAttachmentfilenameold}");
-                                        await DeleteFromFtp(deleteRequest.ProductImageAttachmentfilenameold, deleteRequest.FtpPath);
-                                        Console.WriteLine($"File deleted successfully");
-                                    }
-                                    catch (Exception ftpEx)
-                                    {
-                                        Console.WriteLine($"FTP Delete Warning: {ftpEx.Message}");
-                                        // Don't fail the operation
-                                    }
-                                }
-                            }
-
-                            return Ok(new
-                            {
-                                statusId = statusId,
-                                message = message
-                            });
-                        }
-                        else
-                        {
-                            Console.WriteLine("No data returned from stored procedure");
-                            return Ok(new
-                            {
-                                statusId = 0,
-                                message = "No response from database"
-                            });
-                        }
+                        try { await DeleteFromFtp(deleteRequest.ProductImageAttachmentfilenameold, deleteRequest.FtpPath); }
+                        catch (Exception ftpEx) { Console.WriteLine($"FTP Delete Warning: {ftpEx.Message}"); }
                     }
+
+                    return Ok(new { statusId, message });
                 }
+
+                return Ok(new { statusId = 0, message = "No response from database" });
             }
             catch (SqlException sqlEx)
             {
-                Console.WriteLine($"SQL Error: {sqlEx.Message}");
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = $"Database Error: {sqlEx.Message}"
-                });
+                return Ok(new { statusId = 0, message = "Database Error: " + sqlEx.Message });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"General Error: {ex.Message}");
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = $"Error: {ex.Message}"
-                });
+                Console.WriteLine($"Delete Error: {ex.Message}\n{ex.StackTrace}");
+                return Ok(new { statusId = 0, message = "Error: " + ex.Message });
             }
         }
 
-        // ✅ IMPROVED FTP Delete Function with File Existence Check
+        // ─────────────────────────────────────────────────────────────
+        // FTP: Upload
+        // ─────────────────────────────────────────────────────────────
+        async Task UploadToFtp(string fileName, string base64, string ftpPath)
+        {
+            if (string.IsNullOrWhiteSpace(fileName)) throw new Exception("FTP Upload: Filename is empty");
+            if (string.IsNullOrWhiteSpace(base64)) throw new Exception("FTP Upload: Base64 is empty");
+
+            string server = _configuration["Config:ftpServer"];
+            string user = _configuration["Config:ftpUser"];
+            string password = _configuration["Config:ftpPassword"];
+            string port = _configuration["Config:ftpPort"];
+            string path = !string.IsNullOrWhiteSpace(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
+
+            if (base64.Contains(",")) base64 = base64.Split(',')[1];
+            byte[] bytes = Convert.FromBase64String(base64);
+
+            string url = string.IsNullOrWhiteSpace(port)
+                ? $"ftp://{server}{path}/{fileName}"
+                : $"ftp://{server}:{port}{path}/{fileName}";
+
+            FtpWebRequest req = (FtpWebRequest)WebRequest.Create(url);
+            req.Method = WebRequestMethods.Ftp.UploadFile;
+            req.Credentials = new NetworkCredential(user, password);
+            req.UseBinary = true;
+            req.UsePassive = false;
+            req.KeepAlive = false;
+            req.ContentLength = bytes.Length;
+            req.Timeout = 30000;
+
+            using Stream stream = await req.GetRequestStreamAsync();
+            await stream.WriteAsync(bytes, 0, bytes.Length);
+
+            using FtpWebResponse res = (FtpWebResponse)await req.GetResponseAsync();
+            Console.WriteLine($"FTP Upload OK: {res.StatusDescription}");
+        }
+
+        // ─────────────────────────────────────────────────────────────
+        // FTP: Delete (with existence check)
+        // ─────────────────────────────────────────────────────────────
         async Task DeleteFromFtp(string attachmentFileName, string ftpPath)
         {
-            if (string.IsNullOrEmpty(attachmentFileName))
+            if (string.IsNullOrEmpty(attachmentFileName)) return;
+
+            string server = _configuration["Config:ftpServer"];
+            string user = _configuration["Config:ftpUser"];
+            string password = _configuration["Config:ftpPassword"];
+            string port = _configuration["Config:ftpPort"];
+            string path = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
+
+            string fileName = attachmentFileName.Contains("/") || attachmentFileName.Contains("\\")
+                ? Path.GetFileName(attachmentFileName)
+                : attachmentFileName;
+
+            string url = $"ftp://{server}:{port}{path}/{fileName}";
+
+            if (!await FtpFileExists(url, user, password))
+            {
+                Console.WriteLine($"FTP Delete Skipped: File not found – {fileName}");
                 return;
+            }
 
             try
             {
-                string ftpServer = _configuration["Config:ftpServer"];
-                string ftpUser = _configuration["Config:ftpUser"];
-                string ftpPassword = _configuration["Config:ftpPassword"];
-                string ftpPort = _configuration["Config:ftpPort"];
+                FtpWebRequest req = (FtpWebRequest)WebRequest.Create(url);
+                req.Method = WebRequestMethods.Ftp.DeleteFile;
+                req.Credentials = new NetworkCredential(user, password);
+                req.UseBinary = true;
+                req.UsePassive = true;
+                req.KeepAlive = false;
+                req.Timeout = 10000;
 
-                // ✅ Use provided ftpPath or default
-                string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
-
-                // ✅ Extract just filename if full URL is passed
-                string fileName = attachmentFileName.Contains("/") || attachmentFileName.Contains("\\")
-                    ? Path.GetFileName(attachmentFileName)
-                    : attachmentFileName;
-
-                string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{fileName}";
-
-                Console.WriteLine($"FTP Delete Attempt - URL: {ftpUrl}");
-
-                // ✅ STEP 1: Check if file exists first
-                bool fileExists = await CheckFtpFileExists(ftpUrl, ftpUser, ftpPassword);
-
-                if (!fileExists)
-                {
-                    Console.WriteLine($"FTP Delete Skipped: File doesn't exist - {fileName}");
-                    return; // ✅ Don't throw error, just skip
-                }
-
-                // ✅ STEP 2: Delete the file
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-                request.Method = WebRequestMethods.Ftp.DeleteFile;
-                request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
-                request.UseBinary = true;
-                request.UsePassive = true;
-                request.KeepAlive = false;
-                request.Timeout = 10000; // 10 seconds timeout
-
-                using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
-                {
-                    Console.WriteLine($"FTP Delete Success: {response.StatusDescription}");
-                }
+                using FtpWebResponse res = (FtpWebResponse)await req.GetResponseAsync();
+                Console.WriteLine($"FTP Delete OK: {res.StatusDescription}");
             }
             catch (WebException ex)
             {
-                if (ex.Response is FtpWebResponse response)
-                {
-                    Console.WriteLine($"FTP Delete Error Code: {response.StatusCode}");
-                    Console.WriteLine($"FTP Delete Error Message: {response.StatusDescription}");
-
-                    // ✅ Don't throw error for file not found - just log it
-                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
-                    {
-                        Console.WriteLine($"FTP Delete: File not found (already deleted or never existed) - {attachmentFileName}");
-                        return; // Don't propagate error
-                    }
-                }
-
-                Console.WriteLine($"FTP Delete Exception: {ex.Message}");
-                // ✅ Don't throw - just log
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"FTP Delete General Error: {ex.Message}");
-                // ✅ Don't throw - just log
+                Console.WriteLine($"FTP Delete Error: {ex.Message}");
             }
         }
 
-        // ✅ NEW Helper Method - Check if file exists on FTP
-        async Task<bool> CheckFtpFileExists(string ftpUrl, string ftpUser, string ftpPassword)
+        // ─────────────────────────────────────────────────────────────
+        // FTP: Check File Exists
+        // ─────────────────────────────────────────────────────────────
+        async Task<bool> FtpFileExists(string url, string user, string password)
         {
             try
             {
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-                request.Method = WebRequestMethods.Ftp.GetFileSize; // Just check size
-                request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
-                request.UseBinary = true;
-                request.UsePassive = true;
-                request.KeepAlive = false;
-                request.Timeout = 5000; // 5 seconds timeout
+                FtpWebRequest req = (FtpWebRequest)WebRequest.Create(url);
+                req.Method = WebRequestMethods.Ftp.GetFileSize;
+                req.Credentials = new NetworkCredential(user, password);
+                req.UseBinary = true;
+                req.UsePassive = true;
+                req.KeepAlive = false;
+                req.Timeout = 5000;
 
-                using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
-                {
-                    return true; // File exists
-                }
+                using FtpWebResponse res = (FtpWebResponse)await req.GetResponseAsync();
+                return true;
             }
-            catch (WebException ex)
-            {
-                if (ex.Response is FtpWebResponse response)
-                {
-                    if (response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
-                    {
-                        return false; // File doesn't exist
-                    }
-                }
-                return false; // Assume doesn't exist on any error
-            }
-            catch
-            {
-                return false; // Assume doesn't exist
-            }
+            catch { return false; }
         }
 
-        // ✅ FTP Upload Function
-        //async Task UploadToFtp(string attachmentFileName, string attachmentBase64, string ftpPath)
-        //{
-        //    if (string.IsNullOrEmpty(attachmentFileName) || string.IsNullOrEmpty(attachmentBase64))
-        //        return;
-
-        //    try
-        //    {
-        //        string ftpServer = _configuration["Config:ftpServer"];
-        //        string ftpUser = _configuration["Config:ftpUser"];
-        //        string ftpPassword = _configuration["Config:ftpPassword"];
-        //        string ftpPort = _configuration["Config:ftpPort"];
-
-        //        // ✅ Use provided ftpPath or default
-        //        string finalFtpPath = !string.IsNullOrEmpty(ftpPath) ? ftpPath : "/wwwroot/Images/ProductRegistration";
-
-        //        // Remove data:image/png;base64, prefix if present
-        //        if (attachmentBase64.Contains(","))
-        //            attachmentBase64 = attachmentBase64.Split(',')[1];
-
-        //        byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
-
-        //        string ftpUrl = $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
-
-        //        Console.WriteLine($"FTP Upload URL: {ftpUrl}");
-
-        //        FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-        //        request.Method = WebRequestMethods.Ftp.UploadFile;
-        //        request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
-        //        request.UseBinary = true;
-        //        request.UsePassive = true;
-        //        request.KeepAlive = false;
-        //        request.ContentLength = fileBytes.Length;
-        //        request.Timeout = 30000; // 30 seconds timeout
-
-        //        using (Stream requestStream = await request.GetRequestStreamAsync())
-        //        {
-        //            await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
-        //        }
-
-        //        using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
-        //        {
-        //            Console.WriteLine($"FTP Upload Success: {response.StatusDescription}");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"FTP Upload Error: {ex.Message}");
-        //        throw; // Propagate upload errors
-        //    }
-        //}
-        // ✅ FINAL MERGED FTP Upload Function (Stable Version)
-        async Task UploadToFtp(string attachmentFileName, string attachmentBase64, string ftpPath)
-        {
-            try
-            {
-                Console.WriteLine("===== FTP UPLOAD START =====");
-
-                if (string.IsNullOrWhiteSpace(attachmentFileName))
-                    throw new Exception("FTP Upload Error: Filename is empty");
-
-                if (string.IsNullOrWhiteSpace(attachmentBase64))
-                    throw new Exception("FTP Upload Error: Base64 is empty");
-
-                string ftpServer = _configuration["Config:ftpServer"];
-                string ftpUser = _configuration["Config:ftpUser"];
-                string ftpPassword = _configuration["Config:ftpPassword"];
-                string ftpPort = _configuration["Config:ftpPort"];
-
-                // ✅ Default path if not provided
-                string finalFtpPath = !string.IsNullOrWhiteSpace(ftpPath)
-                    ? ftpPath
-                    : "/wwwroot/Images/ProductRegistration";
-
-                // ✅ Remove base64 prefix
-                if (attachmentBase64.Contains(","))
-                    attachmentBase64 = attachmentBase64.Split(',')[1];
-
-                byte[] fileBytes = Convert.FromBase64String(attachmentBase64);
-
-                // ✅ Port optional handling
-                string ftpUrl = string.IsNullOrWhiteSpace(ftpPort)
-                    ? $"ftp://{ftpServer}{finalFtpPath}/{attachmentFileName}"
-                    : $"ftp://{ftpServer}:{ftpPort}{finalFtpPath}/{attachmentFileName}";
-
-                Console.WriteLine($"FTP URL: {ftpUrl}");
-                Console.WriteLine($"File Size: {fileBytes.Length}");
-
-                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpUrl);
-                request.Method = WebRequestMethods.Ftp.UploadFile;
-                request.Credentials = new NetworkCredential(ftpUser, ftpPassword);
-                request.UseBinary = true;
-                request.UsePassive = false; // ⚠ important for shared hosting
-                request.KeepAlive = false;
-                request.ContentLength = fileBytes.Length;
-                request.Timeout = 30000;
-
-                using (Stream requestStream = await request.GetRequestStreamAsync())
-                {
-                    await requestStream.WriteAsync(fileBytes, 0, fileBytes.Length);
-                }
-
-                using (FtpWebResponse response = (FtpWebResponse)await request.GetResponseAsync())
-                {
-                    Console.WriteLine($"FTP Upload Success: {response.StatusDescription}");
-                }
-
-                Console.WriteLine("===== FTP UPLOAD END =====");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("===== FTP UPLOAD ERROR =====");
-                Console.WriteLine(ex.ToString());
-                throw; // so you can see error in API response
-            }
-        }
-        // Generic Data Fetcher
+        // ─────────────────────────────────────────────────────────────
+        // Generic DB Fetcher
+        // ─────────────────────────────────────────────────────────────
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
             List<T> list = new();
 
-            using SqlConnection con = new SqlConnection(connectionString);
-            using SqlCommand cmd = new SqlCommand(storedProcedure, con);
-
-            cmd.CommandType = CommandType.StoredProcedure;
+            using SqlConnection con = new(connectionString);
+            using SqlCommand cmd = new(storedProcedure, con) { CommandType = CommandType.StoredProcedure };
 
             if (parameters != null)
-            {
-                foreach (var param in parameters)
-                    cmd.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
-            }
+                foreach (var p in parameters)
+                    cmd.Parameters.AddWithValue(p.Key, p.Value ?? DBNull.Value);
 
             await con.OpenAsync();
-
             using SqlDataReader dr = await cmd.ExecuteReaderAsync();
 
             if (typeof(T) == typeof(ExpandoObject))
@@ -553,31 +310,22 @@ namespace NormalAccountProject.Controllers
                 while (await dr.ReadAsync())
                 {
                     IDictionary<string, object> expando = new ExpandoObject();
-
                     for (int i = 0; i < dr.FieldCount; i++)
-                    {
                         expando[dr.GetName(i)] = dr.IsDBNull(i) ? null : dr.GetValue(i);
-                    }
-
                     list.Add((T)expando);
                 }
             }
             else
             {
                 var props = typeof(T).GetProperties();
-
                 while (await dr.ReadAsync())
                 {
-                    T obj = new T();
-
+                    T obj = new();
                     foreach (var prop in props)
                     {
-                        if (!dr.HasColumn(prop.Name) || dr[prop.Name] == DBNull.Value)
-                            continue;
-
+                        if (!dr.HasColumn(prop.Name) || dr[prop.Name] == DBNull.Value) continue;
                         prop.SetValue(obj, Convert.ChangeType(dr[prop.Name], prop.PropertyType));
                     }
-
                     list.Add(obj);
                 }
             }
@@ -586,16 +334,13 @@ namespace NormalAccountProject.Controllers
         }
     }
 
-    // Extension Method for SqlDataReader
     public static class SqlDataReaderExtensions
     {
         public static bool HasColumn(this SqlDataReader reader, string columnName)
         {
             for (int i = 0; i < reader.FieldCount; i++)
-            {
                 if (reader.GetName(i).Equals(columnName, StringComparison.InvariantCultureIgnoreCase))
                     return true;
-            }
             return false;
         }
     }
