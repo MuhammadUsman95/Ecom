@@ -1220,8 +1220,8 @@
             { cond: !CategoryId,                                                 text: 'Please select a category',        focus: 'CategoryId' },
             { cond: !VendorId,                                                   text: 'Please select a vendor',          focus: 'VendorId' },
             { cond: !Prices || isNaN(Prices) || parseFloat(Prices) <= 0,        text: 'Please enter a valid price',      focus: 'Prices' },
-            { cond: DiscountAmount && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0), text: 'Please enter a valid discount amount', focus: 'DiscountAmount' },
-            { cond: !IsUpdate && !hasImage,                                      text: 'Please select a product image',   focus: 'ProductImageAttachment' }
+            { cond: DiscountAmount && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0), text: 'Please enter a valid discount amount', focus: 'DiscountAmount' }
+            // { cond: !IsUpdate && !hasImage,                                      text: 'Please select a product image',   focus: 'ProductImageAttachment' }
         ];
         for (const v of validations) {
             if (v.cond) { await Swal.fire({ icon: 'warning', title: 'Validation', text: v.text, returnFocus: false, ...SW, didClose: () => document.getElementById(v.focus).focus() }); return; }

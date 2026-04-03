@@ -1458,8 +1458,9 @@
             { cond: !contactNo, text: 'Contact number is required', focus: 'ContactNo' },
             { cond: contactNo && contactNo.length < 10, text: 'Contact number must be at least 10 digits', focus: 'ContactNo' },
             { cond: !type, text: 'Please select a vendor type', focus: 'TypeId' },
-            { cond: !department, text: 'Please select a department', focus: 'DepartmentId' },
-            { cond: !VendorImageAttachment, text: 'Please select a vendor image', focus: 'VendorImageAttachment' }
+            { cond: !department, text: 'Please select a department', focus: 'DepartmentId' }
+            // ,
+            // { cond: !VendorImageAttachment, text: 'Please select a vendor image', focus: 'VendorImageAttachment' }
         ];
         for (const v of validations) {
             if (v.cond) {

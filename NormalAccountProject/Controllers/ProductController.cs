@@ -62,8 +62,8 @@ namespace NormalAccountProject.Controllers
             if (string.IsNullOrEmpty(nProductTabObj.Prices))
                 return Ok(new { statusId = 0, message = "Price is required" });
 
-            if (!nProductTabObj.IsUpdate && string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
-                return Ok(new { statusId = 0, message = "Product image is required" });
+            //if (!nProductTabObj.IsUpdate && string.IsNullOrEmpty(nProductTabObj.ProductImageAttachmentfilename))
+            //    return Ok(new { statusId = 0, message = "Product image is required" });
 
             try
             {

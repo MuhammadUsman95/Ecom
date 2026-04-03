@@ -79,7 +79,12 @@ namespace NormalAccountProject.Controllers
                     cmd.Parameters.AddWithValue("@DepartmentId", nEcom_VendorTabObj.DepartmentId);
                     cmd.Parameters.AddWithValue("@UserId", nEcom_VendorTabObj.Userid);
                     cmd.Parameters.AddWithValue("@IsUpdate", nEcom_VendorTabObj.IsUpdate ? "1" : "0");
-                    cmd.Parameters.AddWithValue("@ImagePath", nEcom_VendorTabObj.VendorImageAttachmentfilename);
+                    //cmd.Parameters.AddWithValue("@ImagePath", nEcom_VendorTabObj.VendorImageAttachmentfilename);
+                    cmd.Parameters.AddWithValue("@ImagePath", nEcom_VendorTabObj.VendorImageAttachmentfilename ?? "");
+                    //cmd.Parameters.AddWithValue("@ImagePath",
+                    //!string.IsNullOrEmpty(nEcom_VendorTabObj.VendorImageAttachmentfilename)
+                    //    ? nEcom_VendorTabObj.VendorImageAttachmentfilename
+                    //    : (nEcom_VendorTabObj.VendorImageAttachmentfilenameold ?? ""));
                     cmd.Parameters.AddWithValue("@TimeIn", nEcom_VendorTabObj.TimeIn);
                     cmd.Parameters.AddWithValue("@TimeOut", nEcom_VendorTabObj.TimeOut);
                     cmd.Parameters.AddWithValue("@DeliveryCharges", nEcom_VendorTabObj.DeliveryCharges);
@@ -133,7 +138,6 @@ namespace NormalAccountProject.Controllers
                                     await UploadToFtp(nEcom_VendorTabObj.VendorImageAttachmentfilename, nEcom_VendorTabObj.VendorImageAttachmentbase64);
                                 }
                             }
-
                             return Ok(new
                             {
                                 statusId = statusId,
@@ -212,10 +216,11 @@ namespace NormalAccountProject.Controllers
                             int statusId = Convert.ToInt32(dr["StatusId"]);
                             if (statusId == 1)
                             {
-                                if (!string.IsNullOrEmpty(nEcom_VendorTabObj.VendorImageAttachmentfilenameold))
+                                if (!string.IsNullOrEmpty(nEcom_VendorTabObj.VendorImageAttachmentfilename))
                                 {
                                     string oldFileName = Path.GetFileName(nEcom_VendorTabObj.VendorImageAttachmentfilenameold);
                                     await DeleteFromFtp(oldFileName);
+                                    await UploadToFtp(nEcom_VendorTabObj.VendorImageAttachmentfilename, nEcom_VendorTabObj.VendorImageAttachmentbase64);
                                 }
                             }
 
