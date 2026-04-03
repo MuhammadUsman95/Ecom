@@ -59,7 +59,6 @@
             overflow: hidden;
         }
 
-            /* Grid texture */
             body::before {
                 content: '';
                 position: fixed;
@@ -70,7 +69,6 @@
                 z-index: 0;
             }
 
-        /* Ambient orbs */
         .orb {
             position: fixed;
             border-radius: 50%;
@@ -83,7 +81,7 @@
             height: 500px;
             top: -200px;
             right: -200px;
-            background: radial-gradient(circle, rgba(108,99,255,.08) 0%, transparent 65%);
+            background: radial-gradient(circle,rgba(108,99,255,.08) 0%,transparent 65%);
         }
 
         .orb-2 {
@@ -91,10 +89,9 @@
             height: 400px;
             bottom: -150px;
             left: -150px;
-            background: radial-gradient(circle, rgba(20,184,166,.06) 0%, transparent 65%);
+            background: radial-gradient(circle,rgba(20,184,166,.06) 0%,transparent 65%);
         }
 
-        /* Floating particles */
         .particle {
             position: fixed;
             width: 2px;
@@ -146,7 +143,6 @@
             }
         }
 
-        /* Card */
         .login-card {
             background: var(--surface);
             border: 1px solid var(--border2);
@@ -155,7 +151,6 @@
             overflow: hidden;
         }
 
-        /* Header */
         .login-header {
             padding: 34px 32px 26px;
             text-align: center;
@@ -177,7 +172,6 @@
                 pointer-events: none;
             }
 
-        /* macOS dots */
         .mac-dots {
             display: flex;
             gap: 6px;
@@ -204,35 +198,43 @@
             background: #10b981;
         }
 
-        /* Terminal label */
-        .terminal-label {
-            font-family: var(--font-m);
-            font-size: 9.5px;
-            color: var(--text3);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            position: absolute;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
+        /* ── Skeleton shimmer for logo placeholder ── */
+        .logo-skeleton {
+            width: 150px;
+            height: 50px;
+            background: linear-gradient(90deg, var(--surface3) 25%, var(--surface2) 50%, var(--surface3) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 8px;
+            margin: 0 auto 4px;
         }
 
-/*         .login-logo {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            border-radius: 16px;
+        @@keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .login-logo {
+            margin-bottom: 4px;
+            position: relative;
+            z-index: 1;
+            min-height: 54px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
-            color: #fff;
-            font-size: 22px;
-            box-shadow: 0 6px 28px rgba(108,99,255,.45);
-            position: relative;
-            z-index: 1;
-        } */
+        }
+
+            .login-logo img {
+                width: 150px;
+                height: auto;
+                opacity: 0;
+                transition: opacity .4s ease;
+            }
 
         .login-title {
             font-family: var(--font-h);
@@ -242,24 +244,24 @@
             letter-spacing: -.4px;
             position: relative;
             z-index: 1;
+            min-height: 28px;
         }
 
             .login-title span {
                 color: var(--accent);
             }
 
-        .login-sub {
-            font-family: var(--font-m);
-            font-size: 10px;
-            color: var(--text3);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-top: 7px;
-            position: relative;
-            z-index: 1;
+        /* Title skeleton */
+        .title-skeleton {
+            width: 180px;
+            height: 22px;
+            background: linear-gradient(90deg, var(--surface3) 25%, var(--surface2) 50%, var(--surface3) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 6px;
+            margin: 0 auto;
         }
 
-        /* Accent bar */
         .accent-bar {
             display: flex;
             gap: 2px;
@@ -289,7 +291,6 @@
                 border-radius: 2px;
             }
 
-        /* Form */
         .login-form {
             padding: 26px 30px 30px;
         }
@@ -314,7 +315,6 @@
             }
         }
 
-        /* Floating label inputs */
         .input-wrapper {
             position: relative;
         }
@@ -391,15 +391,11 @@
                 font-weight: 500;
             }
 
-            .form-input:focus ~ .input-icon {
+            .form-input:focus ~ .input-icon,
+            .input-wrapper.has-value .input-icon {
                 color: var(--accent);
             }
 
-        .input-wrapper.has-value .input-icon {
-            color: var(--accent);
-        }
-
-        /* Login Button */
         .btn-login-wrap {
             margin-top: 22px;
             animation: fadeIn .5s ease .35s both;
@@ -466,7 +462,6 @@
                 gap: 8px;
             }
 
-        /* Footer */
         .login-footer {
             margin-top: 20px;
             text-align: center;
@@ -508,13 +503,18 @@
                     <div class="mac-dot mac-dot-y"></div>
                     <div class="mac-dot mac-dot-g"></div>
                 </div>
-                @* <div class="terminal-label">auth.session</div> *@
-                @* <div class="login-logo"><i class="fas fa-store-alt"></i></div> *@
+
+                <!-- Logo: skeleton shown until image loads -->
                 <div class="login-logo">
-                    <img src="./images/logo.png" alt="Logo" style="width: 150px; height: auto;">
+                    <div class="logo-skeleton" id="logoSkeleton"></div>
+                    <img id="companyLogo" src="" alt="Logo" style="display:none;">
                 </div>
-                <div class="login-title"><span> Ecommerce Admin</span></div>
-                @* <div class="login-sub">// sign in to continue</div> *@
+
+                <!-- Company Name: skeleton shown until data loads -->
+                <div class="login-title" id="companyNameWrap">
+                    <div class="title-skeleton" id="titleSkeleton"></div>
+                </div>
+
                 <div class="accent-bar"><span></span><span></span><span></span></div>
             </div>
 
@@ -544,7 +544,7 @@
                 </form>
 
                 <div class="login-footer">
-                    Developed with </span> by <strong>UT Designer</strong>
+                    Developed with <span class="heart">♥</span> by <strong>UT Designer</strong>
                 </div>
             </div>
 
@@ -552,8 +552,9 @@
     </div>
 
     <script>
-        const SW = { background:'#0f1220', color:'#e8eaf2', confirmButtonColor:'#6c63ff' };
+        const SW = { background: '#0f1220', color: '#e8eaf2', confirmButtonColor: '#6c63ff' };
 
+        // ── Auth Check ─────────────────────────────────────────
         function checkIfLoggedIn() {
             if (localStorage.getItem("userId") && localStorage.getItem("password")) {
                 window.location.href = '/Home'; return true;
@@ -561,60 +562,122 @@
             return false;
         }
 
+        // ── Floating Label Init ────────────────────────────────
         function initLoginFloats() {
-            ['wrapUserId','wrapPassword'].forEach(wid => {
+            ['wrapUserId', 'wrapPassword'].forEach(wid => {
                 const wrap = document.getElementById(wid);
                 if (!wrap) return;
                 const inp = wrap.querySelector('input');
                 if (!inp) return;
                 const chk = () => wrap.classList.toggle('has-value', inp.value !== '');
-                inp.addEventListener('input', chk); inp.addEventListener('change', chk); chk();
+                inp.addEventListener('input', chk);
+                inp.addEventListener('change', chk);
+                chk();
             });
         }
 
-        $(document).ready(function() {
+        // ── Load Company Info from DB ──────────────────────────
+        function loadCompanyInfo() {
+            $.ajax({
+                url: '@Url.Action("GetCompanyInfo", "Login")',
+                type: 'GET',
+                success: function (res) {
+                    const name = (res.success && res.companyName) ? res.companyName : 'Ecommerce Admin';
+                    const logo = (res.success && res.companyLogo) ? res.companyLogo : 'logo.png';
+
+                    // Set company name — remove skeleton, show text
+                    $("#titleSkeleton").remove();
+                    $("#companyNameWrap").html('<span>' + name + '</span>');
+                    document.title = name + ' - Admin Login';
+
+                    // Set logo — show image once loaded
+                    const img = $("#companyLogo");
+                    img.attr("src", "./images/" + logo).show();
+                    img.on("load", function () {
+                        $("#logoSkeleton").remove();
+                        $(this).css("opacity", 1);
+                    }).on("error", function () {
+                        // Fallback to default logo
+                        $(this).attr("src", "./images/logo.png");
+                        $("#logoSkeleton").remove();
+                        $(this).css("opacity", 1);
+                    });
+                    // If browser already cached the image
+                    if (img[0].complete && img[0].naturalWidth > 0) {
+                        $("#logoSkeleton").remove();
+                        img.css("opacity", 1);
+                    }
+                },
+                error: function () {
+                    // Fallback defaults on error
+                    $("#titleSkeleton").remove();
+                    $("#companyNameWrap").html('<span>Ecommerce Admin</span>');
+                    $("#logoSkeleton").remove();
+                    $("#companyLogo").attr("src", "./images/logo.png").show().css("opacity", 1);
+                }
+            });
+        }
+
+        // ── Document Ready ─────────────────────────────────────
+        $(document).ready(function () {
             if (checkIfLoggedIn()) return;
+
             $("#userId, #password").val("");
             initLoginFloats();
+            loadCompanyInfo();
             $("#userId").focus();
 
-            $("#loginForm").submit(function(e) {
+            // ── Login Form Submit ──────────────────────────────
+            $("#loginForm").submit(function (e) {
                 e.preventDefault();
-                const userId = $("#userId").val().trim();
+                const userId   = $("#userId").val().trim();
                 const password = $("#password").val().trim();
+
                 if (!userId || !password) {
-                    Swal.fire({ icon:'warning', title:'Validation', text:'Please fill in all fields!', ...SW }); return;
+                    Swal.fire({ icon: 'warning', title: 'Validation', text: 'Please fill in all fields!', ...SW });
+                    return;
                 }
+
                 $("#userId, #password, #loginBtn").prop("disabled", true);
                 $("#loginBtn span").html('<i class="fas fa-spinner fa-spin"></i> Verifying...');
-                Swal.fire({ title:'Please Wait', text:'Verifying credentials...', allowOutsideClick:false, allowEscapeKey:false, didOpen:()=>Swal.showLoading(), ...SW });
+                Swal.fire({
+                    title: 'Please Wait', text: 'Verifying credentials...',
+                    allowOutsideClick: false, allowEscapeKey: false,
+                    didOpen: () => Swal.showLoading(), ...SW
+                });
+
                 $.ajax({
                     url: '@Url.Action("Verify", "Login")',
                     type: 'POST',
                     data: { userId, password },
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
-                            localStorage.setItem("userId", response.userId);
+                            localStorage.setItem("userId",   response.userId);
                             localStorage.setItem("password", response.password);
-                            Swal.fire({ icon:'success', title:'Login Successful!', text:'Redirecting...', timer:1800, timerProgressBar:true, showConfirmButton:false, allowOutsideClick:false, ...SW })
-                                .then(() => { window.location.href='/Home'; });
+                            Swal.fire({
+                                icon: 'success', title: 'Login Successful!',
+                                text: 'Redirecting...', timer: 1800,
+                                timerProgressBar: true, showConfirmButton: false,
+                                allowOutsideClick: false, ...SW
+                            }).then(() => { window.location.href = '/Home'; });
                         } else {
                             $("#userId, #password, #loginBtn").prop("disabled", false);
                             $("#loginBtn span").html('<i class="fas fa-arrow-right-to-bracket"></i> Login');
                             $("#userId").focus();
-                            Swal.fire({ icon:'error', title:'Login Failed', text:response.message||'Invalid credentials.', ...SW });
+                            Swal.fire({ icon: 'error', title: 'Login Failed', text: response.message || 'Invalid credentials.', ...SW });
                         }
                     },
-                    error: function() {
+                    error: function () {
                         $("#userId, #password, #loginBtn").prop("disabled", false);
                         $("#loginBtn span").html('<i class="fas fa-arrow-right-to-bracket"></i> Login');
                         $("#userId").focus();
-                        Swal.fire({ icon:'error', title:'Server Error', text:'Unable to connect. Please try again.', ...SW });
+                        Swal.fire({ icon: 'error', title: 'Server Error', text: 'Unable to connect. Please try again.', ...SW });
                     }
                 });
             });
 
-            $("#userId, #password").keypress(function(e) {
+            // Enter key support
+            $("#userId, #password").keypress(function (e) {
                 if (e.which === 13) { $("#loginForm").submit(); }
             });
         });

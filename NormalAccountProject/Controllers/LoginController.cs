@@ -39,7 +39,7 @@ namespace NormalAccountProject.Controllers
                 {
                     success = true,
                     userId = userId,
-                    password = password   // future encryption possible
+                    password = password
                 });
             }
             else
@@ -110,6 +110,47 @@ namespace NormalAccountProject.Controllers
                 }
 
                 return Json(new { success = true, data = menuItems });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
+        // ══════════════════════════════════════════
+        //  GET /Login/GetCompanyInfo
+        // ══════════════════════════════════════════
+        [HttpGet]
+        public async Task<IActionResult> GetCompanyInfo()
+        {
+            try
+            {
+                string connectionString = _configuration.GetConnectionString("Connection1");
+
+                using var con = new SqlConnection(connectionString);
+                using var cmd = new SqlCommand("User_SP", con)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                cmd.Parameters.AddWithValue("@nCategoryId", 0);
+                cmd.Parameters.AddWithValue("@nsCategoryId", 2);
+                cmd.Parameters.AddWithValue("@UserId", "");
+
+                await con.OpenAsync();
+                using var reader = await cmd.ExecuteReaderAsync();
+
+                if (await reader.ReadAsync())
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        companyName = reader["Company"] != DBNull.Value ? reader["Company"].ToString() : "Ecommerce Admin",
+                        companyLogo = reader["Companylogo"] != DBNull.Value ? reader["Companylogo"].ToString() : "logo.png"
+                    });
+                }
+
+                return Json(new { success = false });
             }
             catch (Exception ex)
             {
