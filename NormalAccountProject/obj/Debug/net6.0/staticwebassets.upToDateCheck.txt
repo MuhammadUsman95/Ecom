@@ -110,6 +110,7 @@ wwwroot\js\swiper-bundle-11.2.10.min.js
 wwwroot\js\swiper-bundle.min.js
 wwwroot\js\vanilla-utils.js
 wwwroot\logo.png
+wwwroot\logo_3.png
 wwwroot\vendor\bootstrap-5.3.7.bundle.min.js
 wwwroot\vendor\bootstrap-5.3.7.min.css
 wwwroot\vendor\bootstrap-5.3.8.bundle.min.js
