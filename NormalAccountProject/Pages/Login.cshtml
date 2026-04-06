@@ -20,22 +20,22 @@
 
     <style>
         :root {
-            --bg: #0a0c12;
-            --bg2: #0f1220;
-            --surface: #141828;
-            --surface2: #1a2035;
-            --surface3: #1f2640;
-            --border: rgba(255,255,255,.06);
-            --border2: rgba(255,255,255,.11);
-            --accent: #6c63ff;
-            --accent2: #4f46e5;
-            --accent-g: rgba(108,99,255,.15);
-            --gold: #f0b429;
-            --teal: #14b8a6;
-            --danger: #f43f5e;
-            --text: #e8eaf2;
-            --text2: #9198b0;
-            --text3: #5a6182;
+            --bg: #f4f4f4;
+            --bg2: #ffffff;
+            --surface: #ffffff;
+            --surface2: #f9f9f9;
+            --surface3: #efefef;
+            --border: rgba(0,0,0,.07);
+            --border2: rgba(0,0,0,.12);
+            --accent: #474544;
+            --accent2: #2e2d2c;
+            --accent-g: rgba(71,69,68,.10);
+            --gold: #b08d57;
+            --teal: #5a7a6e;
+            --danger: #d94f4f;
+            --text: #1a1a1a;
+            --text2: #5c5a58;
+            --text3: #9a9896;
             --font-h: 'Syne', sans-serif;
             --font-b: 'Plus Jakarta Sans', sans-serif;
             --font-m: 'JetBrains Mono', monospace;
@@ -53,18 +53,20 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: var(--bg);
+            background: url('./images/ERP_Solution.jpg') center center / cover no-repeat fixed;
             padding: 20px;
             position: relative;
             overflow: hidden;
         }
 
+            /* Dark overlay for readability */
             body::before {
                 content: '';
                 position: fixed;
                 inset: 0;
-                background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-                background-size: 40px 40px;
+                background: linear-gradient( 135deg, rgba(10, 10, 10, 0.62) 0%, rgba(30, 28, 26, 0.55) 50%, rgba(10, 10, 10, 0.65) 100% );
+                backdrop-filter: blur(1.5px);
+                -webkit-backdrop-filter: blur(1.5px);
                 pointer-events: none;
                 z-index: 0;
             }
@@ -81,7 +83,7 @@
             height: 500px;
             top: -200px;
             right: -200px;
-            background: radial-gradient(circle,rgba(108,99,255,.08) 0%,transparent 65%);
+            background: radial-gradient(circle,rgba(71,69,68,.06) 0%,transparent 65%);
         }
 
         .orb-2 {
@@ -89,14 +91,14 @@
             height: 400px;
             bottom: -150px;
             left: -150px;
-            background: radial-gradient(circle,rgba(20,184,166,.06) 0%,transparent 65%);
+            background: radial-gradient(circle,rgba(90,122,110,.05) 0%,transparent 65%);
         }
 
         .particle {
             position: fixed;
             width: 2px;
             height: 2px;
-            background: rgba(108,99,255,.5);
+            background: rgba(71,69,68,.25);
             border-radius: 50%;
             animation: floatUp 20s infinite linear;
             pointer-events: none;
@@ -147,7 +149,7 @@
             background: var(--surface);
             border: 1px solid var(--border2);
             border-radius: 22px;
-            box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(108,99,255,.08);
+            box-shadow: 0 8px 40px rgba(0,0,0,.12), 0 0 0 1px rgba(71,69,68,.08);
             overflow: hidden;
         }
 
@@ -168,7 +170,7 @@
                 transform: translateX(-50%);
                 width: 260px;
                 height: 260px;
-                background: radial-gradient(circle, rgba(108,99,255,.1) 0%, transparent 65%);
+                background: radial-gradient(circle, rgba(71,69,68,.07) 0%, transparent 65%);
                 pointer-events: none;
             }
 
@@ -198,7 +200,6 @@
             background: #10b981;
         }
 
-        /* ── Skeleton shimmer for logo placeholder ── */
         .logo-skeleton {
             width: 150px;
             height: 50px;
@@ -251,7 +252,6 @@
                 color: var(--accent);
             }
 
-        /* Title skeleton */
         .title-skeleton {
             width: 180px;
             height: 22px;
@@ -287,7 +287,7 @@
 
             .accent-bar span:nth-child(3) {
                 flex: 1;
-                background: var(--border);
+                background: var(--border2);
                 border-radius: 2px;
             }
 
@@ -353,8 +353,8 @@
             font-size: 13.5px;
             font-family: var(--font-b);
             background: var(--bg2);
-            color: #e8eaf2 !important;
-            -webkit-text-fill-color: #e8eaf2 !important;
+            color: #1a1a1a !important;
+            -webkit-text-fill-color: #1a1a1a !important;
             caret-color: var(--accent);
             outline: none;
             transition: border-color .2s, box-shadow .2s, background .2s;
@@ -367,15 +367,15 @@
 
             .form-input:focus {
                 border-color: var(--accent);
-                box-shadow: 0 0 0 3px rgba(108,99,255,.14);
+                box-shadow: 0 0 0 3px rgba(71,69,68,.12);
                 background: var(--surface);
             }
 
             .form-input:-webkit-autofill,
             .form-input:-webkit-autofill:hover,
             .form-input:-webkit-autofill:focus {
-                -webkit-text-fill-color: #e8eaf2 !important;
-                -webkit-box-shadow: 0 0 0px 1000px var(--bg2) inset !important;
+                -webkit-text-fill-color: #1a1a1a !important;
+                -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
                 transition: background-color 5000s ease-in-out 0s;
             }
 
@@ -415,7 +415,7 @@
             cursor: pointer;
             letter-spacing: .2px;
             transition: all .2s ease;
-            box-shadow: 0 4px 20px rgba(108,99,255,.45);
+            box-shadow: 0 4px 20px rgba(71,69,68,.30);
             position: relative;
             overflow: hidden;
         }
@@ -440,7 +440,7 @@
 
             .btn-login:hover:not(:disabled) {
                 transform: translateY(-2px);
-                box-shadow: 0 8px 28px rgba(108,99,255,.55);
+                box-shadow: 0 8px 28px rgba(71,69,68,.40);
             }
 
             .btn-login:active:not(:disabled) {
@@ -483,6 +483,191 @@
             .login-footer .heart {
                 color: var(--danger);
             }
+
+        /* ── Body Entry Animation (Professional) ─────────── */
+        @@keyframes bodyReveal {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        body {
+            animation: bodyReveal .5s ease both;
+        }
+
+        /* ── Toast Notification ───────────────────────────── */
+        @@keyframes toastIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-18px) scale(.96);
+            }
+
+            60% {
+                opacity: 1;
+                transform: translateY(4px) scale(1.01);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @@keyframes toastOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-14px) scale(.95);
+            }
+        }
+
+        /* ── Toast Stack Container ────────────────────────── */
+        #toastContainer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+            pointer-events: none;
+        }
+
+        .toast-notify {
+            pointer-events: all;
+            background: #fff;
+            border-radius: 12px;
+            padding: 13px 15px 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,.06), 0 12px 28px rgba(0,0,0,.14), 0 0 0 1px rgba(0,0,0,.06);
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            min-width: 270px;
+            max-width: 340px;
+            animation: toastIn .45s cubic-bezier(.22,1,.36,1) both;
+            font-family: var(--font-b);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .toast-notify.error {
+                border-top: 3px solid #d94f4f;
+            }
+
+            .toast-notify.success {
+                border-top: 3px solid #10b981;
+            }
+
+            .toast-notify.warning {
+                border-top: 3px solid #f59e0b;
+            }
+
+            .toast-notify.info {
+                border-top: 3px solid #474544;
+            }
+
+        .toast-icon {
+            font-size: 17px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .toast-notify.error .toast-icon {
+            color: #d94f4f;
+        }
+
+        .toast-notify.success .toast-icon {
+            color: #10b981;
+        }
+
+        .toast-notify.warning .toast-icon {
+            color: #f59e0b;
+        }
+
+        .toast-notify.info .toast-icon {
+            color: #474544;
+        }
+
+        .toast-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .toast-title {
+            font-weight: 700;
+            font-size: 12.5px;
+            color: #1a1a1a;
+            letter-spacing: -.1px;
+            line-height: 1.3;
+        }
+
+        .toast-text {
+            font-size: 11.5px;
+            color: #5c5a58;
+            margin-top: 3px;
+            line-height: 1.45;
+        }
+
+        .toast-close {
+            color: #c0bebb;
+            cursor: pointer;
+            font-size: 11px;
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            padding: 0;
+            line-height: 1;
+            margin-top: 2px;
+            transition: color .15s;
+        }
+
+            .toast-close:hover {
+                color: #474544;
+            }
+
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2.5px;
+            border-radius: 0 2px 0 0;
+            animation: toastProgress 3.5s linear forwards;
+        }
+
+        .toast-notify.error .toast-progress {
+            background: #d94f4f;
+        }
+
+        .toast-notify.success .toast-progress {
+            background: #10b981;
+        }
+
+        .toast-notify.warning .toast-progress {
+            background: #f59e0b;
+        }
+
+        .toast-notify.info .toast-progress {
+            background: #474544;
+        }
+
+        @@keyframes toastProgress {
+            from {
+                width: 100%;
+            }
+
+            to {
+                width: 0%;
+            }
+        }
     </style>
 
     <div class="orb orb-1"></div>
@@ -494,6 +679,8 @@
     <div class="particle" style="left:72%;animation-delay:6s;"></div>
     <div class="particle" style="left:88%;animation-delay:3s;"></div>
 
+    <div id="toastContainer"></div>
+
     <div class="login-container">
         <div class="login-card">
 
@@ -504,13 +691,11 @@
                     <div class="mac-dot mac-dot-g"></div>
                 </div>
 
-                <!-- Logo: skeleton shown until image loads -->
                 <div class="login-logo">
                     <div class="logo-skeleton" id="logoSkeleton"></div>
                     <img id="companyLogo" src="" alt="Logo" style="display:none;">
                 </div>
 
-                <!-- Company Name: skeleton shown until data loads -->
                 <div class="login-title" id="companyNameWrap">
                     <div class="title-skeleton" id="titleSkeleton"></div>
                 </div>
@@ -552,7 +737,40 @@
     </div>
 
     <script>
-        const SW = { background: '#0f1220', color: '#e8eaf2', confirmButtonColor: '#6c63ff' };
+        const SW = { background: '#ffffff', color: '#1a1a1a', confirmButtonColor: '#474544' };
+
+        // ── Toast Notification Function ────────────────────────
+        function showToast(icon, title, text) {
+            const iconMap = {
+                error:   'fa-circle-xmark',
+                success: 'fa-circle-check',
+                warning: 'fa-triangle-exclamation',
+                info:    'fa-circle-info'
+            };
+
+            const container = document.getElementById('toastContainer');
+
+            const toast = document.createElement('div');
+            toast.className = 'toast-notify ' + icon;
+            toast.innerHTML =
+                '<i class="fas ' + iconMap[icon] + ' toast-icon"></i>' +
+                '<div class="toast-body">' +
+                    '<div class="toast-title">' + title + '</div>' +
+                    '<div class="toast-text">'  + text  + '</div>' +
+                '</div>' +
+                '<button class="toast-close" onclick="removeToast(this.closest(\'.toast-notify\'))"><i class="fas fa-xmark"></i></button>' +
+                '<div class="toast-progress"></div>';
+
+            container.appendChild(toast);
+            setTimeout(function () { removeToast(toast); }, 3500);
+        }
+
+        function removeToast(toast) {
+            if (!toast || toast._removing) return;
+            toast._removing = true;
+            toast.style.animation = 'toastOut .3s ease forwards';
+            setTimeout(function () { if (toast.parentNode) toast.remove(); }, 300);
+        }
 
         // ── Auth Check ─────────────────────────────────────────
         function checkIfLoggedIn() {
@@ -564,12 +782,12 @@
 
         // ── Floating Label Init ────────────────────────────────
         function initLoginFloats() {
-            ['wrapUserId', 'wrapPassword'].forEach(wid => {
+            ['wrapUserId', 'wrapPassword'].forEach(function (wid) {
                 const wrap = document.getElementById(wid);
                 if (!wrap) return;
                 const inp = wrap.querySelector('input');
                 if (!inp) return;
-                const chk = () => wrap.classList.toggle('has-value', inp.value !== '');
+                const chk = function () { wrap.classList.toggle('has-value', inp.value !== ''); };
                 inp.addEventListener('input', chk);
                 inp.addEventListener('change', chk);
                 chk();
@@ -585,31 +803,26 @@
                     const name = (res.success && res.companyName) ? res.companyName : 'Ecommerce Admin';
                     const logo = (res.success && res.companyLogo) ? res.companyLogo : 'logo.png';
 
-                    // Set company name — remove skeleton, show text
                     $("#titleSkeleton").remove();
                     $("#companyNameWrap").html('<span>' + name + '</span>');
                     document.title = name + ' - Admin Login';
 
-                    // Set logo — show image once loaded
                     const img = $("#companyLogo");
                     img.attr("src", "./images/" + logo).show();
                     img.on("load", function () {
                         $("#logoSkeleton").remove();
                         $(this).css("opacity", 1);
                     }).on("error", function () {
-                        // Fallback to default logo
                         $(this).attr("src", "./images/logo.png");
                         $("#logoSkeleton").remove();
                         $(this).css("opacity", 1);
                     });
-                    // If browser already cached the image
                     if (img[0].complete && img[0].naturalWidth > 0) {
                         $("#logoSkeleton").remove();
                         img.css("opacity", 1);
                     }
                 },
                 error: function () {
-                    // Fallback defaults on error
                     $("#titleSkeleton").remove();
                     $("#companyNameWrap").html('<span>Ecommerce Admin</span>');
                     $("#logoSkeleton").remove();
@@ -634,7 +847,7 @@
                 const password = $("#password").val().trim();
 
                 if (!userId || !password) {
-                    Swal.fire({ icon: 'warning', title: 'Validation', text: 'Please fill in all fields!', ...SW });
+                    showToast('warning', 'Validation', 'Please fill in all fields!');
                     return;
                 }
 
@@ -643,7 +856,7 @@
                 Swal.fire({
                     title: 'Please Wait', text: 'Verifying credentials...',
                     allowOutsideClick: false, allowEscapeKey: false,
-                    didOpen: () => Swal.showLoading(), ...SW
+                    didOpen: function () { Swal.showLoading(); }, ...SW
                 });
 
                 $.ajax({
@@ -654,24 +867,23 @@
                         if (response.success) {
                             localStorage.setItem("userId",   response.userId);
                             localStorage.setItem("password", response.password);
-                            Swal.fire({
-                                icon: 'success', title: 'Login Successful!',
-                                text: 'Redirecting...', timer: 1800,
-                                timerProgressBar: true, showConfirmButton: false,
-                                allowOutsideClick: false, ...SW
-                            }).then(() => { window.location.href = '/Home'; });
+                            Swal.close();
+                            showToast('success', 'Login Successful!', 'Redirecting to dashboard...');
+                            setTimeout(function () { window.location.href = '/Home'; }, 1600);
                         } else {
+                            Swal.close();
                             $("#userId, #password, #loginBtn").prop("disabled", false);
                             $("#loginBtn span").html('<i class="fas fa-arrow-right-to-bracket"></i> Login');
                             $("#userId").focus();
-                            Swal.fire({ icon: 'error', title: 'Login Failed', text: response.message || 'Invalid credentials.', ...SW });
+                            showToast('error', 'Login Failed', response.message || 'Invalid username or password.');
                         }
                     },
                     error: function () {
+                        Swal.close();
                         $("#userId, #password, #loginBtn").prop("disabled", false);
                         $("#loginBtn span").html('<i class="fas fa-arrow-right-to-bracket"></i> Login');
                         $("#userId").focus();
-                        Swal.fire({ icon: 'error', title: 'Server Error', text: 'Unable to connect. Please try again.', ...SW });
+                        showToast('error', 'Server Error', 'Unable to connect. Please try again.');
                     }
                 });
             });
