@@ -7,35 +7,39 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
+    /* ════════════════════════════════════════
+           UNIFIED DESIGN TOKENS — Light Theme
+           Matches: Login.cshtml
+        ════════════════════════════════════════ */
     :root {
-        --bg: #0a0c12;
-        --bg2: #0f1220;
-        --surface: #141828;
-        --surface2: #1a2035;
-        --surface3: #1f2640;
-        --border: rgba(255,255,255,.06);
-        --border2: rgba(255,255,255,.11);
-        --border3: rgba(255,255,255,.18);
-        --accent: #6c63ff;
-        --accent2: #4f46e5;
-        --accent-g: rgba(108,99,255,.15);
-        --gold: #f0b429;
-        --gold-g: rgba(240,180,41,.12);
-        --teal: #14b8a6;
-        --danger: #f43f5e;
+        --bg: #f4f4f4;
+        --bg2: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f9f9f9;
+        --surface3: #efefef;
+        --border: rgba(0,0,0,.07);
+        --border2: rgba(0,0,0,.12);
+        --border3: rgba(0,0,0,.18);
+        --accent: #474544;
+        --accent2: #2e2d2c;
+        --accent-g: rgba(71,69,68,.10);
+        --gold: #b08d57;
+        --gold-g: rgba(176,141,87,.10);
+        --teal: #5a7a6e;
+        --danger: #d94f4f;
         --success: #10b981;
-        --amber: #f59e0b;
-        --text: #e8eaf2;
-        --text2: #9198b0;
-        --text3: #5a6182;
+        --amber: #b08d57;
+        --text: #1a1a1a;
+        --text2: #5c5a58;
+        --text3: #9a9896;
         --font-h: 'Syne',sans-serif;
         --font-b: 'Plus Jakarta Sans',sans-serif;
         --font-m: 'JetBrains Mono',monospace;
         --r: 10px;
         --r2: 14px;
         --r3: 18px;
-        --sh: 0 4px 32px rgba(0,0,0,.45);
-        --sh2: 0 8px 48px rgba(0,0,0,.6);
+        --sh: 0 4px 32px rgba(0,0,0,.07);
+        --sh2: 0 8px 48px rgba(0,0,0,.10);
     }
 
     *, *::before, *::after {
@@ -60,7 +64,7 @@
             right: -200px;
             width: 550px;
             height: 550px;
-            background: radial-gradient(circle,rgba(108,99,255,.07) 0%,transparent 65%);
+            background: radial-gradient(circle, rgba(71,69,68,.05) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
@@ -72,7 +76,7 @@
             left: -150px;
             width: 450px;
             height: 450px;
-            background: radial-gradient(circle,rgba(20,184,166,.05) 0%,transparent 65%);
+            background: radial-gradient(circle, rgba(90,122,110,.04) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
@@ -82,7 +86,7 @@
         inset: 0;
         z-index: 0;
         pointer-events: none;
-        background-image: linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+        background-image: linear-gradient(rgba(0,0,0,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.025) 1px, transparent 1px);
         background-size: 40px 40px;
     }
 
@@ -110,14 +114,14 @@
     .icon-box {
         width: 44px;
         height: 44px;
-        background: linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         border-radius: var(--r);
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
         font-size: 17px;
-        box-shadow: 0 4px 20px rgba(108,99,255,.4);
+        box-shadow: 0 4px 16px rgba(71,69,68,.25);
         flex-shrink: 0;
     }
 
@@ -168,13 +172,13 @@
     .pill-gold {
         background: var(--gold-g);
         color: var(--gold);
-        border-color: rgba(240,180,41,.25);
+        border-color: rgba(176,141,87,.25);
     }
 
     .pill-accent {
         background: var(--accent-g);
-        color: #a09eff;
-        border-color: rgba(108,99,255,.25);
+        color: var(--accent);
+        border-color: rgba(71,69,68,.2);
     }
 
     .toggle-group {
@@ -211,13 +215,12 @@
         }
 
     .toggle-btn-solid {
-        background: var(--accent);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         color: #fff;
-        box-shadow: 0 2px 12px rgba(108,99,255,.35);
+        box-shadow: 0 2px 10px rgba(71,69,68,.25);
     }
 
         .toggle-btn-solid:hover {
-            background: var(--accent2);
             transform: translateY(-1px);
         }
 
@@ -243,7 +246,7 @@
 
         .accent-line span:nth-child(3) {
             flex: 3;
-            background: var(--border);
+            background: var(--border2);
             border-radius: 2px;
         }
 
@@ -251,7 +254,7 @@
         background: var(--surface);
         border-radius: var(--r3);
         border: 1px solid var(--border2);
-        box-shadow: var(--sh2);
+        box-shadow: var(--sh);
         overflow: hidden;
         animation: fadeUp .3s ease both;
         position: relative;
@@ -259,7 +262,7 @@
 
     .form-card-header {
         padding: 12px 22px;
-        background: linear-gradient(90deg,var(--surface2) 0%,rgba(108,99,255,.08) 100%);
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.04) 100%);
         border-bottom: 1px solid var(--border2);
         display: flex;
         align-items: center;
@@ -339,7 +342,7 @@
     .section-label-bar {
         width: 3px;
         height: 12px;
-        background: linear-gradient(180deg,var(--accent),var(--teal));
+        background: linear-gradient(180deg, var(--accent), var(--teal));
         border-radius: 3px;
         flex-shrink: 0;
     }
@@ -347,7 +350,7 @@
     .section-label-bar-teal {
         width: 3px;
         height: 12px;
-        background: linear-gradient(180deg,var(--teal),var(--accent));
+        background: linear-gradient(180deg, var(--teal), var(--accent));
         border-radius: 3px;
         flex-shrink: 0;
     }
@@ -392,7 +395,7 @@
         font-weight: 500;
         color: var(--text3);
         pointer-events: none;
-        transition: top .18s,transform .18s,font-size .18s,color .18s,letter-spacing .18s;
+        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -404,7 +407,8 @@
         transform: none;
     }
 
-    .float-group .form-control:focus ~ .float-label, .float-group.has-value .float-label {
+    .float-group .form-control:focus ~ .float-label,
+    .float-group.has-value .float-label {
         top: 7px;
         transform: none;
         font-size: 9px;
@@ -415,7 +419,8 @@
         font-weight: 500;
     }
 
-    .float-group.is-area .form-control:focus ~ .float-label, .float-group.is-area.has-value .float-label {
+    .float-group.is-area .form-control:focus ~ .float-label,
+    .float-group.is-area.has-value .float-label {
         top: 5px;
         transform: none;
         font-size: 9px;
@@ -451,21 +456,21 @@
         padding: 9px 13px;
         font-size: 13.5px;
         font-family: var(--font-b);
-        color: #e8eaf2 !important;
+        color: #1a1a1a !important;
         background: var(--bg2);
-        transition: border-color .18s,box-shadow .18s,background .18s;
+        transition: border-color .18s, box-shadow .18s, background .18s;
         outline: none;
         width: 100%;
-        -webkit-text-fill-color: #e8eaf2 !important;
-        caret-color: #6c63ff;
+        -webkit-text-fill-color: #1a1a1a !important;
+        caret-color: var(--accent);
     }
 
         .form-control:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(108,99,255,.14);
+            box-shadow: 0 0 0 3px rgba(71,69,68,.12);
             background: var(--surface);
-            color: #e8eaf2 !important;
-            -webkit-text-fill-color: #e8eaf2 !important;
+            color: #1a1a1a !important;
+            -webkit-text-fill-color: #1a1a1a !important;
         }
 
         .form-control::placeholder {
@@ -473,9 +478,11 @@
             -webkit-text-fill-color: var(--text3);
         }
 
-        .form-control:-webkit-autofill, .form-control:-webkit-autofill:hover, .form-control:-webkit-autofill:focus {
-            -webkit-text-fill-color: #e8eaf2 !important;
-            -webkit-box-shadow: 0 0 0px 1000px var(--bg2) inset !important;
+        .form-control:-webkit-autofill,
+        .form-control:-webkit-autofill:hover,
+        .form-control:-webkit-autofill:focus {
+            -webkit-text-fill-color: #1a1a1a !important;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
             transition: background-color 5000s ease-in-out 0s;
         }
 
@@ -487,12 +494,12 @@
     select.form-control {
         appearance: auto;
         cursor: pointer;
-        color: #e8eaf2 !important;
+        color: #1a1a1a !important;
     }
 
         select.form-control option {
             background: var(--surface);
-            color: #e8eaf2;
+            color: #1a1a1a;
         }
 
     .status-meta {
@@ -562,7 +569,7 @@
     .file-icon {
         width: 34px;
         height: 34px;
-        background: linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         border-radius: 8px;
         display: flex;
         align-items: center;
@@ -570,7 +577,7 @@
         color: #fff;
         font-size: 13px;
         flex-shrink: 0;
-        box-shadow: 0 3px 10px rgba(108,99,255,.35);
+        box-shadow: 0 3px 10px rgba(71,69,68,.25);
     }
 
     .file-info-title {
@@ -625,14 +632,14 @@
     }
 
     .btn-save {
-        background: linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         color: #fff;
-        box-shadow: 0 3px 16px rgba(108,99,255,.4);
+        box-shadow: 0 3px 14px rgba(71,69,68,.30);
     }
 
         .btn-save:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(108,99,255,.5);
+            box-shadow: 0 6px 20px rgba(71,69,68,.40);
         }
 
     .btn-cancel {
@@ -649,7 +656,7 @@
     .btn-view-img {
         background: var(--gold-g);
         color: var(--gold);
-        border: 1px solid rgba(240,180,41,.25);
+        border: 1px solid rgba(176,141,87,.25);
         font-family: var(--font-b);
         font-size: 13px;
         font-weight: 600;
@@ -663,14 +670,14 @@
     }
 
         .btn-view-img:hover {
-            background: rgba(240,180,41,.2);
+            background: rgba(176,141,87,.18);
         }
 
     .grid-card {
         background: var(--surface);
         border-radius: var(--r3);
         border: 1px solid var(--border2);
-        box-shadow: var(--sh2);
+        box-shadow: var(--sh);
         overflow: hidden;
         animation: fadeUp .3s ease both;
     }
@@ -680,7 +687,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 13px 20px;
-        background: linear-gradient(90deg,var(--surface2) 0%,rgba(108,99,255,.06) 100%);
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.04) 100%);
         border-bottom: 1px solid var(--border2);
     }
 
@@ -701,12 +708,12 @@
 
     .grid-badge {
         background: var(--accent-g);
-        color: #a09eff;
+        color: var(--accent);
         font-family: var(--font-m);
         font-size: 10.5px;
         padding: 3px 10px;
         border-radius: 20px;
-        border: 1px solid rgba(108,99,255,.22);
+        border: 1px solid rgba(71,69,68,.18);
     }
 
     .grid-scroll {
@@ -797,9 +804,9 @@
         }
 
     .tbl-btn-del {
-        background: rgba(244,63,94,.08);
-        color: #fb7185;
-        border-color: rgba(244,63,94,.18);
+        background: rgba(217,79,79,.07);
+        color: #d94f4f;
+        border-color: rgba(217,79,79,.18);
         margin-left: 4px;
     }
 
@@ -810,9 +817,9 @@
         }
 
     .badge-active {
-        background: rgba(16,185,129,.1);
-        color: #34d399;
-        border: 1px solid rgba(16,185,129,.22);
+        background: rgba(16,185,129,.08);
+        color: #059669;
+        border: 1px solid rgba(16,185,129,.20);
         font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
@@ -822,9 +829,9 @@
     }
 
     .badge-inactive {
-        background: rgba(244,63,94,.08);
-        color: #fb7185;
-        border: 1px solid rgba(244,63,94,.18);
+        background: rgba(217,79,79,.07);
+        color: #d94f4f;
+        border: 1px solid rgba(217,79,79,.18);
         font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
@@ -841,7 +848,7 @@
         padding: 3px 8px;
         background: var(--accent-g);
         border-radius: 5px;
-        border: 1px solid rgba(108,99,255,.2);
+        border: 1px solid rgba(71,69,68,.15);
     }
 
     .empty-state {
@@ -1015,7 +1022,7 @@
 
 <script>
     let userId = localStorage.getItem("userId") || "", GridViewDataList = [], IsUpdate = false;
-    const SW = { background: '#0f1220', color: '#e8eaf2', confirmButtonColor: '#6c63ff', cancelButtonColor: '#1a2035' };
+    const SW = { background: '#ffffff', color: '#1a1a1a', confirmButtonColor: '#474544', cancelButtonColor: '#efefef' };
 
     // ── Float Labels ──────────────────────────────────────────────
     function initFloatLabels() {
@@ -1093,7 +1100,6 @@
                 const cs = document.getElementById("CategoryId");
                 cs.innerHTML = '<option value="">— Select Category —</option>';
                 r.CategoryList.forEach(i => { cs.innerHTML += `<option value="${i.CategoryId}">${i.Category}</option>`; });
-
                 const vs = document.getElementById("VendorId");
                 vs.innerHTML = '<option value="">— Select Vendor —</option>';
                 r.VendorList.forEach(i => { vs.innerHTML += `<option value="${i.VendorId}">${i.Vendor}</option>`; });
@@ -1153,19 +1159,14 @@
     function EditProduct(productId) {
         const p = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productId));
         if (!p) { Swal.fire({ icon: 'error', title: 'Error', text: 'Product not found.', ...SW }); return; }
-
         document.getElementById("ProductId").value          = p.ProductCode || '';
         document.getElementById("Product").value            = gv(p, ['Product Name', 'ProductName', 'Product']);
         document.getElementById("ProductDescription").value = gv(p, ['Product Description', 'ProductDescription', 'Description']);
         document.getElementById("Prices").value             = p.Prices || '0';
         document.getElementById("DiscountAmount").value     = gv(p, ['Discount Amount', 'DiscountAmount'], '0');
         document.getElementById("IsActive").checked         = p['Is Active'] === true || p['Is Active'] === 1;
-
-        // ✅ FIX: Use ProductCategoryId (from EcomProduct_Tab directly, never NULL)
         document.getElementById("CategoryId").value = p.ProductCategoryId || p.CategoryId || '';
-        // ✅ FIX: Use ProductVendorId (from EcomProduct_Tab directly, never NULL)
         document.getElementById("VendorId").value   = p.ProductVendorId   || p.VendorId   || '';
-
         if (p.ProductImage) {
             document.getElementById("ProductImageAttachmentOld").value = p.ProductImage;
             const vb = document.getElementById("ViewImageBtn");
@@ -1174,7 +1175,6 @@
             document.getElementById("ProductImageAttachmentOld").value = "";
             document.getElementById("ViewImageBtn").style.display = "none";
         }
-
         IsUpdate = true;
         document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Update Product';
         initFloatLabels();
@@ -1183,15 +1183,12 @@
 
     // ── Delete Product ────────────────────────────────────────────
     async function DeleteProduct(productId) {
-        const r = await Swal.fire({ title: 'Confirm Delete', text: "Cannot be undone.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, delete', cancelButtonText: 'Cancel', confirmButtonColor: '#f43f5e', ...SW });
+        const r = await Swal.fire({ title: 'Confirm Delete', text: "Cannot be undone.", icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, delete', cancelButtonText: 'Cancel', confirmButtonColor: '#d94f4f', ...SW });
         if (!r.isConfirmed) return;
-
         const p = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productId));
         if (!p) { await Swal.fire({ icon: 'error', title: 'Error', text: 'Not found.', ...SW }); return; }
-
         let img = "";
         if (p.ProductImage) { const parts = p.ProductImage.split('/'); img = parts[parts.length - 1]; }
-
         Swal.fire({ title: 'Please wait', text: 'Deleting...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), ...SW });
         try {
             const res = await jQuery.ajax({ type: 'POST', url: '@Url.Action("nDeleteProductRegistrationData", "ProductRegistration")', data: JSON.stringify({ Userid: userId, ProductId: `${productId}`, ProductImageAttachmentfilenameold: img, FtpPath: "/wwwroot/Images/ProductRegistration" }), contentType: 'application/json' });
@@ -1221,14 +1218,12 @@
             { cond: !VendorId,                                                   text: 'Please select a vendor',          focus: 'VendorId' },
             { cond: !Prices || isNaN(Prices) || parseFloat(Prices) <= 0,        text: 'Please enter a valid price',      focus: 'Prices' },
             { cond: DiscountAmount && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0), text: 'Please enter a valid discount amount', focus: 'DiscountAmount' }
-            // { cond: !IsUpdate && !hasImage,                                      text: 'Please select a product image',   focus: 'ProductImageAttachment' }
         ];
         for (const v of validations) {
             if (v.cond) { await Swal.fire({ icon: 'warning', title: 'Validation', text: v.text, returnFocus: false, ...SW, didClose: () => document.getElementById(v.focus).focus() }); return; }
         }
 
         const { ProductImageAttachmentfilename, ProductImageAttachmentbase64 } = await GetProductImageAttachmentFile();
-
         const nProductTab = { Userid: userId, ProductId, Product, ProductDescription, CategoryId, VendorId, ProductImageAttachmentfilename, ProductImageAttachmentfilenameold: ProductImageAttachmentold, ProductImageAttachmentbase64, Prices, DiscountAmount: DiscountAmount || "0", IsActive: isActive, IsUpdate, FtpPath: "/wwwroot/Images/ProductRegistration" };
 
         Swal.fire({ title: 'Please wait', text: 'Saving...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), ...SW });
