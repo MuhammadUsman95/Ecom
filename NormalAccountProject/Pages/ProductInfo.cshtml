@@ -8,34 +8,34 @@
 
 <style>
     :root {
-        --bg: #0a0c12;
-        --bg2: #0f1220;
-        --surface: #141828;
-        --surface2: #1a2035;
-        --surface3: #1f2640;
-        --border: rgba(255,255,255,.06);
-        --border2: rgba(255,255,255,.11);
-        --border3: rgba(255,255,255,.18);
-        --accent: #6c63ff;
-        --accent2: #4f46e5;
-        --accent-g: rgba(108,99,255,.15);
-        --gold: #f0b429;
-        --gold-g: rgba(240,180,41,.12);
-        --teal: #14b8a6;
-        --danger: #f43f5e;
-        --success: #10b981;
-        --amber: #f59e0b;
-        --text: #e8eaf2;
-        --text2: #9198b0;
-        --text3: #5a6182;
-        --font-h: 'Syne',sans-serif;
-        --font-b: 'Plus Jakarta Sans',sans-serif;
-        --font-m: 'JetBrains Mono',monospace;
+        --bg: #f4f4f4;
+        --bg2: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f9f9f9;
+        --surface3: #efefef;
+        --border: rgba(0,0,0,.07);
+        --border2: rgba(0,0,0,.12);
+        --border3: rgba(0,0,0,.18);
+        --accent: #474544;
+        --accent2: #2e2d2c;
+        --accent-g: rgba(71,69,68,.10);
+        --gold: #b08d57;
+        --gold-g: rgba(176,141,87,.12);
+        --teal: #5a7a6e;
+        --danger: #d94f4f;
+        --success: #2e7d5e;
+        --amber: #b07d2e;
+        --text: #1a1a1a;
+        --text2: #5c5a58;
+        --text3: #9a9896;
+        --font-h: 'Syne', sans-serif;
+        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --font-m: 'JetBrains Mono', monospace;
         --r: 10px;
         --r2: 14px;
         --r3: 18px;
-        --sh: 0 4px 32px rgba(0,0,0,.45);
-        --sh2: 0 8px 48px rgba(0,0,0,.6);
+        --sh: 0 4px 32px rgba(0,0,0,.08);
+        --sh2: 0 8px 40px rgba(0,0,0,.10), 0 0 0 1px rgba(71,69,68,.08);
     }
 
     *, *::before, *::after {
@@ -60,7 +60,7 @@
             right: -200px;
             width: 550px;
             height: 550px;
-            background: radial-gradient(circle,rgba(108,99,255,.07) 0%,transparent 65%);
+            background: radial-gradient(circle, rgba(71,69,68,.05) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
@@ -72,7 +72,7 @@
             left: -150px;
             width: 450px;
             height: 450px;
-            background: radial-gradient(circle,rgba(108,99,255,.04) 0%,transparent 65%);
+            background: radial-gradient(circle, rgba(90,122,110,.04) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
@@ -82,7 +82,7 @@
         inset: 0;
         z-index: 0;
         pointer-events: none;
-        background-image: linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+        background-image: linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
         background-size: 40px 40px;
     }
 
@@ -92,7 +92,7 @@
         padding: 20px 24px;
     }
 
-    /* ── Top Bar ─────────────────────────────────────────────── */
+    /* ── Top Bar ── */
     .top-bar {
         display: flex;
         align-items: center;
@@ -111,14 +111,14 @@
     .icon-box {
         width: 44px;
         height: 44px;
-        background: linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         border-radius: var(--r);
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
         font-size: 17px;
-        box-shadow: 0 4px 20px rgba(108,99,255,.4);
+        box-shadow: 0 4px 20px rgba(71,69,68,.30);
         flex-shrink: 0;
     }
 
@@ -169,13 +169,13 @@
     .pill-gold {
         background: var(--gold-g);
         color: var(--gold);
-        border-color: rgba(240,180,41,.25);
+        border-color: rgba(176,141,87,.30);
     }
 
     .pill-accent {
         background: var(--accent-g);
-        color: #a09eff;
-        border-color: rgba(108,99,255,.25);
+        color: var(--accent2);
+        border-color: rgba(71,69,68,.20);
     }
 
     .toggle-group {
@@ -212,14 +212,14 @@
         }
 
     .toggle-btn-solid {
-        background: var(--accent);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         color: #fff;
-        box-shadow: 0 2px 12px rgba(108,99,255,.35);
+        box-shadow: 0 2px 12px rgba(71,69,68,.25);
     }
 
         .toggle-btn-solid:hover {
-            background: var(--accent2);
             transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(71,69,68,.35);
         }
 
     .accent-line {
@@ -244,11 +244,11 @@
 
         .accent-line span:nth-child(3) {
             flex: 3;
-            background: var(--border);
+            background: var(--border2);
             border-radius: 2px;
         }
 
-    /* ── Form Card ───────────────────────────────────────────── */
+    /* ── Form Card ── */
     .form-card {
         background: var(--surface);
         border-radius: var(--r3);
@@ -260,7 +260,7 @@
 
     .form-card-header {
         padding: 12px 22px;
-        background: linear-gradient(90deg,var(--surface2) 0%,rgba(108,99,255,.08) 100%);
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.06) 100%);
         border-bottom: 1px solid var(--border2);
         display: flex;
         align-items: center;
@@ -322,7 +322,7 @@
             border-radius: 10px;
         }
 
-    /* ── Section Labels ──────────────────────────────────────── */
+    /* ── Section Labels ── */
     .section-label {
         display: flex;
         align-items: center;
@@ -341,7 +341,7 @@
     .section-label-bar {
         width: 3px;
         height: 12px;
-        background: linear-gradient(180deg,var(--accent),var(--teal));
+        background: linear-gradient(180deg, var(--accent), var(--teal));
         border-radius: 3px;
         flex-shrink: 0;
     }
@@ -349,7 +349,7 @@
     .section-label-bar-gold {
         width: 3px;
         height: 12px;
-        background: linear-gradient(180deg,var(--gold),var(--amber));
+        background: linear-gradient(180deg, var(--gold), var(--amber));
         border-radius: 3px;
         flex-shrink: 0;
     }
@@ -357,7 +357,7 @@
     .section-label-bar-teal {
         width: 3px;
         height: 12px;
-        background: linear-gradient(180deg,var(--teal),var(--accent));
+        background: linear-gradient(180deg, var(--teal), var(--accent));
         border-radius: 3px;
         flex-shrink: 0;
     }
@@ -366,7 +366,7 @@
         color: var(--text2);
     }
 
-    /* ── Grid ────────────────────────────────────────────────── */
+    /* ── Grid ── */
     .form-row {
         display: grid;
         gap: 12px;
@@ -385,7 +385,7 @@
         grid-template-columns: 1fr 1fr 1fr;
     }
 
-    /* ── Float Labels ────────────────────────────────────────── */
+    /* ── Float Labels ── */
     .float-group {
         position: relative;
     }
@@ -412,7 +412,7 @@
         font-weight: 500;
         color: var(--text3);
         pointer-events: none;
-        transition: top .18s,transform .18s,font-size .18s,color .18s,letter-spacing .18s;
+        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -450,28 +450,28 @@
         color: transparent;
     }
 
-    /* ── Form Control ────────────────────────────────────────── */
+    /* ── Form Control ── */
     .form-control {
         border: 1px solid var(--border2);
         border-radius: var(--r);
         padding: 9px 13px;
         font-size: 13.5px;
         font-family: var(--font-b);
-        color: #e8eaf2 !important;
+        color: #1a1a1a !important;
         background: var(--bg2);
-        transition: border-color .18s,box-shadow .18s,background .18s;
+        transition: border-color .18s, box-shadow .18s, background .18s;
         outline: none;
         width: 100%;
-        -webkit-text-fill-color: #e8eaf2 !important;
+        -webkit-text-fill-color: #1a1a1a !important;
         caret-color: var(--accent);
     }
 
         .form-control:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(108,99,255,.14);
+            box-shadow: 0 0 0 3px rgba(71,69,68,.12);
             background: var(--surface);
-            color: #e8eaf2 !important;
-            -webkit-text-fill-color: #e8eaf2 !important;
+            color: #1a1a1a !important;
+            -webkit-text-fill-color: #1a1a1a !important;
         }
 
         .form-control::placeholder {
@@ -482,23 +482,23 @@
         .form-control:-webkit-autofill,
         .form-control:-webkit-autofill:hover,
         .form-control:-webkit-autofill:focus {
-            -webkit-text-fill-color: #e8eaf2 !important;
-            -webkit-box-shadow: 0 0 0px 1000px var(--bg2) inset !important;
+            -webkit-text-fill-color: #1a1a1a !important;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
             transition: background-color 5000s ease-in-out 0s;
         }
 
     select.form-control {
         appearance: auto;
         cursor: pointer;
-        color: #e8eaf2 !important;
+        color: #1a1a1a !important;
     }
 
         select.form-control option {
             background: var(--surface);
-            color: #e8eaf2;
+            color: #1a1a1a;
         }
 
-    /* ── Status ──────────────────────────────────────────────── */
+    /* ── Status ── */
     .status-meta {
         font-family: var(--font-m);
         font-size: 9.5px;
@@ -546,7 +546,7 @@
         color: var(--text);
     }
 
-    /* ── Buttons ─────────────────────────────────────────────── */
+    /* ── Buttons ── */
     .btn-row {
         display: flex;
         align-items: center;
@@ -572,14 +572,14 @@
     }
 
     .btn-save {
-        background: linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         color: #fff;
-        box-shadow: 0 3px 16px rgba(108,99,255,.4);
+        box-shadow: 0 3px 16px rgba(71,69,68,.30);
     }
 
         .btn-save:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(108,99,255,.5);
+            box-shadow: 0 6px 24px rgba(71,69,68,.40);
         }
 
     .btn-cancel {
@@ -593,7 +593,7 @@
             color: var(--text);
         }
 
-    /* ── Grid Card ───────────────────────────────────────────── */
+    /* ── Grid Card ── */
     .grid-card {
         background: var(--surface);
         border-radius: var(--r3);
@@ -608,7 +608,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 13px 20px;
-        background: linear-gradient(90deg,var(--surface2) 0%,rgba(108,99,255,.06) 100%);
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.05) 100%);
         border-bottom: 1px solid var(--border2);
     }
 
@@ -629,12 +629,12 @@
 
     .grid-badge {
         background: var(--accent-g);
-        color: #a09eff;
+        color: var(--accent2);
         font-family: var(--font-m);
         font-size: 10.5px;
         padding: 3px 10px;
         border-radius: 20px;
-        border: 1px solid rgba(108,99,255,.22);
+        border: 1px solid rgba(71,69,68,.20);
     }
 
     .grid-scroll {
@@ -653,7 +653,7 @@
             border-radius: 10px;
         }
 
-    /* ── Table ───────────────────────────────────────────────── */
+    /* ── Table ── */
     .pro-table {
         width: 100%;
         border-collapse: collapse;
@@ -726,9 +726,9 @@
         }
 
     .tbl-btn-del {
-        background: rgba(244,63,94,.08);
-        color: #fb7185;
-        border-color: rgba(244,63,94,.18);
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border-color: rgba(217,79,79,.20);
         margin-left: 4px;
     }
 
@@ -738,11 +738,11 @@
             border-color: var(--danger);
         }
 
-    /* ── Badges ──────────────────────────────────────────────── */
+    /* ── Badges ── */
     .badge-active {
-        background: rgba(16,185,129,.1);
-        color: #34d399;
-        border: 1px solid rgba(16,185,129,.22);
+        background: rgba(46,125,94,.10);
+        color: #1e6b4a;
+        border: 1px solid rgba(46,125,94,.22);
         font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
@@ -752,9 +752,9 @@
     }
 
     .badge-inactive {
-        background: rgba(244,63,94,.08);
-        color: #fb7185;
-        border: 1px solid rgba(244,63,94,.18);
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border: 1px solid rgba(217,79,79,.20);
         font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
@@ -763,11 +763,11 @@
         display: inline-block;
     }
 
-    /* ── Price Cells ─────────────────────────────────────────── */
+    /* ── Price Cells ── */
     .price-cell {
         font-family: var(--font-m);
         font-size: 12px;
-        color: #a09eff;
+        color: var(--accent2);
         font-weight: 500;
     }
 
@@ -781,11 +781,11 @@
     .purchase-cell {
         font-family: var(--font-m);
         font-size: 12px;
-        color: #2dd4bf;
+        color: var(--teal);
         font-weight: 500;
     }
 
-    /* ── Empty State ─────────────────────────────────────────── */
+    /* ── Empty State ── */
     .empty-state {
         padding: 60px 20px;
         text-align: center;
@@ -992,13 +992,12 @@
         IsUpdate = false;
 
     const SW = {
-        background: '#0f1220',
-        color: '#e8eaf2',
-        confirmButtonColor: '#6c63ff',
-        cancelButtonColor: '#1a2035'
+        background: '#ffffff',
+        color: '#1a1a1a',
+        confirmButtonColor: '#474544',
+        cancelButtonColor: '#f9f9f9'
     };
 
-    // ── Float Labels ──────────────────────────────────────────────
     function initFloatLabels() {
         document.querySelectorAll('.float-group').forEach(g => {
             if (g.classList.contains('always-float')) return;
@@ -1011,7 +1010,6 @@
         });
     }
 
-    // ── View Toggles ──────────────────────────────────────────────
     function showFormView() {
         document.getElementById("formViewContainer").style.display = "block";
         document.getElementById("gridViewContainer").style.display = "none";
@@ -1030,14 +1028,12 @@
     document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
     document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
 
-    // ── On Load ───────────────────────────────────────────────────
     window.addEventListener("load", async function () {
         initFloatLabels();
         await LoadProductInfoData();
         await LoadGridViewData();
     });
 
-    // ── Load Dropdown ─────────────────────────────────────────────
     async function LoadProductInfoData() {
         try {
             const r = await jQuery.ajax({
@@ -1060,7 +1056,6 @@
         }
     }
 
-    // ── Load Grid ─────────────────────────────────────────────────
     async function LoadGridViewData() {
         try {
             const r = await jQuery.ajax({
@@ -1080,7 +1075,6 @@
         }
     }
 
-    // ── Render Grid ───────────────────────────────────────────────
     function RenderGridView() {
         const c   = document.getElementById("ProductGridContainer");
         const cnt = document.getElementById("TotalProductsCount");
@@ -1097,14 +1091,9 @@
         const t  = document.createElement("table");
         t.className = "pro-table";
         t.innerHTML = `<thead><tr>
-            <th>Actions</th>
-            <th>Code</th>
-            <th>Product Name</th>
-            <th>Sales Price</th>
-            <th>Discount</th>
-            <th>Purchase Rate</th>
-            <th>Category</th>
-            <th>Status</th>
+            <th>Actions</th><th>Code</th><th>Product Name</th>
+            <th>Sales Price</th><th>Discount</th><th>Purchase Rate</th>
+            <th>Category</th><th>Status</th>
         </tr></thead>`;
 
         const tb = document.createElement("tbody");
@@ -1116,7 +1105,7 @@
                 <button class="tbl-btn tbl-btn-edit" onclick="EditProduct(${item.ProductCode})" title="Edit">
                     <i class="fas fa-pen"></i>
                 </button>
-                <button class="tbl-btn tbl-btn-del"  onclick="DeleteProduct(${item.ProductCode})" title="Delete">
+                <button class="tbl-btn tbl-btn-del" onclick="DeleteProduct(${item.ProductCode})" title="Delete">
                     <i class="fas fa-trash-can"></i>
                 </button>
             </td>
@@ -1139,7 +1128,6 @@
         cnt.textContent = `${tb.rows.length} records`;
     }
 
-    // ── Edit ──────────────────────────────────────────────────────
     function EditProduct(productCode) {
         const p = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productCode));
         if (!p) { Swal.fire({ icon:'error', title:'Error', text:'Product not found.', ...SW }); return; }
@@ -1158,24 +1146,19 @@
         showFormView();
     }
 
-    // ── Delete ────────────────────────────────────────────────────
     async function DeleteProduct(productCode) {
         const r = await Swal.fire({
             title: 'Confirm Delete', text: "This action cannot be undone.",
             icon: 'warning', showCancelButton: true,
             confirmButtonText: 'Yes, delete', cancelButtonText: 'Cancel',
-            confirmButtonColor: '#f43f5e', ...SW
+            confirmButtonColor: '#d94f4f', ...SW
         });
         if (!r.isConfirmed) return;
 
         const p = GridViewDataList.find(c => parseInt(c.ProductCode) === parseInt(productCode));
         if (!p) { await Swal.fire({ icon:'error', title:'Error', text:'Not found.', ...SW }); return; }
 
-        Swal.fire({
-            title: 'Please wait', text: 'Deleting...',
-            allowOutsideClick: false, allowEscapeKey: false,
-            didOpen: () => Swal.showLoading(), ...SW
-        });
+        Swal.fire({ title: 'Please wait', text: 'Deleting...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), ...SW });
 
         try {
             const res = await jQuery.ajax({
@@ -1197,7 +1180,6 @@
         }
     }
 
-    // ── Save ──────────────────────────────────────────────────────
     document.getElementById("saveBtn").addEventListener("click", async function () {
         const ProductCode    = document.getElementById("ProductCode").value.trim();
         const Product        = document.getElementById("Product").value.trim();
@@ -1208,10 +1190,8 @@
         const IsActive       = document.getElementById("IsActive").checked;
 
         const validations = [
-            { cond: !Product,
-              text: 'Product name is required',           focus: 'Product'        },
-            { cond: !CategoryId,
-              text: 'Please select a category',           focus: 'CategoryId'     },
+            { cond: !Product,          text: 'Product name is required',           focus: 'Product'        },
+            { cond: !CategoryId,       text: 'Please select a category',           focus: 'CategoryId'     },
             { cond: !SalesPrice || isNaN(SalesPrice) || parseFloat(SalesPrice) <= 0,
               text: 'Please enter a valid sales price',   focus: 'SalesPrice'     },
             { cond: DiscountAmount !== '' && (isNaN(DiscountAmount) || parseFloat(DiscountAmount) < 0),
@@ -1222,32 +1202,20 @@
 
         for (const v of validations) {
             if (v.cond) {
-                await Swal.fire({
-                    icon: 'warning', title: 'Validation', text: v.text,
-                    returnFocus: false, ...SW,
-                    didClose: () => document.getElementById(v.focus).focus()
-                });
+                await Swal.fire({ icon: 'warning', title: 'Validation', text: v.text, returnFocus: false, ...SW, didClose: () => document.getElementById(v.focus).focus() });
                 return;
             }
         }
 
         const payload = {
-            Userid:         userId,
-            ProductCode:    parseInt(ProductCode) || 0,
-            Product,
-            SalesPrice:     parseFloat(SalesPrice)     || 0,
+            Userid: userId, ProductCode: parseInt(ProductCode) || 0, Product,
+            SalesPrice: parseFloat(SalesPrice) || 0,
             DiscountAmount: parseFloat(DiscountAmount) || 0,
-            PurchaseRate:   parseFloat(PurchaseRate)   || 0,
-            CategoryId,
-            IsActive,
-            IsUpdate
+            PurchaseRate: parseFloat(PurchaseRate) || 0,
+            CategoryId, IsActive, IsUpdate
         };
 
-        Swal.fire({
-            title: 'Please wait', text: 'Saving...',
-            allowOutsideClick: false, allowEscapeKey: false,
-            didOpen: () => Swal.showLoading(), ...SW
-        });
+        Swal.fire({ title: 'Please wait', text: 'Saving...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), ...SW });
 
         try {
             const res = await jQuery.ajax({
@@ -1258,11 +1226,7 @@
             });
             Swal.close();
             if (res.statusId === 1) {
-                await Swal.fire({
-                    icon: 'success', title: 'Saved', text: res.message || 'Saved successfully.',
-                    returnFocus: false, ...SW,
-                    didClose: () => document.getElementById("Product").focus()
-                });
+                await Swal.fire({ icon: 'success', title: 'Saved', text: res.message || 'Saved successfully.', returnFocus: false, ...SW, didClose: () => document.getElementById("Product").focus() });
                 nClearForm();
             } else {
                 await Swal.fire({ icon:'warning', title:'Failed', text: res.message || 'Could not save.', ...SW });
@@ -1273,10 +1237,8 @@
         }
     });
 
-    // ── Cancel ────────────────────────────────────────────────────
     document.getElementById("cancelBtn").addEventListener("click", function () { nClearForm(); });
 
-    // ── Clear Form ────────────────────────────────────────────────
     async function nClearForm() {
         document.getElementById("ProductCode").value    = "";
         document.getElementById("Product").value        = "";
@@ -1292,7 +1254,6 @@
         await LoadGridViewData();
     }
 
-    // ── Numeric-only inputs ───────────────────────────────────────
     ["SalesPrice", "DiscountAmount", "PurchaseRate"].forEach(id => {
         const input = document.getElementById(id);
         input.addEventListener("keydown", function (e) {

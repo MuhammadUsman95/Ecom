@@ -8,33 +8,33 @@
 
 <style>
     :root {
-        --bg: #0a0c12;
-        --bg2: #0f1220;
-        --surface: #141828;
-        --surface2: #1a2035;
-        --surface3: #1f2640;
-        --border: rgba(255,255,255,.06);
-        --border2: rgba(255,255,255,.11);
-        --border3: rgba(255,255,255,.18);
-        --accent: #6c63ff;
-        --accent2: #4f46e5;
-        --accent-g: rgba(108,99,255,.15);
-        --gold: #f0b429;
-        --gold-g: rgba(240,180,41,.12);
-        --teal: #14b8a6;
-        --danger: #f43f5e;
-        --success: #10b981;
-        --text: #e8eaf2;
-        --text2: #9198b0;
-        --text3: #5a6182;
+        --bg: #f4f4f4;
+        --bg2: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f9f9f9;
+        --surface3: #efefef;
+        --border: rgba(0,0,0,.07);
+        --border2: rgba(0,0,0,.12);
+        --border3: rgba(0,0,0,.18);
+        --accent: #474544;
+        --accent2: #2e2d2c;
+        --accent-g: rgba(71,69,68,.10);
+        --gold: #b08d57;
+        --gold-g: rgba(176,141,87,.12);
+        --teal: #5a7a6e;
+        --danger: #d94f4f;
+        --success: #2e7d5e;
+        --text: #1a1a1a;
+        --text2: #5c5a58;
+        --text3: #9a9896;
         --font-h: 'Syne', sans-serif;
         --font-b: 'Plus Jakarta Sans', sans-serif;
         --font-m: 'JetBrains Mono', monospace;
         --r: 10px;
         --r2: 14px;
         --r3: 18px;
-        --sh: 0 4px 32px rgba(0,0,0,.45);
-        --sh2: 0 8px 48px rgba(0,0,0,.6);
+        --sh: 0 4px 32px rgba(0,0,0,.08);
+        --sh2: 0 8px 40px rgba(0,0,0,.10), 0 0 0 1px rgba(71,69,68,.08);
     }
 
     *, *::before, *::after {
@@ -43,7 +43,6 @@
         padding: 0;
     }
 
-    /* ── Root Wrap ── */
     .vr-wrap {
         font-family: var(--font-b);
         color: var(--text);
@@ -53,7 +52,6 @@
         overflow: hidden;
     }
 
-        /* Ambient orbs */
         .vr-wrap::before {
             content: '';
             position: fixed;
@@ -61,7 +59,7 @@
             right: -200px;
             width: 550px;
             height: 550px;
-            background: radial-gradient(circle, rgba(108,99,255,.07) 0%, transparent 65%);
+            background: radial-gradient(circle, rgba(71,69,68,.05) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
@@ -73,18 +71,17 @@
             left: -150px;
             width: 450px;
             height: 450px;
-            background: radial-gradient(circle, rgba(20,184,166,.05) 0%, transparent 65%);
+            background: radial-gradient(circle, rgba(90,122,110,.04) 0%, transparent 65%);
             pointer-events: none;
             z-index: 0;
         }
 
-    /* Grid texture */
     .vr-bg-grid {
         position: fixed;
         inset: 0;
         z-index: 0;
         pointer-events: none;
-        background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+        background-image: linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
         background-size: 40px 40px;
     }
 
@@ -94,7 +91,6 @@
         padding: 20px 24px;
     }
 
-    /* ── Top Bar ── */
     .top-bar {
         display: flex;
         align-items: center;
@@ -120,7 +116,7 @@
         justify-content: center;
         color: #fff;
         font-size: 17px;
-        box-shadow: 0 4px 20px rgba(108,99,255,.4);
+        box-shadow: 0 4px 20px rgba(71,69,68,.30);
         flex-shrink: 0;
     }
 
@@ -156,7 +152,6 @@
             color: var(--gold);
         }
 
-    /* ── Pills / Badges ── */
     .pill {
         display: inline-flex;
         align-items: center;
@@ -171,29 +166,28 @@
 
     .pill-accent {
         background: var(--accent-g);
-        color: #a09eff;
-        border-color: rgba(108,99,255,.25);
+        color: var(--accent2);
+        border-color: rgba(71,69,68,.20);
     }
 
     .pill-gold {
         background: var(--gold-g);
         color: var(--gold);
-        border-color: rgba(240,180,41,.25);
+        border-color: rgba(176,141,87,.30);
     }
 
     .pill-success {
-        background: rgba(16,185,129,.1);
-        color: #34d399;
-        border-color: rgba(16,185,129,.25);
+        background: rgba(46,125,94,.10);
+        color: #1e6b4a;
+        border-color: rgba(46,125,94,.25);
     }
 
     .pill-danger {
-        background: rgba(244,63,94,.08);
-        color: #fb7185;
-        border-color: rgba(244,63,94,.2);
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border-color: rgba(217,79,79,.20);
     }
 
-    /* ── Toggle Group ── */
     .toggle-group {
         display: flex;
         gap: 4px;
@@ -228,17 +222,16 @@
         }
 
     .toggle-btn-solid {
-        background: var(--accent);
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         color: #fff;
-        box-shadow: 0 2px 12px rgba(108,99,255,.35);
+        box-shadow: 0 2px 12px rgba(71,69,68,.25);
     }
 
         .toggle-btn-solid:hover {
-            background: var(--accent2);
             transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(71,69,68,.35);
         }
 
-    /* ── Form Card ── */
     .form-card {
         background: var(--surface);
         border-radius: var(--r3);
@@ -250,7 +243,7 @@
 
     .form-card-header {
         padding: 12px 22px;
-        background: linear-gradient(90deg, var(--surface2) 0%, rgba(108,99,255,.08) 100%);
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.06) 100%);
         border-bottom: 1px solid var(--border2);
         display: flex;
         align-items: center;
@@ -312,7 +305,6 @@
             border-radius: 10px;
         }
 
-    /* Section Label */
     .section-label {
         display: flex;
         align-items: center;
@@ -340,7 +332,6 @@
         color: var(--text2);
     }
 
-    /* Form grid */
     .form-row {
         display: grid;
         gap: 12px;
@@ -355,7 +346,6 @@
         grid-template-columns: 1fr;
     }
 
-    /* ── Floating Label Fields ── */
     .float-group {
         position: relative;
     }
@@ -364,8 +354,7 @@
             padding: 22px 13px 7px;
         }
 
-        .float-group select.form-control,
-        .float-group textarea.form-control {
+        .float-group select.form-control, .float-group textarea.form-control {
             padding: 22px 13px 7px;
         }
 
@@ -391,8 +380,7 @@
         transform: none;
     }
 
-    .float-group .form-control:focus ~ .float-label,
-    .float-group.has-value .float-label {
+    .float-group .form-control:focus ~ .float-label, .float-group.has-value .float-label {
         top: 7px;
         transform: none;
         font-size: 9px;
@@ -403,8 +391,7 @@
         font-weight: 500;
     }
 
-    .float-group.is-area .form-control:focus ~ .float-label,
-    .float-group.is-area.has-value .float-label {
+    .float-group.is-area .form-control:focus ~ .float-label, .float-group.is-area.has-value .float-label {
         top: 5px;
         transform: none;
         font-size: 9px;
@@ -434,28 +421,27 @@
         color: transparent;
     }
 
-    /* Form Control */
     .form-control {
         border: 1px solid var(--border2);
         border-radius: var(--r);
         padding: 9px 13px;
         font-size: 13.5px;
         font-family: var(--font-b);
-        color: #e8eaf2 !important;
+        color: #1a1a1a !important;
         background: var(--bg2);
         transition: border-color .18s, box-shadow .18s, background .18s;
         outline: none;
         width: 100%;
-        -webkit-text-fill-color: #e8eaf2 !important;
-        caret-color: #6c63ff;
+        -webkit-text-fill-color: #1a1a1a !important;
+        caret-color: var(--accent);
     }
 
         .form-control:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(108,99,255,.14);
+            box-shadow: 0 0 0 3px rgba(71,69,68,.12);
             background: var(--surface);
-            color: #e8eaf2 !important;
-            -webkit-text-fill-color: #e8eaf2 !important;
+            color: #1a1a1a !important;
+            -webkit-text-fill-color: #1a1a1a !important;
         }
 
         .form-control::placeholder {
@@ -463,13 +449,11 @@
             -webkit-text-fill-color: var(--text3);
         }
 
-        .form-control:-webkit-autofill,
-        .form-control:-webkit-autofill:hover,
-        .form-control:-webkit-autofill:focus {
-            -webkit-text-fill-color: #e8eaf2 !important;
-            -webkit-box-shadow: 0 0 0px 1000px var(--bg2) inset !important;
-            box-shadow: 0 0 0px 1000px var(--bg2) inset !important;
-            caret-color: #6c63ff;
+        .form-control:-webkit-autofill, .form-control:-webkit-autofill:hover, .form-control:-webkit-autofill:focus {
+            -webkit-text-fill-color: #1a1a1a !important;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+            box-shadow: 0 0 0px 1000px #ffffff inset !important;
+            caret-color: var(--accent);
             transition: background-color 5000s ease-in-out 0s;
         }
 
@@ -481,21 +465,19 @@
     select.form-control {
         appearance: auto;
         cursor: pointer;
-        color: #e8eaf2 !important;
+        color: #1a1a1a !important;
     }
 
         select.form-control option {
             background: var(--surface);
-            color: #e8eaf2;
+            color: #1a1a1a;
         }
 
     input[type="time"].form-control::-webkit-calendar-picker-indicator {
-        filter: invert(1);
         opacity: .5;
         cursor: pointer;
     }
 
-    /* Icon Input */
     .input-icon-wrap {
         position: relative;
     }
@@ -514,7 +496,6 @@
         pointer-events: none;
     }
 
-    /* ── Checkbox ── */
     .check-group {
         display: flex;
         align-items: center;
@@ -553,7 +534,6 @@
         color: var(--text);
     }
 
-    /* ── File Upload ── */
     .file-upload-zone {
         border: 1px dashed var(--border2);
         border-radius: var(--r);
@@ -582,7 +562,7 @@
         color: #fff;
         font-size: 13px;
         flex-shrink: 0;
-        box-shadow: 0 3px 10px rgba(108,99,255,.35);
+        box-shadow: 0 3px 10px rgba(71,69,68,.25);
     }
 
     .file-info-title {
@@ -621,7 +601,6 @@
         font-weight: 500;
     }
 
-    /* ── Buttons ── */
     .btn-row {
         display: flex;
         align-items: center;
@@ -649,12 +628,12 @@
     .btn-save {
         background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
         color: #fff;
-        box-shadow: 0 3px 16px rgba(108,99,255,.4);
+        box-shadow: 0 3px 16px rgba(71,69,68,.30);
     }
 
         .btn-save:hover {
             transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(108,99,255,.5);
+            box-shadow: 0 6px 24px rgba(71,69,68,.40);
         }
 
         .btn-save:active {
@@ -675,7 +654,7 @@
     .btn-view-img {
         background: var(--gold-g);
         color: var(--gold);
-        border: 1px solid rgba(240,180,41,.25);
+        border: 1px solid rgba(176,141,87,.30);
         font-family: var(--font-b);
         font-size: 13px;
         font-weight: 600;
@@ -689,10 +668,9 @@
     }
 
         .btn-view-img:hover {
-            background: rgba(240,180,41,.2);
+            background: rgba(176,141,87,.20);
         }
 
-    /* ── Grid Card ── */
     .grid-card {
         background: var(--surface);
         border-radius: var(--r3);
@@ -707,7 +685,7 @@
         align-items: center;
         justify-content: space-between;
         padding: 13px 20px;
-        background: linear-gradient(90deg, var(--surface2) 0%, rgba(108,99,255,.06) 100%);
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.05) 100%);
         border-bottom: 1px solid var(--border2);
     }
 
@@ -728,12 +706,12 @@
 
     .grid-badge {
         background: var(--accent-g);
-        color: #a09eff;
+        color: var(--accent2);
         font-family: var(--font-m);
         font-size: 10.5px;
         padding: 3px 10px;
         border-radius: 20px;
-        border: 1px solid rgba(108,99,255,.22);
+        border: 1px solid rgba(71,69,68,.20);
     }
 
     .grid-scroll {
@@ -752,7 +730,6 @@
             border-radius: 10px;
         }
 
-    /* ── Table ── */
     .pro-table {
         width: 100%;
         border-collapse: collapse;
@@ -784,7 +761,7 @@
             }
 
         .pro-table thead tr:nth-child(2) th {
-            background: #101422;
+            background: #f0f0f0;
             padding: 7px 10px;
             position: sticky;
             top: 38px;
@@ -832,7 +809,6 @@
             white-space: nowrap;
         }
 
-    /* Action Buttons */
     .tbl-btn {
         width: 28px;
         height: 28px;
@@ -859,9 +835,9 @@
         }
 
     .tbl-btn-del {
-        background: rgba(244,63,94,.08);
-        color: #fb7185;
-        border-color: rgba(244,63,94,.18);
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border-color: rgba(217,79,79,.20);
         margin-left: 4px;
     }
 
@@ -871,11 +847,10 @@
             border-color: var(--danger);
         }
 
-    /* Status Badges */
     .badge-active {
-        background: rgba(16,185,129,.1);
-        color: #34d399;
-        border: 1px solid rgba(16,185,129,.22);
+        background: rgba(46,125,94,.10);
+        color: #1e6b4a;
+        border: 1px solid rgba(46,125,94,.22);
         font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
@@ -885,9 +860,9 @@
     }
 
     .badge-inactive {
-        background: rgba(244,63,94,.08);
-        color: #fb7185;
-        border: 1px solid rgba(244,63,94,.18);
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border: 1px solid rgba(217,79,79,.20);
         font-size: 10px;
         font-weight: 600;
         padding: 3px 10px;
@@ -896,7 +871,6 @@
         display: inline-block;
     }
 
-    /* Empty State */
     .empty-state {
         padding: 60px 20px;
         text-align: center;
@@ -921,7 +895,6 @@
         color: var(--text3);
     }
 
-    /* Divider line accent */
     .accent-line {
         display: flex;
         gap: 2px;
@@ -944,11 +917,10 @@
 
         .accent-line span:nth-child(3) {
             flex: 3;
-            background: var(--border);
+            background: var(--border2);
             border-radius: 2px;
         }
 
-    /* Footer */
     .page-footer {
         margin-top: 16px;
         padding-top: 12px;
@@ -965,7 +937,6 @@
             font-weight: 500;
         }
 
-    /* Stat bar above form */
     .stat-row {
         display: flex;
         gap: 8px;
@@ -990,6 +961,15 @@
             font-size: 11px;
         }
 
+    .form-card::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: var(--r3);
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+        pointer-events: none;
+    }
+
     @@keyframes fadeUp {
         from {
             opacity: 0;
@@ -1000,16 +980,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-    }
-
-    /* Form card bottom glow */
-    .form-card::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: var(--r3);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
-        pointer-events: none;
     }
 </style>
 
@@ -1044,7 +1014,6 @@
             </div>
         </div>
 
-        <!-- Accent line -->
         <div class="accent-line"><span></span><span></span><span></span></div>
 
         <!-- FORM VIEW -->
@@ -1169,7 +1138,6 @@
                         </div>
                     </div>
 
-                    <!-- Actions -->
                     <div class="btn-row">
                         <button class="btn-pro btn-save" id="saveBtn">
                             <i class="fas fa-floppy-disk"></i> Save Vendor
@@ -1219,10 +1187,10 @@
     let GridViewDataList = [];
     let IsUpdate = false;
     const SW = {
-        background: '#0f1220',
-        color: '#e8eaf2',
-        confirmButtonColor: '#6c63ff',
-        cancelButtonColor: '#1a2035',
+        background: '#ffffff',
+        color: '#1a1a1a',
+        confirmButtonColor: '#474544',
+        cancelButtonColor: '#f9f9f9',
     };
 
     function initFloatLabels() {
@@ -1423,7 +1391,7 @@
             title: 'Confirm Delete', text: `Delete "${row["Vendor Name"]}"?`,
             icon: 'warning', showCancelButton: true,
             confirmButtonText: 'Yes, delete', cancelButtonText: 'Cancel',
-            confirmButtonColor: '#f43f5e', ...SW
+            confirmButtonColor: '#d94f4f', ...SW
         });
         if (!r.isConfirmed) return;
         const nInfoTab = { Userid: userId.toString(), VendorId: row["VendorId"].toString(), VendorImageAttachmentfilenameold: row["ImagePath"].toString() };
@@ -1459,8 +1427,6 @@
             { cond: contactNo && contactNo.length < 10, text: 'Contact number must be at least 10 digits', focus: 'ContactNo' },
             { cond: !type, text: 'Please select a vendor type', focus: 'TypeId' },
             { cond: !department, text: 'Please select a department', focus: 'DepartmentId' }
-            // ,
-            // { cond: !VendorImageAttachment, text: 'Please select a vendor image', focus: 'VendorImageAttachment' }
         ];
         for (const v of validations) {
             if (v.cond) {
