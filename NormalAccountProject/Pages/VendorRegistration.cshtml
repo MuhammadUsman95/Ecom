@@ -52,39 +52,6 @@
         overflow: hidden;
     }
 
-        .vr-wrap::before {
-            content: '';
-            position: fixed;
-            top: -200px;
-            right: -200px;
-            width: 550px;
-            height: 550px;
-            background: radial-gradient(circle, rgba(71,69,68,.05) 0%, transparent 65%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .vr-wrap::after {
-            content: '';
-            position: fixed;
-            bottom: -150px;
-            left: -150px;
-            width: 450px;
-            height: 450px;
-            background: radial-gradient(circle, rgba(90,122,110,.04) 0%, transparent 65%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-    .vr-bg-grid {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-        background-image: linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
-        background-size: 40px 40px;
-    }
-
     .vr-inner {
         position: relative;
         z-index: 1;
@@ -380,7 +347,8 @@
         transform: none;
     }
 
-    .float-group .form-control:focus ~ .float-label, .float-group.has-value .float-label {
+    .float-group .form-control:focus ~ .float-label,
+    .float-group.has-value .float-label {
         top: 7px;
         transform: none;
         font-size: 9px;
@@ -391,7 +359,8 @@
         font-weight: 500;
     }
 
-    .float-group.is-area .form-control:focus ~ .float-label, .float-group.is-area.has-value .float-label {
+    .float-group.is-area .form-control:focus ~ .float-label,
+    .float-group.is-area.has-value .float-label {
         top: 5px;
         transform: none;
         font-size: 9px;
@@ -449,7 +418,9 @@
             -webkit-text-fill-color: var(--text3);
         }
 
-        .form-control:-webkit-autofill, .form-control:-webkit-autofill:hover, .form-control:-webkit-autofill:focus {
+        .form-control:-webkit-autofill,
+        .form-control:-webkit-autofill:hover,
+        .form-control:-webkit-autofill:focus {
             -webkit-text-fill-color: #1a1a1a !important;
             -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
             box-shadow: 0 0 0px 1000px #ffffff inset !important;
@@ -984,7 +955,6 @@
 </style>
 
 <div class="vr-wrap">
-    <div class="vr-bg-grid"></div>
     <div class="vr-inner">
 
         <!-- Top Bar -->
@@ -1095,11 +1065,18 @@
                     </div>
 
                     <div class="form-row form-row-2">
-                        <div class="float-group">
+                        <div class="float-group always-float">
                             <input type="text" id="DeliveryCharges" class="form-control" placeholder=" ">
                             <label class="float-label" for="DeliveryCharges">Delivery Charges</label>
                         </div>
-                        <div class="float-group">
+                        <div class="float-group always-float">
+                            <input type="text" id="DiscountAmount" class="form-control" placeholder=" ">
+                            <label class="float-label" for="DiscountAmount">Discount Amount</label>
+                        </div>
+                    </div>
+
+                    <div class="form-row form-row-1">
+                        <div class="float-group always-float">
                             <input type="text" id="PerProductAmount" class="form-control" placeholder=" ">
                             <label class="float-label" for="PerProductAmount">Per Product Amount</label>
                         </div>
@@ -1193,6 +1170,7 @@
         cancelButtonColor: '#f9f9f9',
     };
 
+    /* ── Float Labels ─────────────────────────────────────────── */
     function initFloatLabels() {
         document.querySelectorAll('.float-group').forEach(g => {
             if (g.classList.contains('always-float')) return;
@@ -1205,6 +1183,18 @@
         });
     }
 
+    /* ── Set field value + update float label state ────────────── */
+    function setFieldValue(id, val) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.value = val;
+        const group = el.closest('.float-group');
+        if (group && !group.classList.contains('always-float')) {
+            group.classList.toggle('has-value', el.value !== '');
+        }
+    }
+
+    /* ── View toggle ───────────────────────────────────────────── */
     function showFormView() {
         document.getElementById("formViewContainer").style.display = "block";
         document.getElementById("gridViewContainer").style.display = "none";
@@ -1221,6 +1211,7 @@
     document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
     document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
 
+    /* ── File upload ───────────────────────────────────────────── */
     document.getElementById("VendorImageAttachment").addEventListener("change", async function () {
         const file = this.files[0]; if (!file) return;
         if (file.size > 500 * 1024) {
@@ -1253,6 +1244,7 @@
         });
     }
 
+    /* ── Time helpers ──────────────────────────────────────────── */
     function setCurrentTime() {
         const now = new Date();
         const t = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -1262,13 +1254,17 @@
     function getTimeFromTextbox(id) { const v = document.getElementById(id).value; if (!v) return; return `1900-01-01 ${v}:00.000`; }
     function setTimeToTextbox(id, val) { if (!val) return; document.getElementById(id).value = val.split("T")[1].substring(0, 5); }
 
+    /* ── DOMContentLoaded ──────────────────────────────────────── */
     document.addEventListener("DOMContentLoaded", async function () {
-        initFloatLabels();
         await LoadData();
         await LoadGridViewData();
         setCurrentTime();
+        /* Set defaults BEFORE initFloatLabels so labels float correctly */
         document.getElementById("DeliveryCharges").value = "0";
+        document.getElementById("DiscountAmount").value = "0";
         document.getElementById("PerProductAmount").value = "0";
+        initFloatLabels();
+
         const fields = [
             document.getElementById("Vendor"),
             document.getElementById("ContactNo"),
@@ -1282,6 +1278,7 @@
         document.getElementById("Vendor").focus();
     });
 
+    /* ── Load dropdown data ────────────────────────────────────── */
     async function LoadData() {
         return new Promise((res, rej) => jQuery.ajax({
             type: 'POST', url: '@Url.Action("nLoadVendorRegistrationData", "VendorRegistration")',
@@ -1302,6 +1299,7 @@
         list.forEach(i => { const o = document.createElement("option"); o.value = i.DepartmentId; o.text = i.Department; d.appendChild(o); });
     }
 
+    /* ── Grid data ─────────────────────────────────────────────── */
     async function LoadGridViewData() {
         return new Promise((res, rej) => jQuery.ajax({
             type: 'POST', url: '@Url.Action("nLoadGridViewData", "VendorRegistration")',
@@ -1365,20 +1363,22 @@
         document.getElementById("TotalVendorsCount").textContent = `${count} records`;
     }
 
+    /* ── Edit row ──────────────────────────────────────────────── */
     function onEditRow(row) {
         IsUpdate = true;
         document.getElementById("updatePill").style.display = "inline-flex";
         document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Update Vendor';
         document.getElementById("VendorId").value = row["VendorId"] || "";
         document.getElementById("VendorImageAttachmentOld").value = row["ImagePath"] || "";
-        document.getElementById("Vendor").value = row["Vendor Name"] || "";
-        document.getElementById("ContactNo").value = row["Contact #"] || "";
+        setFieldValue("Vendor", row["Vendor Name"] || "");
+        setFieldValue("ContactNo", row["Contact #"] || "");
+        setFieldValue("Address", row["Address"] || "");
+        setFieldValue("DeliveryCharges", row["Delivery Charges"] || "0");
+        setFieldValue("DiscountAmount", row["Discount Amount"] || "0");
+        setFieldValue("PerProductAmount", row["PerProductAmount"] || "0");
         document.getElementById("TypeId").value = row["Type"] || "";
         document.getElementById("DepartmentId").value = row["DepartmentId"] || "";
         document.getElementById("IsActive").checked = row["Is Active"] || false;
-        document.getElementById("DeliveryCharges").value = row["Delivery Charges"] || "";
-        document.getElementById("PerProductAmount").value = row["PerProductAmount"] || "";
-        document.getElementById("Address").value = row["Address"] || "";
         setTimeToTextbox("TimeIn", row["TimeIn"]);
         setTimeToTextbox("TimeOut", row["TimeOut"]);
         document.getElementById("Vendor").focus();
@@ -1386,6 +1386,7 @@
         initFloatLabels();
     }
 
+    /* ── Delete row ────────────────────────────────────────────── */
     async function onDeleteRow(row) {
         const r = await Swal.fire({
             title: 'Confirm Delete', text: `Delete "${row["Vendor Name"]}"?`,
@@ -1409,6 +1410,7 @@
         b.style.display = "inline-flex"; b.href = Link; b.target = "_blank";
     }
 
+    /* ── Save ──────────────────────────────────────────────────── */
     document.getElementById("saveBtn").addEventListener("click", async function () { await SaveData(); });
 
     async function SaveData() {
@@ -1418,15 +1420,14 @@
         const type = document.getElementById("TypeId").value.trim();
         const department = document.getElementById("DepartmentId").value.trim();
         const isActive = document.getElementById("IsActive").checked;
-        const VendorImageAttachment = document.getElementById("VendorImageAttachment").value.trim();
         const VendorImageAttachmentold = document.getElementById("VendorImageAttachmentOld").value.trim();
         const nAddress = document.getElementById("Address").value.trim();
         const validations = [
-            { cond: !Vendor, text: 'Vendor name is required', focus: 'Vendor' },
-            { cond: !contactNo, text: 'Contact number is required', focus: 'ContactNo' },
-            { cond: contactNo && contactNo.length < 10, text: 'Contact number must be at least 10 digits', focus: 'ContactNo' },
-            { cond: !type, text: 'Please select a vendor type', focus: 'TypeId' },
-            { cond: !department, text: 'Please select a department', focus: 'DepartmentId' }
+            { cond: !Vendor,                              text: 'Vendor name is required',                   focus: 'Vendor' },
+            { cond: !contactNo,                           text: 'Contact number is required',                focus: 'ContactNo' },
+            { cond: contactNo && contactNo.length < 10,   text: 'Contact number must be at least 10 digits', focus: 'ContactNo' },
+            { cond: !type,                                text: 'Please select a vendor type',               focus: 'TypeId' },
+            { cond: !department,                          text: 'Please select a department',                focus: 'DepartmentId' }
         ];
         for (const v of validations) {
             if (v.cond) {
@@ -1442,6 +1443,7 @@
             VendorImageAttachmentbase64,
             TimeIn: getTimeFromTextbox("TimeIn"), TimeOut: getTimeFromTextbox("TimeOut"),
             DeliveryCharges: document.getElementById("DeliveryCharges").value.trim(),
+            DiscountAmount: document.getElementById("DiscountAmount").value.trim(),
             PerProductAmount: document.getElementById("PerProductAmount").value.trim(),
             Address: nAddress, IsActive: isActive, IsUpdate
         };
@@ -1454,6 +1456,7 @@
         } catch (e) { Swal.close(); await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred.', ...SW }); }
     }
 
+    /* ── Cancel / Clear ────────────────────────────────────────── */
     document.getElementById("cancelBtn").addEventListener("click", function () { nClearForm(); });
 
     async function nClearForm() {
@@ -1463,8 +1466,10 @@
         document.getElementById("IsActive").checked = false;
         document.getElementById("VendorImageAttachment").value = "";
         document.getElementById("fileNameDisplay").textContent = "Click to browse";
-        document.getElementById("DeliveryCharges").value = "0";
-        document.getElementById("PerProductAmount").value = "0";
+        /* Use setFieldValue so float labels update properly */
+        setFieldValue("DeliveryCharges", "0");
+        setFieldValue("DiscountAmount", "0");
+        setFieldValue("PerProductAmount", "0");
         IsUpdate = false;
         document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Save Vendor';
         document.getElementById("ViewImageBtn").style.display = "none";
@@ -1475,6 +1480,7 @@
         initFloatLabels();
     }
 
+    /* ── Contact number: numeric only ─────────────────────────── */
     const ci = document.getElementById("ContactNo");
     ci.addEventListener("keydown", function (e) { if (e.ctrlKey || e.metaKey || (e.key >= '0' && e.key <= '9') || ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(e.key)) return; e.preventDefault(); });
     ci.addEventListener("input", function () { this.value = this.value.replace(/\D/g, ''); });
