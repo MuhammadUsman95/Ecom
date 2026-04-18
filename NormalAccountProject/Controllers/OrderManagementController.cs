@@ -3,8 +3,7 @@ using NormalAccountProject.Models;
 using System.Data;
 using System.Data.SqlClient;
 using System.Dynamic;
-using System.Net;
-using static NormalAccountProject.Controllers.DashboardController;
+using System.Text.Json;
 
 namespace NormalAccountProject.Controllers
 {
@@ -26,55 +25,74 @@ namespace NormalAccountProject.Controllers
         {
             try
             {
-
-               
-                var response = new
-                {
-                    statusId = 1
-                };
-                return Ok(response);
+                return Ok(new { statusId = 1 });
             }
             catch (Exception ex)
             {
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = "Error: " + ex.Message
-                });
+                return Ok(new { statusId = 0, message = "Error: " + ex.Message });
             }
         }
-        
+
         [HttpPost("nLoadGridViewData")]
         public async Task<IActionResult> nLoadGridViewData([FromBody] Models.nInfoTab nInfoTabObj)
         {
             try
             {
-
                 var parameters = new Dictionary<string, object>
                 {
                     { "@nType", 0 },
                     { "@nsType", 2 }
                 };
 
-                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("Customer_SP", parameters);
+                List<ExpandoObject> nDataList = await nGetDataAsync<ExpandoObject>("EcomOrder_SP", parameters);
 
-                var response = new
-                {
-                    statusId = 1,
-                    GridViewDataList = nDataList
-                };
-                return Ok(response);
+                return Ok(new { statusId = 1, OrderList = nDataList });
             }
             catch (Exception ex)
             {
-                return Ok(new
-                {
-                    statusId = 0,
-                    message = "Error: " + ex.Message
-                });
+                return Ok(new { statusId = 0, message = "Error: " + ex.Message });
             }
         }
 
+        [HttpPost("nUpdateOrderStatus")]
+        public async Task<IActionResult> nUpdateOrderStatus([FromBody] JsonElement body)
+        {
+            try
+            {
+                string orderNo = body.GetProperty("OrderNo").GetString();
+                string orderStatus = body.GetProperty("OrderStatus").GetString();
+
+                using SqlConnection con = new SqlConnection(connectionString);
+                using SqlCommand cmd = new SqlCommand("EcomOrder_SP", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@nType", 0);
+                cmd.Parameters.AddWithValue("@nsType", 3);
+                cmd.Parameters.AddWithValue("@OrderStatus", orderStatus);
+                cmd.Parameters.AddWithValue("@OrderNo", orderNo);
+
+                await con.OpenAsync();
+
+                using SqlDataReader dr = await cmd.ExecuteReaderAsync();
+
+                int statusId = 0;
+                string message = "Something went wrong.";
+
+                if (await dr.ReadAsync())
+                {
+                    statusId = dr["StatusId"] != DBNull.Value ? Convert.ToInt32(dr["StatusId"]) : 0;
+                    message = dr["MessageCaption"] != DBNull.Value ? dr["MessageCaption"].ToString() : "";
+                }
+
+                if (statusId == 1)
+                    return Ok(new { statusId = 1, message = "Status updated successfully." });
+                else
+                    return Ok(new { statusId = 0, message = string.IsNullOrEmpty(message) ? "Update failed." : message });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { statusId = 0, message = "Error: " + ex.Message });
+            }
+        }
 
         public async Task<List<T>> nGetDataAsync<T>(string storedProcedure, Dictionary<string, object> parameters) where T : new()
         {
@@ -82,7 +100,6 @@ namespace NormalAccountProject.Controllers
 
             using SqlConnection con = new SqlConnection(connectionString);
             using SqlCommand cmd = new SqlCommand(storedProcedure, con);
-
             cmd.CommandType = CommandType.StoredProcedure;
 
             if (parameters != null)
@@ -92,41 +109,30 @@ namespace NormalAccountProject.Controllers
             }
 
             await con.OpenAsync();
-
             using SqlDataReader dr = await cmd.ExecuteReaderAsync();
 
             if (typeof(T) == typeof(ExpandoObject))
             {
-                // ExpandoObject handling
                 while (await dr.ReadAsync())
                 {
                     IDictionary<string, object> expando = new ExpandoObject();
-
                     for (int i = 0; i < dr.FieldCount; i++)
-                    {
                         expando[dr.GetName(i)] = dr.IsDBNull(i) ? null : dr.GetValue(i);
-                    }
-
                     list.Add((T)expando);
                 }
             }
             else
             {
-                // Normal class handling via reflection
                 var props = typeof(T).GetProperties();
-
                 while (await dr.ReadAsync())
                 {
                     T obj = new T();
-
                     foreach (var prop in props)
                     {
                         if (!dr.HasColumn(prop.Name) || dr[prop.Name] == DBNull.Value)
                             continue;
-
                         prop.SetValue(obj, Convert.ChangeType(dr[prop.Name], prop.PropertyType));
                     }
-
                     list.Add(obj);
                 }
             }

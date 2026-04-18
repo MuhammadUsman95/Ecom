@@ -3,744 +3,1041 @@
 @{
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Expense Transaction Form</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --bg: #f0f2f5;
-            --card: #ffffff;
-            --primary: #1a73e8;
-            --primary-hover: #1557b0;
-            --danger: #dc3545;
-            --danger-hover: #b02a37;
-            --text: #1f2937;
-            --text-muted: #6b7280;
-            --border: #e2e5ea;
-            --input-bg: #f8f9fb;
-            --input-focus: #e8f0fe;
-            --header-bg: #1a73e8;
-            --shadow: 0 4px 24px rgba(0,0,0,0.08);
-            --radius: 10px;
+<style>
+    :root {
+        --bg: #f4f4f4;
+        --bg2: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f9f9f9;
+        --surface3: #efefef;
+        --border: rgba(0,0,0,.07);
+        --border2: rgba(0,0,0,.12);
+        --border3: rgba(0,0,0,.18);
+        --accent: #474544;
+        --accent2: #2e2d2c;
+        --accent-g: rgba(71,69,68,.10);
+        --gold: #b08d57;
+        --gold-g: rgba(176,141,87,.12);
+        --teal: #5a7a6e;
+        --danger: #d94f4f;
+        --success: #2e7d5e;
+        --text: #1a1a1a;
+        --text2: #5c5a58;
+        --text3: #9a9896;
+        --font-h: 'Syne', sans-serif;
+        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --font-m: 'JetBrains Mono', monospace;
+        --r: 10px;
+        --r2: 14px;
+        --r3: 18px;
+        --sh: 0 4px 32px rgba(0,0,0,.08);
+        --sh2: 0 8px 40px rgba(0,0,0,.10), 0 0 0 1px rgba(71,69,68,.08);
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .exp-wrap {
+        font-family: var(--font-b);
+        color: var(--text);
+        background: var(--bg);
+        min-height: calc(100vh - 60px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .exp-inner {
+        position: relative;
+        z-index: 1;
+        padding: 20px 24px;
+    }
+
+    /* ── Top Bar ── */
+    .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border2);
+    }
+
+    .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .icon-box {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 17px;
+        box-shadow: 0 4px 20px rgba(71,69,68,.30);
+        flex-shrink: 0;
+    }
+
+    .page-title {
+        font-family: var(--font-h);
+        font-size: 21px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -.3px;
+        line-height: 1.1;
+    }
+
+        .page-title span {
+            color: var(--accent);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+        margin-top: 3px;
+    }
+
+        .breadcrumb i {
+            font-size: 7px;
         }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding: 30px 20px;
-            min-height: 100vh;
+        .breadcrumb span {
+            color: var(--gold);
         }
 
-        .container {
-            max-width: 1000px;
-            margin: auto;
-            background: var(--card);
-            border-radius: 14px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+
+    .pill-gold {
+        background: var(--gold-g);
+        color: var(--gold);
+        border-color: rgba(176,141,87,.30);
+    }
+
+    /* ── Accent Line ── */
+    .accent-line {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 18px;
+        height: 2px;
+    }
+
+        .accent-line span:nth-child(1) {
+            flex: 2;
+            background: var(--accent);
+            border-radius: 2px;
         }
 
-        /* ── Title Bar ── */
-        .title-bar {
-            background: var(--header-bg);
-            color: #fff;
-            padding: 18px 28px;
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .accent-line span:nth-child(2) {
+            flex: 1;
+            background: var(--teal);
+            border-radius: 2px;
+            opacity: .6;
         }
 
-            .title-bar span {
-                font-size: 22px;
-            }
-
-        /* ── Form Body ── */
-        .form-body {
-            padding: 24px 28px 28px;
+        .accent-line span:nth-child(3) {
+            flex: 3;
+            background: var(--border2);
+            border-radius: 2px;
         }
 
-        /* ── Header Fields ── */
-        .header-fields {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 18px;
-            margin-bottom: 24px;
+    /* ── Form Card ── */
+    .form-card {
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
+        overflow: hidden;
+        animation: fadeUp .3s ease both;
+        position: relative;
+    }
+
+        .form-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--r3);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+            pointer-events: none;
         }
 
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+    .form-card-header {
+        padding: 12px 22px;
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.06) 100%);
+        border-bottom: 1px solid var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-dots {
+        display: flex;
+        gap: 5px;
+    }
+
+    .h-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+    }
+
+    .h-dot-1 {
+        background: #f43f5e;
+    }
+
+    .h-dot-2 {
+        background: #f59e0b;
+    }
+
+    .h-dot-3 {
+        background: #10b981;
+    }
+
+    .form-card-title {
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text3);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    /* ── Form Body ── */
+    .form-body {
+        padding: 22px 24px;
+        max-height: 80vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .form-body::-webkit-scrollbar {
+            width: 4px;
         }
 
-            .field-group label {
-                font-size: 12px;
-                font-weight: 600;
-                color: var(--text-muted);
-                text-transform: uppercase;
-                letter-spacing: 0.6px;
-            }
-
-            .field-group input,
-            .field-group select {
-                padding: 10px 12px;
-                border: 1.5px solid var(--border);
-                border-radius: 8px;
-                font-family: 'DM Sans', sans-serif;
-                font-size: 14px;
-                background: var(--input-bg);
-                color: var(--text);
-                transition: all 0.2s ease;
-                outline: none;
-                width: 100%;
-            }
-
-                .field-group input:focus,
-                .field-group select:focus {
-                    border-color: var(--primary);
-                    background: var(--input-focus);
-                    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
-                }
-
-                .field-group input[readonly] {
-                    background: #eef1f5;
-                    color: var(--text-muted);
-                    cursor: default;
-                }
-
-        /* ── Divider ── */
-        .divider {
-            height: 1px;
-            background: var(--border);
-            margin: 0 0 20px 0;
-        }
-
-        /* ── Section Label ── */
-        .section-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 14px;
-        }
-
-        /* ── Entry Row ── */
-        .entry-row {
-            display: grid;
-            grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr auto;
-            gap: 12px;
-            align-items: end;
-            margin-bottom: 20px;
-        }
-
-            .entry-row .field-group input,
-            .entry-row .field-group select {
-                width: 100%;
-            }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
-
-        .btn-add {
-            background: var(--primary);
-            color: #fff;
-            height: 42px;
-            min-width: 80px;
-        }
-
-            .btn-add:hover {
-                background: var(--primary-hover);
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
-            }
-
-        .btn-save {
-            background: #16a34a;
-            color: #fff;
-        }
-
-            .btn-save:hover {
-                background: #15803d;
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
-            }
-
-        .btn-cancel {
-            background: var(--danger);
-            color: #fff;
-        }
-
-            .btn-cancel:hover {
-                background: var(--danger-hover);
-                transform: translateY(-1px);
-                box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-            }
-
-        .btn-delete {
-            background: transparent;
-            color: var(--danger);
-            padding: 4px 10px;
-            font-size: 18px;
-            border: 1.5px solid var(--danger);
-            border-radius: 6px;
-            min-width: unset;
-        }
-
-            .btn-delete:hover {
-                background: var(--danger);
-                color: #fff;
-            }
-
-        /* ── Table ── */
-        .table-wrapper {
-            border: 1.5px solid var(--border);
+        .form-body::-webkit-scrollbar-thumb {
+            background: var(--surface3);
             border-radius: 10px;
-            overflow: hidden;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+    /* ── Section Label ── */
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-family: var(--font-m);
+        font-size: 9.5px;
+        color: var(--text3);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 500;
+    }
+
+    .section-label-bar {
+        width: 3px;
+        height: 12px;
+        background: linear-gradient(180deg, var(--accent), var(--teal));
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .section-label-text {
+        color: var(--text2);
+    }
+
+    /* ── Form Row ── */
+    .form-row {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .form-row-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .form-row-1 {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row-4a {
+        grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    }
+
+    /* ── Float Labels ── */
+    .float-group {
+        position: relative;
+    }
+
+        .float-group .form-control {
+            padding: 22px 13px 7px;
         }
 
-        thead th {
-            background: #f1f3f7;
-            padding: 12px 14px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            text-align: center;
-            border-bottom: 1.5px solid var(--border);
+        .float-group select.form-control {
+            padding: 22px 13px 7px;
         }
 
-        tbody td {
-            padding: 11px 14px;
-            text-align: center;
-            font-size: 14px;
-            border-bottom: 1px solid #f0f0f0;
+    .float-label {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-b);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text3);
+        pointer-events: none;
+        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 26px);
+    }
+
+    .float-group .form-control:focus ~ .float-label,
+    .float-group.has-value .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-m);
+        color: var(--accent);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-m);
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .form-control:focus ~ .float-label {
+        color: var(--accent);
+    }
+
+    .float-group .form-control::placeholder {
+        color: transparent;
+    }
+
+    /* ── Form Control ── */
+    .form-control {
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
+        padding: 9px 13px;
+        font-size: 13.5px;
+        font-family: var(--font-b);
+        color: #1a1a1a !important;
+        background: var(--bg2);
+        transition: border-color .18s, box-shadow .18s, background .18s;
+        outline: none;
+        width: 100%;
+        -webkit-text-fill-color: #1a1a1a !important;
+        caret-color: var(--accent);
+    }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(71,69,68,.12);
+            background: var(--surface);
+            color: #1a1a1a !important;
         }
 
-        tbody tr {
-            transition: background 0.15s;
+        .form-control[readonly] {
+            background: var(--surface2);
+            color: var(--text2) !important;
+            -webkit-text-fill-color: var(--text2) !important;
+            cursor: default;
         }
 
-            tbody tr:hover {
-                background: #f8fafd;
+        .form-control::placeholder {
+            color: var(--text3);
+            -webkit-text-fill-color: var(--text3);
+        }
+
+    select.form-control {
+        appearance: auto;
+        cursor: pointer;
+    }
+
+        select.form-control option {
+            background: var(--surface);
+            color: #1a1a1a;
+        }
+
+    input[type="date"].form-control::-webkit-calendar-picker-indicator {
+        opacity: .5;
+        cursor: pointer;
+    }
+
+    /* ── Entry Row Align ── */
+    .entry-align {
+        display: flex;
+        align-items: flex-end;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+        .entry-align .float-group {
+            flex: 1;
+        }
+
+            .entry-align .float-group.lg {
+                flex: 2;
             }
 
-            tbody tr:last-child td {
+    /* ── Buttons ── */
+    .btn-pro {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 20px;
+        font-family: var(--font-b);
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: var(--r);
+        border: none;
+        cursor: pointer;
+        transition: all .2s ease;
+        white-space: nowrap;
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, var(--teal) 0%, #3d5c52 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(90,122,110,.30);
+        height: 46px;
+    }
+
+        .btn-add:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(90,122,110,.40);
+        }
+
+    .btn-save {
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(71,69,68,.30);
+    }
+
+        .btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(71,69,68,.40);
+        }
+
+    .btn-cancel {
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border2);
+    }
+
+        .btn-cancel:hover {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+    /* ── Table ── */
+    .table-wrap {
+        border: 1px solid var(--border2);
+        border-radius: var(--r2);
+        overflow: hidden;
+        margin-bottom: 16px;
+    }
+
+    .pro-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .pro-table thead th {
+            background: var(--surface2);
+            color: var(--text3);
+            padding: 10px 14px;
+            font-size: 9.5px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            white-space: nowrap;
+            font-family: var(--font-m);
+            border-bottom: 1px solid var(--border2);
+            border-right: 1px solid var(--border);
+            text-align: center;
+        }
+
+            .pro-table thead th:last-child {
+                border-right: none;
+            }
+
+        .pro-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .12s;
+        }
+
+            .pro-table tbody tr:hover {
+                background: var(--surface2);
+            }
+
+            .pro-table tbody tr:last-child {
                 border-bottom: none;
             }
 
-        tfoot td,
-        tfoot th {
-            padding: 12px 14px;
-            font-size: 14px;
-            font-weight: 700;
+        .pro-table tbody td {
+            padding: 10px 14px;
+            font-size: 12.5px;
+            color: var(--text2);
             text-align: center;
-            background: #f8f9fb;
-            border-top: 2px solid var(--border);
+        }
+
+            .pro-table tbody td.td-left {
+                text-align: left;
+                font-weight: 500;
+                color: var(--text);
+            }
+
+        .pro-table tfoot td,
+        .pro-table tfoot th {
+            padding: 11px 14px;
+            font-family: var(--font-m);
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+            background: var(--surface2);
+            border-top: 1px solid var(--border2);
             color: var(--text);
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 36px 20px;
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-
-            .empty-state span {
-                font-size: 28px;
-                display: block;
-                margin-bottom: 8px;
+            .pro-table tfoot th.label-cell {
+                text-align: left;
+                color: var(--text2);
+                font-size: 9.5px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
             }
 
-        /* ── Footer ── */
-        .footer {
-            margin-top: 24px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
+    .amount-cell {
+        font-family: var(--font-m);
+        font-size: 12px;
+    }
+
+    .tbl-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        transition: all .15s;
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border-color: rgba(217,79,79,.20);
+    }
+
+        .tbl-btn:hover {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
         }
 
-            .footer .btn {
-                min-width: 120px;
-                padding: 11px 24px;
-            }
+    /* ── Empty State ── */
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+    }
 
-        /* ── Amount styling ── */
-        .amount-cell {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 13px;
+    .empty-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--surface2);
+        border-radius: var(--r2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text3);
+        font-size: 18px;
+        margin: 0 auto 12px;
+        border: 1px solid var(--border2);
+    }
+
+    .empty-text {
+        font-size: 13px;
+        color: var(--text3);
+    }
+
+    /* ── Footer Row ── */
+    .btn-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        margin-top: 4px;
+        justify-content: flex-end;
+    }
+
+    /* ── Page Footer ── */
+    .page-footer {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+    }
+
+        .page-footer strong {
+            color: var(--accent);
+            font-weight: 500;
         }
 
-        /* ── Loading ── */
-        .loading-text {
-            color: var(--text-muted);
-            font-size: 13px;
-            font-style: italic;
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
         }
 
-        /* ── Responsive ── */
-        @@media (max-width: 768px) {
-            .header-fields {
-                grid-template-columns: 1fr;
-            }
-
-            .entry-row {
-                grid-template-columns: 1fr 1fr;
-            }
-
-                .entry-row .field-group:first-child {
-                    grid-column: 1 / -1;
-                }
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-    </style>
-</head>
+    }
 
-<body>
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
 
-    <div class="container">
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
 
-        <!-- ── Title Bar ── -->
-        <div class="title-bar">
-            <span>📋</span> Expense Voucher
+<div class="exp-wrap">
+    <div class="exp-inner">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="icon-box"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div>
+                    <div class="page-title">Expense <span>Voucher</span></div>
+                    <div class="breadcrumb">
+                        Finance <i class="fas fa-chevron-right"></i>
+                        <span>Expenses</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pill pill-gold">
+                <i class="fas fa-circle" style="font-size:6px;"></i> Live
+            </div>
         </div>
 
-        <div class="form-body">
+        <div class="accent-line"><span></span><span></span><span></span></div>
 
-            <!-- ── Header Fields ── -->
-            <div class="header-fields">
-                <div class="field-group">
-                    <label>Expense No</label>
-                    <input type="text" id="expenseNo" placeholder="Loading..." readonly>
+        <!-- Form Card -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <div class="form-card-header-left">
+                    <div class="header-dots">
+                        <div class="h-dot h-dot-1"></div>
+                        <div class="h-dot h-dot-2"></div>
+                        <div class="h-dot h-dot-3"></div>
+                    </div>
+                    <div class="form-card-title">expense_voucher.form</div>
                 </div>
-
-                <div class="field-group">
-                    <label>Date</label>
-                    <input type="date" id="date">
-                </div>
-
-                <div class="field-group">
-                    <label>Customer</label>
-                    <select id="customerDropdown">
-                        <option value="">-- Select Customer --</option>
-                    </select>
+                <div class="pill pill-gold">
+                    <i class="fas fa-circle" style="font-size:6px;"></i> Live
                 </div>
             </div>
 
-            <div class="divider"></div>
+            <div class="form-body">
 
-            <!-- ── Entry Section ── -->
-            <div class="section-label">Add Expense Entry</div>
-
-            <div class="entry-row">
-                <div class="field-group">
-                    <label>Expense Name</label>
-                    <select id="expenseName">
-                        <option value="">-- Select Expense --</option>
-                    </select>
+                <!-- Header Details -->
+                <div class="section-label">
+                    <div class="section-label-bar"></div>
+                    <span class="section-label-text">Voucher Details</span>
                 </div>
 
-                <div class="field-group">
-                    <label>Amount</label>
-                    <input type="number" id="amount" placeholder="0.00">
+                <div class="form-row form-row-3">
+                    <div class="float-group always-float">
+                        <input type="text" id="expenseNo" class="form-control" readonly placeholder=" ">
+                        <label class="float-label" for="expenseNo">Expense No</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <input type="date" id="date" class="form-control">
+                        <label class="float-label" for="date">Date</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <select id="customerDropdown" class="form-control">
+                            <option value="">— Select Customer —</option>
+                        </select>
+                        <label class="float-label" for="customerDropdown">Customer</label>
+                    </div>
                 </div>
 
-                <div class="field-group">
-                    <label>Discount</label>
-                    <input type="number" id="discount" placeholder="0.00">
+                <!-- Entry Section -->
+                <div class="section-label" style="margin-top:4px;">
+                    <div class="section-label-bar" style="background:linear-gradient(180deg,var(--gold),var(--teal));"></div>
+                    <span class="section-label-text">Add Expense Entry</span>
                 </div>
 
-                <div class="field-group">
-                    <label>Total</label>
-                    <input type="number" id="total" placeholder="0.00" readonly>
+                <div class="entry-align">
+                    <div class="float-group always-float lg">
+                        <select id="expenseName" class="form-control">
+                            <option value="">— Select Expense —</option>
+                        </select>
+                        <label class="float-label" for="expenseName">Expense Name</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <input type="number" id="amount" class="form-control" placeholder=" ">
+                        <label class="float-label" for="amount">Amount</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <input type="number" id="discount" class="form-control" placeholder=" ">
+                        <label class="float-label" for="discount">Discount</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <input type="number" id="total" class="form-control" placeholder=" " readonly>
+                        <label class="float-label" for="total">Total</label>
+                    </div>
+                    <div>
+                        <button class="btn-pro btn-add" onclick="addRow()">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
                 </div>
 
-                <div class="field-group">
-                    <label>&nbsp;</label>
-                    <button class="btn btn-add" onclick="addRow()">+ Add</button>
+                <!-- Table Section -->
+                <div class="section-label" style="margin-top:4px;">
+                    <div class="section-label-bar" style="background:linear-gradient(180deg,var(--teal),var(--accent));"></div>
+                    <span class="section-label-text">Expense Entries</span>
                 </div>
-            </div>
 
-            <!-- ── Data Table ── -->
-            <div class="table-wrapper">
-                <table id="dataTable">
-                    <thead>
-                        <tr>
-                            <th style="width:5%">#</th>
-                            <th style="width:35%">Expense Name</th>
-                            <th style="width:18%">Amount</th>
-                            <th style="width:18%">Discount</th>
-                            <th style="width:18%">Total</th>
-                            <th style="width:6%"></th>
-                        </tr>
-                    </thead>
+                <div class="table-wrap">
+                    <table class="pro-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th style="width:5%">#</th>
+                                <th style="width:35%;text-align:left;">Expense Name</th>
+                                <th style="width:18%">Amount</th>
+                                <th style="width:18%">Discount</th>
+                                <th style="width:18%">Total</th>
+                                <th style="width:6%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr id="emptyRow">
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <div class="empty-icon"><i class="fas fa-receipt"></i></div>
+                                        <div class="empty-text">No entries added yet.</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" class="label-cell">Grand Total</th>
+                                <th id="sumAmount" class="amount-cell">0.00</th>
+                                <th id="sumDiscount" class="amount-cell">0.00</th>
+                                <th id="sumTotal" class="amount-cell">0.00</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
 
-                    <tbody id="tableBody">
-                        <tr id="emptyRow">
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <span>📭</span>
-                                    No entries added yet
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
+                <!-- Footer Buttons -->
+                <div class="btn-row">
+                    <button class="btn-pro btn-cancel" onclick="cancelForm()">
+                        <i class="fas fa-xmark"></i> Cancel
+                    </button>
+                    <button class="btn-pro btn-save" onclick="saveForm()">
+                        <i class="fas fa-floppy-disk"></i> Save Voucher
+                    </button>
+                </div>
 
-                    <tfoot>
-                        <tr>
-                            <th colspan="2">Grand Total</th>
-                            <th id="sumAmount" class="amount-cell">0.00</th>
-                            <th id="sumDiscount" class="amount-cell">0.00</th>
-                            <th id="sumTotal" class="amount-cell">0.00</th>
-                            <th></th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+            </div><!-- /form-body -->
+        </div><!-- /form-card -->
 
-            <!-- ── Footer ── -->
-            <div class="footer">
-                <button class="btn btn-cancel" onclick="cancelForm()">✕ Cancel</button>
-                <button class="btn btn-save" onclick="saveForm()">✓ Save</button>
-            </div>
-
+        <div class="page-footer">
+            Developed with <span style="color:var(--danger);">♥</span> by <strong>UT Designer</strong>
         </div>
+
     </div>
+</div>
 
-    <script>
+<script>
+    // ══════════════════════════════════════
+    //  Init
+    // ══════════════════════════════════════
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("date").valueAsDate = new Date();
+        loadExpenseVoucherNo();
+        loadCustomerDropdown();
+        loadExpenseTypeDropdown();
+    });
 
-        // ══════════════════════════════════════
-        //  Page Load — Fetch Voucher No & Customers
-        // ══════════════════════════════════════
-        document.addEventListener("DOMContentLoaded", function () {
-            // Set today's date
-            document.getElementById("date").valueAsDate = new Date();
-
-            // Load Expense Voucher Number
-            loadExpenseVoucherNo();
-
-            // Load Customer Dropdown
-            loadCustomerDropdown();
-
-            // Load Expense Type Dropdown
-            loadExpenseTypeDropdown();
-        });
-
-        // ── Load Expense Voucher No from Controller ──
-        async function loadExpenseVoucherNo() {
-            try {
-                const response = await fetch("/Expense/nLoadExpenseVoucherNo", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({})
-                });
-                const data = await response.json();
-                if (data.statusId === 1 && data.expenseNo) {
-                    document.getElementById("expenseNo").value = data.expenseNo;
-                } else {
-                    document.getElementById("expenseNo").value = "N/A";
-                }
-            } catch (error) {
-                console.error("Error loading voucher no:", error);
-                document.getElementById("expenseNo").value = "Error";
-            }
-        }
-
-        // ── Load Customer Dropdown from Controller ──
-        async function loadCustomerDropdown() {
-            const dropdown = document.getElementById("customerDropdown");
-            try {
-                const response = await fetch("/Expense/nLoadExpenseCustomerDropDown", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({})
-                });
-                const data = await response.json();
-                if (data.statusId === 1 && data.customers) {
-                    data.customers.forEach(function (cust) {
-                        const option = document.createElement("option");
-                        option.value = cust.customerCode;
-                        option.textContent = cust.customerName;
-                        dropdown.appendChild(option);
-                    });
-                }
-            } catch (error) {
-                console.error("Error loading customers:", error);
-            }
-        }
-
-        // ── Load Expense Type Dropdown from Controller ──
-        async function loadExpenseTypeDropdown() {
-            const dropdown = document.getElementById("expenseName");
-            try {
-                const response = await fetch("/Expense/nLoadExpenseTypeDropDown", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({})
-                });
-                const data = await response.json();
-                if (data.statusId === 1 && data.expenseTypes) {
-                    data.expenseTypes.forEach(function (item) {
-                        const option = document.createElement("option");
-                        option.value = item.expenseTypeId;
-                        option.textContent = item.expenseType;
-                        dropdown.appendChild(option);
-                    });
-                }
-            } catch (error) {
-                console.error("Error loading expense types:", error);
-            }
-        }
-
-        // ══════════════════════════════════════
-        //  Entry Logic
-        // ══════════════════════════════════════
-        const amountInput = document.getElementById("amount");
-        const discountInput = document.getElementById("discount");
-        const totalInput = document.getElementById("total");
-        let rowCounter = 0;
-        let detailRows = []; // Track all detail rows for saving
-
-        // Auto-calculate Total
-        function calculateTotal() {
-            const amount = parseFloat(amountInput.value) || 0;
-            const discount = parseFloat(discountInput.value) || 0;
-            totalInput.value = (amount - discount).toFixed(2);
-        }
-
-        amountInput.addEventListener("input", calculateTotal);
-        discountInput.addEventListener("input", calculateTotal);
-
-        // ── Enter Key Navigation: Expense → Amount → Discount → Add ──
-        document.getElementById("expenseName").addEventListener("change", function () {
-            if (this.value) amountInput.focus();
-        });
-
-        amountInput.addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                discountInput.focus();
-            }
-        });
-
-        discountInput.addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
-                e.preventDefault();
-                addRow();
-            }
-        });
-
-        function addRow() {
-            const expenseDropdown = document.getElementById("expenseName");
-            const expenseTypeId = expenseDropdown.value;
-            const expenseTypeName = expenseDropdown.options[expenseDropdown.selectedIndex].text;
-            const amount = parseFloat(amountInput.value) || 0;
-            const discount = parseFloat(discountInput.value) || 0;
-            const total = amount - discount;
-
-            if (!expenseTypeId) {
-                alert("Please select an Expense Name.");
-                expenseDropdown.focus();
-                return;
-            }
-
-            if (amount <= 0) {
-                alert("Please enter a valid Amount.");
-                amountInput.focus();
-                return;
-            }
-
-            // Remove empty state row
-            const emptyRow = document.getElementById("emptyRow");
-            if (emptyRow) emptyRow.remove();
-
-            rowCounter++;
-            const tbody = document.getElementById("tableBody");
-            const row = document.createElement("tr");
-            row.id = "row_" + rowCounter;
-            row.innerHTML = `
-                <td>${rowCounter}</td>
-                <td style="text-align:left; padding-left:16px;">${expenseTypeName}</td>
-                <td class="amount-cell">${amount.toFixed(2)}</td>
-                <td class="amount-cell">${discount.toFixed(2)}</td>
-                <td class="amount-cell">${total.toFixed(2)}</td>
-                <td>
-                    <button class="btn btn-delete" onclick="deleteRow('row_${rowCounter}', ${amount}, ${discount}, ${total})">✕</button>
-                </td>
-            `;
-
-            // Add animation
-            row.style.animation = "fadeIn 0.3s ease";
-            tbody.appendChild(row);
-
-            updateTotals(amount, discount, total);
-
-            // Track detail row data for saving
-            detailRows.push({
-                rowId: "row_" + rowCounter,
-                expenseTypeId: parseInt(expenseTypeId),
-                amount: amount,
-                discountAmount: discount
+    // ── Load Voucher No ──
+    async function loadExpenseVoucherNo() {
+        try {
+            const response = await fetch("/Expense/nLoadExpenseVoucherNo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({})
             });
-
-            // Clear inputs
-            expenseDropdown.value = "";
-            amountInput.value = "";
-            discountInput.value = "";
-            totalInput.value = "";
-            expenseDropdown.focus();
+            const data = await response.json();
+            document.getElementById("expenseNo").value = (data.statusId === 1 && data.expenseNo) ? data.expenseNo : "N/A";
+        } catch (e) {
+            document.getElementById("expenseNo").value = "Error";
         }
+    }
 
-        function deleteRow(rowId, amount, discount, total) {
-            const row = document.getElementById(rowId);
-            if (row) {
-                row.style.opacity = "0";
-                row.style.transform = "translateX(20px)";
-                row.style.transition = "all 0.25s ease";
-                setTimeout(() => {
-                    row.remove();
-                    updateTotals(-amount, -discount, -total);
-
-                    // Remove from detailRows array
-                    detailRows = detailRows.filter(d => d.rowId !== rowId);
-
-                    // Show empty state if no rows
-                    const tbody = document.getElementById("tableBody");
-                    if (tbody.children.length === 0) {
-                        const emptyRow = document.createElement("tr");
-                        emptyRow.id = "emptyRow";
-                        emptyRow.innerHTML = `
-                            <td colspan="6">
-                                <div class="empty-state">
-                                    <span>📭</span>
-                                    No entries added yet
-                                </div>
-                            </td>
-                        `;
-                        tbody.appendChild(emptyRow);
-                    }
-                }, 250);
-            }
-        }
-
-        function updateTotals(amount, discount, total) {
-            const sumAmt = parseFloat(document.getElementById("sumAmount").innerText) + amount;
-            const sumDisc = parseFloat(document.getElementById("sumDiscount").innerText) + discount;
-            const sumTot = parseFloat(document.getElementById("sumTotal").innerText) + total;
-
-            document.getElementById("sumAmount").innerText = sumAmt.toFixed(2);
-            document.getElementById("sumDiscount").innerText = sumDisc.toFixed(2);
-            document.getElementById("sumTotal").innerText = sumTot.toFixed(2);
-        }
-
-        // ══════════════════════════════════════
-        //  Footer Actions
-        // ══════════════════════════════════════
-        async function saveForm() {
-            const tbody = document.getElementById("tableBody");
-            if (tbody.querySelector("#emptyRow")) {
-                alert("Please add at least one entry before saving.");
-                return;
-            }
-
-            const expenseNo = document.getElementById("expenseNo").value;
-            const date = document.getElementById("date").value;
-            const customerCode = document.getElementById("customerDropdown").value;
-            const totalAmount = parseFloat(document.getElementById("sumTotal").innerText) || 0;
-
-            if (!date) {
-                alert("Please select a Date.");
-                return;
-            }
-
-            if (!customerCode) {
-                alert("Please select a Customer.");
-                return;
-            }
-
-            const payload = {
-                expenseNo: expenseNo,
-                customerCode: parseInt(customerCode),
-                date: date,
-                totalAmount: totalAmount,
-                details: detailRows.map(d => ({
-                    expenseTypeId: d.expenseTypeId,
-                    amount: d.amount,
-                    discountAmount: d.discountAmount
-                }))
-            };
-
-            try {
-                const response = await fetch("/Expense/nSaveExpense", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
+    // ── Load Customer Dropdown ──
+    async function loadCustomerDropdown() {
+        const dropdown = document.getElementById("customerDropdown");
+        try {
+            const response = await fetch("/Expense/nLoadExpenseCustomerDropDown", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+            if (data.statusId === 1 && data.customers) {
+                data.customers.forEach(function (cust) {
+                    const option = document.createElement("option");
+                    option.value = cust.customerCode;
+                    option.textContent = cust.customerName;
+                    dropdown.appendChild(option);
                 });
-                const data = await response.json();
-                if (data.statusId === 1) {
-                    alert("Expense saved successfully!");
-                    location.reload();
-                } else {
-                    alert("Error: " + (data.message || "Failed to save."));
+            }
+        } catch (e) { console.error("Error loading customers:", e); }
+    }
+
+    // ── Load Expense Type Dropdown ──
+    async function loadExpenseTypeDropdown() {
+        const dropdown = document.getElementById("expenseName");
+        try {
+            const response = await fetch("/Expense/nLoadExpenseTypeDropDown", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+            if (data.statusId === 1 && data.expenseTypes) {
+                data.expenseTypes.forEach(function (item) {
+                    const option = document.createElement("option");
+                    option.value = item.expenseTypeId;
+                    option.textContent = item.expenseType;
+                    dropdown.appendChild(option);
+                });
+            }
+        } catch (e) { console.error("Error loading expense types:", e); }
+    }
+
+    // ══════════════════════════════════════
+    //  Entry Logic
+    // ══════════════════════════════════════
+    const amountInput   = document.getElementById("amount");
+    const discountInput = document.getElementById("discount");
+    const totalInput    = document.getElementById("total");
+    let rowCounter = 0;
+    let detailRows = [];
+
+    function calculateTotal() {
+        const amount   = parseFloat(amountInput.value) || 0;
+        const discount = parseFloat(discountInput.value) || 0;
+        totalInput.value = (amount - discount).toFixed(2);
+    }
+
+    amountInput.addEventListener("input", calculateTotal);
+    discountInput.addEventListener("input", calculateTotal);
+
+    // Enter key navigation
+    document.getElementById("expenseName").addEventListener("change", function () {
+        if (this.value) amountInput.focus();
+    });
+    amountInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); discountInput.focus(); }
+    });
+    discountInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); addRow(); }
+    });
+
+    function addRow() {
+        const expenseDropdown = document.getElementById("expenseName");
+        const expenseTypeId   = expenseDropdown.value;
+        const expenseTypeName = expenseDropdown.options[expenseDropdown.selectedIndex].text;
+        const amount   = parseFloat(amountInput.value) || 0;
+        const discount = parseFloat(discountInput.value) || 0;
+        const total    = amount - discount;
+
+        if (!expenseTypeId) { alert("Please select an Expense Name."); expenseDropdown.focus(); return; }
+        if (amount <= 0)    { alert("Please enter a valid Amount."); amountInput.focus(); return; }
+
+        const emptyRow = document.getElementById("emptyRow");
+        if (emptyRow) emptyRow.remove();
+
+        rowCounter++;
+        const tbody = document.getElementById("tableBody");
+        const row   = document.createElement("tr");
+        row.id = "row_" + rowCounter;
+        row.style.animation = "fadeIn 0.3s ease";
+        row.innerHTML = `
+            <td>${rowCounter}</td>
+            <td class="td-left">${expenseTypeName}</td>
+            <td class="amount-cell">${amount.toFixed(2)}</td>
+            <td class="amount-cell">${discount.toFixed(2)}</td>
+            <td class="amount-cell">${total.toFixed(2)}</td>
+            <td>
+                <button class="tbl-btn" onclick="deleteRow('row_${rowCounter}', ${amount}, ${discount}, ${total})" title="Remove">
+                    <i class="fas fa-trash-can"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+        updateTotals(amount, discount, total);
+
+        detailRows.push({
+            rowId: "row_" + rowCounter,
+            expenseTypeId: parseInt(expenseTypeId),
+            amount: amount,
+            discountAmount: discount
+        });
+
+        expenseDropdown.value = "";
+        amountInput.value     = "";
+        discountInput.value   = "";
+        totalInput.value      = "";
+        expenseDropdown.focus();
+    }
+
+    function deleteRow(rowId, amount, discount, total) {
+        const row = document.getElementById(rowId);
+        if (row) {
+            row.style.opacity   = "0";
+            row.style.transform = "translateX(20px)";
+            row.style.transition = "all 0.25s ease";
+            setTimeout(() => {
+                row.remove();
+                updateTotals(-amount, -discount, -total);
+                detailRows = detailRows.filter(d => d.rowId !== rowId);
+                const tbody = document.getElementById("tableBody");
+                if (tbody.children.length === 0) {
+                    const emptyRow = document.createElement("tr");
+                    emptyRow.id = "emptyRow";
+                    emptyRow.innerHTML = `
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fas fa-receipt"></i></div>
+                                <div class="empty-text">No entries added yet.</div>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(emptyRow);
                 }
-            } catch (error) {
-                console.error("Save error:", error);
-                alert("Error saving expense. Please try again.");
-            }
+            }, 250);
         }
+    }
 
-        function cancelForm() {
-            if (confirm("Are you sure you want to cancel? All data will be lost.")) {
-                location.reload();
-            }
-        }
-    </script>
+    function updateTotals(amount, discount, total) {
+        const sumAmt  = parseFloat(document.getElementById("sumAmount").innerText) + amount;
+        const sumDisc = parseFloat(document.getElementById("sumDiscount").innerText) + discount;
+        const sumTot  = parseFloat(document.getElementById("sumTotal").innerText) + total;
+        document.getElementById("sumAmount").innerText   = sumAmt.toFixed(2);
+        document.getElementById("sumDiscount").innerText = sumDisc.toFixed(2);
+        document.getElementById("sumTotal").innerText    = sumTot.toFixed(2);
+    }
 
-    <style>
-        @@keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-8px);
-            }
+    // ══════════════════════════════════════
+    //  Save / Cancel
+    // ══════════════════════════════════════
+    async function saveForm() {
+        const tbody = document.getElementById("tableBody");
+        if (tbody.querySelector("#emptyRow")) { alert("Please add at least one entry before saving."); return; }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+        const expenseNo    = document.getElementById("expenseNo").value;
+        const date         = document.getElementById("date").value;
+        const customerCode = document.getElementById("customerDropdown").value;
+        const totalAmount  = parseFloat(document.getElementById("sumTotal").innerText) || 0;
 
-</body>
-</html>
+        if (!date)         { alert("Please select a Date."); return; }
+        if (!customerCode) { alert("Please select a Customer."); return; }
+
+        const payload = {
+            expenseNo,
+            customerCode: parseInt(customerCode),
+            date,
+            totalAmount,
+            details: detailRows.map(d => ({
+                expenseTypeId: d.expenseTypeId,
+                amount: d.amount,
+                discountAmount: d.discountAmount
+            }))
+        };
+
+        try {
+            const response = await fetch("/Expense/nSaveExpense", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            if (data.statusId === 1) { alert("Expense saved successfully!"); location.reload(); }
+            else alert("Error: " + (data.message || "Failed to save."));
+        } catch (e) { console.error("Save error:", e); alert("Error saving expense. Please try again."); }
+    }
+
+    function cancelForm() {
+        if (confirm("Are you sure you want to cancel? All data will be lost.")) location.reload();
+    }
+</script>

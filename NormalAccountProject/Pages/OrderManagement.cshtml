@@ -4,361 +4,601 @@
     ViewData["Title"] = "Order Management";
 }
 
+<style>
+    .order-card {
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 1px 6px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.05);
+        border: 1px solid #eef0f3;
+        overflow: hidden;
+        transition: box-shadow 0.25s, transform 0.2s;
+    }
+
+        .order-card:hover {
+            box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+    /* ── Header ── */
+    .card-header-bar {
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: linear-gradient(135deg, #1a73e8 0%, #1254b0 100%);
+    }
+
+    .order-no-badge {
+        font-size: 14px;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.5px;
+    }
+
+    .status-pill {
+        display: inline-block;
+        padding: 3px 11px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.3px;
+    }
+
+    .pill-Pending {
+        background: #fff8e1;
+        color: #e65100;
+    }
+
+    .pill-Inprocess {
+        background: #e3f2fd;
+        color: #0d47a1;
+    }
+
+    .pill-Delivered {
+        background: #e8f5e9;
+        color: #1b5e20;
+    }
+
+    .pill-Cancelled {
+        background: #fce4ec;
+        color: #880e4f;
+    }
+
+    /* ── Customer ── */
+    .customer-section {
+        padding: 9px 14px;
+        border-bottom: 1px solid #f2f4f7;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .cust-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: #e8f0fe;
+        color: #1a73e8;
+        font-weight: 700;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .customer-name {
+        font-weight: 600;
+        font-size: 13px;
+        color: #1a1a2e;
+    }
+
+    .customer-meta {
+        font-size: 11px;
+        color: #7a8499;
+        margin-top: 1px;
+        line-height: 1.5;
+    }
+
+    /* ── Items Table ── */
+    .items-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+    }
+
+        .items-table thead tr {
+            background: #f7f9fc;
+        }
+
+        .items-table th {
+            padding: 6px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 10px;
+            color: #9aa3b5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #eef0f5;
+        }
+
+        .items-table td {
+            padding: 6px 12px;
+            color: #2d3748;
+            border-bottom: 1px solid #f5f7fa;
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .items-table td.num {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .items-table tbody tr:hover {
+            background: #fafbff;
+        }
+
+    /* ── Footer ── */
+    .card-footer-bar {
+        padding: 8px 14px;
+        background: #f7f9fc;
+        border-top: 1px solid #eef0f5;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .total-amount {
+        font-size: 13px;
+        font-weight: 700;
+        color: #1a73e8;
+    }
+
+    /* ── Status Update ── */
+    .status-update-section {
+        padding: 9px 14px;
+        background: #fff;
+        border-top: 1px solid #eef0f5;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .status-select-input {
+        flex: 1;
+        min-width: 110px;
+        padding: 6px 9px;
+        border-radius: 8px;
+        border: 1.5px solid #dde1ea;
+        font-size: 12px;
+        background: #f7f9fc;
+        color: #2d3748;
+        appearance: auto;
+        cursor: pointer;
+    }
+
+        .status-select-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            background: #fff;
+        }
+
+    .update-btn {
+        padding: 6px 14px;
+        background: #1a73e8;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.2s, transform 0.15s;
+    }
+
+        .update-btn:hover {
+            background: #1254b0;
+            transform: scale(1.02);
+        }
+
+        .update-btn:disabled {
+            background: #a8c4f0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+    /* ── Summary Cards ── */
+    .summary-card {
+        border-radius: 12px;
+        padding: 12px 10px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        border: none;
+        transition: transform 0.2s;
+    }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+        }
+
+    .sc-pending {
+        background: linear-gradient(135deg,#fff8e1,#ffe0b2);
+        color: #bf360c;
+    }
+
+    .sc-inprocess {
+        background: linear-gradient(135deg,#e3f2fd,#bbdefb);
+        color: #0d47a1;
+    }
+
+    .sc-delivered {
+        background: linear-gradient(135deg,#e8f5e9,#c8e6c9);
+        color: #1b5e20;
+    }
+
+    .sc-cancelled {
+        background: linear-gradient(135deg,#fce4ec,#f8bbd0);
+        color: #880e4f;
+    }
+
+    .summary-count {
+        font-size: 22px;
+        font-weight: 800;
+        display: block;
+    }
+
+    /* ── Search Section ── */
+    .search-section {
+        background: #fff;
+        border-radius: 12px;
+        padding: 12px 14px;
+        box-shadow: 0 1px 5px rgba(0,0,0,0.06);
+        margin-bottom: 1rem;
+        border: 1px solid #eef0f5;
+    }
+
+    @@media (max-width: 576px) {
+        .status-update-section {
+            flex-direction: row;
+        }
+
+        .items-table th, .items-table td {
+            padding: 5px 8px;
+        }
+
+        .card-footer-bar {
+            gap: 4px;
+        }
+
+        .cust-avatar {
+            width: 28px;
+            height: 28px;
+            font-size: 11px;
+        }
+    }
+</style>
 <div class="section__content section__content--p30">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="overview-wrap">
-                    <h2 class="title-1">Order Management</h2>
+
+        <!-- Title -->
+        <div class="row mb-3">
+            <div class="col-12 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <h2 class="title-1 mb-0">Order Management</h2>
+                <small class="text-muted">Total Orders: <strong id="totalCount">0</strong></small>
+            </div>
+        </div>
+        <hr class="mt-0 mb-3">
+
+        <!-- Summary Strip -->
+        <div class="row g-2 mb-3">
+            <div class="col-6 col-md-3">
+                <div class="summary-card sc-pending">
+                    <span class="summary-count" id="cntPending">0</span>Pending
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="summary-card sc-inprocess">
+                    <span class="summary-count" id="cntInprocess">0</span>Inprocess
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="summary-card sc-delivered">
+                    <span class="summary-count" id="cntDelivered">0</span>Delivered
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="summary-card sc-cancelled">
+                    <span class="summary-count" id="cntCancelled">0</span>Cancelled
                 </div>
             </div>
         </div>
 
-        <hr>
-
-        <div class="row mt-5">
-            <div class="col-md-12">
-                <div id="CustomerGridContainer" class="table-responsive" style="height: 62vh; overflow-y: auto;"></div>
-                <div class="mt-3" style="text-align:center;">
-                    <p>Total Customers (<span id="TotalCustomersCount">100</span>)</p>
+        <!-- Search & Filter -->
+        <div class="search-section">
+            <div class="row g-2">
+                <div class="col-12 col-md-7">
+                    <input type="text" id="searchInput" class="form-control"
+                           placeholder="&#128269;  Search by Order No or Customer name...">
+                </div>
+                <div class="col-12 col-md-5">
+                    <select id="filterStatus" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="Pending" selected>Pending</option>
+                        <option value="Inprocess">Inprocess</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>   
                 </div>
             </div>
         </div>
 
-        <hr>
+        <!-- Cards Grid -->
+        <div id="ordersGrid" class="row g-3"></div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="copyright">
-                    <p style="margin: 0;">Software Developed By : <span style="font-weight:600;">UT Designer</span></p>
-                </div>
-            </div>
-        </div>
+        <hr class="mt-4">
+        <p class="text-center mb-0" style="font-size:13px;color:#aaa;">
+            Software Developed By: <strong style="color:#555;">UT Designer</strong>
+        </p>
 
     </div>
 </div>
 
 <script>
-    // Variable Declaration
-    let userId = localStorage.getItem("userId") || "";
-    let GridViewDataList = [];
-    let IsUpdate = false;
-    // Variable Declaration
+    let OrderList = [];
+    const STATUS_OPTIONS = ["Pending", "Inprocess", "Delivered", "Cancelled"];
 
-
-
-
-
-    // Form Load
     document.addEventListener("DOMContentLoaded", async function () {
-        await LoadData();
         await LoadGridViewData();
     });
-    // Form Load
 
-
-
-    async function LoadData() {
-        const nInfoTab = { Userid: userId };
-
-        return new Promise((resolve, reject) => {
-            jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadCustomerRegistrationData", "OrderManagement")',
-                data: JSON.stringify(nInfoTab),
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.statusId === 1) {
-
-                        resolve();
-                    } else {
-                        toastr.warning("No data found for CustomerRegistration.");
-                        reject();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error LoadData details: ", xhr, status, error);
-                    reject();
-                }
-            });
-        });
-    }
-
-
-    // Grid View
+    // ─── Load Data ────────────────────────────────────────────
     async function LoadGridViewData() {
-        const nInfoTab = { Userid: userId };
-
-        return new Promise((resolve, reject) => {
-            jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadGridViewData", "OrderManagement")',
-                data: JSON.stringify(nInfoTab),
-                contentType: 'application/json',
-                success: function (response) {
-                    if (response.statusId === 1) {
-
-                        console.log(response.GridViewDataList);
-                        GridViewDataList = response.GridViewDataList;
-                        // Render Grid
-                        renderCustomerGrid(GridViewDataList);
-                        resolve();
-                    } else {
-                        toastr.warning("No data found for CustomerRegistration.");
-                        reject();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("Error LoadData details: ", xhr, status, error);
-                    reject();
-                }
-            });
-        });
-    }
-    function renderCustomerGrid(gridData) {
-        const container = document.getElementById("CustomerGridContainer");
-
-        // Clear previous grid
-        container.innerHTML = "";
-
-        if (!gridData || gridData.length === 0) {
-            container.innerHTML = '<p>No records found.</p>';
-            document.getElementById("TotalCustomersCount").textContent = "0";
-            return;
-        }
-
-        // Determine columns dynamically (skip 'Userid', 'Type', 'CustomerId')
-        const columns = Object.keys(gridData[0]).filter(col => col !== "Userid" && col !== "Type" && col !== "CustomerId" && col !== "ImagePath");
-
-        // Table creation
-        const table = document.createElement("table");
-        table.className = "table table-bordered table-striped table-sm mb-0";
-
-        // Table Header
-        const thead = document.createElement("thead");
-        thead.style.position = "sticky";
-        thead.style.top = "0";
-        thead.style.backgroundColor = "#fff";
-        thead.style.zIndex = "10";
-
-        // Header Row
-        const headerRow = document.createElement("tr");
-
-        // Actions column
-        // const actionTh = document.createElement("th");
-        // actionTh.textContent = "";
-        // headerRow.appendChild(actionTh);
-
-        columns.forEach(col => {
-            const th = document.createElement("th");
-            th.textContent = col;
-            headerRow.appendChild(th);
-        });
-        thead.appendChild(headerRow);
-
-        // Filter Row
-        const filterRow = document.createElement("tr");
-        // const emptyTh = document.createElement("th");
-        // filterRow.appendChild(emptyTh);
-
-        columns.forEach(col => {
-            const th = document.createElement("th");
-            const input = document.createElement("input");
-            input.type = "text";
-            input.placeholder = `Filter ${col}`;
-            input.className = "form-control form-control-sm";
-            input.addEventListener("input", function () {
-                filterTable(this, col);
-            });
-            th.appendChild(input);
-            filterRow.appendChild(th);
-        });
-        thead.appendChild(filterRow);
-
-        table.appendChild(thead);
-
-        // Table Body
-        const tbody = document.createElement("tbody");
-
-        gridData.forEach(row => {
-            const tr = document.createElement("tr");
-
-            // Actions column
-            // const actionTd = document.createElement("td");
-
-            // const editBtn = document.createElement("button");
-            // editBtn.className = "btn btn-sm btn-primary me-1";
-            // editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-            // editBtn.style.padding = "3px";
-            // editBtn.addEventListener("click", () => onEditRow(row));
-            // actionTd.appendChild(editBtn);
-
-            // const deleteBtn = document.createElement("button");
-            // deleteBtn.className = "btn btn-sm btn-danger";
-            // deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
-            // deleteBtn.style.padding = "3px";
-            // deleteBtn.addEventListener("click", () => onDeleteRow(row));
-            // actionTd.appendChild(deleteBtn);
-
-            // tr.appendChild(actionTd);
-
-            // Other columns
-            columns.forEach(col => {
-                const td = document.createElement("td");
-                if (col === "Is Active") {
-                    td.innerHTML = row[col] ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">In-Active</span>';
-                } else {
-                    td.textContent = row[col];
-                }
-                tr.appendChild(td);
-            });
-
-            tbody.appendChild(tr);
-        });
-
-        table.appendChild(tbody);
-        container.appendChild(table);
-
-        // 🔹 Initial total customers count
-        document.getElementById("TotalCustomersCount").textContent = tbody.rows.length;
-    }
-    function filterTable(input, column) {
-        const table = input.closest("table");
-        const tbody = table.querySelector("tbody");
-        const rows = Array.from(tbody.rows);
-        const filterValue = input.value.toLowerCase();
-
-        const colIndex = Array.from(table.querySelectorAll("thead tr:first-child th")).findIndex(th => th.textContent === column);
-
-        let visibleCount = 0;
-
-        rows.forEach(row => {
-            const cellText = row.cells[colIndex].textContent.toLowerCase();
-            if (cellText.includes(filterValue)) {
-                row.style.display = "";
-                visibleCount++;
-            } else {
-                row.style.display = "none";
-            }
-        });
-
-        // 🔹 Update total customers count based on visible rows
-        document.getElementById("TotalCustomersCount").textContent = visibleCount;
-    }
-    function onEditRow(rowData) {
-        IsUpdate = true;
-        document.getElementById("saveBtn").textContent = "Update";
-
-        // Set values to the form using bracket notation
-        document.getElementById("CustomerId").value = rowData["CustomerId"] || "";
-        document.getElementById("CustomerImageAttachmentOld").value = rowData["ImagePath"] || "";
-        document.getElementById("Customer").value = rowData["Customer Name"] || "";
-        document.getElementById("ContactNo").value = rowData["Contact #"] || "";
-        document.getElementById("TypeId").value = rowData["Type"] || ""; // Assuming TypeId is stored in Type
-        document.getElementById("IsActive").checked = rowData["Is Active"] || false;
-        document.getElementById("Customer").focus();
-
-        ViewImage(rowData["ImagePath"] || "")
-    }
-    async function onDeleteRow(rowData) {
-        console.log("Delete clicked", rowData);
-
-        // 🔵 Step 1: Confirmation Swal
-        const result = await Swal.fire({
-            title: 'Are you sure?',
-            text: `Do you really want to delete this customer (${rowData["Customer Name"]}) ?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        });
-
-        if (!result.isConfirmed) {
-            // User clicked "No", exit function
-            return;
-        }
-
-        const nInfoTab = {
-            Userid: userId.toString(),
-            CustomerId: rowData["CustomerId"].toString(),
-            CustomerImageAttachmentfilenameold: rowData["ImagePath"].toString()
-        };
-
-        // 🔵 Step 2: Loader Swal
-        Swal.fire({
-            title: 'Please wait',
-            text: 'Customer Delete is in process...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            returnFocus: false,      // Prevent focus issues
-            didOpen: () => Swal.showLoading()
-        });
-
+        const nInfoTab = { Userid: localStorage.getItem("userId") || "" };
         try {
             const response = await jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nDeleteCustomerRegistrationData", "OrderManagement")',
+                url: '@Url.Action("nLoadGridViewData", "OrderManagement")',
                 data: JSON.stringify(nInfoTab),
                 contentType: 'application/json'
             });
-
-            Swal.close();
-
             if (response.statusId === 1) {
-                await Swal.fire({
-                    icon: 'success',
-                    title: 'Customer Deleted',
-                    text: response.message || 'Customer deleted successfully',
-                    returnFocus: false,
-                    didClose: () => {
-                        document.getElementById("Customer").focus();
-                    }
-                });
-
-                // ✅ Clear Form
-                nClearForm();
+                OrderList = response.OrderList;
+                renderCards();
             } else {
-                await Swal.fire({
-                    icon: 'warning',
-                    title: 'Customer Delete',
-                    text: response.message || 'Customer delete failed',
-                    returnFocus: false
-                });
+                toastr.warning("No order data found.");
             }
-
-        } catch (xhr) {
-            Swal.close();
-
-            await Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while deleting customer',
-                returnFocus: false
-            });
-
-            console.error("Delete Error:", xhr);
+        } catch (e) {
+            console.error("LoadGridViewData error:", e);
+            toastr.error("Failed to load orders.");
         }
     }
-    function ViewImage(Link)
-    {
-        const viewBtn = document.getElementById("ViewImageBtn");
-        viewBtn.style.display = "";
-        viewBtn.href = Link;
-        viewBtn.target = "_blank";
+
+    // ─── Render Cards ─────────────────────────────────────────
+    function renderCards() {
+        const q  = document.getElementById("searchInput").value.toLowerCase().trim();
+        const fs = document.getElementById("filterStatus").value;
+        const grid = document.getElementById("ordersGrid");
+        grid.innerHTML = "";
+
+        // ── Group by OrderNo ──
+        const allGrouped = {};
+        OrderList.forEach(row => {
+            const key = row.OrderNo || row.orderNo || "";
+            if (!allGrouped[key]) {
+                allGrouped[key] = {
+                    OrderNo:         key,
+                    CustomerName:    row.CustomerName    || row.customerName    || "",
+                    ContactNo:       row.ContactNo       || row.contactNo       || "",
+                    CustomerAddress: row.CustomerAddress || row.customerAddress || "",
+                    Floor:           row.Floor           || row.floor           || "",
+                    Street:          row.Street          || row.street          || "",
+                    OrderStatus:     row.OrderStatus     || row.orderStatus     || "Pending",
+                    Items: []
+                };
+            }
+            allGrouped[key].Items.push({
+                Product:        row.Product        || row.product        || "",
+                Quantity:       row.Quantity       || row.quantity       || 0,
+                Rate:           row.Rate           || row.rate           || 0,
+                DiscountAmount: row.DiscountAmount || row.discountAmount || 0
+            });
+        });
+
+        // ── Summary counts (always from full list) ──
+        const allOrders = Object.values(allGrouped);
+        document.getElementById("totalCount").textContent   = allOrders.length;
+        document.getElementById("cntPending").textContent   = allOrders.filter(o => o.OrderStatus === "Pending").length;
+        document.getElementById("cntInprocess").textContent = allOrders.filter(o => o.OrderStatus === "Inprocess").length;
+        document.getElementById("cntDelivered").textContent = allOrders.filter(o => o.OrderStatus === "Delivered").length;
+        document.getElementById("cntCancelled").textContent = allOrders.filter(o => o.OrderStatus === "Cancelled").length;
+
+        // ── Filter ──
+        const filtered = allOrders.filter(o => {
+            const matchQ = !q || o.OrderNo.toLowerCase().includes(q) || o.CustomerName.toLowerCase().includes(q);
+            const matchS = !fs || o.OrderStatus === fs;
+            return matchQ && matchS;
+        });
+
+        if (!filtered.length) {
+            grid.innerHTML = `<div class="col-12 text-center text-muted py-5" style="font-size:14px;">No orders found.</div>`;
+            return;
+        }
+
+        // ── Build cards ──
+        filtered.forEach(order => {
+            const total = order.Items.reduce((s, i) =>
+                s + (Number(i.Quantity) * Number(i.Rate) - Number(i.DiscountAmount)), 0);
+
+            const itemRows = order.Items.map(i => `
+                <tr>
+                    <td>${i.Product}</td>
+                    <td class="num">${i.Quantity}</td>
+                    <td class="num">Rs ${Number(i.Rate).toLocaleString()}</td>
+                    <td class="num" style="color:#e74c3c;">
+                        ${Number(i.DiscountAmount) > 0 ? '-Rs ' + Number(i.DiscountAmount).toLocaleString() : '-'}
+                    </td>
+                </tr>`).join("");
+
+            const statusOptions = STATUS_OPTIONS.map(s =>
+                `<option value="${s}" ${order.OrderStatus === s ? "selected" : ""}>${s}</option>`
+            ).join("");
+
+            const col = document.createElement("div");
+            col.className = "col-12 col-md-6 col-xl-4";
+            col.innerHTML = `
+                <div class="order-card">
+
+                    <!-- Header: Order No + Current Status Pill -->
+                    <div class="card-header-bar">
+                        <span class="order-no-badge"># ${order.OrderNo}</span>
+                        <span class="status-pill pill-${order.OrderStatus}">${order.OrderStatus}</span>
+                    </div>
+
+                    <!-- Customer Info -->
+    <div class="customer-section">
+        <div class="cust-avatar">${order.CustomerName ? order.CustomerName.charAt(0).toUpperCase() : '?'}</div>
+        <div>
+            <div class="customer-name">${order.CustomerName}</div>
+            <div class="customer-meta">
+                <i class="fas fa-phone-alt me-1"></i>${order.ContactNo}<br>
+                <i class="fas fa-map-marker-alt me-1"></i>
+                ${[order.Floor ? order.Floor + ' Floor' : '', order.Street, order.CustomerAddress].filter(Boolean).join(', ')}
+            </div>
+        </div>
+    </div>
+
+                    <!-- Items Table -->
+                    <div style="overflow-x:auto;">
+                        <table class="items-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th style="text-align:right">Qty</th>
+                                    <th style="text-align:right">Rate</th>
+                                    <th style="text-align:right">Disc</th>
+                                </tr>
+                            </thead>
+                            <tbody>${itemRows}</tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer: count + total -->
+                    <div class="card-footer-bar">
+                        <small style="color:#6c757d;">${order.Items.length} item(s)</small>
+                        <span class="total-amount">Total: Rs ${total.toLocaleString()}</span>
+                    </div>
+
+                    <!-- Status Update -->
+                    <div class="status-update-section">
+                        <select class="status-select-input" id="sel_${order.OrderNo}">
+                            ${statusOptions}
+                        </select>
+                        <button class="update-btn" onclick="updateStatus('${order.OrderNo}', this)">
+                            <i class="fas fa-check me-1"></i> Update
+                        </button>
+                    </div>
+
+                </div>`;
+
+            grid.appendChild(col);
+        });
     }
-    // Grid View
 
+    // // ─── Update Status ────────────────────────────────────────
+    // async function updateStatus(orderNo, btn) {
+    //     const sel       = document.getElementById("sel_" + orderNo);
+    //     const newStatus = sel.value;
 
+    //     btn.disabled  = true;
+    //     btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
 
+    //     try {
+    //         const response = await jQuery.ajax({
+    //             type: 'POST',
+    //             url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
+    //             data: JSON.stringify({ OrderNo: orderNo, OrderStatus: newStatus }),
+    //             contentType: 'application/json'
+    //         });
 
+    //         if (response.statusId === 1) {
+    //             // Local list update karo
+    //             OrderList.filter(x => (x.OrderNo || x.orderNo) === orderNo)
+    //                      .forEach(x => {
+    //                          x.OrderStatus = newStatus;
+    //                          x.orderStatus = newStatus;
+    //                      });
+    //             toastr.success("Order #" + orderNo + " → " + newStatus);
+    //             renderCards();
+    //         } else {
+    //             toastr.warning(response.message || "Update failed.");
+    //             btn.disabled  = false;
+    //             btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
+    //         }
+    //     } catch (e) {
+    //         toastr.error("Error updating status.");
+    //         btn.disabled  = false;
+    //         btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
+    //         console.error(e);
+    //     }
+    // }
 
+      async function updateStatus(orderNo, btn) {
+        const sel       = document.getElementById("sel_" + orderNo);
+        const newStatus = sel.value;
 
+        if (!newStatus) {
+            toastr.warning("Please select a status.");
+            return;
+        }
+
+        btn.disabled  = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
+
+        try {
+            const payload = { OrderNo: String(orderNo), OrderStatus: String(newStatus) };
+
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                dataType: 'json',
+                timeout: 15000
+            });
+    if (response.statusId === 1) {
+        OrderList.filter(x => String(x.OrderNo || x.orderNo) === String(orderNo))
+                 .forEach(x => {
+                     x.OrderStatus = newStatus;
+                     x.orderStatus = newStatus;
+                 });
+
+        // ✅ SP ka jo bhi message aaye woh show karo
+        toastr.success(response.message || "Status updated.");
+
+        btn.disabled  = false;
+        btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
+        setTimeout(() => renderCards(), 300);
+
+    } else {
+        // ❌ SP ka error message show karo
+        toastr.error(response.message || "Update failed.");
+        btn.disabled  = false;
+        btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
+    }
+
+        } catch (e) {
+            console.error("Update error:", e);
+            toastr.error("Error: " + (e.responseJSON?.message || e.statusText || "Request failed"));
+            btn.disabled  = false;
+            btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
+        }
+    }
+
+    // ─── Listeners ───────────────────────────────────────────
+    document.getElementById("searchInput").addEventListener("input", renderCards);
+    document.getElementById("filterStatus").addEventListener("change", renderCards);
 </script>
-
-<style>
-    select.form-control {
-        appearance: auto;
-        -webkit-appearance: auto;
-        -moz-appearance: auto;
-    }
-</style>
