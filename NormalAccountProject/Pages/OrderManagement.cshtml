@@ -210,6 +210,20 @@
             transform: none;
         }
 
+    /* ── Finalized Badge ── */
+    .finalized-section {
+        padding: 9px 14px;
+        background: #f7f9fc;
+        border-top: 1px solid #eef0f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 11px;
+        color: #aab0be;
+        font-weight: 500;
+    }
+
     /* ── Summary Cards ── */
     .summary-card {
         border-radius: 12px;
@@ -281,6 +295,7 @@
         }
     }
 </style>
+
 <div class="section__content section__content--p30">
     <div class="container-fluid">
 
@@ -331,7 +346,7 @@
                         <option value="Inprocess">Inprocess</option>
                         <option value="Delivered">Delivered</option>
                         <option value="Cancelled">Cancelled</option>
-                    </select>   
+                    </select>
                 </div>
             </div>
         </div>
@@ -379,8 +394,8 @@
 
     // ─── Render Cards ─────────────────────────────────────────
     function renderCards() {
-        const q  = document.getElementById("searchInput").value.toLowerCase().trim();
-        const fs = document.getElementById("filterStatus").value;
+        const q    = document.getElementById("searchInput").value.toLowerCase().trim();
+        const fs   = document.getElementById("filterStatus").value;
         const grid = document.getElementById("ordersGrid");
         grid.innerHTML = "";
 
@@ -447,6 +462,23 @@
                 `<option value="${s}" ${order.OrderStatus === s ? "selected" : ""}>${s}</option>`
             ).join("");
 
+            // ── Delivered / Cancelled پر dropdown اور button hide ──
+            const isFinalized = order.OrderStatus === "Delivered" || order.OrderStatus === "Cancelled";
+
+            const statusUpdateHTML = isFinalized
+                ? `<div class="finalized-section">
+                       <i class="fas fa-lock"></i>
+                       Order ${order.OrderStatus} &mdash; No further changes allowed
+                   </div>`
+                : `<div class="status-update-section">
+                       <select class="status-select-input" id="sel_${order.OrderNo}">
+                           ${statusOptions}
+                       </select>
+                       <button class="update-btn" onclick="updateStatus('${order.OrderNo}', this)">
+                           <i class="fas fa-check me-1"></i> Update
+                       </button>
+                   </div>`;
+
             const col = document.createElement("div");
             col.className = "col-12 col-md-6 col-xl-4";
             col.innerHTML = `
@@ -459,17 +491,17 @@
                     </div>
 
                     <!-- Customer Info -->
-    <div class="customer-section">
-        <div class="cust-avatar">${order.CustomerName ? order.CustomerName.charAt(0).toUpperCase() : '?'}</div>
-        <div>
-            <div class="customer-name">${order.CustomerName}</div>
-            <div class="customer-meta">
-                <i class="fas fa-phone-alt me-1"></i>${order.ContactNo}<br>
-                <i class="fas fa-map-marker-alt me-1"></i>
-                ${[order.Floor ? order.Floor + ' Floor' : '', order.Street, order.CustomerAddress].filter(Boolean).join(', ')}
-            </div>
-        </div>
-    </div>
+                    <div class="customer-section">
+                        <div class="cust-avatar">${order.CustomerName ? order.CustomerName.charAt(0).toUpperCase() : '?'}</div>
+                        <div>
+                            <div class="customer-name">${order.CustomerName}</div>
+                            <div class="customer-meta">
+                                <i class="fas fa-phone-alt me-1"></i>${order.ContactNo}<br>
+                                <i class="fas fa-map-marker-alt me-1"></i>
+                                ${[order.Floor ? order.Floor + ' Floor' : '', order.Street, order.CustomerAddress].filter(Boolean).join(', ')}
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Items Table -->
                     <div style="overflow-x:auto;">
@@ -492,15 +524,8 @@
                         <span class="total-amount">Total: Rs ${total.toLocaleString()}</span>
                     </div>
 
-                    <!-- Status Update -->
-                    <div class="status-update-section">
-                        <select class="status-select-input" id="sel_${order.OrderNo}">
-                            ${statusOptions}
-                        </select>
-                        <button class="update-btn" onclick="updateStatus('${order.OrderNo}', this)">
-                            <i class="fas fa-check me-1"></i> Update
-                        </button>
-                    </div>
+                    <!-- Status Update / Finalized Message -->
+                    ${statusUpdateHTML}
 
                 </div>`;
 
@@ -508,93 +533,57 @@
         });
     }
 
-    // // ─── Update Status ────────────────────────────────────────
-    // async function updateStatus(orderNo, btn) {
-    //     const sel       = document.getElementById("sel_" + orderNo);
-    //     const newStatus = sel.value;
+    // ─── Update Status ────────────────────────────────────────
+    async function updateStatus(orderNo, btn) {
+        const sel       = document.getElementById("sel_" + orderNo);
+        const newStatus = sel.value;
 
-    //     btn.disabled  = true;
-    //     btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
-
-    //     try {
-    //         const response = await jQuery.ajax({
-    //             type: 'POST',
-    //             url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
-    //             data: JSON.stringify({ OrderNo: orderNo, OrderStatus: newStatus }),
-    //             contentType: 'application/json'
-    //         });
-
-    //         if (response.statusId === 1) {
-    //             // Local list update karo
-    //             OrderList.filter(x => (x.OrderNo || x.orderNo) === orderNo)
-    //                      .forEach(x => {
-    //                          x.OrderStatus = newStatus;
-    //                          x.orderStatus = newStatus;
-    //                      });
-    //             toastr.success("Order #" + orderNo + " → " + newStatus);
-    //             renderCards();
-    //         } else {
-    //             toastr.warning(response.message || "Update failed.");
-    //             btn.disabled  = false;
-    //             btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
-    //         }
-    //     } catch (e) {
-    //         toastr.error("Error updating status.");
-    //         btn.disabled  = false;
-    //         btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
-    //         console.error(e);
-    //     }
-    // }
-
-     async function updateStatus(orderNo, btn) {
-    const sel       = document.getElementById("sel_" + orderNo);
-    const newStatus = sel.value;
-
-    if (!newStatus) {
-        toastr.warning("Please select a status.");
-        return;
-    }
-
-    btn.disabled  = true;
-    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
-
-    try {
-        const payload = { OrderNo: String(orderNo), OrderStatus: String(newStatus) };
-
-        const response = await jQuery.ajax({
-            type: 'POST',
-            url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
-            data: JSON.stringify(payload),
-            contentType: 'application/json',
-            dataType: 'json',
-            timeout: 15000
-        });
-
-        if (response.statusId == 1) {   // ✅ == (loose) — string/int دونوں handle ہوں گے
-            OrderList
-                .filter(x => String(x.OrderNo || x.orderNo) === String(orderNo))
-                .forEach(x => {
-                    x.OrderStatus = newStatus;
-                    x.orderStatus = newStatus;
-                });
-
-            toastr.success(response.message || "Status updated.");
-            renderCards();   // ✅ setTimeout ہٹا دیا
-
-        } else {
-            toastr.error(response.message || "Update failed.");
+        if (!newStatus) {
+            toastr.warning("Please select a status.");
+            return;
         }
 
-    } catch (e) {
-        console.error("Update error:", e);
-        toastr.error("Error: " + (e.responseJSON?.message || e.statusText || "Request failed"));
+        btn.disabled  = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
 
-    } finally {
-        // ✅ یہ ہمیشہ چلے گا — success ہو، error ہو، یا exception ہو
-        btn.disabled  = false;
-        btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
+        try {
+            const payload = { OrderNo: String(orderNo), OrderStatus: String(newStatus) };
+
+            const response = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
+                data: JSON.stringify(payload),
+                contentType: 'application/json',
+                dataType: 'json',
+                timeout: 15000
+            });
+
+            if (response.statusId == 1) {
+                // ✅ Local list update
+                OrderList
+                    .filter(x => String(x.OrderNo || x.orderNo) === String(orderNo))
+                    .forEach(x => {
+                        x.OrderStatus = newStatus;
+                        x.orderStatus = newStatus;
+                    });
+
+                toastr.success(response.message || "Status updated.");
+                renderCards(); // ✅ Card refresh
+
+            } else {
+                toastr.error(response.message || "Update failed.");
+            }
+
+        } catch (e) {
+            console.error("Update error:", e);
+            toastr.error("Error: " + (e.responseJSON?.message || e.statusText || "Request failed"));
+
+        } finally {
+            // ✅ ہمیشہ button reset ہوگا
+            btn.disabled  = false;
+            btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
+        }
     }
-}
 
     // ─── Listeners ───────────────────────────────────────────
     document.getElementById("searchInput").addEventListener("input", renderCards);
