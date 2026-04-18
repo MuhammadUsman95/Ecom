@@ -1,0 +1,746 @@
+﻿@page
+@model NormalAccountProject.Pages.ExpenseModel
+@{
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Transaction Form</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --card: #ffffff;
+            --primary: #1a73e8;
+            --primary-hover: #1557b0;
+            --danger: #dc3545;
+            --danger-hover: #b02a37;
+            --text: #1f2937;
+            --text-muted: #6b7280;
+            --border: #e2e5ea;
+            --input-bg: #f8f9fb;
+            --input-focus: #e8f0fe;
+            --header-bg: #1a73e8;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --radius: 10px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 30px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: var(--card);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        /* ── Title Bar ── */
+        .title-bar {
+            background: var(--header-bg);
+            color: #fff;
+            padding: 18px 28px;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+            .title-bar span {
+                font-size: 22px;
+            }
+
+        /* ── Form Body ── */
+        .form-body {
+            padding: 24px 28px 28px;
+        }
+
+        /* ── Header Fields ── */
+        .header-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+            .field-group label {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+            }
+
+            .field-group input,
+            .field-group select {
+                padding: 10px 12px;
+                border: 1.5px solid var(--border);
+                border-radius: 8px;
+                font-family: 'DM Sans', sans-serif;
+                font-size: 14px;
+                background: var(--input-bg);
+                color: var(--text);
+                transition: all 0.2s ease;
+                outline: none;
+                width: 100%;
+            }
+
+                .field-group input:focus,
+                .field-group select:focus {
+                    border-color: var(--primary);
+                    background: var(--input-focus);
+                    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.12);
+                }
+
+                .field-group input[readonly] {
+                    background: #eef1f5;
+                    color: var(--text-muted);
+                    cursor: default;
+                }
+
+        /* ── Divider ── */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0 0 20px 0;
+        }
+
+        /* ── Section Label ── */
+        .section-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 14px;
+        }
+
+        /* ── Entry Row ── */
+        .entry-row {
+            display: grid;
+            grid-template-columns: 2fr 1.2fr 1.2fr 1.2fr auto;
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 20px;
+        }
+
+            .entry-row .field-group input,
+            .entry-row .field-group select {
+                width: 100%;
+            }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: #fff;
+            height: 42px;
+            min-width: 80px;
+        }
+
+            .btn-add:hover {
+                background: var(--primary-hover);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+            }
+
+        .btn-save {
+            background: #16a34a;
+            color: #fff;
+        }
+
+            .btn-save:hover {
+                background: #15803d;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+            }
+
+        .btn-cancel {
+            background: var(--danger);
+            color: #fff;
+        }
+
+            .btn-cancel:hover {
+                background: var(--danger-hover);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+            }
+
+        .btn-delete {
+            background: transparent;
+            color: var(--danger);
+            padding: 4px 10px;
+            font-size: 18px;
+            border: 1.5px solid var(--danger);
+            border-radius: 6px;
+            min-width: unset;
+        }
+
+            .btn-delete:hover {
+                background: var(--danger);
+                color: #fff;
+            }
+
+        /* ── Table ── */
+        .table-wrapper {
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            background: #f1f3f7;
+            padding: 12px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            text-align: center;
+            border-bottom: 1.5px solid var(--border);
+        }
+
+        tbody td {
+            padding: 11px 14px;
+            text-align: center;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr {
+            transition: background 0.15s;
+        }
+
+            tbody tr:hover {
+                background: #f8fafd;
+            }
+
+            tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+        tfoot td,
+        tfoot th {
+            padding: 12px 14px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            background: #f8f9fb;
+            border-top: 2px solid var(--border);
+            color: var(--text);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 36px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+            .empty-state span {
+                font-size: 28px;
+                display: block;
+                margin-bottom: 8px;
+            }
+
+        /* ── Footer ── */
+        .footer {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+            .footer .btn {
+                min-width: 120px;
+                padding: 11px 24px;
+            }
+
+        /* ── Amount styling ── */
+        .amount-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        /* ── Loading ── */
+        .loading-text {
+            color: var(--text-muted);
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        /* ── Responsive ── */
+        @@media (max-width: 768px) {
+            .header-fields {
+                grid-template-columns: 1fr;
+            }
+
+            .entry-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+                .entry-row .field-group:first-child {
+                    grid-column: 1 / -1;
+                }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ── Title Bar ── -->
+        <div class="title-bar">
+            <span>📋</span> Expense Voucher
+        </div>
+
+        <div class="form-body">
+
+            <!-- ── Header Fields ── -->
+            <div class="header-fields">
+                <div class="field-group">
+                    <label>Expense No</label>
+                    <input type="text" id="expenseNo" placeholder="Loading..." readonly>
+                </div>
+
+                <div class="field-group">
+                    <label>Date</label>
+                    <input type="date" id="date">
+                </div>
+
+                <div class="field-group">
+                    <label>Customer</label>
+                    <select id="customerDropdown">
+                        <option value="">-- Select Customer --</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- ── Entry Section ── -->
+            <div class="section-label">Add Expense Entry</div>
+
+            <div class="entry-row">
+                <div class="field-group">
+                    <label>Expense Name</label>
+                    <select id="expenseName">
+                        <option value="">-- Select Expense --</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label>Amount</label>
+                    <input type="number" id="amount" placeholder="0.00">
+                </div>
+
+                <div class="field-group">
+                    <label>Discount</label>
+                    <input type="number" id="discount" placeholder="0.00">
+                </div>
+
+                <div class="field-group">
+                    <label>Total</label>
+                    <input type="number" id="total" placeholder="0.00" readonly>
+                </div>
+
+                <div class="field-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-add" onclick="addRow()">+ Add</button>
+                </div>
+            </div>
+
+            <!-- ── Data Table ── -->
+            <div class="table-wrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th style="width:5%">#</th>
+                            <th style="width:35%">Expense Name</th>
+                            <th style="width:18%">Amount</th>
+                            <th style="width:18%">Discount</th>
+                            <th style="width:18%">Total</th>
+                            <th style="width:6%"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tableBody">
+                        <tr id="emptyRow">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <span>📭</span>
+                                    No entries added yet
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Grand Total</th>
+                            <th id="sumAmount" class="amount-cell">0.00</th>
+                            <th id="sumDiscount" class="amount-cell">0.00</th>
+                            <th id="sumTotal" class="amount-cell">0.00</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- ── Footer ── -->
+            <div class="footer">
+                <button class="btn btn-cancel" onclick="cancelForm()">✕ Cancel</button>
+                <button class="btn btn-save" onclick="saveForm()">✓ Save</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+
+        // ══════════════════════════════════════
+        //  Page Load — Fetch Voucher No & Customers
+        // ══════════════════════════════════════
+        document.addEventListener("DOMContentLoaded", function () {
+            // Set today's date
+            document.getElementById("date").valueAsDate = new Date();
+
+            // Load Expense Voucher Number
+            loadExpenseVoucherNo();
+
+            // Load Customer Dropdown
+            loadCustomerDropdown();
+
+            // Load Expense Type Dropdown
+            loadExpenseTypeDropdown();
+        });
+
+        // ── Load Expense Voucher No from Controller ──
+        async function loadExpenseVoucherNo() {
+            try {
+                const response = await fetch("/Expense/nLoadExpenseVoucherNo", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({})
+                });
+                const data = await response.json();
+                if (data.statusId === 1 && data.expenseNo) {
+                    document.getElementById("expenseNo").value = data.expenseNo;
+                } else {
+                    document.getElementById("expenseNo").value = "N/A";
+                }
+            } catch (error) {
+                console.error("Error loading voucher no:", error);
+                document.getElementById("expenseNo").value = "Error";
+            }
+        }
+
+        // ── Load Customer Dropdown from Controller ──
+        async function loadCustomerDropdown() {
+            const dropdown = document.getElementById("customerDropdown");
+            try {
+                const response = await fetch("/Expense/nLoadExpenseCustomerDropDown", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({})
+                });
+                const data = await response.json();
+                if (data.statusId === 1 && data.customers) {
+                    data.customers.forEach(function (cust) {
+                        const option = document.createElement("option");
+                        option.value = cust.customerCode;
+                        option.textContent = cust.customerName;
+                        dropdown.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error("Error loading customers:", error);
+            }
+        }
+
+        // ── Load Expense Type Dropdown from Controller ──
+        async function loadExpenseTypeDropdown() {
+            const dropdown = document.getElementById("expenseName");
+            try {
+                const response = await fetch("/Expense/nLoadExpenseTypeDropDown", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({})
+                });
+                const data = await response.json();
+                if (data.statusId === 1 && data.expenseTypes) {
+                    data.expenseTypes.forEach(function (item) {
+                        const option = document.createElement("option");
+                        option.value = item.expenseTypeId;
+                        option.textContent = item.expenseType;
+                        dropdown.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error("Error loading expense types:", error);
+            }
+        }
+
+        // ══════════════════════════════════════
+        //  Entry Logic
+        // ══════════════════════════════════════
+        const amountInput = document.getElementById("amount");
+        const discountInput = document.getElementById("discount");
+        const totalInput = document.getElementById("total");
+        let rowCounter = 0;
+        let detailRows = []; // Track all detail rows for saving
+
+        // Auto-calculate Total
+        function calculateTotal() {
+            const amount = parseFloat(amountInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+            totalInput.value = (amount - discount).toFixed(2);
+        }
+
+        amountInput.addEventListener("input", calculateTotal);
+        discountInput.addEventListener("input", calculateTotal);
+
+        // ── Enter Key Navigation: Expense → Amount → Discount → Add ──
+        document.getElementById("expenseName").addEventListener("change", function () {
+            if (this.value) amountInput.focus();
+        });
+
+        amountInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                discountInput.focus();
+            }
+        });
+
+        discountInput.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                addRow();
+            }
+        });
+
+        function addRow() {
+            const expenseDropdown = document.getElementById("expenseName");
+            const expenseTypeId = expenseDropdown.value;
+            const expenseTypeName = expenseDropdown.options[expenseDropdown.selectedIndex].text;
+            const amount = parseFloat(amountInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+            const total = amount - discount;
+
+            if (!expenseTypeId) {
+                alert("Please select an Expense Name.");
+                expenseDropdown.focus();
+                return;
+            }
+
+            if (amount <= 0) {
+                alert("Please enter a valid Amount.");
+                amountInput.focus();
+                return;
+            }
+
+            // Remove empty state row
+            const emptyRow = document.getElementById("emptyRow");
+            if (emptyRow) emptyRow.remove();
+
+            rowCounter++;
+            const tbody = document.getElementById("tableBody");
+            const row = document.createElement("tr");
+            row.id = "row_" + rowCounter;
+            row.innerHTML = `
+                <td>${rowCounter}</td>
+                <td style="text-align:left; padding-left:16px;">${expenseTypeName}</td>
+                <td class="amount-cell">${amount.toFixed(2)}</td>
+                <td class="amount-cell">${discount.toFixed(2)}</td>
+                <td class="amount-cell">${total.toFixed(2)}</td>
+                <td>
+                    <button class="btn btn-delete" onclick="deleteRow('row_${rowCounter}', ${amount}, ${discount}, ${total})">✕</button>
+                </td>
+            `;
+
+            // Add animation
+            row.style.animation = "fadeIn 0.3s ease";
+            tbody.appendChild(row);
+
+            updateTotals(amount, discount, total);
+
+            // Track detail row data for saving
+            detailRows.push({
+                rowId: "row_" + rowCounter,
+                expenseTypeId: parseInt(expenseTypeId),
+                amount: amount,
+                discountAmount: discount
+            });
+
+            // Clear inputs
+            expenseDropdown.value = "";
+            amountInput.value = "";
+            discountInput.value = "";
+            totalInput.value = "";
+            expenseDropdown.focus();
+        }
+
+        function deleteRow(rowId, amount, discount, total) {
+            const row = document.getElementById(rowId);
+            if (row) {
+                row.style.opacity = "0";
+                row.style.transform = "translateX(20px)";
+                row.style.transition = "all 0.25s ease";
+                setTimeout(() => {
+                    row.remove();
+                    updateTotals(-amount, -discount, -total);
+
+                    // Remove from detailRows array
+                    detailRows = detailRows.filter(d => d.rowId !== rowId);
+
+                    // Show empty state if no rows
+                    const tbody = document.getElementById("tableBody");
+                    if (tbody.children.length === 0) {
+                        const emptyRow = document.createElement("tr");
+                        emptyRow.id = "emptyRow";
+                        emptyRow.innerHTML = `
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <span>📭</span>
+                                    No entries added yet
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(emptyRow);
+                    }
+                }, 250);
+            }
+        }
+
+        function updateTotals(amount, discount, total) {
+            const sumAmt = parseFloat(document.getElementById("sumAmount").innerText) + amount;
+            const sumDisc = parseFloat(document.getElementById("sumDiscount").innerText) + discount;
+            const sumTot = parseFloat(document.getElementById("sumTotal").innerText) + total;
+
+            document.getElementById("sumAmount").innerText = sumAmt.toFixed(2);
+            document.getElementById("sumDiscount").innerText = sumDisc.toFixed(2);
+            document.getElementById("sumTotal").innerText = sumTot.toFixed(2);
+        }
+
+        // ══════════════════════════════════════
+        //  Footer Actions
+        // ══════════════════════════════════════
+        async function saveForm() {
+            const tbody = document.getElementById("tableBody");
+            if (tbody.querySelector("#emptyRow")) {
+                alert("Please add at least one entry before saving.");
+                return;
+            }
+
+            const expenseNo = document.getElementById("expenseNo").value;
+            const date = document.getElementById("date").value;
+            const customerCode = document.getElementById("customerDropdown").value;
+            const totalAmount = parseFloat(document.getElementById("sumTotal").innerText) || 0;
+
+            if (!date) {
+                alert("Please select a Date.");
+                return;
+            }
+
+            if (!customerCode) {
+                alert("Please select a Customer.");
+                return;
+            }
+
+            const payload = {
+                expenseNo: expenseNo,
+                customerCode: parseInt(customerCode),
+                date: date,
+                totalAmount: totalAmount,
+                details: detailRows.map(d => ({
+                    expenseTypeId: d.expenseTypeId,
+                    amount: d.amount,
+                    discountAmount: d.discountAmount
+                }))
+            };
+
+            try {
+                const response = await fetch("/Expense/nSaveExpense", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if (data.statusId === 1) {
+                    alert("Expense saved successfully!");
+                    location.reload();
+                } else {
+                    alert("Error: " + (data.message || "Failed to save."));
+                }
+            } catch (error) {
+                console.error("Save error:", error);
+                alert("Error saving expense. Please try again.");
+            }
+        }
+
+        function cancelForm() {
+            if (confirm("Are you sure you want to cancel? All data will be lost.")) {
+                location.reload();
+            }
+        }
+    </script>
+
+    <style>
+        @@keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+</body>
+</html>
