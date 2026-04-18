@@ -546,57 +546,55 @@
     //     }
     // }
 
-      async function updateStatus(orderNo, btn) {
-        const sel       = document.getElementById("sel_" + orderNo);
-        const newStatus = sel.value;
+     async function updateStatus(orderNo, btn) {
+    const sel       = document.getElementById("sel_" + orderNo);
+    const newStatus = sel.value;
 
-        if (!newStatus) {
-            toastr.warning("Please select a status.");
-            return;
+    if (!newStatus) {
+        toastr.warning("Please select a status.");
+        return;
+    }
+
+    btn.disabled  = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
+
+    try {
+        const payload = { OrderNo: String(orderNo), OrderStatus: String(newStatus) };
+
+        const response = await jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
+            data: JSON.stringify(payload),
+            contentType: 'application/json',
+            dataType: 'json',
+            timeout: 15000
+        });
+
+        if (response.statusId == 1) {   // ✅ == (loose) — string/int دونوں handle ہوں گے
+            OrderList
+                .filter(x => String(x.OrderNo || x.orderNo) === String(orderNo))
+                .forEach(x => {
+                    x.OrderStatus = newStatus;
+                    x.orderStatus = newStatus;
+                });
+
+            toastr.success(response.message || "Status updated.");
+            renderCards();   // ✅ setTimeout ہٹا دیا
+
+        } else {
+            toastr.error(response.message || "Update failed.");
         }
 
-        btn.disabled  = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
+    } catch (e) {
+        console.error("Update error:", e);
+        toastr.error("Error: " + (e.responseJSON?.message || e.statusText || "Request failed"));
 
-        try {
-            const payload = { OrderNo: String(orderNo), OrderStatus: String(newStatus) };
-
-            const response = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
-                data: JSON.stringify(payload),
-                contentType: 'application/json',
-                dataType: 'json',
-                timeout: 15000
-            });
-    if (response.statusId === 1) {
-        OrderList.filter(x => String(x.OrderNo || x.orderNo) === String(orderNo))
-                 .forEach(x => {
-                     x.OrderStatus = newStatus;
-                     x.orderStatus = newStatus;
-                 });
-
-        // ✅ SP ka jo bhi message aaye woh show karo
-        toastr.success(response.message || "Status updated.");
-
-        btn.disabled  = false;
-        btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
-        setTimeout(() => renderCards(), 300);
-
-    } else {
-        // ❌ SP ka error message show karo
-        toastr.error(response.message || "Update failed.");
+    } finally {
+        // ✅ یہ ہمیشہ چلے گا — success ہو، error ہو، یا exception ہو
         btn.disabled  = false;
         btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
     }
-
-        } catch (e) {
-            console.error("Update error:", e);
-            toastr.error("Error: " + (e.responseJSON?.message || e.statusText || "Request failed"));
-            btn.disabled  = false;
-            btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
-        }
-    }
+}
 
     // ─── Listeners ───────────────────────────────────────────
     document.getElementById("searchInput").addEventListener("input", renderCards);
