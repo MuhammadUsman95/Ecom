@@ -15,7 +15,7 @@
         transition: box-shadow 0.25s, transform 0.2s;
         display: flex;
         flex-direction: column;
-        height: 360px; /* ✅ Fixed height */
+        height: 310px; /* FIX 4: Height kam ki — 360 → 310 */
     }
 
         .order-card:hover {
@@ -33,12 +33,23 @@
         flex-shrink: 0;
     }
 
+    /* FIX 6: Order No styling — "Order No :" text, light black color */
     .order-no-badge {
-        font-size: 14px;
-        font-weight: 700;
-        color: #fff;
-        letter-spacing: 0.5px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #e8e8e8;
+        letter-spacing: 0.3px;
     }
+
+        .order-no-badge span.order-no-value {
+            font-weight: 700;
+            color: #1a1a1a;
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-left: 4px;
+        }
 
     .status-pill {
         display: inline-block;
@@ -107,18 +118,45 @@
         font-size: 11px;
         color: #7a8499;
         margin-top: 1px;
-        line-height: 1.5;
+        line-height: 1.6;
+    }
+
+    /* FIX 2 & 3: Phone & WhatsApp clickable links */
+    .contact-link {
+        color: #7a8499;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        transition: color 0.2s;
+    }
+
+        .contact-link:hover {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .contact-link.whatsapp:hover {
+            color: #25d366;
+        }
+
+    .contact-icon {
+        width: 13px;
+        height: 13px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
     }
 
     /* ── Items Table Wrapper — Scrollable ── */
     .items-table-wrapper {
-        flex: 1; /* ✅ باقی space لے لو */
-        overflow-y: auto; /* ✅ 2 سے زیادہ items پر scroll */
+        flex: 1;
+        overflow-y: auto;
         overflow-x: auto;
-        min-height: 0; /* flex scroll fix */
+        min-height: 0;
     }
 
-        /* Custom scrollbar */
         .items-table-wrapper::-webkit-scrollbar {
             width: 4px;
         }
@@ -143,15 +181,15 @@
         font-size: 12px;
     }
 
-        .items-table thead tr {
-            background: #f7f9fc;
-        }
-
         .items-table thead {
             position: sticky;
             top: 0;
             z-index: 1;
         }
+
+            .items-table thead tr {
+                background: #f7f9fc;
+            }
 
         .items-table th {
             padding: 6px 12px;
@@ -231,11 +269,13 @@
             background: #fff;
         }
 
+        /* FIX 1: Disabled state properly styled */
         .status-select-input:disabled {
             background: #f0f0f0;
             color: #aaa;
             cursor: not-allowed;
             border-color: #e0e0e0;
+            opacity: 0.7;
         }
 
     .update-btn {
@@ -251,47 +291,31 @@
         transition: background 0.2s, transform 0.15s;
     }
 
-        .update-btn:hover {
+        .update-btn:hover:not(:disabled) {
             background: #1254b0;
             transform: scale(1.02);
         }
 
+        /* FIX 1: Disabled button properly styled */
         .update-btn:disabled {
             background: #a8c4f0;
             cursor: not-allowed;
             transform: none;
+            opacity: 0.7;
         }
 
-    /* ── Finalized Badge ── */
-    .finalized-section {
-        padding: 9px 14px;
-        background: #f7f9fc;
-        border-top: 1px solid #eef0f5;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        font-size: 11px;
-        color: #aab0be;
-        font-weight: 500;
-        flex-shrink: 0;
-    }
-
-    .summary-card:hover {
-        transform: translateY(-2px);
-    }
-
+    /* FIX 5: finalized-section removed — no longer needed */
 
     /* ── Summary Cards ── */
     .summary-card {
         border-radius: 10px;
-        padding: 8px 6px; /* ✅ کم padding */
+        padding: 8px 6px;
         text-align: center;
         font-size: 11px;
         font-weight: 600;
         border: none;
         transition: transform 0.2s;
-        height: 64px; /* ✅ Fixed height */
+        height: 64px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -323,7 +347,7 @@
     }
 
     .summary-count {
-        font-size: 18px; /* ✅ چھوٹا number */
+        font-size: 18px;
         font-weight: 800;
         display: block;
         line-height: 1.2;
@@ -356,22 +380,67 @@
     .search-section {
         background: #fff;
         border-radius: 12px;
-        padding: 12px 14px;
+        padding: 7px 12px;
         box-shadow: 0 1px 5px rgba(0,0,0,0.06);
         margin-bottom: 1rem;
         border: 1px solid #eef0f5;
     }
 
+    /* ── Refresh Button ── */
+    .refresh-btn {
+        padding: 6px 12px;
+        background: #f0f4ff;
+        border: 1.5px solid #c5d5f8;
+        border-radius: 8px;
+        color: #1a73e8;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.2s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+        .refresh-btn:hover {
+            background: #dce8ff;
+            transform: scale(1.03);
+        }
+
+    /* ── Auto-refresh countdown badge ── */
+    .refresh-badge {
+        font-size: 11px;
+        color: #9aa3b5;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    @@keyframes spinOnce {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .spin-icon {
+        animation: spinOnce 0.6s linear;
+    }
+
     /* ── Responsive ── */
     @@media (max-width: 1199px) {
         .order-card {
-            height: 370px;
+            height: 320px;
         }
     }
 
     @@media (max-width: 767px) {
         .order-card {
-            height: 350px;
+            height: 310px;
         }
 
         .customer-name {
@@ -381,7 +450,7 @@
 
     @@media (max-width: 575px) {
         .order-card {
-            height: 340px;
+            height: 300px;
         }
 
         .items-table th, .items-table td {
@@ -412,87 +481,310 @@
             padding: 6px 10px;
             font-size: 11px;
         }
+
+        .refresh-badge {
+            display: none;
+        }
     }
+    /* ══════════════════════════════════════════
+           PAGE LAYOUT — Fixed top + scroll cards + fixed footer
+           ══════════════════════════════════════════ */
+
+    /* ── Page wrapper — fills remaining space after admin navbar ── */
+    .om-page-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        background: #f4f6fb;
+        z-index: 5;
+        /* JS will set top dynamically based on navbar height */
+    }
+
+    /* ── Fixed Top Panel ── */
+    .om-fixed-top {
+        flex-shrink: 0;
+        background: #f4f6fb;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .om-top-inner {
+        padding: 6px 10px 5px 10px;
+    }
+
+    /* Title row inside fixed top */
+    .om-title-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+
+    .om-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0;
+    }
+
+    /* ── Scrollable Cards Area ── */
+    .om-scroll-area {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+        .om-scroll-area::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .om-scroll-area::-webkit-scrollbar-track {
+            background: #f0f2f7;
+        }
+
+        .om-scroll-area::-webkit-scrollbar-thumb {
+            background: #c5cfe0;
+            border-radius: 4px;
+        }
+
+            .om-scroll-area::-webkit-scrollbar-thumb:hover {
+                background: #1a73e8;
+            }
+
+    /* ── Fixed Footer ── */
+    .om-fixed-footer {
+        flex-shrink: 0;
+        background: #fff;
+        border-top: 1px solid #eef0f5;
+        text-align: center;
+        font-size: 11px;
+        color: #aaa;
+        padding: 5px 12px;
+        z-index: 10;
+    }
+
+        .om-fixed-footer strong {
+            color: #555;
+        }
+
+    /* ── Mobile tweaks ── */
+    @@media (max-width: 575px) {
+        .om-top-inner {
+            padding: 5px 8px 4px 8px;
+        }
+
+        .om-title {
+            font-size: 14px;
+        }
+
+        .summary-card {
+            height: 56px;
+            font-size: 10px;
+        }
+
+        .summary-count {
+            font-size: 15px;
+        }
+
+        .search-section {
+            padding: 5px 8px !important;
+        }
+
+        .refresh-btn span {
+            display: none;
+        }
+
+        .refresh-btn {
+            padding: 6px 10px;
+        }
+
+        .refresh-badge {
+            display: none;
+        }
+    }
+
 </style>
 
-<div class="section__content section__content--p30">
-    <div class="container-fluid">
+<div class="om-page-wrapper">
 
-        <!-- Title -->
-        <div class="row mb-3">
-            <div class="col-12 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                <h2 class="title-1 mb-0">Order Management</h2>
-                <small class="text-muted">Total Orders: <strong id="totalCount">0</strong></small>
+    <!-- ═══ FIXED TOP PANEL ═══ -->
+    <div class="om-fixed-top">
+        <div class="om-top-inner">
+
+            <!-- Title Row -->
+            <div class="om-title-row">
+                <h2 class="om-title">Order Management</h2>
+                <small class="text-muted">Total: <strong id="totalCount">0</strong></small>
             </div>
+
+            <!-- Summary Strip -->
+            <div class="row g-2 mb-2">
+                <div class="col-3">
+                    <div class="summary-card sc-pending">
+                        <span class="summary-count" id="cntPending">0</span>Pending
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="summary-card sc-inprocess">
+                        <span class="summary-count" id="cntInprocess">0</span>Inprocess
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="summary-card sc-delivered">
+                        <span class="summary-count" id="cntDelivered">0</span>Delivered
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="summary-card sc-cancelled">
+                        <span class="summary-count" id="cntCancelled">0</span>Cancelled
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search + Filter + Refresh -->
+            <div class="search-section mb-0">
+                <div class="d-flex align-items-center gap-2">
+                    <div style="min-width:0; flex:1;">
+                        <input type="text" id="searchInput" class="form-control form-control-sm"
+                               placeholder="&#128269; Order No / Customer name...">
+                    </div>
+                    <div style="min-width:100px; max-width:130px;">
+                        <select id="filterStatus" class="form-select form-select-sm">
+                            <option value="">All Status</option>
+                            <option value="Pending" selected>Pending</option>
+                            <option value="Inprocess">Inprocess</option>
+                            <option value="Delivered">Delivered</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <button class="refresh-btn" onclick="manualRefresh(this)" title="Refresh Now">
+                        <i class="fas fa-sync-alt" id="refreshIcon"></i>
+                        <span>Refresh</span>
+                    </button>
+                    <span class="refresh-badge">
+                        <i class="fas fa-clock me-1"></i>Auto: <strong id="countdownTxt">2:00</strong>
+                    </span>
+                </div>
+            </div>
+
         </div>
-        <hr class="mt-0 mb-3">
-
-        <!-- Summary Strip -->
-        <!-- Summary Strip -->
-        <div class="row g-2 mb-3">
-            <div class="col-3">
-                <!-- ✅ col-6 col-md-3 → col-3 چاروں ایک line میں -->
-                <div class="summary-card sc-pending">
-                    <span class="summary-count" id="cntPending">0</span>Pending
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="summary-card sc-inprocess">
-                    <span class="summary-count" id="cntInprocess">0</span>Inprocess
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="summary-card sc-delivered">
-                    <span class="summary-count" id="cntDelivered">0</span>Delivered
-                </div>
-            </div>
-            <div class="col-3">
-                <div class="summary-card sc-cancelled">
-                    <span class="summary-count" id="cntCancelled">0</span>Cancelled
-                </div>
-            </div>
-        </div>
-
-        <!-- Search & Filter -->
-        <div class="search-section">
-            <div class="row g-2">
-                <div class="col-12 col-md-7">
-                    <input type="text" id="searchInput" class="form-control"
-                           placeholder="&#128269;  Search by Order No or Customer name...">
-                </div>
-                <div class="col-12 col-md-5">
-                    <select id="filterStatus" class="form-select">
-                        <option value="">All Status</option>
-                        <option value="Pending" selected>Pending</option>
-                        <option value="Inprocess">Inprocess</option>
-                        <option value="Delivered">Delivered</option>
-                        <option value="Cancelled">Cancelled</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Cards Grid -->
-        <div id="ordersGrid" class="row g-3"></div>
-
-        <hr class="mt-4">
-        <p class="text-center mb-0" style="font-size:13px;color:#aaa;">
-            Software Developed By: <strong style="color:#555;">UT Designer</strong>
-        </p>
-
     </div>
+
+    <!-- ═══ SCROLLABLE CARDS AREA ═══ -->
+    <div class="om-scroll-area">
+        <div class="container-fluid py-2">
+            <div id="ordersGrid" class="row g-3"></div>
+        </div>
+    </div>
+
+    <!-- ═══ FIXED FOOTER ═══ -->
+    <div class="om-fixed-footer">
+        Software Developed By: <strong>UT Designer</strong>
+    </div>
+
 </div>
 
 <script>
     let OrderList = [];
-    const STATUS_OPTIONS = ["Pending", "Inprocess", "Delivered", "Cancelled"];
+    const STATUS_OPTIONS   = ["Pending", "Inprocess", "Delivered", "Cancelled"];
+    const AUTO_REFRESH_SEC = 120;
+    let   countdownVal     = AUTO_REFRESH_SEC;
+    let   countdownTimer   = null;
 
     document.addEventListener("DOMContentLoaded", async function () {
+        adjustLayout();
+        window.addEventListener('resize', adjustLayout);
         await LoadGridViewData();
+        startCountdown();
     });
 
+    // ─── Auto-detect navbar height and adjust wrapper top ────
+    function adjustLayout() {
+        const wrapper = document.querySelector('.om-page-wrapper');
+        if (!wrapper) return;
+
+        // Common admin navbar selectors — try each until found
+        const navSelectors = [
+            '.navbar', '.topbar', '.top-bar', '.header-bar',
+            'nav.navbar', '.admin-header', '.page-header',
+            '[class*="navbar"]', '[class*="topbar"]', '[class*="header"]'
+        ];
+
+        let navH = 0;
+        for (const sel of navSelectors) {
+            const el = document.querySelector(sel);
+            if (el && el.offsetHeight > 30) {
+                navH = el.getBoundingClientRect().bottom;
+                break;
+            }
+        }
+
+        // Also check left sidebar width for desktop
+        const sideSelectors = ['.sidebar', '.side-bar', '.left-sidebar', '[class*="sidebar"]'];
+        let sideW = 0;
+        for (const sel of sideSelectors) {
+            const el = document.querySelector(sel);
+            if (el && el.offsetWidth > 30 && el.offsetWidth < window.innerWidth * 0.5) {
+                sideW = el.offsetWidth;
+                break;
+            }
+        }
+
+        wrapper.style.top  = (navH || 0) + 'px';
+        wrapper.style.left = (sideW || 0) + 'px';
+    }
+
+    // ─── Auto-refresh Countdown ───────────────────────────────
+    function startCountdown() {
+        clearInterval(countdownTimer);
+        countdownVal = AUTO_REFRESH_SEC;
+        updateCountdownDisplay();
+        countdownTimer = setInterval(async () => {
+            countdownVal--;
+            updateCountdownDisplay();
+            if (countdownVal <= 0) {
+                countdownVal = AUTO_REFRESH_SEC;
+                await silentRefresh();
+            }
+        }, 1000);
+    }
+
+    function updateCountdownDisplay() {
+        const m  = String(Math.floor(countdownVal / 60)).padStart(1, '0');
+        const s  = String(countdownVal % 60).padStart(2, '0');
+        const el = document.getElementById("countdownTxt");
+        if (el) el.textContent = m + ':' + s;
+    }
+
+    async function silentRefresh() {
+        await LoadGridViewData(false);
+        const icon = document.getElementById("refreshIcon");
+        if (icon) {
+            icon.classList.add("spin-icon");
+            setTimeout(() => icon.classList.remove("spin-icon"), 650);
+        }
+    }
+
+    async function manualRefresh(btn) {
+        const icon = document.getElementById("refreshIcon");
+        btn.disabled = true;
+        if (icon) icon.classList.add("spin-icon");
+        await LoadGridViewData(false);
+        startCountdown();
+        setTimeout(() => {
+            btn.disabled = false;
+            if (icon) icon.classList.remove("spin-icon");
+        }, 700);
+    }
+
     // ─── Load Data ────────────────────────────────────────────
-    async function LoadGridViewData() {
+    async function LoadGridViewData(showLoader = true) {
         const nInfoTab = { Userid: localStorage.getItem("userId") || "" };
         try {
             const response = await jQuery.ajax({
@@ -505,11 +797,11 @@
                 OrderList = response.OrderList;
                 renderCards();
             } else {
-                toastr.warning("No order data found.");
+                if (showLoader) toastr.warning("No order data found.");
             }
         } catch (e) {
             console.error("LoadGridViewData error:", e);
-            toastr.error("Failed to load orders.");
+            if (showLoader) toastr.error("Failed to load orders.");
         }
     }
 
@@ -544,7 +836,7 @@
             });
         });
 
-        // ── Summary counts (always from full list) ──
+        // ── Summary counts ──
         const allOrders = Object.values(allGrouped);
         document.getElementById("totalCount").textContent   = allOrders.length;
         document.getElementById("cntPending").textContent   = allOrders.filter(o => o.OrderStatus === "Pending").length;
@@ -583,50 +875,66 @@
                 `<option value="${s}" ${order.OrderStatus === s ? "selected" : ""}>${s}</option>`
             ).join("");
 
-            // ── Already Delivered/Cancelled → lock ──
-            const isFinalized = order.OrderStatus === "Delivered" || order.OrderStatus === "Cancelled";
+            // FIX 5: Delivered/Cancelled orders bhi status update section show karein
+            // (finalized-section removed completely — Update button always visible)
+            const statusUpdateHTML = `
+                <div class="status-update-section">
+                    <select class="status-select-input" id="sel_${order.OrderNo}">
+                        ${statusOptions}
+                    </select>
+                    <button class="update-btn"
+                            id="btn_${order.OrderNo}"
+                            onclick="updateStatus('${order.OrderNo}', this)">
+                        <i class="fas fa-check me-1"></i> Update
+                    </button>
+                </div>`;
 
-            const statusUpdateHTML = isFinalized
-                ? `<div class="finalized-section">
-                       <i class="fas fa-lock"></i>
-                       Order ${order.OrderStatus} &mdash; No further changes allowed
-                   </div>`
-                : `<div class="status-update-section">
-                       <select class="status-select-input" id="sel_${order.OrderNo}">
-                           ${statusOptions}
-                       </select>
-                       <button class="update-btn"
-                               id="btn_${order.OrderNo}"
-                               onclick="updateStatus('${order.OrderNo}', this)">
-                           <i class="fas fa-check me-1"></i> Update
-                       </button>
-                   </div>`;
+            // FIX 2 & 3: Phone call link + WhatsApp link
+            const cleanPhone = order.ContactNo.replace(/\D/g, '');
+            const contactHTML = order.ContactNo ? `
+                <a href="tel:${order.ContactNo}" class="contact-link me-2" title="Call">
+                    <svg class="contact-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <path d="M2 2.5C2 2 2.5 1.5 3 1.5h2l1 3-1.5 1.5c.9 1.8 2.2 3.1 4 4L10 9l3 1v2c0 .5-.5 1-1 1C5.5 13 2 7 2 2.5z"/>
+                    </svg>
+                    ${order.ContactNo}
+                </a>
+                <a href="https://wa.me/${cleanPhone}" class="contact-link whatsapp" title="WhatsApp" target="_blank">
+                    <svg class="contact-icon" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 1a7 7 0 0 0-6.07 10.47L1 15l3.65-.96A7 7 0 1 0 8 1zm0 12.7a5.7 5.7 0 0 1-2.9-.8l-.21-.12-2.17.57.58-2.1-.14-.22A5.7 5.7 0 1 1 8 13.7zm3.13-4.26c-.17-.09-.99-.49-1.14-.54-.16-.06-.27-.08-.38.08s-.44.54-.54.65-.2.12-.37.04a4.55 4.55 0 0 1-1.34-.83 5.02 5.02 0 0 1-.93-1.16c-.1-.17-.01-.26.07-.35l.25-.29c.08-.1.1-.17.16-.28.05-.11.03-.21-.02-.29-.04-.09-.38-.91-.52-1.24-.14-.33-.28-.28-.38-.29h-.32c-.11 0-.29.04-.44.21s-.58.57-.58 1.38.6 1.6.68 1.71c.09.11 1.18 1.8 2.86 2.52.4.17.71.28.95.35.4.13.77.11 1.06.07.32-.05.99-.4 1.13-.79.14-.39.14-.72.1-.79-.05-.07-.16-.11-.33-.2z"/>
+                    </svg>
+                    WA
+                </a>` : `<span style="color:#ccc;">—</span>`;
 
             const col = document.createElement("div");
             col.className = "col-12 col-md-6 col-xl-4";
             col.innerHTML = `
                 <div class="order-card">
 
-                    <!-- Header -->
                     <div class="card-header-bar">
-                        <span class="order-no-badge"># ${order.OrderNo}</span>
+                        <!-- FIX 6: "Order No :" label + value in black badge -->
+                        <span class="order-no-badge">
+                            Order No : <span class="order-no-value">${order.OrderNo}</span>
+                        </span>
                         <span class="status-pill pill-${order.OrderStatus}">${order.OrderStatus}</span>
                     </div>
 
-                    <!-- Customer Info -->
                     <div class="customer-section">
                         <div class="cust-avatar">${order.CustomerName ? order.CustomerName.charAt(0).toUpperCase() : '?'}</div>
-                        <div style="overflow:hidden;">
+                        <div style="overflow:hidden; width:100%;">
                             <div class="customer-name">${order.CustomerName}</div>
                             <div class="customer-meta">
-                                <i class="fas fa-phone-alt me-1"></i>${order.ContactNo}<br>
-                                <i class="fas fa-map-marker-alt me-1"></i>
-                                ${[order.Floor ? order.Floor + ' Floor' : '', order.Street, order.CustomerAddress].filter(Boolean).join(', ')}
+                                <!-- FIX 2 & 3: Phone + WhatsApp clickable -->
+                                <div class="d-flex align-items-center flex-wrap gap-1 mb-1">
+                                    ${contactHTML}
+                                </div>
+                                <div>
+                                    <i class="fas fa-map-marker-alt me-1"></i>
+                                    ${[order.Floor ? order.Floor + ' Floor' : '', order.Street, order.CustomerAddress].filter(Boolean).join(', ')}
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Items Table — Scrollable if > 2 rows -->
                     <div class="items-table-wrapper">
                         <table class="items-table">
                             <thead>
@@ -641,13 +949,11 @@
                         </table>
                     </div>
 
-                    <!-- Footer -->
                     <div class="card-footer-bar">
                         <small style="color:#6c757d;">${order.Items.length} item(s)</small>
                         <span class="total-amount">Total: Rs ${total.toLocaleString()}</span>
                     </div>
 
-                    <!-- Status Update / Finalized -->
                     ${statusUpdateHTML}
 
                 </div>`;
@@ -682,9 +988,9 @@
             return;
         }
 
-        // ✅ Button click کے بعد disable — select change پر نہیں
-        btn.disabled  = true;
-        sel.disabled  = true;
+        // FIX 1: Immediately disable both button and dropdown
+        btn.disabled = true;
+        sel.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
 
         try {
@@ -700,7 +1006,6 @@
             });
 
             if (response.statusId == 1) {
-                // ✅ Local list update
                 OrderList
                     .filter(x => String(x.OrderNo || x.orderNo) === String(orderNo))
                     .forEach(x => {
@@ -708,22 +1013,31 @@
                         x.orderStatus = newStatus;
                     });
 
-                // ✅ Summary card bounce
-                highlightSummaryCard(newStatus);
+                // Reset PEHLE karo — renderCards() DOM destroy kar deti hai
+                // is liye btn/sel reset pehle, phir renderCards()
+                btn.disabled  = false;
+                sel.disabled  = false;
+                btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
 
+                highlightSummaryCard(newStatus);
                 toastr.success(response.message || "Status updated.");
-                renderCards();
+
+                // Success ke baad auto refresh — fresh data server se load ho
+                setTimeout(() => {
+                    const refreshBtn = document.querySelector('.refresh-btn');
+                    if (refreshBtn) manualRefresh(refreshBtn);
+                }, 300);
 
             } else {
                 toastr.error(response.message || "Update failed.");
+                btn.disabled  = false;
+                sel.disabled  = false;
+                btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
             }
 
         } catch (e) {
             console.error("Update error:", e);
             toastr.error("Error: " + (e.responseJSON?.message || e.statusText || "Request failed"));
-
-        } finally {
-            // ✅ ہمیشہ reset — success، error، exception سب میں
             btn.disabled  = false;
             sel.disabled  = false;
             btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
