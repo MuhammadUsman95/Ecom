@@ -34,18 +34,9 @@ namespace NormalAccountProject.Controllers
             }
 
             if (count > 0)
-            {
-                return Json(new
-                {
-                    success = true,
-                    userId = userId,
-                    password = password
-                });
-            }
+                return Json(new { success = true, userId = userId, password = password });
             else
-            {
                 return Json(new { success = false, message = "Invalid username or password." });
-            }
         }
 
         // ══════════════════════════════════════════
@@ -57,11 +48,7 @@ namespace NormalAccountProject.Controllers
             if (string.IsNullOrEmpty(userId))
                 return Json(new { loggedIn = false });
 
-            return Json(new
-            {
-                loggedIn = true,
-                userId = userId,
-            });
+            return Json(new { loggedIn = true, userId = userId });
         }
 
         // ══════════════════════════════════════════
@@ -75,6 +62,10 @@ namespace NormalAccountProject.Controllers
 
         // ══════════════════════════════════════════
         //  GET /Login/GetMenu?userId=admin
+        //  MenuType:
+        //    0 = Direct (form name shown as-is)
+        //    1 = Setup  (grouped under Setup)
+        //    2 = Transaction (grouped under Transaction)
         // ══════════════════════════════════════════
         [HttpGet]
         public async Task<IActionResult> GetMenu(string userId = "admin")
@@ -100,12 +91,19 @@ namespace NormalAccountProject.Controllers
 
                 while (await reader.ReadAsync())
                 {
+                    // ✅ MenuType bhi read karo
+                    int menuType = 0;
+                    if (reader.GetOrdinal("MenuType") >= 0 &&
+                        reader["MenuType"] != DBNull.Value)
+                        menuType = Convert.ToInt32(reader["MenuType"]);
+
                     menuItems.Add(new
                     {
                         menuId = reader["MenuId"] != DBNull.Value ? Convert.ToInt32(reader["MenuId"]) : 0,
                         menuName = reader["MenuName"] != DBNull.Value ? reader["MenuName"].ToString() : "",
                         menuUrl = reader["MenuUrl"] != DBNull.Value ? reader["MenuUrl"].ToString() : "#",
-                        menuIcon = reader["MenuIcon"] != DBNull.Value ? reader["MenuIcon"].ToString() : "fas fa-circle"
+                        menuIcon = reader["MenuIcon"] != DBNull.Value ? reader["MenuIcon"].ToString() : "fas fa-circle",
+                        menuType = menuType   // 0 = Direct, 1 = Setup, 2 = Transaction
                     });
                 }
 

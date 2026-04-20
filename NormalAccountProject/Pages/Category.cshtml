@@ -4,42 +4,37 @@
     ViewData["Title"] = "Category Registration";
 }
 
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
     :root {
-        --bg: #0b1120;
-        --bg2: #111827;
-        --surface: #1a2332;
-        --surface2: #1f2b3e;
-        --surface3: #263249;
-        --border: rgba(148,163,194,.08);
-        --border2: rgba(148,163,194,.12);
-        --border3: rgba(148,163,194,.20);
-        --primary: #c9a227;
-        --primary2: #b8931f;
-        --primary-g: rgba(201,162,39,.10);
-        --primary-sh: 0 4px 24px rgba(201,162,39,.25);
-        --accent: #3b82f6;
-        --accent-g: rgba(59,130,246,.10);
-        --teal: #14b8a6;
-        --teal-g: rgba(20,184,166,.10);
+        --bg: #f0f3f8;
+        --surface: #ffffff;
+        --surface2: #f8f9fc;
+        --surface3: #eef1f8;
+        --border: #eef0f6;
+        --border2: #e2e6f0;
+        --border3: #d4d9e8;
+        --blue: #4e9dff;
+        --blue-dark: #2d7dd2;
+        --blue-g: rgba(78,157,255,.10);
+        --blue-g2: rgba(78,157,255,.06);
+        --teal: #00c9a7;
+        --coral: #ff6b6b;
+        --amber: #f59e0b;
+        --green: #10b981;
         --danger: #ef4444;
-        --danger-g: rgba(239,68,68,.08);
-        --success: #22c55e;
-        --success-g: rgba(34,197,94,.10);
-        --text: #e8ecf4;
-        --text2: #94a3b2;
-        --text3: #5a6a80;
-        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --text: #1e2a3a;
+        --text2: #5a6478;
+        --text3: #9ba3b8;
+        --font-h: 'Rubik', sans-serif;
+        --font-b: 'Nunito', sans-serif;
         --font-m: 'JetBrains Mono', monospace;
         --r: 8px;
         --r2: 12px;
         --r3: 16px;
-        --sh: 0 2px 20px rgba(0,0,0,.25);
-        --sh2: 0 8px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(148,163,194,.06);
-        --glass: rgba(26,35,50,.75);
-        --glass-border: rgba(148,163,194,.08);
+        --sh: 0 2px 12px rgba(0,0,0,.06);
+        --sh2: 0 4px 24px rgba(0,0,0,.09);
     }
 
     *, *::before, *::after {
@@ -48,515 +43,405 @@
         padding: 0;
     }
 
-    .vr-wrap {
+    .sr-root {
         font-family: var(--font-b);
         color: var(--text);
         background: var(--bg);
         min-height: calc(100vh - 60px);
-        position: relative;
-        overflow: hidden;
+        padding: 24px 28px 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border2) transparent;
     }
 
-        /* ── Ambient Glow Effects ── */
-        .vr-wrap::before {
-            content: '';
-            position: fixed;
-            top: -200px;
-            right: -100px;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(201,162,39,.06) 0%, rgba(201,162,39,.02) 30%, transparent 65%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .vr-wrap::after {
-            content: '';
-            position: fixed;
-            bottom: -200px;
-            left: -100px;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(59,130,246,.04) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-    .vr-bg-grid {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        pointer-events: none;
-        background-image: linear-gradient(rgba(148,163,194,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,194,.03) 1px, transparent 1px);
-        background-size: 48px 48px;
+    .sr-inner {
+        max-width: 1400px;
+        margin: 0 auto;
     }
 
-    /* Floating orbs */
-    .vr-orb {
-        position: fixed;
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 0;
-        filter: blur(60px);
-    }
-
-    .vr-orb-1 {
-        width: 300px;
-        height: 300px;
-        top: 10%;
-        left: 60%;
-        background: rgba(201,162,39,.04);
-        animation: orbFloat 20s ease-in-out infinite;
-    }
-
-    .vr-orb-2 {
-        width: 250px;
-        height: 250px;
-        top: 60%;
-        left: 20%;
-        background: rgba(59,130,246,.03);
-        animation: orbFloat 25s ease-in-out infinite reverse;
-    }
-
-    @@keyframes orbFloat {
-        0%, 100%
-
-    {
-        transform: translate(0, 0);
-    }
-
-    33% {
-        transform: translate(30px, -20px);
-    }
-
-    66% {
-        transform: translate(-20px, 15px);
-    }
-
-    }
-
-    .vr-inner {
-        position: relative;
-        z-index: 1;
-        padding: 20px 24px;
-    }
-
-    /* ── Top Bar ── */
-    .top-bar {
+    .page-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 22px;
-        padding-bottom: 18px;
-        border-bottom: 1px solid var(--border2);
+        animation: fadeDown .4s ease both;
     }
 
-    .top-bar-left {
+    .ph-left {
         display: flex;
         align-items: center;
         gap: 14px;
     }
 
-    .icon-box {
+    .ph-icon {
         width: 46px;
         height: 46px;
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
         border-radius: var(--r2);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--bg);
-        font-size: 17px;
-        font-weight: 700;
-        box-shadow: var(--primary-sh);
+        color: #fff;
+        font-size: 18px;
+        box-shadow: 0 4px 16px rgba(78,157,255,.35);
         flex-shrink: 0;
-        position: relative;
     }
 
-        .icon-box::after {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(201,162,39,.3), transparent 60%);
-            z-index: -1;
-        }
-
-    .page-title {
-        font-family: var(--font-b);
-        font-size: 22px;
-        font-weight: 800;
+    .ph-title {
+        font-family: var(--font-h);
+        font-size: 21px;
+        font-weight: 700;
         color: var(--text);
-        letter-spacing: -.5px;
         line-height: 1.1;
     }
 
-        .page-title span {
-            background: linear-gradient(135deg, var(--primary), #e0c04a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .ph-title span {
+            color: var(--blue);
         }
 
-    .breadcrumb {
+    .ph-breadcrumb {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
         font-family: var(--font-m);
         font-size: 10px;
         color: var(--text3);
-        letter-spacing: .5px;
-        margin-top: 4px;
+        letter-spacing: .4px;
+        margin-top: 3px;
     }
 
-        .breadcrumb i {
+        .ph-breadcrumb i {
             font-size: 7px;
+            color: var(--text3);
         }
 
-        .breadcrumb span {
-            color: var(--primary);
+        .ph-breadcrumb .bc-cur {
+            color: var(--blue);
+            font-weight: 500;
         }
 
-    .pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-family: var(--font-m);
-        font-size: 10px;
-        font-weight: 600;
-        border: 1px solid transparent;
-        letter-spacing: .3px;
-    }
-
-    .pill-gold {
-        background: var(--primary-g);
-        color: var(--primary);
-        border-color: rgba(201,162,39,.25);
-    }
-
-    .pill-blue {
-        background: var(--accent-g);
-        color: var(--accent);
-        border-color: rgba(59,130,246,.25);
-    }
-
-    .pill-teal {
-        background: var(--teal-g);
-        color: var(--teal);
-        border-color: rgba(20,184,166,.25);
-    }
-
-    /* ── Toggle ── */
-    .toggle-group {
+    .view-toggle {
         display: flex;
         gap: 4px;
         background: var(--surface);
         padding: 4px;
         border-radius: var(--r);
         border: 1px solid var(--border2);
+        box-shadow: var(--sh);
     }
 
-    .toggle-btn {
+    .vt-btn {
         display: inline-flex;
         align-items: center;
         gap: 7px;
         padding: 8px 16px;
         font-family: var(--font-b);
-        font-size: 12px;
-        font-weight: 600;
+        font-size: 12.5px;
+        font-weight: 700;
         border-radius: 6px;
         border: none;
         cursor: pointer;
-        transition: all .25s ease;
+        transition: all .2s ease;
     }
 
-    .toggle-btn-outline {
+    .vt-btn-ghost {
         background: transparent;
-        color: var(--text3);
-    }
-
-        .toggle-btn-outline:hover {
-            background: var(--surface2);
-            color: var(--text2);
-        }
-
-    .toggle-btn-solid {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
-        color: var(--bg);
-        box-shadow: var(--primary-sh);
-        font-weight: 700;
-    }
-
-        .toggle-btn-solid:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 28px rgba(201,162,39,.35);
-        }
-
-    /* ── Accent Line ── */
-    .accent-line {
-        display: flex;
-        gap: 3px;
-        margin-bottom: 20px;
-        height: 2px;
-    }
-
-        .accent-line span:nth-child(1) {
-            flex: 2;
-            background: linear-gradient(90deg, var(--primary), var(--primary2));
-            border-radius: 2px;
-        }
-
-        .accent-line span:nth-child(2) {
-            flex: 1;
-            background: var(--accent);
-            border-radius: 2px;
-            opacity: .4;
-        }
-
-        .accent-line span:nth-child(3) {
-            flex: 3;
-            background: var(--border2);
-            border-radius: 2px;
-        }
-
-    /* ── Form Card ── */
-    .form-card {
-        background: var(--glass);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border-radius: var(--r3);
-        border: 1px solid var(--glass-border);
-        box-shadow: var(--sh2);
-        overflow: hidden;
-        animation: fadeUp .4s ease both;
-    }
-
-    .form-card-header {
-        padding: 14px 22px;
-        background: linear-gradient(180deg, rgba(148,163,194,.04), transparent);
-        border-bottom: 1px solid var(--border2);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .form-card-header-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .header-dots {
-        display: flex;
-        gap: 6px;
-    }
-
-    .h-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-    }
-
-    .h-dot-1 {
-        background: #ef4444;
-        box-shadow: 0 0 6px rgba(239,68,68,.4);
-    }
-
-    .h-dot-2 {
-        background: #f59e0b;
-        box-shadow: 0 0 6px rgba(245,158,11,.4);
-    }
-
-    .h-dot-3 {
-        background: #22c55e;
-        box-shadow: 0 0 6px rgba(34,197,94,.4);
-    }
-
-    .form-card-title {
-        font-family: var(--font-m);
-        font-size: 10.5px;
-        font-weight: 500;
-        color: var(--text3);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-    }
-
-    /* ── Form Body ── */
-    .form-body {
-        padding: 24px 22px;
-        max-height: 65vh;
-        overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: var(--surface3) transparent;
-    }
-
-        .form-body::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .form-body::-webkit-scrollbar-thumb {
-            background: var(--surface3);
-            border-radius: 10px;
-        }
-
-    /* ── Section Label ── */
-    .section-label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-family: var(--font-m);
-        font-size: 9.5px;
-        color: var(--text3);
-        letter-spacing: 2.5px;
-        text-transform: uppercase;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border);
-        font-weight: 500;
-    }
-
-    .section-label-bar {
-        width: 3px;
-        height: 14px;
-        background: linear-gradient(180deg, var(--primary), var(--accent));
-        border-radius: 3px;
-        flex-shrink: 0;
-        box-shadow: 0 0 8px rgba(201,162,39,.3);
-    }
-
-    .section-label-text {
         color: var(--text2);
     }
 
-    /* ── Form Row ── */
-    .form-row {
-        display: grid;
-        gap: 14px;
-        margin-bottom: 16px;
+        .vt-btn-ghost:hover {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+    .vt-btn-active {
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+        color: #fff;
+        box-shadow: 0 2px 10px rgba(78,157,255,.30);
     }
 
-    .form-row-1 {
+        .vt-btn-active:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(78,157,255,.40);
+        }
+
+    .divider {
+        display: flex;
+        gap: 3px;
+        height: 3px;
+        margin-bottom: 20px;
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+        .divider span:nth-child(1) {
+            flex: 3;
+            background: var(--blue);
+        }
+
+        .divider span:nth-child(2) {
+            flex: 1;
+            background: var(--teal);
+            opacity: .6;
+        }
+
+        .divider span:nth-child(3) {
+            flex: 8;
+            background: var(--border2);
+        }
+
+    .form-card {
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
+        overflow: hidden;
+        animation: slideUp .35s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    .fc-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 22px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border2);
+        border-top: 3px solid var(--blue);
+    }
+
+    .fc-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .fc-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--r);
+        background: var(--blue-g);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--blue);
+        font-size: 13px;
+    }
+
+    .fc-title {
+        font-family: var(--font-h);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .fc-sub {
+        font-size: 11px;
+        color: var(--text3);
+        font-weight: 500;
+        margin-top: 1px;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+    }
+
+    .pill-live {
+        background: rgba(16,185,129,.10);
+        color: var(--green);
+        border: 1px solid rgba(16,185,129,.25);
+    }
+
+        .pill-live::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: blink 1.8s ease-in-out infinite;
+        }
+
+    @@keyframes blink {
+        0%, 100% {
+            opacity: 1
+        }
+
+        50% {
+            opacity: .3
+        }
+    }
+
+    .fc-body {
+        padding: 24px 26px;
+        max-height: 68vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border2) transparent;
+    }
+
+        .fc-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .fc-body::-webkit-scrollbar-thumb {
+            background: var(--border2);
+            border-radius: 10px;
+        }
+
+    .sec-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed var(--border2);
+    }
+
+    .sec-label-bar {
+        width: 3px;
+        height: 14px;
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .slb-blue {
+        background: linear-gradient(180deg, var(--blue), var(--teal));
+    }
+
+    .slb-amber {
+        background: linear-gradient(180deg, var(--amber), var(--coral));
+    }
+
+    .sec-label-txt {
+        font-family: var(--font-m);
+        font-size: 9.5px;
+        font-weight: 500;
+        color: var(--text3);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .frow {
+        display: grid;
+        gap: 14px;
+        margin-bottom: 14px;
+    }
+
+    .frow-1 {
         grid-template-columns: 1fr;
     }
 
-    /* ── Float Label ── */
-    .float-group {
+    .fg {
         position: relative;
     }
 
-        .float-group .form-control {
-            padding: 24px 14px 8px;
+        .fg .fc {
+            padding: 22px 14px 8px;
         }
 
-    .float-label {
+    .fl {
         position: absolute;
         left: 14px;
         top: 50%;
         transform: translateY(-50%);
         font-family: var(--font-b);
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--text3);
         pointer-events: none;
-        transition: top .2s, transform .2s, font-size .2s, color .2s, letter-spacing .2s;
+        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: calc(100% - 28px);
     }
 
-    .float-group .form-control:focus ~ .float-label,
-    .float-group.has-value .float-label {
-        top: 8px;
+    .fg .fc:focus ~ .fl, .fg.has-value .fl {
+        top: 7px;
         transform: none;
         font-size: 9px;
         font-family: var(--font-m);
-        color: var(--primary);
-        letter-spacing: 1.2px;
+        color: var(--blue);
+        letter-spacing: 1px;
         text-transform: uppercase;
-        font-weight: 600;
+        font-weight: 500;
     }
 
-    .float-group .form-control::placeholder {
+    .fg .fc::placeholder {
         color: transparent;
     }
 
-    /* ── Form Control ── */
-    .form-control {
+    .fc {
         border: 1px solid var(--border2);
         border-radius: var(--r);
         padding: 10px 14px;
         font-size: 13.5px;
         font-family: var(--font-b);
+        font-weight: 600;
         color: var(--text) !important;
         background: var(--surface);
         transition: border-color .2s, box-shadow .2s, background .2s;
         outline: none;
         width: 100%;
         -webkit-text-fill-color: var(--text) !important;
-        caret-color: var(--primary);
-        box-shadow: inset 0 1px 3px rgba(0,0,0,.15);
+        caret-color: var(--blue);
     }
 
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(201,162,39,.12), inset 0 1px 3px rgba(0,0,0,.1);
-            background: var(--surface2);
+        .fc:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px var(--blue-g);
+            background: #fff;
         }
 
-        .form-control::placeholder {
-            color: var(--text3);
-            -webkit-text-fill-color: var(--text3);
-        }
-
-        .form-control:-webkit-autofill,
-        .form-control:-webkit-autofill:hover,
-        .form-control:-webkit-autofill:focus {
-            -webkit-text-fill-color: var(--text) !important;
-            -webkit-box-shadow: 0 0 0px 1000px var(--surface) inset !important;
-            transition: background-color 5000s ease-in-out 0s;
-        }
-
-    /* ── Status / Checkbox ── */
     .status-meta {
         font-family: var(--font-m);
         font-size: 9.5px;
         color: var(--text3);
-        letter-spacing: 1.2px;
+        letter-spacing: 1px;
         text-transform: uppercase;
         margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
     }
+
+        .status-meta i {
+            color: var(--blue);
+        }
 
     .check-group {
         display: flex;
         align-items: center;
         gap: 10px;
         padding: 11px 16px;
-        background: var(--surface);
+        background: var(--surface2);
         border-radius: var(--r);
         border: 1px solid var(--border2);
         cursor: pointer;
-        transition: all .25s;
+        transition: all .2s;
         width: fit-content;
+        user-select: none;
     }
 
         .check-group:hover {
-            border-color: var(--primary);
-            background: var(--primary-g);
+            border-color: var(--blue);
+            background: var(--blue-g2);
         }
 
     .check-input {
-        width: 17px;
-        height: 17px;
+        width: 16px;
+        height: 16px;
         cursor: pointer;
-        accent-color: var(--primary);
+        accent-color: var(--blue);
     }
 
     .check-label {
         font-size: 13px;
-        font-weight: 600;
+        font-weight: 700;
         color: var(--text2);
         cursor: pointer;
         font-family: var(--font-b);
@@ -564,24 +449,23 @@
     }
 
     .check-group:hover .check-label {
-        color: var(--text);
+        color: var(--blue);
     }
 
-    /* ── Buttons ── */
     .btn-row {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 8px;
         flex-wrap: wrap;
         padding-top: 20px;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid var(--border2);
         margin-top: 6px;
     }
 
-    .btn-pro {
+    .btn {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        gap: 7px;
         padding: 10px 22px;
         font-family: var(--font-b);
         font-size: 13px;
@@ -589,222 +473,223 @@
         border-radius: var(--r);
         border: none;
         cursor: pointer;
-        transition: all .25s ease;
-        letter-spacing: .2px;
+        transition: all .2s ease;
     }
 
-    .btn-save {
-        background: linear-gradient(135deg, var(--primary) 0%, var(--primary2) 100%);
-        color: var(--bg);
-        box-shadow: var(--primary-sh);
+    .btn-primary {
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+        color: #fff;
+        box-shadow: 0 3px 14px rgba(78,157,255,.30);
     }
 
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(201,162,39,.4);
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(78,157,255,.42);
         }
 
-        .btn-save:active {
-            transform: translateY(0);
-        }
-
-    .btn-cancel {
+    .btn-secondary {
         background: var(--surface2);
         color: var(--text2);
         border: 1px solid var(--border2);
     }
 
-        .btn-cancel:hover {
+        .btn-secondary:hover {
             background: var(--surface3);
             color: var(--text);
+            border-color: var(--border3);
         }
 
-    /* ── Grid Card ── */
     .grid-card {
-        background: var(--glass);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
+        background: var(--surface);
         border-radius: var(--r3);
-        border: 1px solid var(--glass-border);
+        border: 1px solid var(--border2);
         box-shadow: var(--sh2);
         overflow: hidden;
-        animation: fadeUp .4s ease both;
+        animation: slideUp .35s cubic-bezier(.22,1,.36,1) both;
     }
 
-    .grid-header {
+    .gc-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 14px 22px;
-        background: linear-gradient(180deg, rgba(148,163,194,.04), transparent);
+        background: var(--surface2);
         border-bottom: 1px solid var(--border2);
+        border-top: 3px solid var(--blue);
     }
 
-    .grid-header-left {
+    .gc-header-left {
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .grid-header-title {
+    .gc-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--r);
+        background: var(--blue-g);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--blue);
+        font-size: 13px;
+    }
+
+    .gc-title {
+        font-family: var(--font-h);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .gc-badge {
+        background: var(--blue-g);
+        color: var(--blue-dark);
         font-family: var(--font-m);
         font-size: 10.5px;
         font-weight: 500;
-        color: var(--text2);
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-    }
-
-    .grid-badge {
-        background: var(--primary-g);
-        color: var(--primary);
-        font-family: var(--font-m);
-        font-size: 10px;
-        font-weight: 600;
-        padding: 4px 12px;
+        padding: 3px 10px;
         border-radius: 20px;
-        border: 1px solid rgba(201,162,39,.25);
+        border: 1px solid rgba(78,157,255,.20);
     }
 
-    .grid-scroll {
-        height: 58vh;
+    .tbl-scroll {
+        height: 60vh;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: var(--surface3) transparent;
-        padding: 0;
+        scrollbar-color: var(--border2) transparent;
     }
 
-        .grid-scroll::-webkit-scrollbar {
+        .tbl-scroll::-webkit-scrollbar {
             width: 4px;
         }
 
-        .grid-scroll::-webkit-scrollbar-thumb {
-            background: var(--surface3);
+        .tbl-scroll::-webkit-scrollbar-thumb {
+            background: var(--border2);
             border-radius: 10px;
         }
 
-    /* ── Table ── */
-    .pro-table {
+    .pro-tbl {
         width: 100%;
         border-collapse: collapse;
     }
 
-        .pro-table thead th {
+        .pro-tbl thead th {
             background: var(--surface2);
             color: var(--text3);
-            padding: 11px 16px;
-            font-size: 9.5px;
-            font-weight: 600;
+            padding: 10px 16px;
+            font-size: 10px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             white-space: nowrap;
-            font-family: var(--font-m);
+            font-family: var(--font-b);
             position: sticky;
             top: 0;
             z-index: 10;
             border-bottom: 1px solid var(--border2);
-            border-right: 1px solid var(--border);
+            text-align: left;
         }
 
-            .pro-table thead th:last-child {
-                border-right: none;
-            }
-
-        .pro-table tbody tr {
+        .pro-tbl tbody tr {
             border-bottom: 1px solid var(--border);
-            transition: background .15s;
+            transition: background .12s;
         }
 
-            .pro-table tbody tr:hover {
-                background: rgba(201,162,39,.04);
+            .pro-tbl tbody tr:hover {
+                background: var(--surface2);
             }
 
-            .pro-table tbody tr:last-child {
+            .pro-tbl tbody tr:last-child {
                 border-bottom: none;
             }
 
-        .pro-table tbody td {
+        .pro-tbl tbody td {
             padding: 11px 16px;
-            font-size: 12.5px;
+            font-size: 13px;
             color: var(--text2);
             white-space: nowrap;
+            font-weight: 600;
         }
 
-    /* ── Table Buttons ── */
+            .pro-tbl tbody td:first-child {
+                color: var(--text);
+            }
+
     .tbl-btn {
         width: 30px;
         height: 30px;
-        border-radius: 8px;
+        border-radius: var(--r);
         border: 1px solid transparent;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-size: 11px;
-        transition: all .2s;
+        transition: all .15s;
     }
 
-    .tbl-btn-edit {
-        background: var(--surface2);
-        color: var(--text2);
-        border-color: var(--border2);
+    .tbl-edit {
+        background: var(--blue-g);
+        color: var(--blue);
+        border-color: rgba(78,157,255,.20);
     }
 
-        .tbl-btn-edit:hover {
-            background: var(--primary);
-            color: var(--bg);
-            border-color: var(--primary);
-            box-shadow: 0 2px 10px rgba(201,162,39,.3);
+        .tbl-edit:hover {
+            background: var(--blue);
+            color: #fff;
+            border-color: var(--blue);
         }
 
-    .tbl-btn-del {
-        background: var(--danger-g);
-        color: #f87171;
-        border-color: rgba(239,68,68,.2);
+    .tbl-del {
+        background: rgba(239,68,68,.08);
+        color: var(--danger);
+        border-color: rgba(239,68,68,.20);
         margin-left: 4px;
     }
 
-        .tbl-btn-del:hover {
+        .tbl-del:hover {
             background: var(--danger);
             color: #fff;
             border-color: var(--danger);
-            box-shadow: 0 2px 10px rgba(239,68,68,.3);
         }
 
-    /* ── Badges ── */
-    .badge-active {
-        background: var(--success-g);
-        color: #4ade80;
-        border: 1px solid rgba(34,197,94,.25);
-        font-size: 10px;
-        font-weight: 600;
-        padding: 3px 11px;
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 10.5px;
+        font-weight: 700;
+        padding: 3px 10px;
         border-radius: 20px;
-        font-family: var(--font-m);
-        display: inline-block;
+        font-family: var(--font-b);
+    }
+
+    .badge-active {
+        background: rgba(16,185,129,.10);
+        color: #059669;
+        border: 1px solid rgba(16,185,129,.25);
     }
 
     .badge-inactive {
-        background: var(--danger-g);
-        color: #f87171;
-        border: 1px solid rgba(239,68,68,.2);
-        font-size: 10px;
-        font-weight: 600;
-        padding: 3px 11px;
-        border-radius: 20px;
-        font-family: var(--font-m);
-        display: inline-block;
+        background: rgba(239,68,68,.08);
+        color: var(--danger);
+        border: 1px solid rgba(239,68,68,.20);
     }
 
-    /* ── Empty State ── */
+    .badge i {
+        font-size: 6px;
+    }
+
     .empty-state {
-        padding: 60px 20px;
+        padding: 70px 20px;
         text-align: center;
     }
 
     .empty-icon {
-        width: 56px;
-        height: 56px;
+        width: 60px;
+        height: 60px;
         background: var(--surface2);
         border-radius: var(--r2);
         display: flex;
@@ -812,133 +697,130 @@
         justify-content: center;
         color: var(--text3);
         font-size: 22px;
-        margin: 0 auto 14px;
+        margin: 0 auto 16px;
         border: 1px solid var(--border2);
     }
 
-    .empty-text {
-        font-size: 13px;
-        color: var(--text3);
+    .empty-title {
+        font-family: var(--font-h);
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--text2);
+        margin-bottom: 5px;
     }
 
-    /* ── Footer ── */
-    .page-footer {
+    .empty-sub {
+        font-size: 12px;
+        color: var(--text3);
+        font-weight: 500;
+    }
+
+    .pg-footer {
         margin-top: 18px;
         padding-top: 14px;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid var(--border2);
         text-align: center;
         font-family: var(--font-m);
-        font-size: 10px;
+        font-size: 10.5px;
         color: var(--text3);
         letter-spacing: .5px;
     }
 
-        .page-footer strong {
-            background: linear-gradient(135deg, var(--primary), #e0c04a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 700;
+        .pg-footer strong {
+            color: var(--blue);
+            font-weight: 500;
         }
 
-    @@keyframes fadeUp {
+        .pg-footer .heart {
+            color: var(--coral);
+        }
+
+    @@keyframes fadeDown {
         from {
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(-16px)
         }
 
         to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0)
         }
     }
 
-    /* ── SweetAlert Dark Theme Override ── */
-    .swal2-popup {
-        background: var(--surface) !important;
-        color: var(--text) !important;
-        border: 1px solid var(--border2) !important;
-        border-radius: var(--r3) !important;
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px)
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
     }
 
-    .swal2-title {
-        color: var(--text) !important;
-        font-family: var(--font-b) !important;
-    }
+    @@media (max-width: 768px) {
+        .sr-root {
+            padding: 14px;
+        }
 
-    .swal2-html-container {
-        color: var(--text2) !important;
-        font-family: var(--font-b) !important;
+        .page-header {
+            flex-wrap: wrap;
+            gap: 12px;
+        }
     }
 </style>
 
-<div class="vr-wrap">
-    <div class="vr-bg-grid"></div>
-    <div class="vr-orb vr-orb-1"></div>
-    <div class="vr-orb vr-orb-2"></div>
-    <div class="vr-inner">
+<div class="sr-root">
+    <div class="sr-inner">
 
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <div class="icon-box"><i class="fas fa-th-large"></i></div>
+        <div class="page-header">
+            <div class="ph-left">
+                <div class="ph-icon"><i class="fas fa-th-large"></i></div>
                 <div>
-                    <div class="page-title">Category <span>Registry</span></div>
-                    <div class="breadcrumb">
-                        Setup <i class="fas fa-chevron-right"></i> <span>Category</span>
-                    </div>
+                    <div class="ph-title">Category <span>Registry</span></div>
+                    <div class="ph-breadcrumb">Setup <i class="fas fa-chevron-right"></i> <span class="bc-cur">Category</span></div>
                 </div>
             </div>
-            <div style="display:flex;align-items:center;gap:10px;">
-                <div class="toggle-group">
-                    <button class="toggle-btn toggle-btn-outline" id="gridViewToggleBtn">
-                        <i class="fas fa-table-cells"></i> Grid
-                    </button>
-                    <button class="toggle-btn toggle-btn-solid" id="formViewToggleBtn" style="display:none;">
-                        <i class="fas fa-pen-to-square"></i> Form
-                    </button>
-                </div>
+            <div class="view-toggle">
+                <button class="vt-btn vt-btn-ghost" id="gridViewToggleBtn"><i class="fas fa-table-cells"></i> Grid View</button>
+                <button class="vt-btn vt-btn-active" id="formViewToggleBtn" style="display:none;"><i class="fas fa-pen-to-square"></i> Form View</button>
             </div>
         </div>
 
-        <div class="accent-line"><span></span><span></span><span></span></div>
+        <div class="divider"><span></span><span></span><span></span></div>
 
         <!-- FORM VIEW -->
         <div id="formViewContainer">
             <div class="form-card">
-                <div class="form-card-header">
-                    <div class="form-card-header-left">
-                        <div class="header-dots">
-                            <div class="h-dot h-dot-1"></div>
-                            <div class="h-dot h-dot-2"></div>
-                            <div class="h-dot h-dot-3"></div>
+                <div class="fc-header">
+                    <div class="fc-header-left">
+                        <div class="fc-icon"><i class="fas fa-folder-plus"></i></div>
+                        <div>
+                            <div class="fc-title">Category Registration</div>
+                            <div class="fc-sub">Add or update a category</div>
                         </div>
-                        <div class="form-card-title">category_registration.form</div>
                     </div>
-                    <div class="pill pill-blue"><i class="fas fa-circle" style="font-size:6px;"></i> Live</div>
+                    <div class="status-pill pill-live">Live</div>
                 </div>
-
-                <div class="form-body">
+                <div class="fc-body">
                     <input style="display:none;" type="text" id="CategoryId">
 
-                    <div class="section-label">
-                        <div class="section-label-bar"></div>
-                        <span class="section-label-text">Basic Details</span>
+                    <div class="sec-label">
+                        <div class="sec-label-bar slb-blue"></div>
+                        <span class="sec-label-txt">Basic Details</span>
                     </div>
 
-                    <div class="form-row form-row-1">
-                        <div class="float-group">
-                            <input type="text" id="Category" class="form-control" placeholder=" ">
-                            <label class="float-label" for="Category">Category Name</label>
+                    <div class="frow frow-1">
+                        <div class="fg">
+                            <input type="text" id="Category" class="fc" placeholder=" ">
+                            <label class="fl" for="Category">Category Name</label>
                         </div>
                     </div>
 
-                    <div class="form-row form-row-1" style="margin-bottom:22px;">
+                    <div class="frow frow-1" style="margin-bottom:20px;">
                         <div>
-                            <div class="status-meta">
-                                <i class="fas fa-toggle-on" style="color:var(--primary);margin-right:5px;"></i>
-                                Category Status
-                            </div>
+                            <div class="status-meta"><i class="fas fa-toggle-on"></i> Category Status</div>
                             <div class="check-group">
                                 <input type="checkbox" id="IsActive" class="check-input" checked>
                                 <label class="check-label" for="IsActive">Mark as Active</label>
@@ -947,12 +829,8 @@
                     </div>
 
                     <div class="btn-row">
-                        <button class="btn-pro btn-save" id="saveBtn">
-                            <i class="fas fa-floppy-disk"></i> Save Category
-                        </button>
-                        <button class="btn-pro btn-cancel" id="cancelBtn">
-                            <i class="fas fa-xmark"></i> Cancel
-                        </button>
+                        <button class="btn btn-primary" id="saveBtn"><i class="fas fa-floppy-disk"></i> Save Category</button>
+                        <button class="btn btn-secondary" id="cancelBtn"><i class="fas fa-xmark"></i> Cancel</button>
                     </div>
                 </div>
             </div>
@@ -961,242 +839,134 @@
         <!-- GRID VIEW -->
         <div id="gridViewContainer" style="display:none;">
             <div class="grid-card">
-                <div class="grid-header">
-                    <div class="grid-header-left">
-                        <div class="header-dots">
-                            <div class="h-dot h-dot-1"></div>
-                            <div class="h-dot h-dot-2"></div>
-                            <div class="h-dot h-dot-3"></div>
-                        </div>
-                        <div class="grid-header-title">All Categories</div>
-                        <div class="grid-badge" id="TotalCategoriesCount">0 records</div>
+                <div class="gc-header">
+                    <div class="gc-header-left">
+                        <div class="gc-icon"><i class="fas fa-table-list"></i></div>
+                        <div><div class="gc-title">All Categories</div></div>
+                        <div class="gc-badge" id="TotalCategoriesCount">0 records</div>
                     </div>
-                    <div class="pill pill-teal">
-                        <i class="fas fa-circle-dot" style="font-size:7px;"></i> Live Data
-                    </div>
+                    <div class="status-pill pill-live">Live Data</div>
                 </div>
-                <div class="grid-scroll">
-                    <div id="CategoryGridContainer"></div>
-                </div>
+                <div class="tbl-scroll"><div id="CategoryGridContainer"></div></div>
             </div>
         </div>
 
-        <div class="page-footer">
-            Developed with <span style="color:var(--danger);">&#9829;</span> by <strong>UT Designer</strong>
-        </div>
+        <div class="pg-footer">Developed with <span class="heart">♥</span> by <strong>UT Designer</strong></div>
     </div>
 </div>
 
 <script>
     let userId = localStorage.getItem("userId") || "", GridViewDataList = [], IsUpdate = false;
-
-    const SW = {
-        background: '#1a2332',
-        color: '#e8ecf4',
-        confirmButtonColor: '#c9a227',
-        cancelButtonColor: '#263249'
-    };
+    const SW = { background: '#ffffff', color: '#1e2a3a', confirmButtonColor: '#4e9dff', cancelButtonColor: '#f8f9fc' };
 
     function initFloatLabels() {
-        document.querySelectorAll('.float-group').forEach(g => {
+        document.querySelectorAll('.fg').forEach(g => {
             const el = g.querySelector('input:not([type="checkbox"]):not([type="file"]):not([style*="display:none"]),textarea,select');
             if (!el) return;
             const chk = () => g.classList.toggle('has-value', el.value !== '');
-            el.addEventListener('input', chk);
-            el.addEventListener('change', chk);
-            chk();
+            el.addEventListener('input', chk); el.addEventListener('change', chk); chk();
         });
     }
 
     function showFormView() {
         document.getElementById("formViewContainer").style.display = "block";
-        document.getElementById("gridViewContainer").style.display = "none";
-        document.getElementById("formViewToggleBtn").style.display = "none";
-        document.getElementById("gridViewToggleBtn").style.display = "inline-flex";
+        document.getElementById("gridViewContainer").style.display  = "none";
+        document.getElementById("formViewToggleBtn").style.display  = "none";
+        document.getElementById("gridViewToggleBtn").style.display  = "inline-flex";
+        document.getElementById("gridViewToggleBtn").className      = "vt-btn vt-btn-ghost";
         document.getElementById("Category").focus();
     }
-
     function showGridView() {
         document.getElementById("formViewContainer").style.display = "none";
-        document.getElementById("gridViewContainer").style.display = "block";
-        document.getElementById("gridViewToggleBtn").style.display = "none";
-        document.getElementById("formViewToggleBtn").style.display = "inline-flex";
+        document.getElementById("gridViewContainer").style.display  = "block";
+        document.getElementById("gridViewToggleBtn").style.display  = "none";
+        document.getElementById("formViewToggleBtn").style.display  = "inline-flex";
+        document.getElementById("formViewToggleBtn").className      = "vt-btn vt-btn-active";
     }
-
     document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
     document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
 
-    window.addEventListener("load", async function () {
-        initFloatLabels();
-        await LoadCategoryRegistrationData();
-        await LoadGridViewData();
-    });
+    window.addEventListener("load", async function () { initFloatLabels(); await LoadCategoryRegistrationData(); await LoadGridViewData(); });
 
     async function LoadCategoryRegistrationData() {
         try {
-            const r = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadCategoryRegistrationData", "CategoryRegistration")',
-                data: JSON.stringify({ Userid: userId }),
-                contentType: 'application/json'
-            });
+            const r = await jQuery.ajax({ type: 'POST', url: '@Url.Action("nLoadCategoryRegistrationData", "CategoryRegistration")', data: JSON.stringify({ Userid: userId }), contentType: 'application/json' });
             if (r.statusId !== 1) await Swal.fire({ icon: 'warning', title: 'Warning', text: r.message || 'Failed', ...SW });
-        } catch {
-            await Swal.fire({ icon: 'error', title: 'Error', text: 'Error loading data', ...SW });
-        }
+        } catch { await Swal.fire({ icon: 'error', title: 'Error', text: 'Error loading data', ...SW }); }
     }
 
     async function LoadGridViewData() {
         try {
-            const r = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nLoadGridViewData", "CategoryRegistration")',
-                data: JSON.stringify({ Userid: userId }),
-                contentType: 'application/json'
-            });
-            if (r.statusId === 1) {
-                GridViewDataList = r.GridViewDataList || [];
-                RenderGridView();
-            } else {
-                await Swal.fire({ icon: 'warning', title: 'Warning', text: r.message || 'Failed', ...SW });
-            }
-        } catch {
-            await Swal.fire({ icon: 'error', title: 'Error', text: 'Error loading grid', ...SW });
-        }
+            const r = await jQuery.ajax({ type: 'POST', url: '@Url.Action("nLoadGridViewData", "CategoryRegistration")', data: JSON.stringify({ Userid: userId }), contentType: 'application/json' });
+            if (r.statusId === 1) { GridViewDataList = r.GridViewDataList || []; RenderGridView(); }
+            else await Swal.fire({ icon: 'warning', title: 'Warning', text: r.message || 'Failed', ...SW });
+        } catch { await Swal.fire({ icon: 'error', title: 'Error', text: 'Error loading grid', ...SW }); }
     }
 
     function RenderGridView() {
-        const c   = document.getElementById("CategoryGridContainer");
-        const cnt = document.getElementById("TotalCategoriesCount");
-
+        const c = document.getElementById("CategoryGridContainer"), cnt = document.getElementById("TotalCategoriesCount");
         if (!GridViewDataList.length) {
-            c.innerHTML = `<div class="empty-state">
-                <div class="empty-icon"><i class="fas fa-folder-open"></i></div>
-                <div class="empty-text">No categories found.</div>
-            </div>`;
-            cnt.textContent = "0 records";
-            return;
+            c.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="fas fa-folder-open"></i></div><div class="empty-title">No Categories Found</div><div class="empty-sub">Click "Form View" to add your first category.</div></div>`;
+            cnt.textContent = "0 records"; return;
         }
-
-        const t  = document.createElement("table");
-        t.className = "pro-table";
-        t.innerHTML = `<thead><tr>
-            <th>Actions</th>
-            <th>ID</th>
-            <th>Category Name</th>
-            <th>Status</th>
-        </tr></thead>`;
-
+        const t = document.createElement("table"); t.className = "pro-tbl";
+        t.innerHTML = `<thead><tr><th>Actions</th><th>ID</th><th>Category Name</th><th>Status</th></tr></thead>`;
         const tb = document.createElement("tbody");
         GridViewDataList.forEach(item => {
             const tr = document.createElement("tr");
-            tr.innerHTML = `
-            <td>
-                <button class="tbl-btn tbl-btn-edit" onclick="EditCategory(${item.CategoryId})" title="Edit">
-                    <i class="fas fa-pen"></i>
-                </button>
-                <button class="tbl-btn tbl-btn-del" onclick="DeleteCategory(${item.CategoryId})" title="Delete">
-                    <i class="fas fa-trash-can"></i>
-                </button>
+            tr.innerHTML = `<td>
+                <button class="tbl-btn tbl-edit" onclick="EditCategory(${item.CategoryId})" title="Edit"><i class="fas fa-pen"></i></button>
+                <button class="tbl-btn tbl-del"  onclick="DeleteCategory(${item.CategoryId})" title="Delete"><i class="fas fa-trash-can"></i></button>
             </td>
-            <td><span style="font-family:var(--font-m);font-size:11px;color:var(--text3);">#${item.CategoryId || ''}</span></td>
-            <td style="font-weight:600;color:var(--text);">${item.Category || ''}</td>
+            <td>${item.CategoryId || ''}</td>
+            <td>${item.Category || ''}</td>
             <td>${item['Is Active']
-                ? '<span class="badge-active"><i class="fas fa-circle" style="font-size:6px;margin-right:4px;"></i>Active</span>'
-                : '<span class="badge-inactive"><i class="fas fa-circle" style="font-size:6px;margin-right:4px;"></i>Inactive</span>'
-            }</td>`;
+                ? '<span class="badge badge-active"><i class="fas fa-circle"></i> Active</span>'
+                : '<span class="badge badge-inactive"><i class="fas fa-circle"></i> Inactive</span>'}</td>`;
             tb.appendChild(tr);
         });
-
-        t.appendChild(tb);
-        c.innerHTML = "";
-        c.appendChild(t);
-        cnt.textContent = `${tb.rows.length} records`;
+        t.appendChild(tb); c.innerHTML = ""; c.appendChild(t);
+        cnt.textContent = `${tb.rows.length} record${tb.rows.length !== 1 ? 's' : ''}`;
     }
 
     function EditCategory(id) {
         const cat = GridViewDataList.find(c => parseInt(c.CategoryId) === parseInt(id));
         if (!cat) { Swal.fire({ icon: 'error', title: 'Error', text: 'Not found.', ...SW }); return; }
-
         document.getElementById("CategoryId").value = cat.CategoryId || '';
         document.getElementById("Category").value   = cat.Category   || '';
         document.getElementById("IsActive").checked = cat['Is Active'] === true || cat['Is Active'] === 1;
-
         IsUpdate = true;
         document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Update Category';
-        initFloatLabels();
-        showFormView();
+        initFloatLabels(); showFormView();
     }
 
     async function DeleteCategory(id) {
-        const r = await Swal.fire({
-            title: 'Confirm Delete', text: "Cannot be undone.",
-            icon: 'warning', showCancelButton: true,
-            confirmButtonText: 'Yes, delete', cancelButtonText: 'Cancel',
-            confirmButtonColor: '#ef4444', ...SW
-        });
+        const r = await Swal.fire({ title: 'Delete Category?', text: 'This action cannot be undone.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Delete', cancelButtonText: 'Cancel', confirmButtonColor: '#ef4444', ...SW });
         if (!r.isConfirmed) return;
-
         Swal.fire({ title: 'Please wait', text: 'Deleting...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), ...SW });
-
         try {
-            const res = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nDeleteCategoryRegistrationData", "CategoryRegistration")',
-                data: JSON.stringify({ Userid: userId, CategoryId: `${id}` }),
-                contentType: 'application/json'
-            });
+            const res = await jQuery.ajax({ type: 'POST', url: '@Url.Action("nDeleteCategoryRegistrationData", "CategoryRegistration")', data: JSON.stringify({ Userid: userId, CategoryId: `${id}` }), contentType: 'application/json' });
             Swal.close();
-            if (res.statusId === 1) {
-                await Swal.fire({ icon: 'success', title: 'Deleted', text: res.message || 'Deleted.', ...SW });
-                await LoadGridViewData();
-            } else {
-                await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not delete.', ...SW });
-            }
-        } catch {
-            Swal.close();
-            await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred.', ...SW });
-        }
+            if (res.statusId === 1) { await Swal.fire({ icon: 'success', title: 'Deleted!', text: res.message || 'Deleted.', ...SW }); await LoadGridViewData(); }
+            else await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not delete.', ...SW });
+        } catch { Swal.close(); await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred.', ...SW }); }
     }
 
     document.getElementById("saveBtn").addEventListener("click", async function () {
         const CategoryId = document.getElementById("CategoryId").value.trim();
         const Category   = document.getElementById("Category").value.trim();
         const isActive   = document.getElementById("IsActive").checked;
-
         if (!Category) {
-            await Swal.fire({
-                icon: 'warning', title: 'Validation', text: 'Category name is required',
-                returnFocus: false, ...SW,
-                didClose: () => document.getElementById("Category").focus()
-            });
+            await Swal.fire({ icon: 'warning', title: 'Validation', text: 'Category name is required', returnFocus: false, ...SW, didClose: () => document.getElementById("Category").focus() });
             return;
         }
-
         Swal.fire({ title: 'Please wait', text: 'Saving...', allowOutsideClick: false, allowEscapeKey: false, didOpen: () => Swal.showLoading(), ...SW });
-
         try {
-            const res = await jQuery.ajax({
-                type: 'POST',
-                url: '@Url.Action("nSaveCategoryRegistrationData", "CategoryRegistration")',
-                data: JSON.stringify({ Userid: userId, CategoryId, Category, IsActive: isActive, IsUpdate }),
-                contentType: 'application/json'
-            });
+            const res = await jQuery.ajax({ type: 'POST', url: '@Url.Action("nSaveCategoryRegistrationData", "CategoryRegistration")', data: JSON.stringify({ Userid: userId, CategoryId, Category, IsActive: isActive, IsUpdate }), contentType: 'application/json' });
             Swal.close();
-            if (res.statusId === 1) {
-                await Swal.fire({
-                    icon: 'success', title: 'Saved', text: res.message || 'Saved.',
-                    returnFocus: false, ...SW,
-                    didClose: () => document.getElementById("Category").focus()
-                });
-                nClearForm();
-            } else {
-                await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not save.', ...SW });
-            }
-        } catch {
-            Swal.close();
-            await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred.', ...SW });
-        }
+            if (res.statusId === 1) { await Swal.fire({ icon: 'success', title: 'Saved!', text: res.message || 'Saved.', returnFocus: false, ...SW, didClose: () => document.getElementById("Category").focus() }); nClearForm(); }
+            else await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not save.', ...SW });
+        } catch { Swal.close(); await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred.', ...SW }); }
     });
 
     document.getElementById("cancelBtn").addEventListener("click", function () { nClearForm(); });
@@ -1207,8 +977,7 @@
         document.getElementById("IsActive").checked = true;
         IsUpdate = false;
         document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Save Category';
-        initFloatLabels();
-        document.getElementById("Category").focus();
+        initFloatLabels(); document.getElementById("Category").focus();
         await LoadGridViewData();
     }
 </script>

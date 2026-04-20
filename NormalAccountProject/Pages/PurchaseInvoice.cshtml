@@ -3,38 +3,38 @@
 @{
 }
 
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
     :root {
-        --bg: #f4f4f4;
-        --bg2: #ffffff;
+        --bg: #f0f3f8;
         --surface: #ffffff;
-        --surface2: #f9f9f9;
-        --surface3: #efefef;
-        --border: rgba(0,0,0,.07);
-        --border2: rgba(0,0,0,.12);
-        --border3: rgba(0,0,0,.18);
-        --accent: #6d4c1f;
-        --accent2: #4e3615;
-        --accent-g: rgba(109,76,31,.10);
-        --gold: #b08d57;
-        --gold-g: rgba(176,141,87,.12);
-        --teal: #117a65;
-        --danger: #d94f4f;
-        --success: #2e7d5e;
-        --text: #1a1a1a;
-        --text2: #5c5a58;
-        --text3: #9a9896;
-        --font-h: 'Syne', sans-serif;
-        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --surface2: #f8f9fc;
+        --surface3: #eef1f8;
+        --border: #eef0f6;
+        --border2: #e2e6f0;
+        --border3: #d4d9e8;
+        --blue: #4e9dff;
+        --blue-dark: #2d7dd2;
+        --blue-g: rgba(78,157,255,.10);
+        --blue-g2: rgba(78,157,255,.06);
+        --teal: #00c9a7;
+        --coral: #ff6b6b;
+        --amber: #f59e0b;
+        --green: #10b981;
+        --danger: #ef4444;
+        --text: #1e2a3a;
+        --text2: #5a6478;
+        --text3: #9ba3b8;
+        --font-h: 'Rubik', sans-serif;
+        --font-b: 'Nunito', sans-serif;
         --font-m: 'JetBrains Mono', monospace;
-        --r: 10px;
-        --r2: 14px;
-        --r3: 18px;
-        --sh: 0 4px 32px rgba(0,0,0,.08);
-        --sh2: 0 8px 40px rgba(0,0,0,.10), 0 0 0 1px rgba(109,76,31,.08);
+        --r: 8px;
+        --r2: 12px;
+        --r3: 16px;
+        --sh: 0 2px 12px rgba(0,0,0,.06);
+        --sh2: 0 4px 24px rgba(0,0,0,.09);
     }
 
     *, *::before, *::after {
@@ -43,124 +43,144 @@
         padding: 0;
     }
 
-    .pi-wrap {
+    .sr-root {
         font-family: var(--font-b);
         color: var(--text);
         background: var(--bg);
         min-height: calc(100vh - 60px);
-        position: relative;
-        overflow: hidden;
+        padding: 24px 28px 20px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border2) transparent;
     }
 
-    .pi-inner {
-        position: relative;
-        z-index: 1;
-        padding: 20px 24px;
+    .sr-inner {
+        max-width: 1400px;
+        margin: 0 auto;
     }
 
-    .top-bar {
+    .page-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border2);
+        margin-bottom: 22px;
+        animation: fadeDown .4s ease both;
     }
 
-    .top-bar-left {
+    .ph-left {
         display: flex;
         align-items: center;
         gap: 14px;
     }
 
-    .icon-box {
-        width: 44px;
-        height: 44px;
-        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-        border-radius: var(--r);
+    .ph-icon {
+        width: 46px;
+        height: 46px;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+        border-radius: var(--r2);
         display: flex;
         align-items: center;
         justify-content: center;
         color: #fff;
-        font-size: 17px;
-        box-shadow: 0 4px 20px rgba(109,76,31,.30);
+        font-size: 18px;
+        box-shadow: 0 4px 16px rgba(78,157,255,.35);
         flex-shrink: 0;
     }
 
-    .page-title {
+    .ph-title {
         font-family: var(--font-h);
         font-size: 21px;
-        font-weight: 800;
+        font-weight: 700;
         color: var(--text);
-        letter-spacing: -.3px;
         line-height: 1.1;
     }
 
-        .page-title span {
-            color: var(--accent);
+        .ph-title span {
+            color: var(--blue);
         }
 
-    .breadcrumb {
+    .ph-breadcrumb {
         display: flex;
         align-items: center;
         gap: 5px;
         font-family: var(--font-m);
         font-size: 10px;
         color: var(--text3);
-        letter-spacing: .5px;
+        letter-spacing: .4px;
         margin-top: 3px;
     }
 
-        .breadcrumb i {
+        .ph-breadcrumb i {
             font-size: 7px;
         }
 
-        .breadcrumb span {
-            color: var(--gold);
+        .ph-breadcrumb .bc-cur {
+            color: var(--blue);
+            font-weight: 500;
         }
 
-    .pill {
+    .status-pill {
         display: inline-flex;
         align-items: center;
         gap: 5px;
-        padding: 3px 10px;
+        padding: 4px 12px;
         border-radius: 20px;
         font-family: var(--font-m);
         font-size: 10.5px;
         font-weight: 500;
-        border: 1px solid transparent;
     }
 
-    .pill-brown {
-        background: rgba(109,76,31,.10);
-        color: var(--accent);
-        border-color: rgba(109,76,31,.30);
+    .pill-live {
+        background: rgba(16,185,129,.10);
+        color: var(--green);
+        border: 1px solid rgba(16,185,129,.25);
     }
 
-    .accent-line {
+        .pill-live::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+            animation: blink 1.8s ease-in-out infinite;
+        }
+    @@keyframes blink {
+        0%,100%
+
+    {
+        opacity: 1
+    }
+
+    50% {
+        opacity: .3
+    }
+
+    }
+
+    .divider {
         display: flex;
-        gap: 2px;
-        margin-bottom: 18px;
-        height: 2px;
+        gap: 3px;
+        height: 3px;
+        margin-bottom: 20px;
+        border-radius: 3px;
+        overflow: hidden;
     }
 
-        .accent-line span:nth-child(1) {
-            flex: 2;
-            background: var(--accent);
-            border-radius: 2px;
+        .divider span:nth-child(1) {
+            flex: 3;
+            background: var(--blue);
         }
 
-        .accent-line span:nth-child(2) {
+        .divider span:nth-child(2) {
             flex: 1;
-            background: var(--gold);
-            border-radius: 2px;
+            background: var(--teal);
             opacity: .6;
         }
 
-        .accent-line span:nth-child(3) {
-            flex: 3;
+        .divider span:nth-child(3) {
+            flex: 8;
             background: var(--border2);
-            border-radius: 2px;
         }
 
     .form-card {
@@ -169,232 +189,219 @@
         border: 1px solid var(--border2);
         box-shadow: var(--sh2);
         overflow: hidden;
-        animation: fadeUp .3s ease both;
-        position: relative;
+        animation: slideUp .35s cubic-bezier(.22,1,.36,1) both;
     }
 
-        .form-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: var(--r3);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
-            pointer-events: none;
-        }
-
-    .form-card-header {
-        padding: 12px 22px;
-        background: linear-gradient(90deg, var(--surface2) 0%, rgba(109,76,31,.06) 100%);
-        border-bottom: 1px solid var(--border2);
+    .fc-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 14px 22px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border2);
+        border-top: 3px solid var(--blue);
     }
 
-    .form-card-header-left {
+    .fc-header-left {
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .header-dots {
+    .fc-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: var(--r);
+        background: var(--blue-g);
         display: flex;
-        gap: 5px;
+        align-items: center;
+        justify-content: center;
+        color: var(--blue);
+        font-size: 13px;
     }
 
-    .h-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
+    .fc-title {
+        font-family: var(--font-h);
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
     }
 
-    .h-dot-1 {
-        background: #f43f5e;
-    }
-
-    .h-dot-2 {
-        background: #f59e0b;
-    }
-
-    .h-dot-3 {
-        background: #10b981;
-    }
-
-    .form-card-title {
-        font-family: var(--font-m);
-        font-size: 10.5px;
-        font-weight: 500;
+    .fc-sub {
+        font-size: 11px;
         color: var(--text3);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
+        font-weight: 500;
+        margin-top: 1px;
     }
 
-    .form-body {
-        padding: 22px 24px;
+    .fc-body {
+        padding: 24px 26px;
         max-height: 82vh;
         overflow-y: auto;
         scrollbar-width: thin;
-        scrollbar-color: var(--surface3) transparent;
+        scrollbar-color: var(--border2) transparent;
     }
 
-        .form-body::-webkit-scrollbar {
+        .fc-body::-webkit-scrollbar {
             width: 4px;
         }
 
-        .form-body::-webkit-scrollbar-thumb {
-            background: var(--surface3);
+        .fc-body::-webkit-scrollbar-thumb {
+            background: var(--border2);
             border-radius: 10px;
         }
 
-    .section-label {
+    .sec-label {
         display: flex;
         align-items: center;
-        gap: 9px;
-        font-family: var(--font-m);
-        font-size: 9.5px;
-        color: var(--text3);
-        letter-spacing: 2px;
-        text-transform: uppercase;
+        gap: 10px;
         margin-bottom: 14px;
         padding-bottom: 10px;
-        border-bottom: 1px solid var(--border);
-        font-weight: 500;
+        border-bottom: 1px dashed var(--border2);
     }
 
-    .section-label-bar {
+    .sec-label-bar {
         width: 3px;
-        height: 12px;
-        background: linear-gradient(180deg, var(--accent), var(--gold));
+        height: 14px;
         border-radius: 3px;
         flex-shrink: 0;
     }
 
-    .section-label-text {
-        color: var(--text2);
+    .slb-blue {
+        background: linear-gradient(180deg, var(--blue), var(--teal));
     }
 
-    .form-row {
+    .slb-teal {
+        background: linear-gradient(180deg, var(--teal), var(--blue));
+    }
+
+    .slb-amber {
+        background: linear-gradient(180deg, var(--amber), var(--coral));
+    }
+
+    .sec-label-txt {
+        font-family: var(--font-m);
+        font-size: 9.5px;
+        font-weight: 500;
+        color: var(--text3);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .frow {
         display: grid;
-        gap: 12px;
+        gap: 14px;
         margin-bottom: 14px;
     }
 
-    .form-row-4 {
+    .frow-4 {
         grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 
-    .form-row-3 {
+    .frow-3 {
         grid-template-columns: 1fr 1fr 1fr;
     }
 
-    .form-row-2 {
+    .frow-2 {
         grid-template-columns: 1fr 1fr;
     }
 
-    .float-group {
+    .fg {
         position: relative;
     }
 
-        .float-group .form-control {
-            padding: 22px 13px 7px;
+        .fg .fc {
+            padding: 22px 14px 8px;
         }
 
-        .float-group select.form-control {
-            padding: 22px 13px 7px;
+        .fg select.fc {
+            padding: 22px 14px 8px;
         }
 
-    .float-label {
+        .fg.always-up .fl {
+            top: 7px;
+            transform: none;
+            font-size: 9px;
+            font-family: var(--font-m);
+            color: var(--text3);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .fg.always-up .fc:focus ~ .fl {
+            color: var(--blue);
+        }
+
+    .fl {
         position: absolute;
-        left: 13px;
+        left: 14px;
         top: 50%;
         transform: translateY(-50%);
         font-family: var(--font-b);
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 600;
         color: var(--text3);
         pointer-events: none;
-        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
+        transition: top .18s,transform .18s,font-size .18s,color .18s,letter-spacing .18s;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: calc(100% - 26px);
     }
 
-    .float-group .form-control:focus ~ .float-label,
-    .float-group.has-value .float-label {
+    .fg .fc:focus ~ .fl, .fg.has-value .fl {
         top: 7px;
         transform: none;
         font-size: 9px;
         font-family: var(--font-m);
-        color: var(--accent);
+        color: var(--blue);
         letter-spacing: 1px;
         text-transform: uppercase;
         font-weight: 500;
     }
 
-    .float-group.always-float .float-label {
-        top: 7px;
-        transform: none;
-        font-size: 9px;
-        font-family: var(--font-m);
-        color: var(--text3);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        font-weight: 500;
-    }
-
-    .float-group.always-float .form-control:focus ~ .float-label {
-        color: var(--accent);
-    }
-
-    .float-group .form-control::placeholder {
+    .fg .fc::placeholder {
         color: transparent;
     }
 
-    .form-control {
+    .fc {
         border: 1px solid var(--border2);
         border-radius: var(--r);
-        padding: 9px 13px;
+        padding: 10px 14px;
         font-size: 13.5px;
         font-family: var(--font-b);
-        color: #1a1a1a !important;
-        background: var(--bg2);
-        transition: border-color .18s, box-shadow .18s, background .18s;
+        font-weight: 600;
+        color: var(--text) !important;
+        background: var(--surface);
+        transition: border-color .2s, box-shadow .2s, background .2s;
         outline: none;
         width: 100%;
-        -webkit-text-fill-color: #1a1a1a !important;
-        caret-color: var(--accent);
+        -webkit-text-fill-color: var(--text) !important;
+        caret-color: var(--blue);
     }
 
-        .form-control:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(109,76,31,.12);
-            background: var(--surface);
+        .fc:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px var(--blue-g);
+            background: #fff;
         }
 
-        .form-control[readonly] {
+        .fc[readonly] {
             background: var(--surface2);
-            color: var(--text2) !important;
-            -webkit-text-fill-color: var(--text2) !important;
+            color: var(--text3) !important;
+            -webkit-text-fill-color: var(--text3) !important;
             cursor: default;
         }
 
-        .form-control::placeholder {
-            color: var(--text3);
-            -webkit-text-fill-color: var(--text3);
-        }
-
-    select.form-control {
+    select.fc {
         appearance: auto;
         cursor: pointer;
     }
 
-        select.form-control option {
-            background: var(--surface);
-            color: #1a1a1a;
+        select.fc option {
+            background: #fff;
+            color: var(--text);
         }
 
-    input[type="date"].form-control::-webkit-calendar-picker-indicator {
+    input[type="date"].fc::-webkit-calendar-picker-indicator {
         opacity: .5;
         cursor: pointer;
     }
@@ -407,71 +414,19 @@
         flex-wrap: wrap;
     }
 
-        .entry-align .float-group {
-            min-width: 120px;
+        .entry-align .fg {
+            min-width: 100px;
         }
 
-            .entry-align .float-group.xl {
+            .entry-align .fg.xl {
                 flex: 3;
             }
 
-            .entry-align .float-group.lg {
-                flex: 2;
-            }
-
-            .entry-align .float-group.sm {
+            .entry-align .fg.sm {
                 flex: 1;
             }
 
-    .btn-pro {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 9px 20px;
-        font-family: var(--font-b);
-        font-size: 13px;
-        font-weight: 600;
-        border-radius: var(--r);
-        border: none;
-        cursor: pointer;
-        transition: all .2s ease;
-        white-space: nowrap;
-    }
-
-    .btn-add {
-        background: linear-gradient(135deg, var(--teal) 0%, #0e6655 100%);
-        color: #fff;
-        box-shadow: 0 3px 16px rgba(17,122,101,.30);
-        height: 46px;
-    }
-
-        .btn-add:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(17,122,101,.40);
-        }
-
-    .btn-save {
-        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-        color: #fff;
-        box-shadow: 0 3px 16px rgba(109,76,31,.30);
-    }
-
-        .btn-save:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(109,76,31,.40);
-        }
-
-    .btn-cancel {
-        background: var(--surface2);
-        color: var(--text2);
-        border: 1px solid var(--border2);
-    }
-
-        .btn-cancel:hover {
-            background: var(--surface3);
-            color: var(--text);
-        }
-
+    /* Summary Strip */
     .summary-strip {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -503,15 +458,16 @@
         color: var(--text);
     }
 
-    .summary-card.highlight .summary-value {
-        color: var(--accent);
-    }
-
     .summary-card.highlight {
-        border-color: rgba(109,76,31,.25);
-        background: rgba(109,76,31,.04);
+        border-color: rgba(78,157,255,.25);
+        background: var(--blue-g2);
     }
 
+        .summary-card.highlight .summary-value {
+            color: var(--blue-dark);
+        }
+
+    /* Table */
     .table-wrap {
         border: 1px solid var(--border2);
         border-radius: var(--r2);
@@ -519,57 +475,58 @@
         margin-bottom: 16px;
     }
 
-    .pro-table {
+    .pro-tbl {
         width: 100%;
         border-collapse: collapse;
     }
 
-        .pro-table thead th {
+        .pro-tbl thead th {
             background: var(--surface2);
             color: var(--text3);
             padding: 10px 14px;
             font-size: 9.5px;
-            font-weight: 500;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.2px;
             white-space: nowrap;
-            font-family: var(--font-m);
+            font-family: var(--font-b);
             border-bottom: 1px solid var(--border2);
             border-right: 1px solid var(--border);
             text-align: center;
         }
 
-            .pro-table thead th:last-child {
+            .pro-tbl thead th:last-child {
                 border-right: none;
             }
 
-        .pro-table tbody tr {
+        .pro-tbl tbody tr {
             border-bottom: 1px solid var(--border);
             transition: background .12s;
         }
 
-            .pro-table tbody tr:hover {
+            .pro-tbl tbody tr:hover {
                 background: var(--surface2);
             }
 
-            .pro-table tbody tr:last-child {
+            .pro-tbl tbody tr:last-child {
                 border-bottom: none;
             }
 
-        .pro-table tbody td {
+        .pro-tbl tbody td {
             padding: 10px 14px;
             font-size: 12.5px;
             color: var(--text2);
             text-align: center;
+            font-weight: 600;
         }
 
-            .pro-table tbody td.td-left {
+            .pro-tbl tbody td.td-left {
                 text-align: left;
-                font-weight: 500;
+                font-weight: 700;
                 color: var(--text);
             }
 
-        .pro-table tfoot td, .pro-table tfoot th {
+        .pro-tbl tfoot td, .pro-tbl tfoot th {
             padding: 11px 14px;
             font-family: var(--font-m);
             font-size: 11px;
@@ -580,7 +537,7 @@
             color: var(--text);
         }
 
-            .pro-table tfoot th.label-cell {
+            .pro-tbl tfoot th.label-cell {
                 text-align: left;
                 color: var(--text2);
                 font-size: 9.5px;
@@ -588,8 +545,8 @@
                 text-transform: uppercase;
             }
 
-            .pro-table tfoot th.grand-val {
-                color: var(--accent);
+            .pro-tbl tfoot th.grand-val {
+                color: var(--blue-dark);
                 font-size: 13px;
             }
 
@@ -598,23 +555,22 @@
         font-size: 12px;
     }
 
-    .tbl-btn {
+    .tbl-del {
         width: 28px;
         height: 28px;
-        border-radius: 7px;
-        border: 1px solid transparent;
+        border-radius: var(--r);
+        border: 1px solid rgba(239,68,68,.20);
         cursor: pointer;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         font-size: 11px;
         transition: all .15s;
-        background: rgba(217,79,79,.08);
-        color: #c0392b;
-        border-color: rgba(217,79,79,.20);
+        background: rgba(239,68,68,.08);
+        color: var(--danger);
     }
 
-        .tbl-btn:hover {
+        .tbl-del:hover {
             background: var(--danger);
             color: #fff;
             border-color: var(--danger);
@@ -644,194 +600,236 @@
         color: var(--text3);
     }
 
+    /* Buttons */
     .btn-row {
         display: flex;
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
         padding-top: 18px;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid var(--border2);
         margin-top: 4px;
         justify-content: flex-end;
     }
 
-    .page-footer {
-        margin-top: 16px;
-        padding-top: 12px;
-        border-top: 1px solid var(--border);
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 22px;
+        font-family: var(--font-b);
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: var(--r);
+        border: none;
+        cursor: pointer;
+        transition: all .2s ease;
+        white-space: nowrap;
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, var(--teal) 0%, #00a88e 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(0,201,167,.30);
+        height: 46px;
+    }
+
+        .btn-add:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(0,201,167,.40);
+        }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+        color: #fff;
+        box-shadow: 0 3px 14px rgba(78,157,255,.30);
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(78,157,255,.42);
+        }
+
+    .btn-secondary {
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border2);
+    }
+
+        .btn-secondary:hover {
+            background: var(--surface3);
+            color: var(--text);
+            border-color: var(--border3);
+        }
+
+    .pg-footer {
+        margin-top: 18px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border2);
         text-align: center;
         font-family: var(--font-m);
-        font-size: 10px;
+        font-size: 10.5px;
         color: var(--text3);
         letter-spacing: .5px;
     }
 
-        .page-footer strong {
-            color: var(--accent);
+        .pg-footer strong {
+            color: var(--blue);
             font-weight: 500;
         }
 
-    @@keyframes fadeUp {
-        from {
-            opacity: 0;
-            transform: translateY(10px);
+        .pg-footer .heart {
+            color: var(--coral);
         }
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    @@keyframes fadeDown {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-16px)
     }
 
-    @@keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-6px);
-        }
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
 
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    }
+    @@keyframes slideUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+
+    }
+    @@keyframes fadeIn {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(-6px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+
+    }
+    @@media (max-width: 900px) {
+        .sr-root
+
+    {
+        padding: 14px;
+    }
+
+    .frow-4, .frow-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .summary-strip {
+        grid-template-columns: 1fr 1fr;
+    }
+
     }
 </style>
 
-<div class="pi-wrap">
-    <div class="pi-inner">
+<div class="sr-root">
+    <div class="sr-inner">
 
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <div class="icon-box"><i class="fas fa-cart-shopping"></i></div>
+        <div class="page-header">
+            <div class="ph-left">
+                <div class="ph-icon"><i class="fas fa-cart-shopping"></i></div>
                 <div>
-                    <div class="page-title">Purchase <span>Invoice</span></div>
-                    <div class="breadcrumb">
-                        Finance <i class="fas fa-chevron-right"></i>
-                        <span>Purchase Invoice</span>
-                    </div>
+                    <div class="ph-title">Purchase <span>Invoice</span></div>
+                    <div class="ph-breadcrumb">Finance <i class="fas fa-chevron-right"></i> <span class="bc-cur">Purchase Invoice</span></div>
                 </div>
             </div>
-            <div class="pill pill-brown">
-                <i class="fas fa-circle" style="font-size:6px;"></i> Live
-            </div>
+            <div class="status-pill pill-live">Live</div>
         </div>
 
-        <div class="accent-line"><span></span><span></span><span></span></div>
+        <div class="divider"><span></span><span></span><span></span></div>
 
-        <!-- Form Card -->
         <div class="form-card">
-            <div class="form-card-header">
-                <div class="form-card-header-left">
-                    <div class="header-dots">
-                        <div class="h-dot h-dot-1"></div>
-                        <div class="h-dot h-dot-2"></div>
-                        <div class="h-dot h-dot-3"></div>
-                    </div>
-                    <div class="form-card-title">purchase_invoice.form</div>
+            <div class="fc-header">
+                <div class="fc-header-left">
+                    <div class="fc-icon"><i class="fas fa-cart-shopping"></i></div>
+                    <div><div class="fc-title">Purchase Invoice</div><div class="fc-sub">Create a new purchase invoice</div></div>
                 </div>
-                <div class="pill pill-brown">
-                    <i class="fas fa-circle" style="font-size:6px;"></i> Live
-                </div>
+                <div class="status-pill pill-live">Live</div>
             </div>
 
-            <div class="form-body">
+            <div class="fc-body">
 
-                <!-- Header Details -->
-                <div class="section-label">
-                    <div class="section-label-bar"></div>
-                    <span class="section-label-text">Invoice Details</span>
-                </div>
-
-                <div class="form-row form-row-4">
-                    <div class="float-group always-float">
-                        <input type="text" id="documentNo" class="form-control" readonly placeholder=" ">
-                        <label class="float-label" for="documentNo">Document No</label>
+                <div class="sec-label"><div class="sec-label-bar slb-blue"></div><span class="sec-label-txt">Invoice Details</span></div>
+                <div class="frow frow-4">
+                    <div class="fg always-up">
+                        <input type="text" id="documentNo" class="fc" readonly placeholder=" ">
+                        <label class="fl" for="documentNo">Document No</label>
                     </div>
-                    <div class="float-group always-float">
-                        <input type="date" id="date" class="form-control">
-                        <label class="float-label" for="date">Date</label>
+                    <div class="fg always-up">
+                        <input type="date" id="date" class="fc">
+                        <label class="fl" for="date">Date</label>
                     </div>
-                    <div class="float-group always-float">
-                        <select id="vendorDropdown" class="form-control">
-                            <option value="">— Select Vendor —</option>
-                        </select>
-                        <label class="float-label" for="vendorDropdown">Vendor</label>
+                    <div class="fg always-up">
+                        <select id="vendorDropdown" class="fc"><option value="">— Select Vendor —</option></select>
+                        <label class="fl" for="vendorDropdown">Vendor</label>
                     </div>
-                    <div class="float-group always-float">
-                        <input type="text" id="remarks" class="form-control" placeholder=" ">
-                        <label class="float-label" for="remarks">Remarks</label>
+                    <div class="fg">
+                        <input type="text" id="remarks" class="fc" placeholder=" ">
+                        <label class="fl" for="remarks">Remarks</label>
                     </div>
                 </div>
 
-                <!-- Entry Section -->
-                <div class="section-label" style="margin-top:4px;">
-                    <div class="section-label-bar" style="background:linear-gradient(180deg,var(--gold),var(--teal));"></div>
-                    <span class="section-label-text">Add Product Entry</span>
-                </div>
-
+                <div class="sec-label" style="margin-top:4px;"><div class="sec-label-bar slb-teal"></div><span class="sec-label-txt">Add Product Entry</span></div>
                 <div class="entry-align">
-                    <div class="float-group always-float xl">
-                        <select id="productDropdown" class="form-control">
-                            <option value="">— Select Product —</option>
-                        </select>
-                        <label class="float-label" for="productDropdown">Product</label>
+                    <div class="fg always-up xl">
+                        <select id="productDropdown" class="fc"><option value="">— Select Product —</option></select>
+                        <label class="fl" for="productDropdown">Product</label>
                     </div>
-                    <div class="float-group always-float sm">
-                        <input type="number" id="qty" class="form-control" placeholder=" " min="1">
-                        <label class="float-label" for="qty">Qty</label>
+                    <div class="fg always-up sm">
+                        <input type="number" id="qty" class="fc" placeholder=" " min="1">
+                        <label class="fl" for="qty">Qty</label>
                     </div>
-                    <!-- ✅ CHANGE 1: readonly hata diya -->
-                    <div class="float-group always-float sm">
-                        <input type="number" id="rate" class="form-control" placeholder=" ">
-                        <label class="float-label" for="rate">Rate</label>
+                    <div class="fg always-up sm">
+                        <input type="number" id="rate" class="fc" placeholder=" ">
+                        <label class="fl" for="rate">Rate</label>
                     </div>
-                    <div class="float-group always-float sm">
-                        <input type="number" id="amount" class="form-control" placeholder=" " readonly>
-                        <label class="float-label" for="amount">Amount</label>
+                    <div class="fg always-up sm">
+                        <input type="number" id="amount" class="fc" placeholder=" " readonly>
+                        <label class="fl" for="amount">Amount</label>
                     </div>
-                    <div class="float-group always-float sm">
-                        <input type="number" id="discount" class="form-control" placeholder=" ">
-                        <label class="float-label" for="discount">Discount</label>
+                    <div class="fg always-up sm">
+                        <input type="number" id="discount" class="fc" placeholder=" ">
+                        <label class="fl" for="discount">Discount</label>
                     </div>
-                    <div class="float-group always-float sm">
-                        <input type="number" id="netAmount" class="form-control" placeholder=" " readonly>
-                        <label class="float-label" for="netAmount">Net Amount</label>
+                    <div class="fg always-up sm">
+                        <input type="number" id="netAmount" class="fc" placeholder=" " readonly>
+                        <label class="fl" for="netAmount">Net Amount</label>
                     </div>
                     <div>
-                        <button class="btn-pro btn-add" onclick="addRow()">
-                            <i class="fas fa-plus"></i> Add
-                        </button>
+                        <button class="btn btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Add</button>
                     </div>
                 </div>
 
-                <!-- Summary Strip -->
-                <div class="summary-strip" style="margin-bottom:16px;">
-                    <div class="summary-card">
-                        <div class="summary-label">Total Qty</div>
-                        <div class="summary-value" id="dispQty">0</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Total Amount</div>
-                        <div class="summary-value" id="dispAmount">0.00</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-label">Total Discount</div>
-                        <div class="summary-value" id="dispDiscount">0.00</div>
-                    </div>
-                    <div class="summary-card highlight">
-                        <div class="summary-label">Net Amount</div>
-                        <div class="summary-value" id="dispNet">0.00</div>
-                    </div>
+                <div class="summary-strip">
+                    <div class="summary-card"><div class="summary-label">Total Qty</div><div class="summary-value" id="dispQty">0</div></div>
+                    <div class="summary-card"><div class="summary-label">Total Amount</div><div class="summary-value" id="dispAmount">0.00</div></div>
+                    <div class="summary-card"><div class="summary-label">Total Discount</div><div class="summary-value" id="dispDiscount">0.00</div></div>
+                    <div class="summary-card highlight"><div class="summary-label">Net Amount</div><div class="summary-value" id="dispNet">0.00</div></div>
                 </div>
 
-                <!-- Table Section -->
-                <div class="section-label" style="margin-top:4px;">
-                    <div class="section-label-bar" style="background:linear-gradient(180deg,var(--gold),var(--accent));"></div>
-                    <span class="section-label-text">Invoice Entries</span>
-                </div>
-
+                <div class="sec-label" style="margin-top:4px;"><div class="sec-label-bar slb-amber"></div><span class="sec-label-txt">Invoice Entries</span></div>
                 <div class="table-wrap">
-                    <table class="pro-table" id="dataTable">
+                    <table class="pro-tbl" id="dataTable">
                         <thead>
                             <tr>
                                 <th style="width:4%">#</th>
@@ -868,33 +866,23 @@
                     </table>
                 </div>
 
-                <!-- Footer Buttons -->
                 <div class="btn-row">
-                    <button class="btn-pro btn-cancel" onclick="cancelForm()">
-                        <i class="fas fa-xmark"></i> Cancel
-                    </button>
-                    <button class="btn-pro btn-save" onclick="saveForm()">
-                        <i class="fas fa-floppy-disk"></i> Save Invoice
-                    </button>
+                    <button class="btn btn-secondary" onclick="cancelForm()"><i class="fas fa-xmark"></i> Cancel</button>
+                    <button class="btn btn-primary" onclick="saveForm()"><i class="fas fa-floppy-disk"></i> Save Invoice</button>
                 </div>
 
-            </div><!-- /form-body -->
-        </div><!-- /form-card -->
-
-        <div class="page-footer">
-            Developed with <span style="color:var(--danger);">&#9829;</span> by <strong>UT Designer</strong>
+            </div>
         </div>
 
+        <div class="pg-footer">Developed with <span class="heart">♥</span> by <strong>UT Designer</strong></div>
     </div>
 </div>
 
 <script>
-    // ══════════════════════════════════════
-    //  Init
-    // ══════════════════════════════════════
-    let productMap = {};  // productCode -> { rate, discountAmount, productName }
+    let productMap = {};
     let rowCounter = 0;
     let detailRows = [];
+    const SW = { background: '#ffffff', color: '#1e2a3a', confirmButtonColor: '#4e9dff', cancelButtonColor: '#f8f9fc' };
 
     document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("date").valueAsDate = new Date();
@@ -903,327 +891,160 @@
         loadProductDropdown();
     });
 
-    // ── Load Document No ──
     async function loadDocumentNo() {
         try {
-            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceNo", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({})
-            });
+            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceNo", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
             const data = await res.json();
-            document.getElementById("documentNo").value =
-                (data.statusId === 1 && data.documentNo) ? data.documentNo : "N/A";
-        } catch (e) {
-            document.getElementById("documentNo").value = "Error";
-        }
+            document.getElementById("documentNo").value = (data.statusId === 1 && data.documentNo) ? data.documentNo : "N/A";
+        } catch (e) { document.getElementById("documentNo").value = "Error"; }
     }
 
-    // ── Load Vendor Dropdown ──
     async function loadVendorDropdown() {
         const dd = document.getElementById("vendorDropdown");
         try {
-            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceVendorDropDown", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({})
-            });
+            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceVendorDropDown", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
             const data = await res.json();
             if (data.statusId === 1 && data.vendors) {
-                data.vendors.forEach(function (v) {
-                    const opt = document.createElement("option");
-                    opt.value = v.vendorCode;
-                    opt.textContent = v.vendorName;
-                    dd.appendChild(opt);
-                });
+                data.vendors.forEach(function (v) { const opt = document.createElement("option"); opt.value = v.vendorCode; opt.textContent = v.vendorName; dd.appendChild(opt); });
             }
         } catch (e) { console.error("Error loading vendors:", e); }
     }
 
-    // ── Load Product Dropdown ──
     async function loadProductDropdown() {
         const dd = document.getElementById("productDropdown");
         try {
-            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceProductDropDown", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({})
-            });
+            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceProductDropDown", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
             const data = await res.json();
             if (data.statusId === 1 && data.products) {
                 data.products.forEach(function (p) {
-                    const opt = document.createElement("option");
-                    opt.value = p.productCode;
-                    opt.textContent = p.productName;
-                    dd.appendChild(opt);
-                    productMap[p.productCode] = {
-                        rate:           parseFloat(p.rate)           || 0,
-                        discountAmount: parseFloat(p.discountAmount) || 0,
-                        productName:    p.productName
-                    };
+                    const opt = document.createElement("option"); opt.value = p.productCode; opt.textContent = p.productName; dd.appendChild(opt);
+                    productMap[p.productCode] = { rate: parseFloat(p.rate) || 0, discountAmount: parseFloat(p.discountAmount) || 0, productName: p.productName };
                 });
             }
         } catch (e) { console.error("Error loading products:", e); }
     }
 
-    // ══════════════════════════════════════
-    //  Product Selection Auto-Fill
-    // ══════════════════════════════════════
     document.getElementById("productDropdown").addEventListener("change", function () {
         const code = this.value;
         if (code && productMap[code]) {
             document.getElementById("rate").value     = productMap[code].rate.toFixed(2);
             document.getElementById("discount").value = productMap[code].discountAmount.toFixed(2);
             document.getElementById("qty").value      = 1;
-            recalcEntry();
-            document.getElementById("qty").focus();
-        } else {
-            clearEntryFields();
-        }
+            recalcEntry(); document.getElementById("qty").focus();
+        } else { clearEntryFields(); }
     });
 
-    // ── Recalc on Qty, Rate, or Discount change ──
     document.getElementById("qty").addEventListener("input", recalcEntry);
-    document.getElementById("rate").addEventListener("input", recalcEntry);      // ✅ CHANGE 2: rate listener add kiya
+    document.getElementById("rate").addEventListener("input", recalcEntry);
     document.getElementById("discount").addEventListener("input", recalcEntry);
 
-    // ── Enter Key Navigation: Product → Qty → Rate → Discount → Add ──
-    // ✅ CHANGE 3: qty Enter → rate focus
-    document.getElementById("qty").addEventListener("keydown", function (e) {
-        if (e.key === "Enter") { e.preventDefault(); document.getElementById("rate").focus(); }
-    });
-    // ✅ CHANGE 3: rate Enter → discount focus
-    document.getElementById("rate").addEventListener("keydown", function (e) {
-        if (e.key === "Enter") { e.preventDefault(); document.getElementById("discount").focus(); }
-    });
-    // discount Enter → addRow
-    document.getElementById("discount").addEventListener("keydown", function (e) {
-        if (e.key === "Enter") { e.preventDefault(); addRow(); }
-    });
+    document.getElementById("qty").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); document.getElementById("rate").focus(); } });
+    document.getElementById("rate").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); document.getElementById("discount").focus(); } });
+    document.getElementById("discount").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addRow(); } });
 
     function recalcEntry() {
-        const qty      = parseFloat(document.getElementById("qty").value)      || 0;
-        const rate     = parseFloat(document.getElementById("rate").value)     || 0;
+        const qty = parseFloat(document.getElementById("qty").value) || 0;
+        const rate = parseFloat(document.getElementById("rate").value) || 0;
         const discount = parseFloat(document.getElementById("discount").value) || 0;
-        const amount   = qty * rate;
-        const net      = amount - discount;
+        const amount = qty * rate;
         document.getElementById("amount").value    = amount.toFixed(2);
-        document.getElementById("netAmount").value = net.toFixed(2);
+        document.getElementById("netAmount").value = (amount - discount).toFixed(2);
     }
 
     function clearEntryFields() {
-        document.getElementById("qty").value       = "";
-        document.getElementById("rate").value      = "";
-        document.getElementById("amount").value    = "";
-        document.getElementById("discount").value  = "";
-        document.getElementById("netAmount").value = "";
+        ["qty","rate","amount","discount","netAmount"].forEach(id => document.getElementById(id).value = "");
     }
 
-    // ══════════════════════════════════════
-    //  Add Row
-    // ══════════════════════════════════════
     function addRow() {
-        const dd          = document.getElementById("productDropdown");
+        const dd = document.getElementById("productDropdown");
         const productCode = dd.value;
         const productName = dd.options[dd.selectedIndex].text;
-        const qty         = parseFloat(document.getElementById("qty").value)       || 0;
-        const rate        = parseFloat(document.getElementById("rate").value)      || 0;
-        const amount      = parseFloat(document.getElementById("amount").value)    || 0;
-        const discount    = parseFloat(document.getElementById("discount").value)  || 0;
-        const netAmount   = parseFloat(document.getElementById("netAmount").value) || 0;
+        const qty       = parseFloat(document.getElementById("qty").value)       || 0;
+        const rate      = parseFloat(document.getElementById("rate").value)      || 0;
+        const amount    = parseFloat(document.getElementById("amount").value)    || 0;
+        const discount  = parseFloat(document.getElementById("discount").value)  || 0;
+        const netAmount = parseFloat(document.getElementById("netAmount").value) || 0;
 
-        if (!productCode)   { alert("Please select a Product.");           dd.focus();                                    return; }
-        if (qty <= 0)       { alert("Please enter a valid Qty.");          document.getElementById("qty").focus();       return; }
-        if (rate <= 0)      { alert("Rate is 0. Check product data.");     document.getElementById("rate").focus();      return; }
+        if (!productCode) { alert("Please select a Product."); dd.focus(); return; }
+        if (qty <= 0)     { alert("Please enter a valid Qty."); document.getElementById("qty").focus(); return; }
+        if (rate <= 0)    { alert("Rate is 0. Check product data."); document.getElementById("rate").focus(); return; }
 
-        const emptyRow = document.getElementById("emptyRow");
-        if (emptyRow) emptyRow.remove();
-
+        const emptyRow = document.getElementById("emptyRow"); if (emptyRow) emptyRow.remove();
         rowCounter++;
         const tbody = document.getElementById("tableBody");
-        const row   = document.createElement("tr");
-        row.id = "row_" + rowCounter;
-        row.style.animation = "fadeIn 0.3s ease";
+        const row = document.createElement("tr"); row.id = "row_" + rowCounter; row.style.animation = "fadeIn 0.3s ease";
         row.innerHTML = `
-            <td>${rowCounter}</td>
-            <td class="td-left">${productName}</td>
-            <td class="amount-cell">${qty}</td>
-            <td class="amount-cell">${rate.toFixed(2)}</td>
-            <td class="amount-cell">${amount.toFixed(2)}</td>
-            <td class="amount-cell">${discount.toFixed(2)}</td>
+            <td>${rowCounter}</td><td class="td-left">${productName}</td>
+            <td class="amount-cell">${qty}</td><td class="amount-cell">${rate.toFixed(2)}</td>
+            <td class="amount-cell">${amount.toFixed(2)}</td><td class="amount-cell">${discount.toFixed(2)}</td>
             <td class="amount-cell">${netAmount.toFixed(2)}</td>
-            <td>
-                <button class="tbl-btn"
-                    onclick="deleteRow('row_${rowCounter}', ${qty}, ${amount}, ${discount}, ${netAmount})"
-                    title="Remove">
-                    <i class="fas fa-trash-can"></i>
-                </button>
-            </td>
-        `;
+            <td><button class="tbl-del" onclick="deleteRow('row_${rowCounter}',${qty},${amount},${discount},${netAmount})" title="Remove"><i class="fas fa-trash-can"></i></button></td>`;
         tbody.appendChild(row);
-
         updateTotals(qty, amount, discount, netAmount);
-
-        detailRows.push({
-            rowId: "row_" + rowCounter,
-            productCode: parseInt(productCode),
-            qty: qty,
-            rate: rate,
-            amount: amount,
-            discountAmount: discount,
-            netAmount: netAmount
-        });
-
-        dd.value = "";
-        clearEntryFields();
-        dd.focus();
+        detailRows.push({ rowId: "row_" + rowCounter, productCode: parseInt(productCode), qty, rate, amount, discountAmount: discount, netAmount });
+        dd.value = ""; clearEntryFields(); dd.focus();
     }
 
-    // ══════════════════════════════════════
-    //  Delete Row
-    // ══════════════════════════════════════
     function deleteRow(rowId, qty, amount, discount, netAmount) {
         const row = document.getElementById(rowId);
         if (row) {
-            row.style.opacity    = "0";
-            row.style.transform  = "translateX(20px)";
-            row.style.transition = "all 0.25s ease";
+            row.style.opacity = "0"; row.style.transform = "translateX(20px)"; row.style.transition = "all 0.25s ease";
             setTimeout(() => {
-                row.remove();
-                updateTotals(-qty, -amount, -discount, -netAmount);
+                row.remove(); updateTotals(-qty, -amount, -discount, -netAmount);
                 detailRows = detailRows.filter(d => d.rowId !== rowId);
-
                 const tbody = document.getElementById("tableBody");
                 if (tbody.children.length === 0) {
-                    const er = document.createElement("tr");
-                    er.id = "emptyRow";
-                    er.innerHTML = `
-                        <td colspan="8">
-                            <div class="empty-state">
-                                <div class="empty-icon"><i class="fas fa-box-open"></i></div>
-                                <div class="empty-text">No products added yet.</div>
-                            </div>
-                        </td>
-                    `;
+                    const er = document.createElement("tr"); er.id = "emptyRow";
+                    er.innerHTML = `<td colspan="8"><div class="empty-state"><div class="empty-icon"><i class="fas fa-box-open"></i></div><div class="empty-text">No products added yet.</div></div></td>`;
                     tbody.appendChild(er);
                 }
             }, 250);
         }
     }
 
-    // ══════════════════════════════════════
-    //  Update Totals
-    // ══════════════════════════════════════
     function updateTotals(qty, amount, discount, netAmount) {
         const sQty  = parseFloat(document.getElementById("sumQty").innerText)      + qty;
         const sAmt  = parseFloat(document.getElementById("sumAmount").innerText)   + amount;
         const sDisc = parseFloat(document.getElementById("sumDiscount").innerText) + discount;
         const sNet  = parseFloat(document.getElementById("sumNet").innerText)      + netAmount;
-
         document.getElementById("sumQty").innerText      = sQty.toFixed(0);
         document.getElementById("sumAmount").innerText   = sAmt.toFixed(2);
         document.getElementById("sumDiscount").innerText = sDisc.toFixed(2);
         document.getElementById("sumNet").innerText      = sNet.toFixed(2);
-
-        const dispQty      = document.getElementById("dispQty");
-        const dispAmount   = document.getElementById("dispAmount");
-        const dispDiscount = document.getElementById("dispDiscount");
-        const dispNet      = document.getElementById("dispNet");
-
-        if (dispQty)      dispQty.innerText      = sQty.toFixed(0);
-        if (dispAmount)   dispAmount.innerText   = sAmt.toFixed(2);
-        if (dispDiscount) dispDiscount.innerText = sDisc.toFixed(2);
-        if (dispNet)      dispNet.innerText      = sNet.toFixed(2);
+        const dq = document.getElementById("dispQty"), da = document.getElementById("dispAmount"), dd2 = document.getElementById("dispDiscount"), dn = document.getElementById("dispNet");
+        if (dq) dq.innerText = sQty.toFixed(0); if (da) da.innerText = sAmt.toFixed(2); if (dd2) dd2.innerText = sDisc.toFixed(2); if (dn) dn.innerText = sNet.toFixed(2);
     }
 
-    // ══════════════════════════════════════
-    //  Save / Cancel
-    // ══════════════════════════════════════
     async function saveForm() {
         const tbody = document.getElementById("tableBody");
-        if (tbody.querySelector("#emptyRow")) {
-            alert("Please add at least one product before saving.");
-            return;
-        }
-
-        const documentNo          = document.getElementById("documentNo").value;
-        const date                = document.getElementById("date").value;
-        const vendorCode          = document.getElementById("vendorDropdown").value;
-        const remarks             = document.getElementById("remarks").value;
-        const totalQty            = parseFloat(document.getElementById("sumQty").innerText)      || 0;
-        const totalAmount         = parseFloat(document.getElementById("sumAmount").innerText)   || 0;
-        const totalDiscountAmount = parseFloat(document.getElementById("sumDiscount").innerText) || 0;
-        const netAmount           = parseFloat(document.getElementById("sumNet").innerText)      || 0;
-
-        if (!date)       { alert("Please select a Date.");    return; }
-        if (!vendorCode) { alert("Please select a Vendor.");  return; }
-
+        if (tbody.querySelector("#emptyRow")) { alert("Please add at least one product before saving."); return; }
+        const documentNo = document.getElementById("documentNo").value;
+        const date = document.getElementById("date").value;
+        const vendorCode = document.getElementById("vendorDropdown").value;
+        const remarks = document.getElementById("remarks").value;
+        if (!date) { alert("Please select a Date."); return; }
+        if (!vendorCode) { alert("Please select a Vendor."); return; }
         const payload = {
-            documentNo,
-            vendorCode: parseInt(vendorCode),
-            date,
-            remarks,
-            totalQty,
-            totalAmount,
-            totalDiscountAmount,
-            netAmount,
-            details: detailRows.map(d => ({
-                productCode:    d.productCode,
-                qty:            d.qty,
-                rate:           d.rate,
-                amount:         d.amount,
-                discountAmount: d.discountAmount,
-                netAmount:      d.netAmount
-            }))
+            documentNo, vendorCode: parseInt(vendorCode), date, remarks,
+            totalQty: parseFloat(document.getElementById("sumQty").innerText) || 0,
+            totalAmount: parseFloat(document.getElementById("sumAmount").innerText) || 0,
+            totalDiscountAmount: parseFloat(document.getElementById("sumDiscount").innerText) || 0,
+            netAmount: parseFloat(document.getElementById("sumNet").innerText) || 0,
+            details: detailRows.map(d => ({ productCode: d.productCode, qty: d.qty, rate: d.rate, amount: d.amount, discountAmount: d.discountAmount, netAmount: d.netAmount }))
         };
-
         try {
-            const res  = await fetch("/PurchaseInvoice/nSavePurchaseInvoice", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
+            const res = await fetch("/PurchaseInvoice/nSavePurchaseInvoice", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
             const data = await res.json();
-
             if (data.statusId === 1) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Saved!',
-                    text: 'Purchase Invoice saved successfully!',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#6d4c1f',
-                    timer: 2000,
-                    timerProgressBar: true
-                }).then(() => {
-                    location.reload();
-                });
+                Swal.fire({ icon: 'success', title: 'Saved!', text: 'Purchase Invoice saved successfully!', confirmButtonText: 'OK', confirmButtonColor: '#4e9dff', timer: 2000, timerProgressBar: true, ...SW }).then(() => { location.reload(); });
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: data.message || "Failed to save.",
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#d94f4f'
-                });
+                Swal.fire({ icon: 'error', title: 'Error!', text: data.message || "Failed to save.", confirmButtonText: 'OK', confirmButtonColor: '#ef4444', ...SW });
             }
-        } catch (e) {
-            console.error("Save error:", e);
-            alert("Error saving invoice. Please try again.");
-        }
+        } catch (e) { console.error("Save error:", e); alert("Error saving invoice."); }
     }
 
     function cancelForm() {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Cancel?',
-            text: 'All data will be lost.',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, Cancel',
-            cancelButtonText: 'Go Back',
-            confirmButtonColor: '#d94f4f',
-            cancelButtonColor: '#6d4c1f'
-        }).then((result) => {
-            if (result.isConfirmed) location.reload();
-        });
+        Swal.fire({ icon: 'warning', title: 'Cancel?', text: 'All data will be lost.', showCancelButton: true, confirmButtonText: 'Yes, Cancel', cancelButtonText: 'Go Back', confirmButtonColor: '#ef4444', cancelButtonColor: '#4e9dff', ...SW })
+            .then((result) => { if (result.isConfirmed) location.reload(); });
     }
 </script>
