@@ -1,0 +1,1229 @@
+﻿@page
+@model NormalAccountProject.Pages.PurchaseInvoiceModel
+@{
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    :root {
+        --bg: #f4f4f4;
+        --bg2: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f9f9f9;
+        --surface3: #efefef;
+        --border: rgba(0,0,0,.07);
+        --border2: rgba(0,0,0,.12);
+        --border3: rgba(0,0,0,.18);
+        --accent: #6d4c1f;
+        --accent2: #4e3615;
+        --accent-g: rgba(109,76,31,.10);
+        --gold: #b08d57;
+        --gold-g: rgba(176,141,87,.12);
+        --teal: #117a65;
+        --danger: #d94f4f;
+        --success: #2e7d5e;
+        --text: #1a1a1a;
+        --text2: #5c5a58;
+        --text3: #9a9896;
+        --font-h: 'Syne', sans-serif;
+        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --font-m: 'JetBrains Mono', monospace;
+        --r: 10px;
+        --r2: 14px;
+        --r3: 18px;
+        --sh: 0 4px 32px rgba(0,0,0,.08);
+        --sh2: 0 8px 40px rgba(0,0,0,.10), 0 0 0 1px rgba(109,76,31,.08);
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .pi-wrap {
+        font-family: var(--font-b);
+        color: var(--text);
+        background: var(--bg);
+        min-height: calc(100vh - 60px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pi-inner {
+        position: relative;
+        z-index: 1;
+        padding: 20px 24px;
+    }
+
+    .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border2);
+    }
+
+    .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .icon-box {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 17px;
+        box-shadow: 0 4px 20px rgba(109,76,31,.30);
+        flex-shrink: 0;
+    }
+
+    .page-title {
+        font-family: var(--font-h);
+        font-size: 21px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -.3px;
+        line-height: 1.1;
+    }
+
+        .page-title span {
+            color: var(--accent);
+        }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+        margin-top: 3px;
+    }
+
+        .breadcrumb i {
+            font-size: 7px;
+        }
+
+        .breadcrumb span {
+            color: var(--gold);
+        }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+
+    .pill-brown {
+        background: rgba(109,76,31,.10);
+        color: var(--accent);
+        border-color: rgba(109,76,31,.30);
+    }
+
+    .accent-line {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 18px;
+        height: 2px;
+    }
+
+        .accent-line span:nth-child(1) {
+            flex: 2;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .accent-line span:nth-child(2) {
+            flex: 1;
+            background: var(--gold);
+            border-radius: 2px;
+            opacity: .6;
+        }
+
+        .accent-line span:nth-child(3) {
+            flex: 3;
+            background: var(--border2);
+            border-radius: 2px;
+        }
+
+    .form-card {
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
+        overflow: hidden;
+        animation: fadeUp .3s ease both;
+        position: relative;
+    }
+
+        .form-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--r3);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+            pointer-events: none;
+        }
+
+    .form-card-header {
+        padding: 12px 22px;
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(109,76,31,.06) 100%);
+        border-bottom: 1px solid var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-dots {
+        display: flex;
+        gap: 5px;
+    }
+
+    .h-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+    }
+
+    .h-dot-1 {
+        background: #f43f5e;
+    }
+
+    .h-dot-2 {
+        background: #f59e0b;
+    }
+
+    .h-dot-3 {
+        background: #10b981;
+    }
+
+    .form-card-title {
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text3);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    .form-body {
+        padding: 22px 24px;
+        max-height: 82vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .form-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .form-body::-webkit-scrollbar-thumb {
+            background: var(--surface3);
+            border-radius: 10px;
+        }
+
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-family: var(--font-m);
+        font-size: 9.5px;
+        color: var(--text3);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 500;
+    }
+
+    .section-label-bar {
+        width: 3px;
+        height: 12px;
+        background: linear-gradient(180deg, var(--accent), var(--gold));
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .section-label-text {
+        color: var(--text2);
+    }
+
+    .form-row {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .form-row-4 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+
+    .form-row-3 {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .float-group {
+        position: relative;
+    }
+
+        .float-group .form-control {
+            padding: 22px 13px 7px;
+        }
+
+        .float-group select.form-control {
+            padding: 22px 13px 7px;
+        }
+
+    .float-label {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-b);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text3);
+        pointer-events: none;
+        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 26px);
+    }
+
+    .float-group .form-control:focus ~ .float-label,
+    .float-group.has-value .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-m);
+        color: var(--accent);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-m);
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group.always-float .form-control:focus ~ .float-label {
+        color: var(--accent);
+    }
+
+    .float-group .form-control::placeholder {
+        color: transparent;
+    }
+
+    .form-control {
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
+        padding: 9px 13px;
+        font-size: 13.5px;
+        font-family: var(--font-b);
+        color: #1a1a1a !important;
+        background: var(--bg2);
+        transition: border-color .18s, box-shadow .18s, background .18s;
+        outline: none;
+        width: 100%;
+        -webkit-text-fill-color: #1a1a1a !important;
+        caret-color: var(--accent);
+    }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(109,76,31,.12);
+            background: var(--surface);
+        }
+
+        .form-control[readonly] {
+            background: var(--surface2);
+            color: var(--text2) !important;
+            -webkit-text-fill-color: var(--text2) !important;
+            cursor: default;
+        }
+
+        .form-control::placeholder {
+            color: var(--text3);
+            -webkit-text-fill-color: var(--text3);
+        }
+
+    select.form-control {
+        appearance: auto;
+        cursor: pointer;
+    }
+
+        select.form-control option {
+            background: var(--surface);
+            color: #1a1a1a;
+        }
+
+    input[type="date"].form-control::-webkit-calendar-picker-indicator {
+        opacity: .5;
+        cursor: pointer;
+    }
+
+    .entry-align {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+    }
+
+        .entry-align .float-group {
+            min-width: 120px;
+        }
+
+            .entry-align .float-group.xl {
+                flex: 3;
+            }
+
+            .entry-align .float-group.lg {
+                flex: 2;
+            }
+
+            .entry-align .float-group.sm {
+                flex: 1;
+            }
+
+    .btn-pro {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 20px;
+        font-family: var(--font-b);
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: var(--r);
+        border: none;
+        cursor: pointer;
+        transition: all .2s ease;
+        white-space: nowrap;
+    }
+
+    .btn-add {
+        background: linear-gradient(135deg, var(--teal) 0%, #0e6655 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(17,122,101,.30);
+        height: 46px;
+    }
+
+        .btn-add:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(17,122,101,.40);
+        }
+
+    .btn-save {
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(109,76,31,.30);
+    }
+
+        .btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(109,76,31,.40);
+        }
+
+    .btn-cancel {
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border2);
+    }
+
+        .btn-cancel:hover {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+    .summary-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+
+    .summary-card {
+        background: var(--surface2);
+        border: 1px solid var(--border2);
+        border-radius: var(--r2);
+        padding: 12px 16px;
+        text-align: center;
+    }
+
+    .summary-label {
+        font-family: var(--font-m);
+        font-size: 9px;
+        color: var(--text3);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
+
+    .summary-value {
+        font-family: var(--font-m);
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text);
+    }
+
+    .summary-card.highlight .summary-value {
+        color: var(--accent);
+    }
+
+    .summary-card.highlight {
+        border-color: rgba(109,76,31,.25);
+        background: rgba(109,76,31,.04);
+    }
+
+    .table-wrap {
+        border: 1px solid var(--border2);
+        border-radius: var(--r2);
+        overflow: hidden;
+        margin-bottom: 16px;
+    }
+
+    .pro-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .pro-table thead th {
+            background: var(--surface2);
+            color: var(--text3);
+            padding: 10px 14px;
+            font-size: 9.5px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            white-space: nowrap;
+            font-family: var(--font-m);
+            border-bottom: 1px solid var(--border2);
+            border-right: 1px solid var(--border);
+            text-align: center;
+        }
+
+            .pro-table thead th:last-child {
+                border-right: none;
+            }
+
+        .pro-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .12s;
+        }
+
+            .pro-table tbody tr:hover {
+                background: var(--surface2);
+            }
+
+            .pro-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+        .pro-table tbody td {
+            padding: 10px 14px;
+            font-size: 12.5px;
+            color: var(--text2);
+            text-align: center;
+        }
+
+            .pro-table tbody td.td-left {
+                text-align: left;
+                font-weight: 500;
+                color: var(--text);
+            }
+
+        .pro-table tfoot td, .pro-table tfoot th {
+            padding: 11px 14px;
+            font-family: var(--font-m);
+            font-size: 11px;
+            font-weight: 500;
+            text-align: center;
+            background: var(--surface2);
+            border-top: 1px solid var(--border2);
+            color: var(--text);
+        }
+
+            .pro-table tfoot th.label-cell {
+                text-align: left;
+                color: var(--text2);
+                font-size: 9.5px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            .pro-table tfoot th.grand-val {
+                color: var(--accent);
+                font-size: 13px;
+            }
+
+    .amount-cell {
+        font-family: var(--font-m);
+        font-size: 12px;
+    }
+
+    .tbl-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        transition: all .15s;
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border-color: rgba(217,79,79,.20);
+    }
+
+        .tbl-btn:hover {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 48px;
+        height: 48px;
+        background: var(--surface2);
+        border-radius: var(--r2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text3);
+        font-size: 18px;
+        margin: 0 auto 12px;
+        border: 1px solid var(--border2);
+    }
+
+    .empty-text {
+        font-size: 13px;
+        color: var(--text3);
+    }
+
+    .btn-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        margin-top: 4px;
+        justify-content: flex-end;
+    }
+
+    .page-footer {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+    }
+
+        .page-footer strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="pi-wrap">
+    <div class="pi-inner">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="icon-box"><i class="fas fa-cart-shopping"></i></div>
+                <div>
+                    <div class="page-title">Purchase <span>Invoice</span></div>
+                    <div class="breadcrumb">
+                        Finance <i class="fas fa-chevron-right"></i>
+                        <span>Purchase Invoice</span>
+                    </div>
+                </div>
+            </div>
+            <div class="pill pill-brown">
+                <i class="fas fa-circle" style="font-size:6px;"></i> Live
+            </div>
+        </div>
+
+        <div class="accent-line"><span></span><span></span><span></span></div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <div class="form-card-header">
+                <div class="form-card-header-left">
+                    <div class="header-dots">
+                        <div class="h-dot h-dot-1"></div>
+                        <div class="h-dot h-dot-2"></div>
+                        <div class="h-dot h-dot-3"></div>
+                    </div>
+                    <div class="form-card-title">purchase_invoice.form</div>
+                </div>
+                <div class="pill pill-brown">
+                    <i class="fas fa-circle" style="font-size:6px;"></i> Live
+                </div>
+            </div>
+
+            <div class="form-body">
+
+                <!-- Header Details -->
+                <div class="section-label">
+                    <div class="section-label-bar"></div>
+                    <span class="section-label-text">Invoice Details</span>
+                </div>
+
+                <div class="form-row form-row-4">
+                    <div class="float-group always-float">
+                        <input type="text" id="documentNo" class="form-control" readonly placeholder=" ">
+                        <label class="float-label" for="documentNo">Document No</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <input type="date" id="date" class="form-control">
+                        <label class="float-label" for="date">Date</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <select id="vendorDropdown" class="form-control">
+                            <option value="">— Select Vendor —</option>
+                        </select>
+                        <label class="float-label" for="vendorDropdown">Vendor</label>
+                    </div>
+                    <div class="float-group always-float">
+                        <input type="text" id="remarks" class="form-control" placeholder=" ">
+                        <label class="float-label" for="remarks">Remarks</label>
+                    </div>
+                </div>
+
+                <!-- Entry Section -->
+                <div class="section-label" style="margin-top:4px;">
+                    <div class="section-label-bar" style="background:linear-gradient(180deg,var(--gold),var(--teal));"></div>
+                    <span class="section-label-text">Add Product Entry</span>
+                </div>
+
+                <div class="entry-align">
+                    <div class="float-group always-float xl">
+                        <select id="productDropdown" class="form-control">
+                            <option value="">— Select Product —</option>
+                        </select>
+                        <label class="float-label" for="productDropdown">Product</label>
+                    </div>
+                    <div class="float-group always-float sm">
+                        <input type="number" id="qty" class="form-control" placeholder=" " min="1">
+                        <label class="float-label" for="qty">Qty</label>
+                    </div>
+                    <!-- ✅ CHANGE 1: readonly hata diya -->
+                    <div class="float-group always-float sm">
+                        <input type="number" id="rate" class="form-control" placeholder=" ">
+                        <label class="float-label" for="rate">Rate</label>
+                    </div>
+                    <div class="float-group always-float sm">
+                        <input type="number" id="amount" class="form-control" placeholder=" " readonly>
+                        <label class="float-label" for="amount">Amount</label>
+                    </div>
+                    <div class="float-group always-float sm">
+                        <input type="number" id="discount" class="form-control" placeholder=" ">
+                        <label class="float-label" for="discount">Discount</label>
+                    </div>
+                    <div class="float-group always-float sm">
+                        <input type="number" id="netAmount" class="form-control" placeholder=" " readonly>
+                        <label class="float-label" for="netAmount">Net Amount</label>
+                    </div>
+                    <div>
+                        <button class="btn-pro btn-add" onclick="addRow()">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Summary Strip -->
+                <div class="summary-strip" style="margin-bottom:16px;">
+                    <div class="summary-card">
+                        <div class="summary-label">Total Qty</div>
+                        <div class="summary-value" id="dispQty">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Total Amount</div>
+                        <div class="summary-value" id="dispAmount">0.00</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Total Discount</div>
+                        <div class="summary-value" id="dispDiscount">0.00</div>
+                    </div>
+                    <div class="summary-card highlight">
+                        <div class="summary-label">Net Amount</div>
+                        <div class="summary-value" id="dispNet">0.00</div>
+                    </div>
+                </div>
+
+                <!-- Table Section -->
+                <div class="section-label" style="margin-top:4px;">
+                    <div class="section-label-bar" style="background:linear-gradient(180deg,var(--gold),var(--accent));"></div>
+                    <span class="section-label-text">Invoice Entries</span>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="pro-table" id="dataTable">
+                        <thead>
+                            <tr>
+                                <th style="width:4%">#</th>
+                                <th style="width:30%;text-align:left;">Product</th>
+                                <th style="width:10%">Qty</th>
+                                <th style="width:14%">Rate</th>
+                                <th style="width:14%">Amount</th>
+                                <th style="width:14%">Discount</th>
+                                <th style="width:10%">Net Amount</th>
+                                <th style="width:4%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr id="emptyRow">
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                                        <div class="empty-text">No products added yet.</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="2" class="label-cell">Grand Total</th>
+                                <th id="sumQty" class="amount-cell">0</th>
+                                <th class="amount-cell">—</th>
+                                <th id="sumAmount" class="amount-cell">0.00</th>
+                                <th id="sumDiscount" class="amount-cell">0.00</th>
+                                <th id="sumNet" class="amount-cell grand-val">0.00</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!-- Footer Buttons -->
+                <div class="btn-row">
+                    <button class="btn-pro btn-cancel" onclick="cancelForm()">
+                        <i class="fas fa-xmark"></i> Cancel
+                    </button>
+                    <button class="btn-pro btn-save" onclick="saveForm()">
+                        <i class="fas fa-floppy-disk"></i> Save Invoice
+                    </button>
+                </div>
+
+            </div><!-- /form-body -->
+        </div><!-- /form-card -->
+
+        <div class="page-footer">
+            Developed with <span style="color:var(--danger);">&#9829;</span> by <strong>UT Designer</strong>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ══════════════════════════════════════
+    //  Init
+    // ══════════════════════════════════════
+    let productMap = {};  // productCode -> { rate, discountAmount, productName }
+    let rowCounter = 0;
+    let detailRows = [];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("date").valueAsDate = new Date();
+        loadDocumentNo();
+        loadVendorDropdown();
+        loadProductDropdown();
+    });
+
+    // ── Load Document No ──
+    async function loadDocumentNo() {
+        try {
+            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceNo", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({})
+            });
+            const data = await res.json();
+            document.getElementById("documentNo").value =
+                (data.statusId === 1 && data.documentNo) ? data.documentNo : "N/A";
+        } catch (e) {
+            document.getElementById("documentNo").value = "Error";
+        }
+    }
+
+    // ── Load Vendor Dropdown ──
+    async function loadVendorDropdown() {
+        const dd = document.getElementById("vendorDropdown");
+        try {
+            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceVendorDropDown", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({})
+            });
+            const data = await res.json();
+            if (data.statusId === 1 && data.vendors) {
+                data.vendors.forEach(function (v) {
+                    const opt = document.createElement("option");
+                    opt.value = v.vendorCode;
+                    opt.textContent = v.vendorName;
+                    dd.appendChild(opt);
+                });
+            }
+        } catch (e) { console.error("Error loading vendors:", e); }
+    }
+
+    // ── Load Product Dropdown ──
+    async function loadProductDropdown() {
+        const dd = document.getElementById("productDropdown");
+        try {
+            const res = await fetch("/PurchaseInvoice/nLoadPurchaseInvoiceProductDropDown", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({})
+            });
+            const data = await res.json();
+            if (data.statusId === 1 && data.products) {
+                data.products.forEach(function (p) {
+                    const opt = document.createElement("option");
+                    opt.value = p.productCode;
+                    opt.textContent = p.productName;
+                    dd.appendChild(opt);
+                    productMap[p.productCode] = {
+                        rate:           parseFloat(p.rate)           || 0,
+                        discountAmount: parseFloat(p.discountAmount) || 0,
+                        productName:    p.productName
+                    };
+                });
+            }
+        } catch (e) { console.error("Error loading products:", e); }
+    }
+
+    // ══════════════════════════════════════
+    //  Product Selection Auto-Fill
+    // ══════════════════════════════════════
+    document.getElementById("productDropdown").addEventListener("change", function () {
+        const code = this.value;
+        if (code && productMap[code]) {
+            document.getElementById("rate").value     = productMap[code].rate.toFixed(2);
+            document.getElementById("discount").value = productMap[code].discountAmount.toFixed(2);
+            document.getElementById("qty").value      = 1;
+            recalcEntry();
+            document.getElementById("qty").focus();
+        } else {
+            clearEntryFields();
+        }
+    });
+
+    // ── Recalc on Qty, Rate, or Discount change ──
+    document.getElementById("qty").addEventListener("input", recalcEntry);
+    document.getElementById("rate").addEventListener("input", recalcEntry);      // ✅ CHANGE 2: rate listener add kiya
+    document.getElementById("discount").addEventListener("input", recalcEntry);
+
+    // ── Enter Key Navigation: Product → Qty → Rate → Discount → Add ──
+    // ✅ CHANGE 3: qty Enter → rate focus
+    document.getElementById("qty").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("rate").focus(); }
+    });
+    // ✅ CHANGE 3: rate Enter → discount focus
+    document.getElementById("rate").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); document.getElementById("discount").focus(); }
+    });
+    // discount Enter → addRow
+    document.getElementById("discount").addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); addRow(); }
+    });
+
+    function recalcEntry() {
+        const qty      = parseFloat(document.getElementById("qty").value)      || 0;
+        const rate     = parseFloat(document.getElementById("rate").value)     || 0;
+        const discount = parseFloat(document.getElementById("discount").value) || 0;
+        const amount   = qty * rate;
+        const net      = amount - discount;
+        document.getElementById("amount").value    = amount.toFixed(2);
+        document.getElementById("netAmount").value = net.toFixed(2);
+    }
+
+    function clearEntryFields() {
+        document.getElementById("qty").value       = "";
+        document.getElementById("rate").value      = "";
+        document.getElementById("amount").value    = "";
+        document.getElementById("discount").value  = "";
+        document.getElementById("netAmount").value = "";
+    }
+
+    // ══════════════════════════════════════
+    //  Add Row
+    // ══════════════════════════════════════
+    function addRow() {
+        const dd          = document.getElementById("productDropdown");
+        const productCode = dd.value;
+        const productName = dd.options[dd.selectedIndex].text;
+        const qty         = parseFloat(document.getElementById("qty").value)       || 0;
+        const rate        = parseFloat(document.getElementById("rate").value)      || 0;
+        const amount      = parseFloat(document.getElementById("amount").value)    || 0;
+        const discount    = parseFloat(document.getElementById("discount").value)  || 0;
+        const netAmount   = parseFloat(document.getElementById("netAmount").value) || 0;
+
+        if (!productCode)   { alert("Please select a Product.");           dd.focus();                                    return; }
+        if (qty <= 0)       { alert("Please enter a valid Qty.");          document.getElementById("qty").focus();       return; }
+        if (rate <= 0)      { alert("Rate is 0. Check product data.");     document.getElementById("rate").focus();      return; }
+
+        const emptyRow = document.getElementById("emptyRow");
+        if (emptyRow) emptyRow.remove();
+
+        rowCounter++;
+        const tbody = document.getElementById("tableBody");
+        const row   = document.createElement("tr");
+        row.id = "row_" + rowCounter;
+        row.style.animation = "fadeIn 0.3s ease";
+        row.innerHTML = `
+            <td>${rowCounter}</td>
+            <td class="td-left">${productName}</td>
+            <td class="amount-cell">${qty}</td>
+            <td class="amount-cell">${rate.toFixed(2)}</td>
+            <td class="amount-cell">${amount.toFixed(2)}</td>
+            <td class="amount-cell">${discount.toFixed(2)}</td>
+            <td class="amount-cell">${netAmount.toFixed(2)}</td>
+            <td>
+                <button class="tbl-btn"
+                    onclick="deleteRow('row_${rowCounter}', ${qty}, ${amount}, ${discount}, ${netAmount})"
+                    title="Remove">
+                    <i class="fas fa-trash-can"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(row);
+
+        updateTotals(qty, amount, discount, netAmount);
+
+        detailRows.push({
+            rowId: "row_" + rowCounter,
+            productCode: parseInt(productCode),
+            qty: qty,
+            rate: rate,
+            amount: amount,
+            discountAmount: discount,
+            netAmount: netAmount
+        });
+
+        dd.value = "";
+        clearEntryFields();
+        dd.focus();
+    }
+
+    // ══════════════════════════════════════
+    //  Delete Row
+    // ══════════════════════════════════════
+    function deleteRow(rowId, qty, amount, discount, netAmount) {
+        const row = document.getElementById(rowId);
+        if (row) {
+            row.style.opacity    = "0";
+            row.style.transform  = "translateX(20px)";
+            row.style.transition = "all 0.25s ease";
+            setTimeout(() => {
+                row.remove();
+                updateTotals(-qty, -amount, -discount, -netAmount);
+                detailRows = detailRows.filter(d => d.rowId !== rowId);
+
+                const tbody = document.getElementById("tableBody");
+                if (tbody.children.length === 0) {
+                    const er = document.createElement("tr");
+                    er.id = "emptyRow";
+                    er.innerHTML = `
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="fas fa-box-open"></i></div>
+                                <div class="empty-text">No products added yet.</div>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(er);
+                }
+            }, 250);
+        }
+    }
+
+    // ══════════════════════════════════════
+    //  Update Totals
+    // ══════════════════════════════════════
+    function updateTotals(qty, amount, discount, netAmount) {
+        const sQty  = parseFloat(document.getElementById("sumQty").innerText)      + qty;
+        const sAmt  = parseFloat(document.getElementById("sumAmount").innerText)   + amount;
+        const sDisc = parseFloat(document.getElementById("sumDiscount").innerText) + discount;
+        const sNet  = parseFloat(document.getElementById("sumNet").innerText)      + netAmount;
+
+        document.getElementById("sumQty").innerText      = sQty.toFixed(0);
+        document.getElementById("sumAmount").innerText   = sAmt.toFixed(2);
+        document.getElementById("sumDiscount").innerText = sDisc.toFixed(2);
+        document.getElementById("sumNet").innerText      = sNet.toFixed(2);
+
+        const dispQty      = document.getElementById("dispQty");
+        const dispAmount   = document.getElementById("dispAmount");
+        const dispDiscount = document.getElementById("dispDiscount");
+        const dispNet      = document.getElementById("dispNet");
+
+        if (dispQty)      dispQty.innerText      = sQty.toFixed(0);
+        if (dispAmount)   dispAmount.innerText   = sAmt.toFixed(2);
+        if (dispDiscount) dispDiscount.innerText = sDisc.toFixed(2);
+        if (dispNet)      dispNet.innerText      = sNet.toFixed(2);
+    }
+
+    // ══════════════════════════════════════
+    //  Save / Cancel
+    // ══════════════════════════════════════
+    async function saveForm() {
+        const tbody = document.getElementById("tableBody");
+        if (tbody.querySelector("#emptyRow")) {
+            alert("Please add at least one product before saving.");
+            return;
+        }
+
+        const documentNo          = document.getElementById("documentNo").value;
+        const date                = document.getElementById("date").value;
+        const vendorCode          = document.getElementById("vendorDropdown").value;
+        const remarks             = document.getElementById("remarks").value;
+        const totalQty            = parseFloat(document.getElementById("sumQty").innerText)      || 0;
+        const totalAmount         = parseFloat(document.getElementById("sumAmount").innerText)   || 0;
+        const totalDiscountAmount = parseFloat(document.getElementById("sumDiscount").innerText) || 0;
+        const netAmount           = parseFloat(document.getElementById("sumNet").innerText)      || 0;
+
+        if (!date)       { alert("Please select a Date.");    return; }
+        if (!vendorCode) { alert("Please select a Vendor.");  return; }
+
+        const payload = {
+            documentNo,
+            vendorCode: parseInt(vendorCode),
+            date,
+            remarks,
+            totalQty,
+            totalAmount,
+            totalDiscountAmount,
+            netAmount,
+            details: detailRows.map(d => ({
+                productCode:    d.productCode,
+                qty:            d.qty,
+                rate:           d.rate,
+                amount:         d.amount,
+                discountAmount: d.discountAmount,
+                netAmount:      d.netAmount
+            }))
+        };
+
+        try {
+            const res  = await fetch("/PurchaseInvoice/nSavePurchaseInvoice", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.statusId === 1) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Saved!',
+                    text: 'Purchase Invoice saved successfully!',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#6d4c1f',
+                    timer: 2000,
+                    timerProgressBar: true
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: data.message || "Failed to save.",
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#d94f4f'
+                });
+            }
+        } catch (e) {
+            console.error("Save error:", e);
+            alert("Error saving invoice. Please try again.");
+        }
+    }
+
+    function cancelForm() {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Cancel?',
+            text: 'All data will be lost.',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Cancel',
+            cancelButtonText: 'Go Back',
+            confirmButtonColor: '#d94f4f',
+            cancelButtonColor: '#6d4c1f'
+        }).then((result) => {
+            if (result.isConfirmed) location.reload();
+        });
+    }
+</script>
