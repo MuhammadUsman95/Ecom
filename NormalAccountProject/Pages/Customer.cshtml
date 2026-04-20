@@ -1,0 +1,1206 @@
+﻿@page "/Customer"
+@model NormalAccountProject.Pages.CustomerModel
+@{
+    ViewData["Title"] = "Customer Registration";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --bg: #f4f4f4;
+        --bg2: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f9f9f9;
+        --surface3: #efefef;
+        --border: rgba(0,0,0,.07);
+        --border2: rgba(0,0,0,.12);
+        --border3: rgba(0,0,0,.18);
+        --accent: #474544;
+        --accent2: #2e2d2c;
+        --accent-g: rgba(71,69,68,.10);
+        --gold: #b08d57;
+        --gold-g: rgba(176,141,87,.12);
+        --teal: #5a7a6e;
+        --danger: #d94f4f;
+        --success: #2e7d5e;
+        --text: #1a1a1a;
+        --text2: #5c5a58;
+        --text3: #9a9896;
+        --font-h: 'Syne', sans-serif;
+        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --font-m: 'JetBrains Mono', monospace;
+        --r: 10px;
+        --r2: 14px;
+        --r3: 18px;
+        --sh: 0 4px 32px rgba(0,0,0,.08);
+        --sh2: 0 8px 40px rgba(0,0,0,.10), 0 0 0 1px rgba(71,69,68,.08);
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .vr-wrap {
+        font-family: var(--font-b);
+        color: var(--text);
+        background: var(--bg);
+        min-height: calc(100vh - 60px);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .vr-wrap::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            right: -200px;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(71,69,68,.05) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .vr-wrap::after {
+            content: '';
+            position: fixed;
+            bottom: -150px;
+            left: -150px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(90,122,110,.04) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+    .vr-bg-grid {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
+    .vr-inner {
+        position: relative;
+        z-index: 1;
+        padding: 20px 24px;
+    }
+
+    /* ── Top Bar ── */
+    .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border2);
+    }
+
+    .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .icon-box {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 17px;
+        box-shadow: 0 4px 20px rgba(71,69,68,.30);
+        flex-shrink: 0;
+    }
+
+    .page-title {
+        font-family: var(--font-h);
+        font-size: 21px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -.3px;
+        line-height: 1.1;
+    }
+
+        .page-title span {
+            color: var(--accent);
+        }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+        margin-top: 3px;
+    }
+
+        .breadcrumb i {
+            font-size: 7px;
+        }
+
+        .breadcrumb span {
+            color: var(--gold);
+        }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+
+    .pill-gold {
+        background: var(--gold-g);
+        color: var(--gold);
+        border-color: rgba(176,141,87,.30);
+    }
+
+    .pill-accent {
+        background: var(--accent-g);
+        color: var(--accent2);
+        border-color: rgba(71,69,68,.20);
+    }
+
+    /* ── Toggle ── */
+    .toggle-group {
+        display: flex;
+        gap: 4px;
+        background: var(--surface2);
+        padding: 4px;
+        border-radius: var(--r);
+        border: 1px solid var(--border2);
+    }
+
+    .toggle-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 15px;
+        font-family: var(--font-b);
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 7px;
+        border: none;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .toggle-btn-outline {
+        background: transparent;
+        color: var(--text2);
+    }
+
+        .toggle-btn-outline:hover {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+    .toggle-btn-solid {
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        color: #fff;
+        box-shadow: 0 2px 12px rgba(71,69,68,.25);
+    }
+
+        .toggle-btn-solid:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 18px rgba(71,69,68,.35);
+        }
+
+    /* ── Accent Line ── */
+    .accent-line {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 18px;
+        height: 2px;
+    }
+
+        .accent-line span:nth-child(1) {
+            flex: 2;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .accent-line span:nth-child(2) {
+            flex: 1;
+            background: var(--teal);
+            border-radius: 2px;
+            opacity: .6;
+        }
+
+        .accent-line span:nth-child(3) {
+            flex: 3;
+            background: var(--border2);
+            border-radius: 2px;
+        }
+
+    /* ── Form Card ── */
+    .form-card {
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
+        overflow: hidden;
+        animation: fadeUp .3s ease both;
+        position: relative;
+    }
+
+    .form-card-header {
+        padding: 12px 22px;
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.06) 100%);
+        border-bottom: 1px solid var(--border2);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .form-card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-dots {
+        display: flex;
+        gap: 5px;
+    }
+
+    .h-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+    }
+
+    .h-dot-1 {
+        background: #f43f5e;
+    }
+
+    .h-dot-2 {
+        background: #f59e0b;
+    }
+
+    .h-dot-3 {
+        background: #10b981;
+    }
+
+    .form-card-title {
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text3);
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    /* ── Form Body ── */
+    .form-body {
+        padding: 22px 24px;
+        max-height: 65vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .form-body::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .form-body::-webkit-scrollbar-thumb {
+            background: var(--surface3);
+            border-radius: 10px;
+        }
+
+    /* ── Section Label ── */
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-family: var(--font-m);
+        font-size: 9.5px;
+        color: var(--text3);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 500;
+    }
+
+    .section-label-bar {
+        width: 3px;
+        height: 12px;
+        background: linear-gradient(180deg, var(--accent), var(--teal));
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+    .section-label-text {
+        color: var(--text2);
+    }
+
+    /* ── Form Row ── */
+    .form-row {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+
+    .form-row-1 {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row-2 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    /* ── Float Label ── */
+    .float-group {
+        position: relative;
+    }
+
+        .float-group .form-control {
+            padding: 22px 13px 7px;
+        }
+
+    .float-label {
+        position: absolute;
+        left: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-family: var(--font-b);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text3);
+        pointer-events: none;
+        transition: top .18s, transform .18s, font-size .18s, color .18s, letter-spacing .18s;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: calc(100% - 26px);
+    }
+
+    .float-group .form-control:focus ~ .float-label,
+    .float-group.has-value .float-label {
+        top: 7px;
+        transform: none;
+        font-size: 9px;
+        font-family: var(--font-m);
+        color: var(--accent);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .float-group .form-control::placeholder {
+        color: transparent;
+    }
+
+    /* ── Form Control ── */
+    .form-control {
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
+        padding: 9px 13px;
+        font-size: 13.5px;
+        font-family: var(--font-b);
+        color: #1a1a1a !important;
+        background: var(--bg2);
+        transition: border-color .18s, box-shadow .18s, background .18s;
+        outline: none;
+        width: 100%;
+        -webkit-text-fill-color: #1a1a1a !important;
+        caret-color: var(--accent);
+    }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(71,69,68,.12);
+            background: var(--surface);
+            color: #1a1a1a !important;
+            -webkit-text-fill-color: #1a1a1a !important;
+        }
+
+        .form-control::placeholder {
+            color: var(--text3);
+            -webkit-text-fill-color: var(--text3);
+        }
+
+        .form-control:-webkit-autofill,
+        .form-control:-webkit-autofill:hover,
+        .form-control:-webkit-autofill:focus {
+            -webkit-text-fill-color: #1a1a1a !important;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        /* ── Read-only Code Field ── */
+        .form-control[readonly] {
+            background: var(--surface2) !important;
+            color: var(--text3) !important;
+            -webkit-text-fill-color: var(--text3) !important;
+            cursor: default;
+            border-style: dashed;
+        }
+
+    /* ── Status / Checkbox ── */
+    .status-meta {
+        font-family: var(--font-m);
+        font-size: 9.5px;
+        color: var(--text3);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+    }
+
+    .check-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        background: var(--bg2);
+        border-radius: var(--r);
+        border: 1px solid var(--border2);
+        cursor: pointer;
+        transition: all .2s;
+        width: fit-content;
+    }
+
+        .check-group:hover {
+            border-color: var(--accent);
+            background: var(--accent-g);
+        }
+
+    .check-input {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: var(--accent);
+    }
+
+    .check-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        cursor: pointer;
+        font-family: var(--font-b);
+        transition: color .2s;
+    }
+
+    .check-group:hover .check-label {
+        color: var(--text);
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        padding-top: 18px;
+        border-top: 1px solid var(--border);
+        margin-top: 4px;
+    }
+
+    .btn-pro {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 20px;
+        font-family: var(--font-b);
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: var(--r);
+        border: none;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(71,69,68,.30);
+    }
+
+        .btn-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(71,69,68,.40);
+        }
+
+    .btn-cancel {
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border2);
+    }
+
+        .btn-cancel:hover {
+            background: var(--surface3);
+            color: var(--text);
+        }
+
+    /* ── Grid Card ── */
+    .grid-card {
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
+        overflow: hidden;
+        animation: fadeUp .3s ease both;
+    }
+
+    .grid-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 20px;
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.05) 100%);
+        border-bottom: 1px solid var(--border2);
+    }
+
+    .grid-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .grid-header-title {
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .grid-badge {
+        background: var(--accent-g);
+        color: var(--accent2);
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 1px solid rgba(71,69,68,.20);
+    }
+
+    .grid-scroll {
+        height: 58vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .grid-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .grid-scroll::-webkit-scrollbar-thumb {
+            background: var(--surface3);
+            border-radius: 10px;
+        }
+
+    /* ── Table ── */
+    .pro-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .pro-table thead th {
+            background: var(--surface2);
+            color: var(--text3);
+            padding: 10px 14px;
+            font-size: 9.5px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            white-space: nowrap;
+            font-family: var(--font-m);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid var(--border2);
+            border-right: 1px solid var(--border);
+        }
+
+            .pro-table thead th:last-child {
+                border-right: none;
+            }
+
+        .pro-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .12s;
+        }
+
+            .pro-table tbody tr:hover {
+                background: var(--surface2);
+            }
+
+            .pro-table tbody tr:last-child {
+                border-bottom: none;
+            }
+
+        .pro-table tbody td {
+            padding: 10px 14px;
+            font-size: 12.5px;
+            color: var(--text2);
+            white-space: nowrap;
+        }
+
+    /* ── Table Buttons ── */
+    .tbl-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        transition: all .15s;
+    }
+
+    .tbl-btn-edit {
+        background: var(--surface2);
+        color: var(--text2);
+        border-color: var(--border2);
+    }
+
+        .tbl-btn-edit:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+    .tbl-btn-del {
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border-color: rgba(217,79,79,.20);
+        margin-left: 4px;
+    }
+
+        .tbl-btn-del:hover {
+            background: var(--danger);
+            color: #fff;
+            border-color: var(--danger);
+        }
+
+    /* ── Badges ── */
+    .badge-active {
+        background: rgba(46,125,94,.10);
+        color: #1e6b4a;
+        border: 1px solid rgba(46,125,94,.22);
+        font-size: 10px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        display: inline-block;
+    }
+
+    .badge-inactive {
+        background: rgba(217,79,79,.08);
+        color: #c0392b;
+        border: 1px solid rgba(217,79,79,.20);
+        font-size: 10px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        display: inline-block;
+    }
+
+    /* ── Contact Pill ── */
+    .contact-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-m);
+        font-size: 11px;
+        color: var(--teal);
+    }
+
+    /* ── Empty State ── */
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 54px;
+        height: 54px;
+        background: var(--surface2);
+        border-radius: var(--r2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text3);
+        font-size: 20px;
+        margin: 0 auto 14px;
+        border: 1px solid var(--border2);
+    }
+
+    .empty-text {
+        font-size: 13px;
+        color: var(--text3);
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+    }
+
+        .page-footer strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="vr-wrap">
+    <div class="vr-bg-grid"></div>
+    <div class="vr-inner">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="icon-box"><i class="fas fa-user-tie"></i></div>
+                <div>
+                    <div class="page-title">Customer <span>Registry</span></div>
+                    <div class="breadcrumb">
+                        Setup <i class="fas fa-chevron-right"></i> <span>Customer</span>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div class="toggle-group">
+                    <button class="toggle-btn toggle-btn-outline" id="gridViewToggleBtn">
+                        <i class="fas fa-table-cells"></i> Grid
+                    </button>
+                    <button class="toggle-btn toggle-btn-solid" id="formViewToggleBtn" style="display:none;">
+                        <i class="fas fa-pen-to-square"></i> Form
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="accent-line"><span></span><span></span><span></span></div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- FORM VIEW                                  -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="formViewContainer">
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="form-card-header-left">
+                        <div class="header-dots">
+                            <div class="h-dot h-dot-1"></div>
+                            <div class="h-dot h-dot-2"></div>
+                            <div class="h-dot h-dot-3"></div>
+                        </div>
+                        <div class="form-card-title">customer_registration.form</div>
+                    </div>
+                    <div class="pill pill-gold"><i class="fas fa-circle" style="font-size:6px;"></i> Live</div>
+                </div>
+
+                <div class="form-body">
+
+                    <div class="section-label">
+                        <div class="section-label-bar"></div>
+                        <span class="section-label-text">Customer Details</span>
+                    </div>
+
+                    <!-- Row 1: CustomerCode (Auto / Read-only) | CustomerName -->
+                    <div class="form-row form-row-2">
+                        <div class="float-group has-value">
+                            <input type="text" id="CustomerCode" class="form-control"
+                                   placeholder=" " readonly>
+                            <label class="float-label" for="CustomerCode">
+                                <i class="fas fa-hashtag" style="font-size:9px;margin-right:3px;"></i>
+                                Customer Code (Auto)
+                            </label>
+                        </div>
+                        <div class="float-group">
+                            <input type="text" id="CustomerName" class="form-control" placeholder=" ">
+                            <label class="float-label" for="CustomerName">Customer Name</label>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Contact No -->
+                    <div class="form-row form-row-1">
+                        <div class="float-group">
+                            <input type="text" id="ContactNo" class="form-control" placeholder=" " maxlength="20">
+                            <label class="float-label" for="ContactNo">Contact No</label>
+                        </div>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="form-row form-row-1" style="margin-bottom:20px;">
+                        <div>
+                            <div class="status-meta">
+                                <i class="fas fa-toggle-on" style="color:var(--accent);margin-right:5px;"></i>
+                                Customer Status
+                            </div>
+                            <div class="check-group">
+                                <input type="checkbox" id="IsActive" class="check-input" checked>
+                                <label class="check-label" for="IsActive">Mark as Active</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button class="btn-pro btn-save" id="saveBtn">
+                            <i class="fas fa-floppy-disk"></i> Save Customer
+                        </button>
+                        <button class="btn-pro btn-cancel" id="cancelBtn">
+                            <i class="fas fa-xmark"></i> Cancel
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════ -->
+        <!-- GRID VIEW                                  -->
+        <!-- ══════════════════════════════════════════ -->
+        <div id="gridViewContainer" style="display:none;">
+            <div class="grid-card">
+                <div class="grid-header">
+                    <div class="grid-header-left">
+                        <div class="header-dots">
+                            <div class="h-dot h-dot-1"></div>
+                            <div class="h-dot h-dot-2"></div>
+                            <div class="h-dot h-dot-3"></div>
+                        </div>
+                        <div class="grid-header-title">All Customers</div>
+                        <div class="grid-badge" id="TotalCustomersCount">0 records</div>
+                    </div>
+                    <div class="pill pill-accent">
+                        <i class="fas fa-circle-dot" style="font-size:7px;"></i> Live Data
+                    </div>
+                </div>
+                <div class="grid-scroll">
+                    <div id="CustomerGridContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            Developed with <span style="color:var(--danger);">♥</span> by <strong>UT Designer</strong>
+        </div>
+    </div>
+</div>
+
+<script>
+    let userId = localStorage.getItem("userId") || "",
+        GridViewDataList = [],
+        IsUpdate = false;
+
+    const SW = {
+        background: '#ffffff', color: '#1a1a1a',
+        confirmButtonColor: '#474544', cancelButtonColor: '#f9f9f9'
+    };
+
+    /* ── Float Labels ── */
+    function initFloatLabels() {
+        document.querySelectorAll('.float-group').forEach(g => {
+            const el = g.querySelector('input:not([type="checkbox"]):not([type="file"]),textarea,select');
+            if (!el) return;
+            const chk = () => g.classList.toggle('has-value', el.value.trim() !== '');
+            el.addEventListener('input', chk);
+            el.addEventListener('change', chk);
+            chk();
+        });
+    }
+
+    /* ── View Switches ── */
+    function showFormView() {
+        document.getElementById("formViewContainer").style.display = "block";
+        document.getElementById("gridViewContainer").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "none";
+        document.getElementById("gridViewToggleBtn").style.display = "inline-flex";
+        document.getElementById("CustomerName").focus();
+    }
+
+    function showGridView() {
+        document.getElementById("formViewContainer").style.display = "none";
+        document.getElementById("gridViewContainer").style.display = "block";
+        document.getElementById("gridViewToggleBtn").style.display = "none";
+        document.getElementById("formViewToggleBtn").style.display = "inline-flex";
+    }
+
+    document.getElementById("gridViewToggleBtn").addEventListener("click", showGridView);
+    document.getElementById("formViewToggleBtn").addEventListener("click", showFormView);
+
+    /* ── Page Load ── */
+    window.addEventListener("load", async function () {
+        // Show placeholder in read-only code field
+        document.getElementById("CustomerCode").value = "Auto-Generated";
+        initFloatLabels();
+        await LoadGridViewData();
+    });
+
+    /* ══════════════════════════════════════════
+       LOAD GRID
+    ══════════════════════════════════════════ */
+    async function LoadGridViewData() {
+        try {
+            const r = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadGridViewData", "CustomerRegistration")',
+                data: JSON.stringify({ Userid: userId }),
+                contentType: 'application/json'
+            });
+            if (r.statusId === 1) {
+                GridViewDataList = r.GridViewDataList || [];
+                RenderGridView();
+            } else {
+                await Swal.fire({ icon: 'warning', title: 'Warning', text: r.message || 'Failed to load data.', ...SW });
+            }
+        } catch {
+            await Swal.fire({ icon: 'error', title: 'Error', text: 'Error loading grid data.', ...SW });
+        }
+    }
+
+    /* ══════════════════════════════════════════
+       RENDER GRID
+    ══════════════════════════════════════════ */
+    function RenderGridView() {
+        const c   = document.getElementById("CustomerGridContainer");
+        const cnt = document.getElementById("TotalCustomersCount");
+
+        if (!GridViewDataList.length) {
+            c.innerHTML = `<div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-users"></i></div>
+                <div class="empty-text">No customers found.</div>
+            </div>`;
+            cnt.textContent = "0 records";
+            return;
+        }
+
+        const t = document.createElement("table");
+        t.className = "pro-table";
+        t.innerHTML = `<thead><tr>
+            <th>Actions</th>
+            <th>Code</th>
+            <th>Customer Name</th>
+            <th>Contact No</th>
+            <th>Status</th>
+        </tr></thead>`;
+
+        const tb = document.createElement("tbody");
+        GridViewDataList.forEach(item => {
+            const tr = document.createElement("tr");
+            // ✅ CustomerCode use karo (CustomerCode string ho sakta hai, quotes zaruri)
+            tr.innerHTML = `
+            <td>
+                <button class="tbl-btn tbl-btn-edit"
+                        onclick="EditCustomer('${item.CustomerCode}')" title="Edit">
+                    <i class="fas fa-pen"></i>
+                </button>
+                <button class="tbl-btn tbl-btn-del"
+                        onclick="DeleteCustomer('${item.CustomerCode}')" title="Delete">
+                    <i class="fas fa-trash-can"></i>
+                </button>
+            </td>
+            <td>
+                <span style="font-family:var(--font-m);font-size:11px;color:var(--text3);">
+                    ${item.CustomerCode || '—'}
+                </span>
+            </td>
+            <td style="font-weight:600;color:var(--text);">${item.CustomerName || '—'}</td>
+            <td>
+                <span class="contact-pill">
+                    <i class="fas fa-phone" style="font-size:9px;"></i>
+                    ${item.ContactNo || '—'}
+                </span>
+            </td>
+            <td>
+                ${item.IsActive
+                    ? '<span class="badge-active"><i class="fas fa-circle" style="font-size:6px;margin-right:4px;"></i>Active</span>'
+                    : '<span class="badge-inactive"><i class="fas fa-circle" style="font-size:6px;margin-right:4px;"></i>Inactive</span>'
+                }
+            </td>`;
+            tb.appendChild(tr);
+        });
+
+        t.appendChild(tb);
+        c.innerHTML = "";
+        c.appendChild(t);
+        cnt.textContent = `${tb.rows.length} records`;
+    }
+
+    /* ══════════════════════════════════════════
+       EDIT CUSTOMER
+    ══════════════════════════════════════════ */
+    function EditCustomer(code) {
+        // ✅ CustomerCode se match karo
+        const cust = GridViewDataList.find(c => String(c.CustomerCode) === String(code));
+        if (!cust) {
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Customer not found.', ...SW });
+            return;
+        }
+
+        document.getElementById("CustomerCode").value = cust.CustomerCode || '';
+        document.getElementById("CustomerName").value = cust.CustomerName || '';
+        document.getElementById("ContactNo").value    = cust.ContactNo    || '';
+        document.getElementById("IsActive").checked   = cust.IsActive === true || cust.IsActive === 1;
+
+        IsUpdate = true;
+        document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Update Customer';
+        initFloatLabels();
+        showFormView();
+    }
+
+    /* ══════════════════════════════════════════
+       DELETE CUSTOMER
+    ══════════════════════════════════════════ */
+    async function DeleteCustomer(code) {
+        const confirm = await Swal.fire({
+            title: 'Confirm Delete', text: "This action cannot be undone.",
+            icon: 'warning', showCancelButton: true,
+            confirmButtonText: 'Yes, delete', cancelButtonText: 'Cancel',
+            confirmButtonColor: '#d94f4f', ...SW
+        });
+        if (!confirm.isConfirmed) return;
+
+        Swal.fire({
+            title: 'Please wait', text: 'Deleting...',
+            allowOutsideClick: false, allowEscapeKey: false,
+            didOpen: () => Swal.showLoading(), ...SW
+        });
+
+        try {
+            // ✅ CustomerCode bhejo
+            const res = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nDeleteCustomerData", "CustomerRegistration")',
+                data: JSON.stringify({ Userid: userId, CustomerCode: `${code}` }),
+                contentType: 'application/json'
+            });
+            Swal.close();
+            if (res.statusId === 1) {
+                await Swal.fire({ icon: 'success', title: 'Deleted', text: res.message || 'Customer deleted.', ...SW });
+                await LoadGridViewData();
+            } else {
+                await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not delete.', ...SW });
+            }
+        } catch {
+            Swal.close();
+            await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred while deleting.', ...SW });
+        }
+    }
+
+    /* ══════════════════════════════════════════
+       SAVE / UPDATE CUSTOMER
+    ══════════════════════════════════════════ */
+    document.getElementById("saveBtn").addEventListener("click", async function () {
+        const CustomerCode = document.getElementById("CustomerCode").value.trim();
+        const CustomerName = document.getElementById("CustomerName").value.trim();
+        const ContactNo    = document.getElementById("ContactNo").value.trim();
+        const isActive     = document.getElementById("IsActive").checked;
+
+        // ✅ Sirf CustomerName validate karo — CustomerCode auto hai
+        if (!CustomerName) {
+            await Swal.fire({
+                icon: 'warning', title: 'Validation',
+                text: 'Customer name is required.',
+                returnFocus: false, ...SW,
+                didClose: () => document.getElementById("CustomerName").focus()
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Please wait', text: 'Saving...',
+            allowOutsideClick: false, allowEscapeKey: false,
+            didOpen: () => Swal.showLoading(), ...SW
+        });
+
+        try {
+            // Insert mein CustomerCode empty bhejte hain — SP khud generate karega
+            // Update mein existing CustomerCode bhejte hain
+            const res = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nSaveCustomerData", "CustomerRegistration")',
+                data: JSON.stringify({
+                    Userid:       userId,
+                    CustomerCode: IsUpdate ? CustomerCode : '',   // Insert = '', Update = code
+                    CustomerName: CustomerName,
+                    ContactNo:    ContactNo,
+                    IsActive:     isActive,
+                    IsUpdate:     IsUpdate
+                }),
+                contentType: 'application/json'
+            });
+            Swal.close();
+            if (res.statusId === 1) {
+                // ✅ Naya generated code field mein dikhao (insert case)
+                if (!IsUpdate && res.generatedCode) {
+                    document.getElementById("CustomerCode").value = res.generatedCode;
+                    initFloatLabels();
+                }
+                await Swal.fire({
+                    icon: 'success', title: IsUpdate ? 'Updated' : 'Saved',
+                    text: res.message || (IsUpdate ? 'Customer updated.' : 'Customer saved.'),
+                    returnFocus: false, ...SW
+                });
+                nClearForm();
+            } else {
+                await Swal.fire({ icon: 'warning', title: 'Failed', text: res.message || 'Could not save.', ...SW });
+            }
+        } catch {
+            Swal.close();
+            await Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred while saving.', ...SW });
+        }
+    });
+
+    /* ── Cancel ── */
+    document.getElementById("cancelBtn").addEventListener("click", function () { nClearForm(); });
+
+    /* ══════════════════════════════════════════
+       CLEAR FORM
+    ══════════════════════════════════════════ */
+    async function nClearForm() {
+        document.getElementById("CustomerCode").value = "Auto-Generated";
+        document.getElementById("CustomerName").value = "";
+        document.getElementById("ContactNo").value    = "";
+        document.getElementById("IsActive").checked   = true;
+        IsUpdate = false;
+        document.getElementById("saveBtn").innerHTML = '<i class="fas fa-floppy-disk"></i> Save Customer';
+        initFloatLabels();
+        document.getElementById("CustomerName").focus();
+        await LoadGridViewData();
+    }
+</script>
