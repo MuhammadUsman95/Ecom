@@ -1,0 +1,814 @@
+﻿@page "/StockView"
+@model NormalAccountProject.Pages.StockViewModel
+@{
+    ViewData["Title"] = "Stock View";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --bg: #f4f4f4;
+        --bg2: #ffffff;
+        --surface: #ffffff;
+        --surface2: #f9f9f9;
+        --surface3: #efefef;
+        --border: rgba(0,0,0,.07);
+        --border2: rgba(0,0,0,.12);
+        --accent: #474544;
+        --accent2: #2e2d2c;
+        --accent-g: rgba(71,69,68,.10);
+        --gold: #b08d57;
+        --gold-g: rgba(176,141,87,.12);
+        --teal: #5a7a6e;
+        --danger: #d94f4f;
+        --text: #1a1a1a;
+        --text2: #5c5a58;
+        --text3: #9a9896;
+        --font-h: 'Syne', sans-serif;
+        --font-b: 'Plus Jakarta Sans', sans-serif;
+        --font-m: 'JetBrains Mono', monospace;
+        --r: 10px;
+        --r2: 14px;
+        --r3: 18px;
+        --sh2: 0 8px 40px rgba(0,0,0,.10), 0 0 0 1px rgba(71,69,68,.08);
+    }
+
+    *, *::before, *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    .vr-wrap {
+        font-family: var(--font-b);
+        color: var(--text);
+        background: var(--bg);
+        min-height: calc(100vh - 60px);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .vr-wrap::before {
+            content: '';
+            position: fixed;
+            top: -200px;
+            right: -200px;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(71,69,68,.05) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .vr-wrap::after {
+            content: '';
+            position: fixed;
+            bottom: -150px;
+            left: -150px;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(90,122,110,.04) 0%, transparent 65%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+    .vr-bg-grid {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
+    .vr-inner {
+        position: relative;
+        z-index: 1;
+        padding: 20px 24px;
+    }
+
+    .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--border2);
+    }
+
+    .top-bar-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .icon-box {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        border-radius: var(--r);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 17px;
+        box-shadow: 0 4px 20px rgba(71,69,68,.30);
+        flex-shrink: 0;
+    }
+
+    .page-title {
+        font-family: var(--font-h);
+        font-size: 21px;
+        font-weight: 800;
+        color: var(--text);
+        letter-spacing: -.3px;
+        line-height: 1.1;
+    }
+
+        .page-title span {
+            color: var(--accent);
+        }
+
+    .breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+        margin-top: 3px;
+    }
+
+        .breadcrumb i {
+            font-size: 7px;
+        }
+
+        .breadcrumb span {
+            color: var(--gold);
+        }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        border: 1px solid transparent;
+    }
+
+    .pill-gold {
+        background: var(--gold-g);
+        color: var(--gold);
+        border-color: rgba(176,141,87,.30);
+    }
+
+    .pill-accent {
+        background: var(--accent-g);
+        color: var(--accent2);
+        border-color: rgba(71,69,68,.20);
+    }
+
+    .accent-line {
+        display: flex;
+        gap: 2px;
+        margin-bottom: 18px;
+        height: 2px;
+    }
+
+        .accent-line span:nth-child(1) {
+            flex: 2;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        .accent-line span:nth-child(2) {
+            flex: 1;
+            background: var(--teal);
+            border-radius: 2px;
+            opacity: .6;
+        }
+
+        .accent-line span:nth-child(3) {
+            flex: 3;
+            background: var(--border2);
+            border-radius: 2px;
+        }
+
+    /* ── Filter Bar ── */
+    .filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+    }
+
+    .cat-select-wrap {
+        position: relative;
+    }
+
+        .cat-select-wrap .icon-left {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            font-size: 11px;
+            pointer-events: none;
+        }
+
+        .cat-select-wrap .icon-right {
+            position: absolute;
+            right: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            font-size: 10px;
+            pointer-events: none;
+        }
+
+    .cat-select {
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
+        padding: 8px 32px 8px 34px;
+        font-size: 12.5px;
+        font-family: var(--font-b);
+        font-weight: 600;
+        color: var(--text);
+        background: var(--bg2);
+        outline: none;
+        cursor: pointer;
+        min-width: 190px;
+        appearance: none;
+        -webkit-appearance: none;
+        transition: border-color .18s, box-shadow .18s;
+    }
+
+        .cat-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(71,69,68,.10);
+        }
+
+    .search-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 180px;
+    }
+
+        .search-wrap i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text3);
+            font-size: 12px;
+            pointer-events: none;
+        }
+
+    .search-input {
+        border: 1px solid var(--border2);
+        border-radius: var(--r);
+        padding: 8px 12px 8px 34px;
+        font-size: 12.5px;
+        font-family: var(--font-b);
+        color: var(--text);
+        background: var(--bg2);
+        outline: none;
+        width: 100%;
+        transition: border-color .18s, box-shadow .18s;
+    }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(71,69,68,.10);
+        }
+
+        .search-input::placeholder {
+            color: var(--text3);
+        }
+
+    .btn-refresh {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 18px;
+        font-family: var(--font-b);
+        font-size: 12.5px;
+        font-weight: 600;
+        border-radius: var(--r);
+        border: none;
+        cursor: pointer;
+        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+        color: #fff;
+        box-shadow: 0 3px 16px rgba(71,69,68,.28);
+        transition: all .2s ease;
+        white-space: nowrap;
+    }
+
+        .btn-refresh:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 24px rgba(71,69,68,.40);
+        }
+
+        .btn-refresh:active {
+            transform: translateY(0);
+        }
+
+        .btn-refresh.spinning i {
+            animation: spin .5s ease;
+        }
+
+    /* ── Grid Card ── */
+    .grid-card {
+        background: var(--surface);
+        border-radius: var(--r3);
+        border: 1px solid var(--border2);
+        box-shadow: var(--sh2);
+        overflow: hidden;
+        animation: fadeUp .35s ease both;
+    }
+
+    .grid-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 20px;
+        background: linear-gradient(90deg, var(--surface2) 0%, rgba(71,69,68,.05) 100%);
+        border-bottom: 1px solid var(--border2);
+    }
+
+    .grid-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-dots {
+        display: flex;
+        gap: 5px;
+    }
+
+    .h-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+    }
+
+    .h-dot-1 {
+        background: #f43f5e;
+    }
+
+    .h-dot-2 {
+        background: #f59e0b;
+    }
+
+    .h-dot-3 {
+        background: #10b981;
+    }
+
+    .grid-header-title {
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        font-weight: 500;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+    }
+
+    .grid-badge {
+        background: var(--accent-g);
+        color: var(--accent2);
+        font-family: var(--font-m);
+        font-size: 10.5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        border: 1px solid rgba(71,69,68,.20);
+    }
+
+    .grid-scroll {
+        max-height: 65vh;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--surface3) transparent;
+    }
+
+        .grid-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .grid-scroll::-webkit-scrollbar-thumb {
+            background: var(--surface3);
+            border-radius: 10px;
+        }
+
+    /* ── Table ── */
+    .pro-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .pro-table thead th {
+            background: var(--surface2);
+            color: var(--text3);
+            padding: 10px 16px;
+            font-size: 9.5px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            white-space: nowrap;
+            font-family: var(--font-m);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid var(--border2);
+            border-right: 1px solid var(--border);
+        }
+
+            .pro-table thead th:last-child {
+                border-right: none;
+            }
+
+        .pro-table tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background .12s;
+        }
+
+            .pro-table tbody tr:hover {
+                background: var(--surface2);
+            }
+
+        .pro-table tbody td {
+            padding: 10px 16px;
+            font-size: 12.5px;
+            color: var(--text2);
+            white-space: nowrap;
+        }
+
+        /* ── Total Row ── */
+        .pro-table tfoot td {
+            padding: 12px 16px;
+            font-family: var(--font-m);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            background: var(--surface2);
+            border-top: 2px solid var(--border2);
+        }
+
+    /* ── Category Pill ── */
+    .cat-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 9px;
+        border-radius: 20px;
+        font-family: var(--font-m);
+        font-size: 10px;
+        font-weight: 500;
+    }
+
+    .price-val {
+        font-family: var(--font-m);
+        font-size: 12px;
+        color: var(--text);
+    }
+
+    .discount-val {
+        font-family: var(--font-m);
+        font-size: 12px;
+        color: var(--danger);
+    }
+
+    .empty-state {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .empty-icon {
+        width: 54px;
+        height: 54px;
+        background: var(--surface2);
+        border-radius: var(--r2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text3);
+        font-size: 20px;
+        margin: 0 auto 14px;
+        border: 1px solid var(--border2);
+    }
+
+    .empty-text {
+        font-size: 13px;
+        color: var(--text3);
+    }
+
+    .page-footer {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: .5px;
+    }
+
+        .page-footer strong {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+    .last-updated {
+        font-family: var(--font-m);
+        font-size: 10px;
+        color: var(--text3);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    @@keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<div class="vr-wrap">
+    <div class="vr-bg-grid"></div>
+    <div class="vr-inner">
+
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="icon-box"><i class="fas fa-boxes-stacking"></i></div>
+                <div>
+                    <div class="page-title">Stock <span>View</span></div>
+                    <div class="breadcrumb">
+                        Inventory <i class="fas fa-chevron-right"></i> <span>Stock View</span>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+                <div class="last-updated">
+                    <i class="fas fa-clock" style="font-size:10px;"></i>
+                    <span id="lastUpdatedTime">--</span>
+                </div>
+                <div class="pill pill-gold">
+                    <i class="fas fa-circle" style="font-size:6px;"></i> Live
+                </div>
+            </div>
+        </div>
+
+        <div class="accent-line"><span></span><span></span><span></span></div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+
+            <!-- Category Dropdown -->
+            <div class="cat-select-wrap">
+                <i class="fas fa-layer-group icon-left"></i>
+                <select class="cat-select" id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+                <i class="fas fa-chevron-down icon-right"></i>
+            </div>
+
+            <!-- Search -->
+            <div class="search-wrap">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by code or product name…">
+            </div>
+
+            <!-- Refresh -->
+            <button class="btn-refresh" id="refreshBtn">
+                <i class="fas fa-arrows-rotate"></i> Refresh
+            </button>
+
+        </div>
+
+        <!-- Grid Card -->
+        <div class="grid-card">
+            <div class="grid-header">
+                <div class="grid-header-left">
+                    <div class="header-dots">
+                        <div class="h-dot h-dot-1"></div>
+                        <div class="h-dot h-dot-2"></div>
+                        <div class="h-dot h-dot-3"></div>
+                    </div>
+                    <div class="grid-header-title">Product Stock</div>
+                    <div class="grid-badge" id="TotalStockCount">0 records</div>
+                </div>
+                <div class="pill pill-accent">
+                    <i class="fas fa-circle-dot" style="font-size:7px;"></i> Live Data
+                </div>
+            </div>
+            <div class="grid-scroll">
+                <div id="StockGridContainer"></div>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            Developed with <span style="color:var(--danger);">♥</span> by <strong>UT Designer</strong>
+        </div>
+    </div>
+</div>
+
+<script>
+    let userId = localStorage.getItem("userId") || "";
+    let StockDataList = [];
+
+    const SW = { background:'#ffffff', color:'#1a1a1a', confirmButtonColor:'#474544', cancelButtonColor:'#f9f9f9' };
+
+    /* ── Category color palette ── */
+    const CAT_PALETTE = [
+        { bg:'rgba(71,69,68,.10)',   color:'#474544', border:'rgba(71,69,68,.25)'  },
+        { bg:'rgba(90,122,110,.12)', color:'#3e6557', border:'rgba(90,122,110,.28)'},
+        { bg:'rgba(176,141,87,.12)', color:'#8a6d2f', border:'rgba(176,141,87,.28)'},
+        { bg:'rgba(57,100,170,.10)', color:'#2d5aa0', border:'rgba(57,100,170,.25)'},
+        { bg:'rgba(150,70,160,.10)', color:'#7a3b88', border:'rgba(150,70,160,.25)'},
+        { bg:'rgba(217,79,79,.08)',  color:'#c0392b', border:'rgba(217,79,79,.22)' },
+    ];
+    const catColorMap = {};
+    let catColorIdx = 0;
+
+    function getCatStyle(cat) {
+        if (!catColorMap[cat]) { catColorMap[cat] = CAT_PALETTE[catColorIdx++ % CAT_PALETTE.length]; }
+        return catColorMap[cat];
+    }
+
+    function catPill(cat) {
+        const s = getCatStyle(cat);
+        return `<span class="cat-pill" style="background:${s.bg};color:${s.color};border:1px solid ${s.border};">
+                    <i class="fas fa-circle" style="font-size:5px;"></i>${cat}
+                </span>`;
+    }
+
+    function fNum(val) {
+        return parseFloat(val || 0).toLocaleString('en-PK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function updateLastUpdated() {
+        const now = new Date();
+        document.getElementById("lastUpdatedTime").textContent =
+            "Updated " + now.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+    }
+
+    /* ── Populate Category Dropdown ── */
+    function populateCategoryDropdown() {
+        const sel  = document.getElementById("categoryFilter");
+        const prev = sel.value;
+        const cats = [...new Set(StockDataList.map(i => (i.Category || '').trim()).filter(Boolean))].sort();
+        sel.innerHTML = `<option value="">All Categories</option>`;
+        cats.forEach(c => {
+            const opt = document.createElement("option");
+            opt.value = c; opt.textContent = c;
+            if (c === prev) opt.selected = true;
+            sel.appendChild(opt);
+        });
+    }
+
+    /* ── Filtered List ── */
+    function getFilteredList() {
+        const q   = document.getElementById("searchInput").value.trim().toLowerCase();
+        const cat = document.getElementById("categoryFilter").value;
+        return StockDataList.filter(i => {
+            const matchCat    = !cat || (i.Category || '').trim() === cat;
+            const matchSearch = !q   ||
+                (i.ProductCode || '').toString().toLowerCase().includes(q) ||
+                (i.Product     || '').toLowerCase().includes(q);
+            return matchCat && matchSearch;
+        });
+    }
+
+    /* ── Render ── */
+    function RenderStockGrid() {
+        const c    = document.getElementById("StockGridContainer");
+        const cnt  = document.getElementById("TotalStockCount");
+        const list = getFilteredList();
+
+        if (!list.length) {
+            c.innerHTML = `<div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-boxes-stacking"></i></div>
+                <div class="empty-text">No products found.</div>
+            </div>`;
+            cnt.textContent = "0 records";
+            return;
+        }
+
+        const totalStock    = list.reduce((s, i) => s + (parseInt(i.Stock)           || 0), 0);
+        const totalDiscount = list.reduce((s, i) => s + (parseFloat(i.DiscountAmount) || 0), 0);
+
+        const t  = document.createElement("table");
+        t.className = "pro-table";
+
+        t.innerHTML = `<thead><tr>
+            <th>#</th>
+            <th>Product Code</th>
+            <th>Product</th>
+            <th>Category</th>
+            <th style="text-align:right;">Sales Price</th>
+            <th style="text-align:right;">Discount</th>
+            <th style="text-align:right;">Stock</th>
+        </tr></thead>`;
+
+        const tb = document.createElement("tbody");
+        list.forEach((item, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+            <td><span style="font-family:var(--font-m);font-size:10px;color:var(--text3);">${idx + 1}</span></td>
+            <td><span style="font-family:var(--font-m);font-size:11.5px;color:var(--accent);font-weight:600;">${item.ProductCode || '—'}</span></td>
+            <td style="font-weight:600;color:var(--text);">${item.Product || '—'}</td>
+            <td>${item.Category ? catPill(item.Category.trim()) : '—'}</td>
+            <td style="text-align:right;"><span class="price-val">${fNum(item.SalesPrice)}</span></td>
+            <td style="text-align:right;"><span class="discount-val">${fNum(item.DiscountAmount)}</span></td>
+            <td style="text-align:right;">
+                <span style="font-family:var(--font-m);font-size:12px;font-weight:600;color:var(--text);">${parseInt(item.Stock) || 0}</span>
+            </td>`;
+            tb.appendChild(tr);
+        });
+        t.appendChild(tb);
+
+        /* ── Total Footer Row ── */
+        const tf = document.createElement("tfoot");
+        tf.innerHTML = `<tr>
+            <td colspan="5" style="font-family:var(--font-m);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);">
+                <i class="fas fa-sigma" style="margin-right:6px;color:var(--accent);"></i>Total
+            </td>
+            <td style="text-align:right;color:var(--danger);">${fNum(totalDiscount)}</td>
+            <td style="text-align:right;color:var(--accent);font-size:13px;">${totalStock.toLocaleString()}</td>
+        </tr>`;
+        t.appendChild(tf);
+
+        c.innerHTML = "";
+        c.appendChild(t);
+        cnt.textContent = `${list.length} record${list.length !== 1 ? 's' : ''}`;
+    }
+
+    /* ── Load Data from API ── */
+    async function LoadStockData() {
+        try {
+            const r = await jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("nLoadStockViewData", "StockView")',
+                data: JSON.stringify({ Userid: userId }),
+                contentType: 'application/json'
+            });
+            if (r.statusId === 1) {
+                StockDataList = r.StockDataList || [];
+                populateCategoryDropdown();
+                RenderStockGrid();
+                updateLastUpdated();
+            } else {
+                await Swal.fire({ icon:'warning', title:'Warning', text: r.message || 'Failed to load data.', ...SW });
+            }
+        } catch {
+            await Swal.fire({ icon:'error', title:'Error', text:'Failed to load stock data.', ...SW });
+        }
+    }
+
+    /* ── Refresh Button ── */
+    document.getElementById("refreshBtn").addEventListener("click", async function () {
+        const btn = this;
+        btn.classList.add("spinning"); btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-arrows-rotate"></i> Refreshing…';
+        await LoadStockData();
+        setTimeout(() => {
+            btn.classList.remove("spinning"); btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-arrows-rotate"></i> Refresh';
+        }, 500);
+    });
+
+    /* ── Live Filter Events ── */
+    document.getElementById("categoryFilter").addEventListener("change", RenderStockGrid);
+    document.getElementById("searchInput").addEventListener("input",    RenderStockGrid);
+
+    /* ── Init ── */
+    window.addEventListener("load", () => LoadStockData());
+</script>
