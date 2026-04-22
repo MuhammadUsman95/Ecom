@@ -3,981 +3,1622 @@
 @{
 }
 
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Rubik:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-    :root {
-        --bg: #f0f3f8;
-        --surface: #ffffff;
-        --surface2: #f8f9fc;
-        --surface3: #eef1f8;
-        --border: #eef0f6;
-        --border2: #e2e6f0;
-        --border3: #d4d9e8;
-        --blue: #4e9dff;
-        --blue-dark: #2d7dd2;
-        --blue-g: rgba(78,157,255,.10);
-        --blue-g2: rgba(78,157,255,.06);
-        --teal: #00c9a7;
-        --coral: #ff6b6b;
-        --amber: #f59e0b;
-        --green: #10b981;
-        --danger: #ef4444;
-        --text: #1e2a3a;
-        --text2: #5a6478;
-        --text3: #9ba3b8;
-        --font-h: 'Rubik', sans-serif;
-        --font-b: 'Nunito', sans-serif;
-        --font-m: 'JetBrains Mono', monospace;
-        --r: 8px;
-        --r2: 12px;
-        --r3: 16px;
-        --sh: 0 2px 12px rgba(0,0,0,.06);
-        --sh2: 0 4px 24px rgba(0,0,0,.09);
-    }
-
+    /* ══════════════════════════════════════════════
+       RESET & BASE
+    ══════════════════════════════════════════════ */
     *, *::before, *::after {
         box-sizing: border-box;
         margin: 0;
-        padding: 0;
+        padding: 0
     }
 
-    .sr-root {
-        font-family: var(--font-b);
+    :root {
+        --dark: #1e1e2d;
+        --dark2: #2b2b3b;
+        --dark3: #3a3a50;
+        --accent: #4361ee;
+        --accent2: #3a0ca3;
+        --red: #e63946;
+        --green: #2dc653;
+        --amber: #f4a261;
+        --surface: #ffffff;
+        --surface2: #f8f9fb;
+        --surface3: #f1f3f7;
+        --border: #e4e6ef;
+        --border2: #d1d5e0;
+        --text: #1e1e2d;
+        --text2: #5a607a;
+        --text3: #9499b0;
+        --shadow: 0 2px 8px rgba(0,0,0,.08);
+        --shadow2: 0 4px 20px rgba(0,0,0,.12);
+    }
+
+    .si-root {
+        font-family: 'Inter',Arial,sans-serif;
+        font-size: 13px;
+        background: var(--surface2);
         color: var(--text);
-        background: var(--bg);
-        min-height: calc(100vh - 60px);
-        padding: 24px 28px 20px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scrollbar-width: thin;
-        scrollbar-color: var(--border2) transparent;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
     }
 
-    .sr-inner {
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .page-header {
+    /* ══════════════════════════════════════════════
+       TOP NAV BAR
+    ══════════════════════════════════════════════ */
+    .si-topbar {
+        background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+        color: #fff;
+        padding: 0 18px;
+        height: 42px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 22px;
-        animation: fadeDown .4s ease both;
+        flex-shrink: 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,.25);
+        position: sticky;
+        top: 0;
+        z-index: 100;
     }
 
-    .ph-left {
+    .topbar-left {
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
     }
 
-    .ph-icon {
-        width: 46px;
-        height: 46px;
-        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
-        border-radius: var(--r2);
+    .topbar-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 12px;
         color: #fff;
-        font-size: 18px;
-        box-shadow: 0 4px 16px rgba(78,157,255,.35);
-        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(67,97,238,.4);
     }
 
-    .ph-title {
-        font-family: var(--font-h);
-        font-size: 21px;
+    .si-page-title {
+        font-size: 14px;
         font-weight: 700;
-        color: var(--text);
-        line-height: 1.1;
+        color: #fff;
+        letter-spacing: .2px;
     }
 
-        .ph-title span {
-            color: var(--blue);
-        }
-
-    .ph-breadcrumb {
+    .btn-gv {
+        background: rgba(255,255,255,.12);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,.2);
+        border-radius: 5px;
+        padding: 5px 12px;
+        font-size: 11.5px;
+        font-weight: 500;
+        cursor: pointer;
         display: flex;
         align-items: center;
         gap: 5px;
-        font-family: var(--font-m);
-        font-size: 10px;
-        color: var(--text3);
-        letter-spacing: .4px;
-        margin-top: 3px;
+        transition: all .2s;
+        backdrop-filter: blur(4px);
     }
 
-        .ph-breadcrumb i {
-            font-size: 7px;
+        .btn-gv:hover {
+            background: rgba(255,255,255,.2);
+            border-color: rgba(255,255,255,.35);
         }
 
-        .ph-breadcrumb .bc-cur {
-            color: var(--blue);
+    .si-bc {
+        font-size: 11.5px;
+        color: rgba(255,255,255,.5);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .si-bc span {
+            color: rgba(255,255,255,.85);
             font-weight: 500;
         }
 
-    .status-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-family: var(--font-m);
-        font-size: 10.5px;
-        font-weight: 500;
-    }
-
-    .pill-live {
-        background: rgba(16,185,129,.10);
-        color: var(--green);
-        border: 1px solid rgba(16,185,129,.25);
-    }
-
-        .pill-live::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--green);
-            animation: blink 1.8s ease-in-out infinite;
-        }
-    @@keyframes blink {
-        0%,100%
-
-    {
-        opacity: 1
-    }
-
-    50% {
-        opacity: .3
-    }
-
-    }
-
-    .divider {
-        display: flex;
-        gap: 3px;
-        height: 3px;
-        margin-bottom: 20px;
-        border-radius: 3px;
-        overflow: hidden;
-    }
-
-        .divider span:nth-child(1) {
-            flex: 3;
-            background: var(--blue);
-        }
-
-        .divider span:nth-child(2) {
-            flex: 1;
-            background: var(--teal);
-            opacity: .6;
-        }
-
-        .divider span:nth-child(3) {
-            flex: 8;
-            background: var(--border2);
-        }
-
-    .form-card {
+    /* ══════════════════════════════════════════════
+       FORM BODY
+    ══════════════════════════════════════════════ */
+    .si-body {
         background: var(--surface);
-        border-radius: var(--r3);
-        border: 1px solid var(--border2);
-        box-shadow: var(--sh2);
+        margin: 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow2);
         overflow: hidden;
-        animation: slideUp .35s cubic-bezier(.22,1,.36,1) both;
+        flex: 1;
     }
 
-    .fc-header {
+    /* ── FORM HEADER STRIP ── */
+    .form-head {
+        background: linear-gradient(135deg, var(--dark) 0%, var(--dark3) 100%);
+        padding: 12px 20px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 14px 22px;
-        background: var(--surface2);
-        border-bottom: 1px solid var(--border2);
-        border-top: 3px solid var(--blue);
     }
 
-    .fc-header-left {
+    .form-head-left {
         display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .fc-icon {
-        width: 32px;
-        height: 32px;
-        border-radius: var(--r);
-        background: var(--blue-g);
+    .form-head-icon {
+        width: 34px;
+        height: 34px;
+        background: rgba(255,255,255,.12);
+        border-radius: 7px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: var(--blue);
-        font-size: 13px;
-    }
-
-    .fc-title {
-        font-family: var(--font-h);
+        color: #fff;
         font-size: 14px;
-        font-weight: 600;
-        color: var(--text);
     }
 
-    .fc-sub {
+    .form-head-title {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .form-head-sub {
+        color: rgba(255,255,255,.5);
         font-size: 11px;
-        color: var(--text3);
-        font-weight: 500;
         margin-top: 1px;
     }
 
-    .fc-body {
-        padding: 24px 26px;
-        max-height: 82vh;
+    .live-pill {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(45,198,83,.15);
+        border: 1px solid rgba(45,198,83,.3);
+        color: #2dc653;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 10.5px;
+        font-weight: 600;
+    }
+
+    .live-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #2dc653;
+        animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    @@keyframes pulse {
+        0%, 100% {
+            opacity: 1
+        }
+
+        50% {
+            opacity: .3
+        }
+    }
+
+    /* ── FORM CONTENT ── */
+    .form-body {
+        padding: 16px 20px 14px;
+    }
+
+    /* ── SECTION LABEL ── */
+    .sec-hdr {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sec-bar {
+        width: 3px;
+        height: 16px;
+        border-radius: 3px;
+        flex-shrink: 0;
+    }
+
+        .sec-bar.blue {
+            background: linear-gradient(180deg,var(--accent),#4cc9f0);
+        }
+
+        .sec-bar.teal {
+            background: linear-gradient(180deg,#2dc653,#4cc9f0);
+        }
+
+        .sec-bar.amber {
+            background: linear-gradient(180deg,var(--amber),var(--red));
+        }
+
+    .sec-ttl-txt {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--text2);
+    }
+
+    /* ══════════════════════════════════════════════
+       FIELD GROUPS
+    ══════════════════════════════════════════════ */
+    .fi-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .fi {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .fi-lbl {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .8px;
+        color: var(--text3);
+        line-height: 1;
+    }
+
+        .fi-lbl.red {
+            color: var(--red);
+        }
+
+    .fi input,
+    .fi select,
+    .fi textarea {
+        border: 1.5px solid var(--border);
+        border-radius: 6px;
+        padding: 0 10px;
+        font-size: 12.5px;
+        font-family: inherit;
+        font-weight: 500;
+        color: var(--text);
+        background: var(--surface2);
+        outline: none;
+        height: 34px;
+        transition: border-color .18s, background .18s, box-shadow .18s;
+    }
+
+        .fi input:focus, .fi select:focus, .fi textarea:focus {
+            border-color: var(--accent);
+            background: var(--surface);
+            box-shadow: 0 0 0 3px rgba(67,97,238,.1);
+        }
+
+        .fi input[readonly] {
+            background: #f4f5f8;
+            color: var(--text2);
+            cursor: default;
+            border-color: var(--border);
+        }
+
+            .fi input[readonly]:focus {
+                box-shadow: none;
+                border-color: var(--border);
+            }
+
+    .fi textarea {
+        height: 56px;
+        resize: vertical;
+        padding: 8px 10px;
+        line-height: 1.4;
+    }
+
+    /* input + search btn combo */
+    .fi-sb {
+        display: flex;
+        align-items: center;
+    }
+
+        .fi-sb input {
+            border-right: none;
+            border-radius: 6px 0 0 6px;
+            flex: 1;
+        }
+
+        .fi-sb .sbtn {
+            height: 34px;
+            width: 34px;
+            background: var(--dark);
+            color: #fff;
+            border: 1.5px solid var(--dark);
+            border-radius: 0 6px 6px 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11.5px;
+            flex-shrink: 0;
+            transition: background .15s;
+        }
+
+            .fi-sb .sbtn:hover {
+                background: var(--accent);
+            }
+
+    /* ══════════════════════════════════════════════
+       SEARCHABLE DROPDOWN
+    ══════════════════════════════════════════════ */
+    .sd {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .sd-iw {
+        display: flex;
+        align-items: center;
+    }
+
+    .sd-disp {
+        border: 1.5px solid var(--border);
+        border-right: none;
+        border-radius: 6px 0 0 6px;
+        padding: 0 10px;
+        font-size: 12.5px;
+        font-family: inherit;
+        font-weight: 500;
+        color: var(--text3);
+        background: var(--surface2);
+        height: 34px;
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+        user-select: none;
+        transition: border-color .18s,background .18s,box-shadow .18s;
+        display: flex;
+        align-items: center;
+    }
+
+        .sd-disp.hv {
+            color: var(--text);
+            background: var(--surface);
+        }
+
+    .sd.open .sd-disp {
+        border-color: var(--accent);
+        background: var(--surface);
+        box-shadow: 0 0 0 3px rgba(67,97,238,.1);
+    }
+
+    .sd-obtn {
+        height: 34px;
+        width: 34px;
+        background: var(--dark);
+        color: #fff;
+        border: 1.5px solid var(--dark);
+        border-radius: 0 6px 6px 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11.5px;
+        flex-shrink: 0;
+        transition: background .15s;
+    }
+
+        .sd-obtn:hover {
+            background: var(--accent);
+        }
+
+    .sd-panel {
+        display: none;
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        min-width: 220px;
+        width: 100%;
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        box-shadow: 0 8px 28px rgba(0,0,0,.14);
+        z-index: 9999;
+        overflow: hidden;
+    }
+
+    .sd.open .sd-panel {
+        display: block;
+        animation: sdIn .15s ease;
+    }
+
+    @@keyframes sdIn {
+        from {
+            opacity: 0;
+            transform: translateY(-4px)
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0)
+        }
+    }
+
+    .sd-sr {
+        display: flex;
+        align-items: center;
+        padding: 8px 10px;
+        background: var(--surface2);
+        border-bottom: 1px solid var(--border);
+        gap: 7px;
+    }
+
+        .sd-sr i {
+            color: var(--text3);
+            font-size: 11px;
+        }
+
+    .sd-si {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--text);
+        width: 100%;
+    }
+
+        .sd-si::placeholder {
+            color: var(--text3);
+        }
+
+    .sd-list {
+        max-height: 168px;
         overflow-y: auto;
         scrollbar-width: thin;
         scrollbar-color: var(--border2) transparent;
     }
 
-        .fc-body::-webkit-scrollbar {
+        .sd-list::-webkit-scrollbar {
             width: 4px;
         }
 
-        .fc-body::-webkit-scrollbar-thumb {
+        .sd-list::-webkit-scrollbar-thumb {
             background: var(--border2);
             border-radius: 10px;
         }
 
-    .sec-label {
+    .sd-opt {
+        padding: 8px 12px;
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--text2);
+        cursor: pointer;
+        border-bottom: 1px solid var(--border);
+        transition: background .1s,color .1s;
         display: flex;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 14px;
-        padding-bottom: 10px;
-        border-bottom: 1px dashed var(--border2);
+        gap: 8px;
     }
 
-    .sec-label-bar {
-        width: 3px;
-        height: 14px;
-        border-radius: 3px;
-        flex-shrink: 0;
-    }
+        .sd-opt::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--border2);
+            flex-shrink: 0;
+            transition: background .1s;
+        }
 
-    .slb-blue {
-        background: linear-gradient(180deg, var(--blue), var(--teal));
-    }
+        .sd-opt:last-child {
+            border-bottom: none;
+        }
 
-    .slb-teal {
-        background: linear-gradient(180deg, var(--teal), var(--blue));
-    }
+        .sd-opt:hover, .sd-opt.hi {
+            background: var(--dark);
+            color: #fff;
+        }
 
-    .slb-amber {
-        background: linear-gradient(180deg, var(--amber), var(--coral));
-    }
+            .sd-opt:hover::before, .sd-opt.hi::before {
+                background: var(--accent);
+            }
 
-    .sec-label-txt {
-        font-family: var(--font-m);
-        font-size: 9.5px;
-        font-weight: 500;
+        .sd-opt.sel {
+            background: rgba(67,97,238,.07);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+            .sd-opt.sel::before {
+                background: var(--accent);
+            }
+
+    .sd-empty {
+        padding: 14px;
+        text-align: center;
+        font-size: 12px;
         color: var(--text3);
-        letter-spacing: 2px;
-        text-transform: uppercase;
     }
 
-    .frow {
-        display: grid;
-        gap: 14px;
+    /* ══════════════════════════════════════════════
+       ENTRY PANEL
+    ══════════════════════════════════════════════ */
+    .entry-panel {
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 14px;
         margin-bottom: 14px;
-    }
-
-    .frow-4 {
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-    }
-
-    .fg {
-        position: relative;
-    }
-
-        .fg .fc {
-            padding: 22px 14px 8px;
-        }
-
-        .fg select.fc {
-            padding: 22px 14px 8px;
-        }
-
-        .fg.always-up .fl {
-            top: 7px;
-            transform: none;
-            font-size: 9px;
-            font-family: var(--font-m);
-            color: var(--text3);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-
-        .fg.always-up .fc:focus ~ .fl {
-            color: var(--blue);
-        }
-
-    .fl {
-        position: absolute;
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-family: var(--font-b);
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text3);
-        pointer-events: none;
-        transition: top .18s,transform .18s,font-size .18s,color .18s,letter-spacing .18s;
-        white-space: nowrap;
-    }
-
-    .fg .fc:focus ~ .fl, .fg.has-value .fl {
-        top: 7px;
-        transform: none;
-        font-size: 9px;
-        font-family: var(--font-m);
-        color: var(--blue);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        font-weight: 500;
-    }
-
-    .fg .fc::placeholder {
-        color: transparent;
-    }
-
-    .fc {
-        border: 1px solid var(--border2);
-        border-radius: var(--r);
-        padding: 10px 14px;
-        font-size: 13.5px;
-        font-family: var(--font-b);
-        font-weight: 600;
-        color: var(--text) !important;
-        background: var(--surface);
-        transition: border-color .2s, box-shadow .2s, background .2s;
-        outline: none;
-        width: 100%;
-        -webkit-text-fill-color: var(--text) !important;
-        caret-color: var(--blue);
-    }
-
-        .fc:focus {
-            border-color: var(--blue);
-            box-shadow: 0 0 0 3px var(--blue-g);
-            background: #fff;
-        }
-
-        .fc[readonly] {
-            background: var(--surface2);
-            color: var(--text3) !important;
-            -webkit-text-fill-color: var(--text3) !important;
-            cursor: default;
-        }
-
-    select.fc {
-        appearance: auto;
-        cursor: pointer;
-    }
-
-        select.fc option {
-            background: #fff;
-            color: var(--text);
-        }
-
-    input[type="date"].fc::-webkit-calendar-picker-indicator {
-        opacity: .5;
-        cursor: pointer;
-    }
-
-    .entry-align {
         display: flex;
+        gap: 8px;
         align-items: flex-end;
-        gap: 10px;
-        margin-bottom: 14px;
         flex-wrap: wrap;
     }
 
-        .entry-align .fg {
-            min-width: 100px;
+    .btn-add {
+        background: linear-gradient(135deg,var(--dark) 0%,var(--dark3) 100%);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 0 18px;
+        height: 34px;
+        font-size: 12.5px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        align-self: flex-end;
+        transition: all .18s;
+        box-shadow: 0 2px 8px rgba(30,30,45,.25);
+        letter-spacing: .2px;
+    }
+
+        .btn-add:hover {
+            background: linear-gradient(135deg,var(--accent) 0%,var(--accent2) 100%);
+            box-shadow: 0 4px 14px rgba(67,97,238,.35);
+            transform: translateY(-1px);
         }
 
-            .entry-align .fg.xl {
-                flex: 3;
-            }
+        .btn-add i {
+            font-size: 10px;
+        }
 
-            .entry-align .fg.sm {
-                flex: 1;
-            }
-
-    .summary-strip {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        margin-bottom: 16px;
+    /* ══════════════════════════════════════════════
+       TABLE AREA
+    ══════════════════════════════════════════════ */
+    .tbl-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
     }
 
-    .summary-card {
-        background: var(--surface2);
-        border: 1px solid var(--border2);
-        border-radius: var(--r2);
-        padding: 12px 16px;
-        text-align: center;
+    .tbl-toolbar-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .summary-label {
-        font-family: var(--font-m);
-        font-size: 9px;
-        color: var(--text3);
-        letter-spacing: 1.5px;
+    .tbl-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text2);
         text-transform: uppercase;
-        margin-bottom: 5px;
+        letter-spacing: .8px;
     }
 
-    .summary-value {
-        font-family: var(--font-m);
-        font-size: 15px;
-        font-weight: 500;
-        color: var(--text);
+    .btn-del-sel {
+        background: var(--surface);
+        color: var(--red);
+        border: 1.5px solid rgba(230,57,70,.3);
+        border-radius: 5px;
+        padding: 5px 12px;
+        font-size: 11.5px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all .15s;
     }
 
-    .summary-card.highlight {
-        border-color: rgba(78,157,255,.25);
-        background: var(--blue-g2);
-    }
-
-        .summary-card.highlight .summary-value {
-            color: var(--blue-dark);
+        .btn-del-sel:hover {
+            background: var(--red);
+            color: #fff;
+            border-color: var(--red);
         }
 
-    .table-wrap {
-        border: 1px solid var(--border2);
-        border-radius: var(--r2);
+    .si-tw {
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
         overflow: hidden;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
+        box-shadow: var(--shadow);
     }
 
-    .pro-tbl {
+    .si-tbl {
         width: 100%;
         border-collapse: collapse;
+        font-size: 12px;
     }
 
-        .pro-tbl thead th {
-            background: var(--surface2);
-            color: var(--text3);
-            padding: 10px 14px;
-            font-size: 9.5px;
+        .si-tbl thead th {
+            background: linear-gradient(135deg,var(--dark) 0%,var(--dark2) 100%);
+            color: rgba(255,255,255,.85);
+            padding: 10px 10px;
+            font-size: 10.5px;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: .8px;
             white-space: nowrap;
-            font-family: var(--font-b);
-            border-bottom: 1px solid var(--border2);
-            border-right: 1px solid var(--border);
-            text-align: center;
+            border-right: 1px solid rgba(255,255,255,.08);
+            text-align: left;
         }
 
-            .pro-tbl thead th:last-child {
+            .si-tbl thead th:last-child {
                 border-right: none;
             }
 
-        .pro-tbl tbody tr {
+            .si-tbl thead th.tc {
+                text-align: center;
+            }
+
+            .si-tbl thead th input[type="checkbox"] {
+                accent-color: var(--accent);
+                width: 14px;
+                height: 14px;
+            }
+
+        .si-tbl tbody tr {
             border-bottom: 1px solid var(--border);
             transition: background .12s;
         }
 
-            .pro-tbl tbody tr:hover {
-                background: var(--surface2);
+            .si-tbl tbody tr:nth-child(even) {
+                background: #fafbfd;
             }
 
-            .pro-tbl tbody tr:last-child {
+            .si-tbl tbody tr:hover {
+                background: rgba(67,97,238,.04);
+            }
+
+            .si-tbl tbody tr:last-child {
                 border-bottom: none;
             }
 
-        .pro-tbl tbody td {
-            padding: 10px 14px;
-            font-size: 12.5px;
+        .si-tbl tbody td {
+            padding: 9px 10px;
             color: var(--text2);
+            font-size: 12px;
+            font-weight: 500;
+            border-right: 1px solid var(--border);
             text-align: center;
-            font-weight: 600;
         }
 
-            .pro-tbl tbody td.td-left {
+            .si-tbl tbody td:last-child {
+                border-right: none;
+            }
+
+            .si-tbl tbody td.tl {
                 text-align: left;
-                font-weight: 700;
+                font-weight: 600;
                 color: var(--text);
             }
 
-        .pro-tbl tfoot td, .pro-tbl tfoot th {
-            padding: 11px 14px;
-            font-family: var(--font-m);
-            font-size: 11px;
-            font-weight: 500;
-            text-align: center;
-            background: var(--surface2);
-            border-top: 1px solid var(--border2);
-            color: var(--text);
-        }
-
-            .pro-tbl tfoot th.label-cell {
-                text-align: left;
-                color: var(--text2);
-                font-size: 9.5px;
-                letter-spacing: 1px;
-                text-transform: uppercase;
+            .si-tbl tbody td input[type="checkbox"] {
+                accent-color: var(--accent);
+                width: 13px;
+                height: 13px;
             }
 
-            .pro-tbl tfoot th.grand-val {
-                color: var(--blue-dark);
-                font-size: 13px;
-            }
-
-    .amount-cell {
-        font-family: var(--font-m);
-        font-size: 12px;
-    }
-
-    .tbl-del {
-        width: 28px;
-        height: 28px;
-        border-radius: var(--r);
-        border: 1px solid rgba(239,68,68,.20);
-        cursor: pointer;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 11px;
-        transition: all .15s;
-        background: rgba(239,68,68,.08);
-        color: var(--danger);
-    }
-
-        .tbl-del:hover {
-            background: var(--danger);
-            color: #fff;
-            border-color: var(--danger);
-        }
-
-    .empty-state {
-        padding: 40px 20px;
+    .no-rec {
+        padding: 30px;
         text-align: center;
-    }
-
-    .empty-icon {
-        width: 48px;
-        height: 48px;
-        background: var(--surface2);
-        border-radius: var(--r2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
         color: var(--text3);
-        font-size: 18px;
-        margin: 0 auto 12px;
-        border: 1px solid var(--border2);
+        font-size: 12.5px;
     }
 
-    .empty-text {
-        font-size: 13px;
+        .no-rec i {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--border2);
+        }
+
+    .rdel {
+        background: none;
+        border: 1.5px solid var(--border2);
+        border-radius: 5px;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
         color: var(--text3);
-    }
-
-    .btn-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        padding-top: 18px;
-        border-top: 1px solid var(--border2);
-        margin-top: 4px;
-        justify-content: flex-end;
-    }
-
-    .btn {
+        font-size: 10px;
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 10px 22px;
-        font-family: var(--font-b);
+        justify-content: center;
+        transition: all .15s;
+    }
+
+        .rdel:hover {
+            background: var(--red);
+            color: #fff;
+            border-color: var(--red);
+        }
+
+    /* table footer */
+    .si-tbl tfoot td {
+        padding: 9px 10px;
+        background: linear-gradient(135deg,var(--dark) 0%,var(--dark2) 100%);
+        color: rgba(255,255,255,.9);
+        font-weight: 700;
+        font-size: 12px;
+        text-align: center;
+        border-top: 2px solid var(--dark3);
+        border-right: 1px solid rgba(255,255,255,.08);
+    }
+
+        .si-tbl tfoot td:last-child {
+            border-right: none;
+        }
+
+        .si-tbl tfoot td.tlbl {
+            text-align: left;
+            font-size: 10.5px;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,.6);
+            font-weight: 600;
+        }
+
+        .si-tbl tfoot td.accent-val {
+            color: #7dd3fc;
+            font-size: 13px;
+        }
+
+    /* ══════════════════════════════════════════════
+       SUMMARY STRIP
+    ══════════════════════════════════════════════ */
+    .si-sum {
+        display: flex;
+        gap: 0;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 4px;
+        box-shadow: var(--shadow);
+    }
+
+    .sum-card {
+        flex: 1;
+        padding: 12px 14px;
+        border-right: 1px solid var(--border);
+        background: var(--surface2);
+        transition: background .15s;
+    }
+
+        .sum-card:last-child {
+            border-right: none;
+            background: rgba(67,97,238,.05);
+        }
+
+        .sum-card:hover {
+            background: var(--surface3);
+        }
+
+    .sum-lbl {
+        font-size: 9.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text3);
+        margin-bottom: 5px;
+    }
+
+        .sum-lbl.red {
+            color: var(--red);
+        }
+
+    .sum-val {
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--text);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -.3px;
+    }
+
+    .sum-card:last-child .sum-val {
+        color: var(--accent);
+    }
+
+    .sum-input-wrap {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 2px;
+    }
+
+    .sum-input {
+        border: 1.5px solid var(--border2);
+        border-radius: 5px;
+        padding: 3px 8px;
         font-size: 13px;
         font-weight: 700;
-        border-radius: var(--r);
-        border: none;
-        cursor: pointer;
-        transition: all .2s ease;
-        white-space: nowrap;
+        font-family: inherit;
+        color: var(--text);
+        background: var(--surface);
+        width: 80px;
+        outline: none;
+        transition: border-color .15s,box-shadow .15s;
     }
 
-    .btn-add {
-        background: linear-gradient(135deg, var(--teal) 0%, #00a88e 100%);
-        color: #fff;
-        box-shadow: 0 3px 16px rgba(0,201,167,.30);
-        height: 46px;
-    }
-
-        .btn-add:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 24px rgba(0,201,167,.40);
+        .sum-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(67,97,238,.1);
         }
 
-    .btn-primary {
-        background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
-        color: #fff;
-        box-shadow: 0 3px 14px rgba(78,157,255,.30);
-    }
-
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(78,157,255,.42);
-        }
-
-    .btn-secondary {
-        background: var(--surface2);
-        color: var(--text2);
-        border: 1px solid var(--border2);
-    }
-
-        .btn-secondary:hover {
-            background: var(--surface3);
-            color: var(--text);
-            border-color: var(--border3);
-        }
-
-    .pg-footer {
-        margin-top: 18px;
-        padding-top: 14px;
-        border-top: 1px solid var(--border2);
-        text-align: center;
-        font-family: var(--font-m);
-        font-size: 10.5px;
+    .sum-pct {
+        font-size: 11px;
         color: var(--text3);
-        letter-spacing: .5px;
     }
 
-        .pg-footer strong {
-            color: var(--blue);
-            font-weight: 500;
+    /* ══════════════════════════════════════════════
+       ACTION BUTTONS
+    ══════════════════════════════════════════════ */
+    .si-actions {
+        background: linear-gradient(135deg,var(--dark) 0%,var(--dark2) 100%);
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-top: 1px solid var(--dark3);
+        flex-shrink: 0;
+    }
+
+    .btn-save {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 9px 22px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transition: all .18s;
+        box-shadow: 0 3px 12px rgba(67,97,238,.4);
+        letter-spacing: .2px;
+    }
+
+        .btn-save:hover {
+            background: #3452d4;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 18px rgba(67,97,238,.5);
         }
 
-        .pg-footer .heart {
-            color: var(--coral);
+    .btn-cancel {
+        background: rgba(255,255,255,.1);
+        color: rgba(255,255,255,.85);
+        border: 1.5px solid rgba(255,255,255,.2);
+        border-radius: 6px;
+        padding: 9px 22px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transition: all .18s;
+    }
+
+        .btn-cancel:hover {
+            background: rgba(255,255,255,.18);
+            color: #fff;
         }
-    @@keyframes fadeDown {
-        from
 
-    {
-        opacity: 0;
-        transform: translateY(-16px)
+    .actions-spacer {
+        flex: 1;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0)
+    .actions-hint {
+        font-size: 11px;
+        color: rgba(255,255,255,.3);
     }
 
-    }
-    @@keyframes slideUp {
-        from
-
-    {
-        opacity: 0;
-        transform: translateY(20px)
+    /* ══════════════════════════════════════════════
+       WIDTHS
+    ══════════════════════════════════════════════ */
+    .w-inv {
+        width: 130px
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0)
+    .w-dt {
+        width: 140px
     }
 
-    }
-    @@keyframes fadeIn {
-        from
-
-    {
-        opacity: 0;
-        transform: translateY(-6px)
+    .w-ref {
+        width: 115px
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0)
+    .w-cu {
+        width: 240px
     }
 
-    }
-    @@media (max-width: 900px) {
-        .sr-root
-
-    {
-        padding: 14px;
+    .w-rem {
+        width: 420px
     }
 
-    .frow-4 {
-        grid-template-columns: 1fr 1fr;
+    .w-pr {
+        flex: 3;
+        min-width: 170px
     }
 
-    .summary-strip {
-        grid-template-columns: 1fr 1fr;
+    .w-qt {
+        width: 72px
     }
 
+    .w-rt {
+        width: 90px
+    }
+
+    .w-dp {
+        width: 70px
+    }
+
+    .w-da {
+        width: 90px
+    }
+
+    .w-na {
+        width: 92px
+    }
+
+    @@media(max-width:900px) {
+        .si-body {
+            margin: 8px;
+            border-radius: 8px;
+        }
+
+        .form-body {
+            padding: 12px 14px 10px;
+        }
+
+        .fi-row {
+            flex-wrap: wrap;
+        }
+
+        .si-sum {
+            flex-wrap: wrap;
+        }
+
+        .sum-card {
+            min-width: 48%;
+        }
     }
 </style>
 
-<div class="sr-root">
-    <div class="sr-inner">
-        <div class="page-header">
-            <div class="ph-left">
-                <div class="ph-icon"><i class="fas fa-file-invoice"></i></div>
-                <div>
-                    <div class="ph-title">Sales <span>Invoice</span></div>
-                    <div class="ph-breadcrumb">Finance <i class="fas fa-chevron-right"></i> <span class="bc-cur">Sales Invoice</span></div>
-                </div>
-            </div>
-            <div class="status-pill pill-live">Live</div>
+<div class="si-root">
+
+    <!-- ══ TOP BAR ══ -->
+    <div class="si-topbar">
+        <div class="topbar-left">
+            <div class="topbar-icon"><i class="fas fa-file-invoice"></i></div>
+            <span class="si-page-title">Sale Invoice</span>
+            <button class="btn-gv"><i class="fas fa-table-list"></i> Grid View</button>
         </div>
-        <div class="divider"><span></span><span></span><span></span></div>
-
-        <div class="form-card">
-            <div class="fc-header">
-                <div class="fc-header-left">
-                    <div class="fc-icon"><i class="fas fa-file-invoice"></i></div>
-                    <div><div class="fc-title">Sales Invoice</div><div class="fc-sub">Create a new sales invoice</div></div>
-                </div>
-                <div class="status-pill pill-live">Live</div>
-            </div>
-
-            <div class="fc-body">
-                <div class="sec-label"><div class="sec-label-bar slb-blue"></div><span class="sec-label-txt">Invoice Details</span></div>
-                <div class="frow frow-4">
-                    <div class="fg always-up"><input type="text" id="invoiceNo" class="fc" readonly placeholder=" "><label class="fl" for="invoiceNo">Invoice No</label></div>
-                    <div class="fg always-up"><input type="date" id="date" class="fc"><label class="fl" for="date">Date</label></div>
-                    <div class="fg always-up"><select id="customerDropdown" class="fc"><option value="">— Select Customer —</option></select><label class="fl" for="customerDropdown">Customer</label></div>
-                    <div class="fg"><input type="text" id="remarks" class="fc" placeholder=" "><label class="fl" for="remarks">Remarks</label></div>
-                </div>
-
-                <div class="sec-label" style="margin-top:4px;"><div class="sec-label-bar slb-teal"></div><span class="sec-label-txt">Add Product Entry</span></div>
-                <div class="entry-align">
-                    <div class="fg always-up xl"><select id="productDropdown" class="fc"><option value="">— Select Product —</option></select><label class="fl" for="productDropdown">Product</label></div>
-                    <div class="fg always-up sm"><input type="number" id="qty" class="fc" placeholder=" " min="1"><label class="fl" for="qty">Qty</label></div>
-                    <div class="fg always-up sm"><input type="number" id="salesPrice" class="fc" placeholder=" " readonly><label class="fl" for="salesPrice">Unit Price</label></div>
-                    <div class="fg always-up sm"><input type="number" id="amount" class="fc" placeholder=" " readonly><label class="fl" for="amount">Amount</label></div>
-                    <div class="fg always-up sm"><input type="number" id="discount" class="fc" placeholder=" "><label class="fl" for="discount">Discount</label></div>
-                    <div class="fg always-up sm"><input type="number" id="netAmount" class="fc" placeholder=" " readonly><label class="fl" for="netAmount">Net Amount</label></div>
-                    <div><button class="btn btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Add</button></div>
-                </div>
-
-                <div class="summary-strip">
-                    <div class="summary-card"><div class="summary-label">Total Qty</div><div class="summary-value" id="dispQty">0</div></div>
-                    <div class="summary-card"><div class="summary-label">Total Amount</div><div class="summary-value" id="dispAmount">0.00</div></div>
-                    <div class="summary-card"><div class="summary-label">Total Discount</div><div class="summary-value" id="dispDiscount">0.00</div></div>
-                    <div class="summary-card highlight"><div class="summary-label">Net Amount</div><div class="summary-value" id="dispNet">0.00</div></div>
-                </div>
-
-                <div class="sec-label" style="margin-top:4px;"><div class="sec-label-bar slb-amber"></div><span class="sec-label-txt">Invoice Entries</span></div>
-                <div class="table-wrap">
-                    <table class="pro-tbl" id="dataTable">
-                        <thead>
-                            <tr>
-                                <th style="width:4%">#</th>
-                                <th style="width:30%;text-align:left;">Product</th>
-                                <th style="width:10%">Qty</th>
-                                <th style="width:14%">Unit Price</th>
-                                <th style="width:14%">Amount</th>
-                                <th style="width:14%">Discount</th>
-                                <th style="width:10%">Net Amount</th>
-                                <th style="width:4%"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <tr id="emptyRow"><td colspan="8"><div class="empty-state"><div class="empty-icon"><i class="fas fa-box-open"></i></div><div class="empty-text">No products added yet.</div></div></td></tr>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th colspan="2" class="label-cell">Grand Total</th>
-                                <th id="sumQty" class="amount-cell">0</th>
-                                <th class="amount-cell">—</th>
-                                <th id="sumAmount" class="amount-cell">0.00</th>
-                                <th id="sumDiscount" class="amount-cell">0.00</th>
-                                <th id="sumNet" class="amount-cell grand-val">0.00</th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-
-                <div class="btn-row">
-                    <button class="btn btn-secondary" onclick="cancelForm()"><i class="fas fa-xmark"></i> Cancel</button>
-                    <button class="btn btn-primary" onclick="saveForm()"><i class="fas fa-floppy-disk"></i> Save Invoice</button>
-                </div>
-            </div>
+        <div class="si-bc">
+            Home <i class="fas fa-chevron-right" style="font-size:9px;opacity:.4"></i>
+            <span>Sale Invoice</span>
         </div>
-
-        <div class="pg-footer">Developed with <span class="heart">♥</span> by <strong>UT Designer</strong></div>
     </div>
-</div>
+
+    <!-- ══ FORM CARD ══ -->
+    <div class="si-body">
+
+        <!-- Form Header -->
+        <div class="form-head">
+            <div class="form-head-left">
+                <div class="form-head-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div>
+                    <div class="form-head-title">New Sale Invoice</div>
+                    <div class="form-head-sub">Fill in the details below to create an invoice</div>
+                </div>
+            </div>
+            <div class="live-pill"><div class="live-dot"></div> Live</div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="form-body">
+
+            <!-- ── SECTION: Invoice Details ── -->
+            <div class="sec-hdr" style="margin-top:2px;">
+                <div class="sec-bar blue"></div>
+                <span class="sec-ttl-txt">Invoice Details</span>
+            </div>
+
+            <div class="fi-row">
+                <div class="fi w-inv">
+                    <span class="fi-lbl">Bill No</span>
+                    <input type="text" id="invoiceNo" readonly placeholder="Loading…">
+                </div>
+                <div class="fi w-dt">
+                    <span class="fi-lbl">Bill Date</span>
+                    <input type="date" id="date">
+                </div>
+                <div class="fi w-ref">
+                    <span class="fi-lbl">Ref. #</span>
+                    <input type="text" id="refNo" placeholder="Optional">
+                </div>
+
+                <!-- Customer Searchable Dropdown -->
+                <div class="sd w-cu" id="cuWrap">
+                    <span class="fi-lbl">Customer</span>
+                    <div class="sd-iw">
+                        <div class="sd-disp" id="cuDisp" tabindex="0"
+                             onclick="toggleSD('cuWrap')">
+                            Select a customer…
+                        </div>
+                        <button class="sd-obtn" onclick="toggleSD('cuWrap')" type="button">
+                            <i class="fas fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                    <input type="hidden" id="customerCode">
+                    <div class="sd-panel">
+                        <div class="sd-sr">
+                            <i class="fas fa-magnifying-glass"></i>
+                            <input class="sd-si" id="cuSrch" placeholder="Type to search customer…"
+                                   oninput="filterSD('cuWrap','cuSrch','cuList')">
+                        </div>
+                        <div class="sd-list" id="cuList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fi-row">
+                <div class="fi w-rem">
+                    <span class="fi-lbl">Remarks</span>
+                    <textarea id="remarks" placeholder="Add any notes or remarks…"></textarea>
+                </div>
+            </div>
+
+            <!-- ── SECTION: Product Entry ── -->
+            <div class="sec-hdr">
+                <div class="sec-bar teal"></div>
+                <span class="sec-ttl-txt">Add Product Entry</span>
+            </div>
+
+            <div class="entry-panel">
+
+                <!-- Product Searchable Dropdown -->
+                <div class="sd w-pr" id="prWrap">
+                    <span class="fi-lbl">Product / Barcode</span>
+                    <div class="sd-iw">
+                        <div class="sd-disp" id="prDisp" tabindex="0"
+                             onclick="toggleSD('prWrap')" style="width:100%">
+                            Select a product…
+                        </div>
+                        <button class="sd-obtn" onclick="toggleSD('prWrap')" type="button">
+                            <i class="fas fa-magnifying-glass"></i>
+                        </button>
+                    </div>
+                    <input type="hidden" id="productCode">
+                    <div class="sd-panel">
+                        <div class="sd-sr">
+                            <i class="fas fa-magnifying-glass"></i>
+                            <input class="sd-si" id="prSrch" placeholder="Type to search product…"
+                                   oninput="filterSD('prWrap','prSrch','prList')">
+                        </div>
+                        <div class="sd-list" id="prList"></div>
+                    </div>
+                </div>
+
+                <div class="fi w-qt">
+                    <span class="fi-lbl">Qty</span>
+                    <input type="number" id="qty" min="1" value="0">
+                </div>
+                <div class="fi w-rt">
+                    <span class="fi-lbl">Rate</span>
+                    <input type="number" id="salesPrice" readonly value="0">
+                </div>
+                <div class="fi w-dp">
+                    <span class="fi-lbl">Disc %</span>
+                    <input type="number" id="discPct" value="0" min="0" max="100">
+                </div>
+                <div class="fi w-da">
+                    <span class="fi-lbl red">Disc Amt</span>
+                    <input type="number" id="discount" readonly value="0">
+                </div>
+                <div class="fi w-na">
+                    <span class="fi-lbl">Net Amt</span>
+                    <input type="number" id="netAmount" readonly value="0">
+                </div>
+                <button class="btn-add" onclick="addRow()" type="button">
+                    <i class="fas fa-plus"></i> Add
+                </button>
+            </div>
+
+            <!-- ── SECTION: Invoice Entries ── -->
+            <div class="sec-hdr">
+                <div class="sec-bar amber"></div>
+                <span class="sec-ttl-txt">Invoice Entries</span>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="tbl-toolbar">
+                <div class="tbl-toolbar-left">
+                    <button class="btn-del-sel" onclick="deleteSelected()" type="button">
+                        <i class="fas fa-trash-can"></i>
+                        Delete Selected (<span id="selCnt">0</span>)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="si-tw">
+                <table class="si-tbl">
+                    <thead>
+                        <tr>
+                            <th style="width:36px;text-align:center">
+                                <input type="checkbox" id="chkAll" onchange="toggleAll(this)">
+                            </th>
+                            <th style="width:36px" class="tc">#</th>
+                            <th style="min-width:200px">Product / Item</th>
+                            <th class="tc" style="width:64px">Qty</th>
+                            <th class="tc" style="width:90px">Rate</th>
+                            <th class="tc" style="width:94px">Amount</th>
+                            <th class="tc" style="width:66px">Disc %</th>
+                            <th class="tc" style="width:90px">Disc Amt</th>
+                            <th class="tc" style="width:94px">Net Amt</th>
+                            <th style="width:36px"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr id="emptyRow">
+                            <td colspan="10">
+                                <div class="no-rec">
+                                    <i class="fas fa-box-open"></i>
+                                    No products added yet — use the form above to add entries
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot id="tfoot" style="display:none">
+                        <tr>
+                            <td colspan="3" class="tlbl">Grand Total</td>
+                            <td id="ftQ">0</td>
+                            <td></td>
+                            <td id="ftA">0.00</td>
+                            <td></td>
+                            <td id="ftD">0.00</td>
+                            <td id="ftN" class="accent-val">0.00</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- ── SUMMARY ── -->
+            <div class="si-sum">
+                <div class="sum-card">
+                    <div class="sum-lbl">Bill Gross Amount</div>
+                    <div class="sum-val" id="sumGross">0.00</div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-lbl">Bill Disc %</div>
+                    <div class="sum-input-wrap">
+                        <input type="number" class="sum-input" id="billDiscPct"
+                               value="0" min="0" max="100" oninput="recalcBill()">
+                        <span class="sum-pct">%</span>
+                    </div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-lbl">Bill Disc Amount</div>
+                    <div class="sum-val" id="sumDiscAmt">0.00</div>
+                </div>
+                <div class="sum-card">
+                    <div class="sum-lbl red">Bill Net Amount</div>
+                    <div class="sum-val" id="sumNet">0.00</div>
+                </div>
+            </div>
+
+        </div><!-- /.form-body -->
+    </div><!-- /.si-body -->
+    <!-- ══ SAVE / CANCEL ══ -->
+    <div class="si-actions">
+        <button class="btn-save" onclick="saveForm()" type="button">
+            <i class="fas fa-floppy-disk"></i> Save Invoice
+        </button>
+        <button class="btn-cancel" onclick="cancelForm()" type="button">
+            <i class="fas fa-xmark"></i> Cancel
+        </button>
+        <div class="actions-spacer"></div>
+        <span class="actions-hint"><i class="fas fa-lock" style="margin-right:4px;"></i>All data is saved securely</span>
+    </div>
+
+</div><!-- /.si-root -->
+
 
 <script>
-    let productMap = {}, rowCounter = 0, detailRows = [];
-    const SW = { background: '#ffffff', color: '#1e2a3a', confirmButtonColor: '#4e9dff', cancelButtonColor: '#f8f9fc' };
+    /* ══════════════════════════════════════
+       SEARCHABLE DROPDOWN ENGINE
+    ══════════════════════════════════════ */
+    const _sd = {};
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.getElementById("date").valueAsDate = new Date();
-        loadInvoiceNo(); loadCustomerDropdown(); loadProductDropdown();
-    });
-
-    async function loadInvoiceNo() {
-        try {
-            const res = await fetch("/SaleInvoice/nLoadSaleInvoiceNo", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
-            const data = await res.json();
-            document.getElementById("invoiceNo").value = (data.statusId === 1 && data.invoiceNo) ? data.invoiceNo : "N/A";
-        } catch (e) { document.getElementById("invoiceNo").value = "Error"; }
+    function buildSD(wrapId, listId, items, vk, lk) {
+        _sd[wrapId] = items.map(i => ({ v: String(i[vk]), l: i[lk] }));
+        renderSD(wrapId, listId, _sd[wrapId]);
     }
 
-    async function loadCustomerDropdown() {
-        const dd = document.getElementById("customerDropdown");
-        try {
-            const res = await fetch("/SaleInvoice/nLoadSaleInvoiceCustomerDropDown", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
-            const data = await res.json();
-            if (data.statusId === 1 && data.customers) {
-                data.customers.forEach(function (c) { const opt = document.createElement("option"); opt.value = c.customerCode; opt.textContent = c.customerName; dd.appendChild(opt); });
-            }
-        } catch (e) { console.error("Error loading customers:", e); }
+    function renderSD(wrapId, listId, items) {
+        const el = document.getElementById(listId);
+        el.innerHTML = '';
+        if (!items.length) {
+            el.innerHTML = '<div class="sd-empty"><i class="fas fa-search" style="margin-right:5px"></i>No results found.</div>';
+            return;
+        }
+        items.forEach(it => {
+            const d = document.createElement('div');
+            d.className = 'sd-opt';
+            d.textContent = it.l;
+            d.dataset.v = it.v;
+            d.onmouseenter = () => d.classList.add('hi');
+            d.onmouseleave = () => d.classList.remove('hi');
+            d.onclick = () => pickSD(wrapId, it.v, it.l);
+            el.appendChild(d);
+        });
     }
 
-    async function loadProductDropdown() {
-        const dd = document.getElementById("productDropdown");
-        try {
-            const res = await fetch("/SaleInvoice/nLoadSaleInvoiceProductDropDown", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({}) });
-            const data = await res.json();
-            if (data.statusId === 1 && data.products) {
-                data.products.forEach(function (p) {
-                    const opt = document.createElement("option"); opt.value = p.productCode; opt.textContent = p.productName; dd.appendChild(opt);
-                    productMap[p.productCode] = { salesPrice: parseFloat(p.salesPrice) || 0, discountAmount: parseFloat(p.discountAmount) || 0, productName: p.productName };
-                });
-            }
-        } catch (e) { console.error("Error loading products:", e); }
+    function filterSD(wrapId, srchId, listId) {
+        const q = document.getElementById(srchId).value.toLowerCase();
+        renderSD(wrapId, listId, (_sd[wrapId] || []).filter(i => i.l.toLowerCase().includes(q)));
     }
 
-    document.getElementById("productDropdown").addEventListener("change", function () {
-        const code = this.value;
-        if (code && productMap[code]) {
-            document.getElementById("salesPrice").value = productMap[code].salesPrice.toFixed(2);
-            document.getElementById("discount").value   = productMap[code].discountAmount.toFixed(2);
-            document.getElementById("qty").value        = 1;
-            recalcEntry(); document.getElementById("qty").focus();
-        } else { clearEntryFields(); }
-    });
-
-    document.getElementById("qty").addEventListener("input", recalcEntry);
-    document.getElementById("discount").addEventListener("input", recalcEntry);
-    document.getElementById("qty").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); document.getElementById("discount").focus(); } });
-    document.getElementById("discount").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); addRow(); } });
-
-    function recalcEntry() {
-        const qty = parseFloat(document.getElementById("qty").value) || 0;
-        const unitPrice = parseFloat(document.getElementById("salesPrice").value) || 0;
-        const discount = parseFloat(document.getElementById("discount").value) || 0;
-        const amount = qty * unitPrice;
-        document.getElementById("amount").value    = amount.toFixed(2);
-        document.getElementById("netAmount").value = (amount - discount).toFixed(2);
-    }
-
-    function clearEntryFields() {
-        ["qty","salesPrice","amount","discount","netAmount"].forEach(id => document.getElementById(id).value = "");
-    }
-
-    function addRow() {
-        const dd = document.getElementById("productDropdown");
-        const productCode = dd.value; const productName = dd.options[dd.selectedIndex].text;
-        const qty = parseFloat(document.getElementById("qty").value) || 0;
-        const unitPrice = parseFloat(document.getElementById("salesPrice").value) || 0;
-        const amount = parseFloat(document.getElementById("amount").value) || 0;
-        const discount = parseFloat(document.getElementById("discount").value) || 0;
-        const netAmount = parseFloat(document.getElementById("netAmount").value) || 0;
-        if (!productCode)   { alert("Please select a Product."); dd.focus(); return; }
-        if (qty <= 0)       { alert("Please enter a valid Qty."); document.getElementById("qty").focus(); return; }
-        if (unitPrice <= 0) { alert("Unit Price is 0. Check product data."); document.getElementById("salesPrice").focus(); return; }
-        const emptyRow = document.getElementById("emptyRow"); if (emptyRow) emptyRow.remove();
-        rowCounter++;
-        const tbody = document.getElementById("tableBody");
-        const row = document.createElement("tr"); row.id = "row_" + rowCounter; row.style.animation = "fadeIn 0.3s ease";
-        row.innerHTML = `<td>${rowCounter}</td><td class="td-left">${productName}</td>
-            <td class="amount-cell">${qty}</td><td class="amount-cell">${unitPrice.toFixed(2)}</td>
-            <td class="amount-cell">${amount.toFixed(2)}</td><td class="amount-cell">${discount.toFixed(2)}</td>
-            <td class="amount-cell">${netAmount.toFixed(2)}</td>
-            <td><button class="tbl-del" onclick="deleteRow('row_${rowCounter}',${qty},${amount},${discount},${netAmount})" title="Remove"><i class="fas fa-trash-can"></i></button></td>`;
-        tbody.appendChild(row);
-        updateTotals(qty, amount, discount, netAmount);
-        detailRows.push({ rowId: "row_" + rowCounter, productCode: parseInt(productCode), qty, salesPrice: unitPrice, amount, discountAmount: discount, netAmount });
-        dd.value = ""; clearEntryFields(); dd.focus();
-    }
-
-    function deleteRow(rowId, qty, amount, discount, netAmount) {
-        const row = document.getElementById(rowId);
-        if (row) {
-            row.style.opacity = "0"; row.style.transform = "translateX(20px)"; row.style.transition = "all 0.25s ease";
+    function toggleSD(wrapId) {
+        const w = document.getElementById(wrapId);
+        const was = w.classList.contains('open');
+        closeAllSD();
+        if (!was) {
+            w.classList.add('open');
+            const si = wrapId === 'cuWrap' ? 'cuSrch' : 'prSrch';
+            const li = wrapId === 'cuWrap' ? 'cuList'  : 'prList';
             setTimeout(() => {
-                row.remove(); updateTotals(-qty, -amount, -discount, -netAmount);
-                detailRows = detailRows.filter(d => d.rowId !== rowId);
-                const tbody = document.getElementById("tableBody");
-                if (tbody.children.length === 0) {
-                    const er = document.createElement("tr"); er.id = "emptyRow";
-                    er.innerHTML = `<td colspan="8"><div class="empty-state"><div class="empty-icon"><i class="fas fa-box-open"></i></div><div class="empty-text">No products added yet.</div></div></td>`;
-                    tbody.appendChild(er);
-                }
-            }, 250);
+                const s = document.getElementById(si);
+                if (s) { s.value = ''; s.focus(); }
+                renderSD(wrapId, li, _sd[wrapId] || []);
+            }, 30);
         }
     }
 
-    function updateTotals(qty, amount, discount, netAmount) {
-        const sQty  = parseFloat(document.getElementById("sumQty").innerText)      + qty;
-        const sAmt  = parseFloat(document.getElementById("sumAmount").innerText)   + amount;
-        const sDisc = parseFloat(document.getElementById("sumDiscount").innerText) + discount;
-        const sNet  = parseFloat(document.getElementById("sumNet").innerText)      + netAmount;
-        document.getElementById("sumQty").innerText      = sQty.toFixed(0);
-        document.getElementById("sumAmount").innerText   = sAmt.toFixed(2);
-        document.getElementById("sumDiscount").innerText = sDisc.toFixed(2);
-        document.getElementById("sumNet").innerText      = sNet.toFixed(2);
-        const dq = document.getElementById("dispQty"), da = document.getElementById("dispAmount"), dd2 = document.getElementById("dispDiscount"), dn = document.getElementById("dispNet");
-        if (dq) dq.innerText = sQty.toFixed(0); if (da) da.innerText = sAmt.toFixed(2); if (dd2) dd2.innerText = sDisc.toFixed(2); if (dn) dn.innerText = sNet.toFixed(2);
+    function closeAllSD() {
+        document.querySelectorAll('.sd.open').forEach(w => w.classList.remove('open'));
+    }
+    document.addEventListener('click', e => { if (!e.target.closest('.sd')) closeAllSD(); });
+
+    function pickSD(wrapId, val, label) {
+        const w = document.getElementById(wrapId);
+        const d = w.querySelector('.sd-disp');
+        d.textContent = label;
+        d.classList.add('hv');
+        if (wrapId === 'cuWrap') {
+            document.getElementById('customerCode').value = val;
+        } else {
+            document.getElementById('productCode').value = val;
+            onProd(val);
+        }
+        // mark selected
+        w.querySelectorAll('.sd-opt').forEach(o => o.classList.toggle('sel', o.dataset.v === val));
+        closeAllSD();
     }
 
-    async function saveForm() {
-        const tbody = document.getElementById("tableBody");
-        if (tbody.querySelector("#emptyRow")) { alert("Please add at least one product before saving."); return; }
-        const invoiceNo = document.getElementById("invoiceNo").value;
-        const date = document.getElementById("date").value;
-        const customerCode = document.getElementById("customerDropdown").value;
-        const remarks = document.getElementById("remarks").value;
-        if (!date) { alert("Please select a Date."); return; }
-        if (!customerCode) { alert("Please select a Customer."); return; }
-        const payload = {
-            invoiceNo, customerCode: parseInt(customerCode), date, remarks,
-            totalAmount: parseFloat(document.getElementById("sumAmount").innerText) || 0,
-            totalDiscount: parseFloat(document.getElementById("sumDiscount").innerText) || 0,
-            netAmount: parseFloat(document.getElementById("sumNet").innerText) || 0,
-            details: detailRows.map(d => ({ productCode: d.productCode, qty: d.qty, salesPrice: d.salesPrice, amount: d.amount, discountAmount: d.discountAmount, netAmount: d.netAmount }))
-        };
+    /* ══════════════════════════════════════
+       STATE
+    ══════════════════════════════════════ */
+    let pMap = {}, rCnt = 0, rows = [], gross = 0;
+
+    const SW = {
+        background: '#ffffff', color: '#1e1e2d',
+        confirmButtonColor: '#4361ee', cancelButtonColor: '#6c757d'
+    };
+
+    /* ══════════════════════════════════════
+       INIT
+    ══════════════════════════════════════ */
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('date').valueAsDate = new Date();
+        loadNo(); loadCust(); loadProd();
+    });
+
+    /* ══════════════════════════════════════
+       API LOADERS
+    ══════════════════════════════════════ */
+    async function loadNo() {
         try {
-            const res = await fetch("/SaleInvoice/nSaveSaleInvoice", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+            const r = await fetch('/SaleInvoice/nLoadSaleInvoiceNo',
+                { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+            const d = await r.json();
+            document.getElementById('invoiceNo').value =
+                (d.statusId === 1 && d.invoiceNo) ? d.invoiceNo : 'N/A';
+        } catch { document.getElementById('invoiceNo').value = 'Error'; }
+    }
+
+    async function loadCust() {
+        try {
+            const r = await fetch('/SaleInvoice/nLoadSaleInvoiceCustomerDropDown',
+                { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+            const d = await r.json();
+            if (d.statusId === 1 && d.customers)
+                buildSD('cuWrap', 'cuList', d.customers, 'customerCode', 'customerName');
+        } catch (e) { console.error(e); }
+    }
+
+    async function loadProd() {
+        try {
+            const r = await fetch('/SaleInvoice/nLoadSaleInvoiceProductDropDown',
+                { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+            const d = await r.json();
+            if (d.statusId === 1 && d.products) {
+                d.products.forEach(p => {
+                    pMap[String(p.productCode)] = {
+                        salesPrice: parseFloat(p.salesPrice) || 0,
+                        discountAmount: parseFloat(p.discountAmount) || 0,
+                        productName: p.productName
+                    };
+                });
+                buildSD('prWrap', 'prList', d.products, 'productCode', 'productName');
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    /* ══════════════════════════════════════
+       PRODUCT LOGIC
+    ══════════════════════════════════════ */
+    function onProd(code) {
+        if (code && pMap[code]) {
+            document.getElementById('salesPrice').value = pMap[code].salesPrice.toFixed(2);
+            document.getElementById('qty').value = 1;
+            document.getElementById('discPct').value = 0;
+            recalcEntry();
+            document.getElementById('qty').focus();
+        } else clearEntry();
+    }
+
+    document.getElementById('qty').addEventListener('input', recalcEntry);
+    document.getElementById('discPct').addEventListener('input', recalcEntry);
+    document.getElementById('qty').addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('discPct').focus(); }
+    });
+    document.getElementById('discPct').addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); addRow(); }
+    });
+
+    function recalcEntry() {
+        const q = parseFloat(document.getElementById('qty').value) || 0;
+        const r = parseFloat(document.getElementById('salesPrice').value) || 0;
+        const p = parseFloat(document.getElementById('discPct').value) || 0;
+        const a = q * r, disc = a * p / 100;
+        document.getElementById('discount').value  = disc.toFixed(2);
+        document.getElementById('netAmount').value = (a - disc).toFixed(2);
+    }
+
+    function clearEntry() {
+        ['qty','salesPrice','discPct','discount','netAmount'].forEach(id =>
+            document.getElementById(id).value = 0
+        );
+    }
+
+    /* ══════════════════════════════════════
+       ADD ROW
+    ══════════════════════════════════════ */
+    function addRow() {
+        const pCode = document.getElementById('productCode').value;
+        const pName = document.getElementById('prDisp').textContent.trim();
+        const qty   = parseFloat(document.getElementById('qty').value) || 0;
+        const rate  = parseFloat(document.getElementById('salesPrice').value) || 0;
+        const dp    = parseFloat(document.getElementById('discPct').value) || 0;
+        const disc  = parseFloat(document.getElementById('discount').value) || 0;
+        const net   = parseFloat(document.getElementById('netAmount').value) || 0;
+        const amt   = qty * rate;
+
+        if (!pCode) { showAlert('warning', 'Product Missing', 'Please select a product.'); return; }
+        if (qty <= 0) { showAlert('warning', 'Invalid Qty', 'Please enter a valid quantity.'); return; }
+        if (rate <= 0) { showAlert('warning', 'Invalid Rate', 'Unit rate is 0. Please check product data.'); return; }
+
+        const er = document.getElementById('emptyRow'); if (er) er.remove();
+        rCnt++;
+        const tb = document.getElementById('tableBody');
+        const tr = document.createElement('tr');
+        tr.id = 'r' + rCnt;
+        tr.style.animation = 'sdIn .2s ease';
+        tr.innerHTML = `
+          <td style="text-align:center"><input type="checkbox" class="rc" onchange="updSel()"></td>
+          <td style="text-align:center;color:var(--text3);font-size:11px">${rCnt}</td>
+          <td class="tl">${pName}</td>
+          <td style="text-align:center">${qty}</td>
+          <td style="text-align:center">${rate.toFixed(2)}</td>
+          <td style="text-align:center">${amt.toFixed(2)}</td>
+          <td style="text-align:center">${dp.toFixed(2)}</td>
+          <td style="text-align:center;color:var(--red)">${disc.toFixed(2)}</td>
+          <td style="text-align:center;color:var(--accent);font-weight:700">${net.toFixed(2)}</td>
+          <td style="text-align:center">
+            <button class="rdel"
+              onclick="delRow('r${rCnt}',${qty},${amt},${disc},${net})" type="button" title="Remove">
+              <i class="fas fa-xmark"></i>
+            </button>
+          </td>`;
+        tb.appendChild(tr);
+        document.getElementById('tfoot').style.display = '';
+        updTotals(qty, amt, disc, net);
+        rows.push({ id:'r'+rCnt, productCode:parseInt(pCode), qty, salesPrice:rate,
+                    amount:amt, discountAmount:disc, netAmount:net });
+
+        // reset
+        const pd = document.getElementById('prDisp');
+        pd.textContent = 'Select a product…'; pd.classList.remove('hv');
+        document.getElementById('productCode').value = '';
+        clearEntry();
+    }
+
+    /* ══════════════════════════════════════
+       DELETE ROW
+    ══════════════════════════════════════ */
+    function delRow(id, qty, amt, disc, net) {
+        const r = document.getElementById(id); if (!r) return;
+        r.style.opacity = '0'; r.style.transition = 'opacity .2s';
+        setTimeout(() => {
+            r.remove();
+            updTotals(-qty, -amt, -disc, -net);
+            rows = rows.filter(d => d.id !== id);
+            const tb = document.getElementById('tableBody');
+            if (!tb.children.length) {
+                const er = document.createElement('tr'); er.id = 'emptyRow';
+                er.innerHTML = `<td colspan="10"><div class="no-rec">
+                  <i class="fas fa-box-open"></i>
+                  No products added yet — use the form above to add entries
+                </div></td>`;
+                tb.appendChild(er);
+                document.getElementById('tfoot').style.display = 'none';
+            }
+            updSel();
+        }, 200);
+    }
+
+    function toggleAll(cb) {
+        document.querySelectorAll('.rc').forEach(c => c.checked = cb.checked);
+        updSel();
+    }
+    function updSel() {
+        document.getElementById('selCnt').textContent =
+            document.querySelectorAll('.rc:checked').length;
+    }
+    function deleteSelected() {
+        const checked = [...document.querySelectorAll('.rc:checked')];
+        if (!checked.length) { showAlert('info', 'Nothing Selected', 'Please check rows to delete.'); return; }
+        Swal.fire({
+            icon:'warning', title:`Delete ${checked.length} row(s)?`,
+            text:'This cannot be undone.',
+            showCancelButton:true, confirmButtonText:'Yes, Delete',
+            cancelButtonText:'Cancel', confirmButtonColor:'#e63946',
+            cancelButtonColor:'#6c757d', ...SW
+        }).then(res => {
+            if (res.isConfirmed) {
+                checked.forEach(cb => {
+                    const tr = cb.closest('tr'), id = tr.id;
+                    const d = rows.find(r => r.id === id);
+                    if (d) delRow(id, d.qty, d.amount, d.discountAmount, d.netAmount);
+                });
+                document.getElementById('chkAll').checked = false;
+            }
+        });
+    }
+
+    /* ══════════════════════════════════════
+       TOTALS
+    ══════════════════════════════════════ */
+    function updTotals(qty, amt, disc, net) {
+        const fq = document.getElementById('ftQ'), fa = document.getElementById('ftA'),
+              fd = document.getElementById('ftD'), fn = document.getElementById('ftN');
+        fq.textContent = (parseFloat(fq.textContent) || 0) + qty;
+        fa.textContent = ((parseFloat(fa.textContent) || 0) + amt).toFixed(2);
+        fd.textContent = ((parseFloat(fd.textContent) || 0) + disc).toFixed(2);
+        fn.textContent = ((parseFloat(fn.textContent) || 0) + net).toFixed(2);
+        gross = parseFloat(fa.textContent) || 0;
+        document.getElementById('sumGross').textContent = gross.toFixed(2);
+        recalcBill();
+    }
+
+    function recalcBill() {
+        const p = parseFloat(document.getElementById('billDiscPct').value) || 0;
+        const d = gross * p / 100;
+        document.getElementById('sumDiscAmt').textContent = d.toFixed(2);
+        document.getElementById('sumNet').textContent = (gross - d).toFixed(2);
+    }
+
+    /* ══════════════════════════════════════
+       SAVE
+    ══════════════════════════════════════ */
+    async function saveForm() {
+        if (document.getElementById('tableBody').querySelector('#emptyRow')) {
+            showAlert('warning', 'No Products', 'Please add at least one product.');
+            return;
+        }
+        const invNo = document.getElementById('invoiceNo').value;
+        const date  = document.getElementById('date').value;
+        const cc    = document.getElementById('customerCode').value;
+        const rem   = document.getElementById('remarks').value;
+        if (!date) { showAlert('warning', 'Date Required', 'Please select a bill date.'); return; }
+        if (!cc)   { showAlert('warning', 'Customer Required', 'Please select a customer.'); return; }
+
+        const payload = {
+            invoiceNo: invNo, customerCode: parseInt(cc), date, remarks: rem,
+            totalAmount:   parseFloat(document.getElementById('sumGross').textContent)   || 0,
+            totalDiscount: parseFloat(document.getElementById('sumDiscAmt').textContent) || 0,
+            netAmount:     parseFloat(document.getElementById('sumNet').textContent)     || 0,
+            details: rows.map(d => ({
+                productCode: d.productCode, qty: d.qty, salesPrice: d.salesPrice,
+                amount: d.amount, discountAmount: d.discountAmount, netAmount: d.netAmount
+            }))
+        };
+
+        try {
+            const res  = await fetch('/SaleInvoice/nSaveSaleInvoice', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
             const data = await res.json();
             if (data.statusId === 1) {
-                Swal.fire({ icon: 'success', title: 'Saved!', text: 'Invoice saved successfully!', confirmButtonText: 'OK', confirmButtonColor: '#4e9dff', timer: 2000, timerProgressBar: true, ...SW }).then(() => { location.reload(); });
+                Swal.fire({
+                    icon: 'success', title: 'Invoice Saved!',
+                    text: 'Your invoice has been saved successfully.',
+                    confirmButtonText: 'OK', timer: 2500,
+                    timerProgressBar: true, ...SW
+                }).then(() => location.reload());
             } else {
-                Swal.fire({ icon: 'error', title: 'Error!', text: data.message || "Failed to save.", confirmButtonText: 'OK', confirmButtonColor: '#ef4444', ...SW });
+                Swal.fire({
+                    icon: 'error', title: 'Save Failed',
+                    text: data.message || 'An error occurred while saving.',
+                    confirmButtonText: 'OK', confirmButtonColor: '#e63946', ...SW
+                });
             }
-        } catch (e) { console.error("Save error:", e); alert("Error saving invoice."); }
+        } catch (e) {
+            console.error(e);
+            showAlert('error', 'Network Error', 'Could not reach the server. Please try again.');
+        }
     }
 
+    /* ══════════════════════════════════════
+       CANCEL
+    ══════════════════════════════════════ */
     function cancelForm() {
-        Swal.fire({ icon: 'warning', title: 'Cancel?', text: 'All data will be lost.', showCancelButton: true, confirmButtonText: 'Yes, Cancel', cancelButtonText: 'Go Back', confirmButtonColor: '#ef4444', cancelButtonColor: '#4e9dff', ...SW })
-            .then((result) => { if (result.isConfirmed) location.reload(); });
+        Swal.fire({
+            icon: 'question', title: 'Discard Changes?',
+            text: 'All unsaved data will be lost.',
+            showCancelButton: true, confirmButtonText: 'Yes, Discard',
+            cancelButtonText: 'Keep Editing',
+            confirmButtonColor: '#e63946', cancelButtonColor: '#4361ee', ...SW
+        }).then(r => { if (r.isConfirmed) location.reload(); });
+    }
+
+    /* ══════════════════════════════════════
+       HELPER
+    ══════════════════════════════════════ */
+    function showAlert(icon, title, text) {
+        Swal.fire({ icon, title, text, confirmButtonText: 'OK', ...SW });
     }
 </script>
