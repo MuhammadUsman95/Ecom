@@ -1,0 +1,547 @@
+using System;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Windows.Forms;
+using ZXing;
+
+namespace LabelGenerator
+{
+    public partial class Form1 : Form
+    {
+        TextBox txtBrand, txtBarcode, txtPrice, txtProduct, txtQty;
+        Button btnGenerate, btnPrint, btnPreview;
+        PictureBox picBarcode;
+        Panel previewPanel;
+
+        PrintDocument printDoc = new PrintDocument();
+        Bitmap barcodeImage;
+
+        public Form1()
+        {
+            InitializeComponent();
+            CreateUI();
+        }
+
+        private void CreateUI()
+        {
+            this.Text = "Label Generator  •  Professional";
+            this.Size = new Size(780, 620);
+            this.MinimumSize = new Size(780, 620);
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.BackColor = Color.FromArgb(240, 240, 238);
+            this.Font = new Font("Segoe UI", 9.5f);
+
+            // ── Header ───────────────────────────────────────────
+            Panel header = new Panel { Dock = DockStyle.Top, Height = 56, BackColor = Color.FromArgb(15, 15, 15) };
+            Label logoText = new Label
+            {
+                Text = "LABEL",
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 13f, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(22, 16)
+            };
+            Label logoAccent = new Label
+            {
+                Text = "GEN",
+                ForeColor = Color.FromArgb(255, 200, 0),
+                Font = new Font("Segoe UI", 13f, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(75, 16)
+            };
+            Label headerSub = new Label
+            {
+                Text = "Barcode Label Printing System",
+                ForeColor = Color.FromArgb(140, 140, 140),
+                Font = new Font("Segoe UI", 8.5f),
+                AutoSize = true,
+                Location = new Point(118, 20)
+            };
+            header.Controls.Add(logoText);
+            header.Controls.Add(logoAccent);
+            header.Controls.Add(headerSub);
+
+            // ── Left Panel: Input ─────────────────────────────────
+            Panel leftPanel = new Panel
+            {
+                Location = new Point(18, 74),
+                Size = new Size(330, 516),
+                BackColor = Color.White
+            };
+            leftPanel.Paint += PanelBorder_Paint;
+
+            // Section title bar
+            Panel inputTitle = new Panel
+            {
+                Location = new Point(0, 0),
+                Size = new Size(330, 38),
+                BackColor = Color.FromArgb(15, 15, 15)
+            };
+            inputTitle.Controls.Add(new Label
+            {
+                Text = "  LABEL DETAILS",
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.White,
+                Location = new Point(0, 0),
+                Size = new Size(330, 38),
+                TextAlign = ContentAlignment.MiddleLeft
+            });
+            leftPanel.Controls.Add(inputTitle);
+
+            int startY = 52;
+            int gap = 56;
+
+            AddField(leftPanel, "Brand Name", startY, ref txtBrand, 290);
+            AddField(leftPanel, "Product Name", startY + gap, ref txtProduct, 290);
+            AddField(leftPanel, "Barcode / SKU", startY + gap * 2, ref txtBarcode, 290);
+            AddField(leftPanel, "Price (PKR)", startY + gap * 3, ref txtPrice, 290);
+
+            // Qty row
+            leftPanel.Controls.Add(MakeLabel("Print Quantity", new Point(20, startY + gap * 4)));
+            txtQty = MakeTextBox(new Point(20, startY + gap * 4 + 22), 80);
+            txtQty.Text = "1";
+            txtQty.Font = new Font("Segoe UI", 11f, FontStyle.Bold);
+            leftPanel.Controls.Add(txtQty);
+            leftPanel.Controls.Add(new Label
+            {
+                Text = "copies to print",
+                Font = new Font("Segoe UI", 8f),
+                ForeColor = Color.FromArgb(140, 140, 140),
+                Location = new Point(108, startY + gap * 4 + 27),
+                AutoSize = true
+            });
+
+            // Generate button (full width, prominent)
+            btnGenerate = MakeButton("  Generate Barcode", new Point(20, 358), true, 290, 42);
+            btnGenerate.Click += BtnGenerate_Click;
+            leftPanel.Controls.Add(btnGenerate);
+
+            // Divider
+            Panel divider = new Panel
+            {
+                Location = new Point(20, 410),
+                Size = new Size(290, 1),
+                BackColor = Color.FromArgb(230, 230, 228)
+            };
+            leftPanel.Controls.Add(divider);
+
+            // Print + Preview
+            btnPrint = MakeButton("  Print Label", new Point(20, 422), true, 139, 38);
+            btnPrint.Click += BtnPrint_Click;
+            leftPanel.Controls.Add(btnPrint);
+
+            btnPreview = MakeButton("  Preview", new Point(171, 422), false, 139, 38);
+            btnPreview.Click += BtnPreview_Click;
+            leftPanel.Controls.Add(btnPreview);
+
+            // ── Right Panel: Preview ──────────────────────────────
+            Panel rightPanel = new Panel
+            {
+                Location = new Point(366, 74),
+                Size = new Size(390, 516),
+                BackColor = Color.White
+            };
+            rightPanel.Paint += PanelBorder_Paint;
+
+            Panel previewTitle = new Panel
+            {
+                Location = new Point(0, 0),
+                Size = new Size(390, 38),
+                BackColor = Color.FromArgb(15, 15, 15)
+            };
+            previewTitle.Controls.Add(new Label
+            {
+                Text = "  LABEL PREVIEW",
+                Font = new Font("Segoe UI", 8.5f, FontStyle.Bold),
+                ForeColor = Color.White,
+                Location = new Point(0, 0),
+                Size = new Size(390, 38),
+                TextAlign = ContentAlignment.MiddleLeft
+            });
+
+            // Status badge
+            Label statusBadge = new Label
+            {
+                Text = "LIVE",
+                Font = new Font("Segoe UI", 7f, FontStyle.Bold),
+                ForeColor = Color.FromArgb(50, 180, 100),
+                BackColor = Color.FromArgb(30, 30, 30),
+                Location = new Point(344, 12),
+                Size = new Size(36, 18),
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            previewTitle.Controls.Add(statusBadge);
+            rightPanel.Controls.Add(previewTitle);
+
+            // Label preview card — taller, more room
+            previewPanel = new Panel
+            {
+                Location = new Point(60, 65),
+                Size = new Size(270, 200),
+                BackColor = Color.White
+            };
+            previewPanel.Paint += PreviewPanel_Paint;
+            rightPanel.Controls.Add(previewPanel);
+
+            // Barcode inside preview
+            //picBarcode = new PictureBox
+            //{
+            //    Location = new Point(5, 70),
+            //    Size = new Size(260, 65),
+            //    SizeMode = PictureBoxSizeMode.StretchImage,
+            //    BackColor = Color.White
+            //};
+            //previewPanel.Controls.Add(picBarcode);
+
+            // Hint below preview
+            Panel hintBox = new Panel
+            {
+                Location = new Point(30, 290),
+                Size = new Size(330, 60),
+                BackColor = Color.FromArgb(248, 248, 246)
+            };
+            hintBox.Paint += PanelBorder_Paint;
+            Label hintText = new Label
+            {
+                Text = "1. Fill in all fields\n2. Click \"Generate Barcode\"\n3. Use Print or Preview to output",
+                Font = new Font("Segoe UI", 8.5f),
+                ForeColor = Color.FromArgb(100, 100, 100),
+                Location = new Point(12, 8),
+                AutoSize = true
+            };
+            hintBox.Controls.Add(hintText);
+            rightPanel.Controls.Add(hintBox);
+
+            // Actual size note
+            rightPanel.Controls.Add(new Label
+            {
+                Text = "Actual label size: 1.5\" × 1.2\"  (38mm × 30mm)",
+                Font = new Font("Segoe UI", 8f),
+                ForeColor = Color.FromArgb(160, 160, 160),
+                Location = new Point(60, 272),
+                AutoSize = true
+            });
+
+            this.Controls.Add(header);
+            this.Controls.Add(leftPanel);
+            this.Controls.Add(rightPanel);
+        }
+
+        // ── Helper: add labeled field ─────────────────────────────
+        private void AddField(Panel parent, string labelText, int y, ref TextBox tb, int width)
+        {
+            parent.Controls.Add(MakeLabel(labelText, new Point(20, y)));
+            tb = MakeTextBox(new Point(20, y + 22), width);
+            parent.Controls.Add(tb);
+        }
+
+        private Label MakeLabel(string text, Point loc)
+        {
+            return new Label
+            {
+                Text = text,
+                Font = new Font("Segoe UI", 8f),
+                ForeColor = Color.FromArgb(100, 100, 100),
+                Location = loc,
+                AutoSize = true
+            };
+        }
+
+        private TextBox MakeTextBox(Point loc, int width)
+        {
+            TextBox tb = new TextBox
+            {
+                Location = loc,
+                Width = width,
+                Height = 30,
+                Font = new Font("Segoe UI", 10.5f),
+                BorderStyle = BorderStyle.FixedSingle,
+                BackColor = Color.FromArgb(252, 252, 250)
+            };
+            tb.TextChanged += (s, e) => UpdatePreview();
+            return tb;
+        }
+
+        private Button MakeButton(string text, Point loc, bool primary, int width = 130, int height = 36)
+        {
+            Button b = new Button
+            {
+                Text = text,
+                Location = loc,
+                Width = width,
+                Height = height,
+                FlatStyle = FlatStyle.Flat,
+                Font = new Font("Segoe UI", 9f, FontStyle.Bold),
+                Cursor = Cursors.Hand,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            if (primary)
+            {
+                b.BackColor = Color.FromArgb(15, 15, 15);
+                b.ForeColor = Color.White;
+                b.FlatAppearance.BorderColor = Color.FromArgb(15, 15, 15);
+            }
+            else
+            {
+                b.BackColor = Color.White;
+                b.ForeColor = Color.FromArgb(15, 15, 15);
+                b.FlatAppearance.BorderColor = Color.FromArgb(160, 160, 160);
+            }
+            return b;
+        }
+
+        private void PanelBorder_Paint(object sender, PaintEventArgs e)
+        {
+            var p = sender as Panel;
+            ControlPaint.DrawBorder(e.Graphics, p.ClientRectangle,
+                Color.FromArgb(210, 210, 206), ButtonBorderStyle.Solid);
+        }
+
+        private void UpdatePreview()
+        {
+            if (previewPanel != null) previewPanel.Invalidate();
+        }
+
+        // ── Preview Paint: Khaadi-style label ────────────────────
+        private void PreviewPanel_Paint(object sender, PaintEventArgs e)
+        {
+            if (txtBrand == null || txtProduct == null || txtPrice == null || txtBarcode == null)
+                return;
+
+            Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            int W = previewPanel.Width;
+            int H = previewPanel.Height;
+
+            // White background
+            g.FillRectangle(Brushes.White, 0, 0, W, H);
+
+            // Outer border
+            using (Pen bp = new Pen(Color.FromArgb(180, 180, 180), 1.5f))
+                g.DrawRectangle(bp, new Rectangle(1, 1, W - 2, H - 2));
+
+            string brand = string.IsNullOrWhiteSpace(txtBrand.Text) ? "BRAND NAME" : txtBrand.Text.ToUpper();
+            string product = string.IsNullOrWhiteSpace(txtProduct.Text) ? "PRODUCT" : txtProduct.Text.ToUpper();
+            string price = string.IsNullOrWhiteSpace(txtPrice.Text) ? "0.00" : txtPrice.Text;
+            string sku = string.IsNullOrWhiteSpace(txtBarcode.Text) ? "SKU-000000" : txtBarcode.Text;
+
+            Font brandFont = new Font("Arial", 14f, FontStyle.Bold);
+            Font skuFont = new Font("Arial", 7.5f);
+            Font priceFont = new Font("Arial", 8f, FontStyle.Bold);
+            Font productFont = new Font("Arial", 7.5f, FontStyle.Bold);
+
+            int y = 30;
+
+            // ── Brand Name ──────────────────────────
+            SizeF bs = g.MeasureString(brand, brandFont);
+            g.DrawString(brand, brandFont, Brushes.Black, (W - bs.Width) / 2, y);
+            y += (int)bs.Height + 2;
+
+            // ── SKU ─────────────────────────────────
+            SizeF ss = g.MeasureString(sku, skuFont);
+            g.DrawString(sku, skuFont, Brushes.Black, (W - ss.Width) / 2, y);
+            y += (int)ss.Height + 4;
+
+            // ── Barcode ─────────────────────────────
+            int barcodeHeight = 55; // ✅ Controlled height
+            if (barcodeImage != null)
+            {
+                g.DrawImage(barcodeImage, new Rectangle(8, y, W - 16, barcodeHeight));
+            }
+            else
+            {
+                g.FillRectangle(new SolidBrush(Color.FromArgb(245, 245, 245)),
+                    new Rectangle(8, y, W - 16, barcodeHeight));
+                using (Pen ph = new Pen(Color.FromArgb(200, 200, 200), 1))
+                    g.DrawRectangle(ph, new Rectangle(8, y, W - 16, barcodeHeight));
+                SizeF ps2 = g.MeasureString("[ barcode here ]", skuFont);
+                g.DrawString("[ barcode here ]", skuFont,
+                    new SolidBrush(Color.FromArgb(180, 180, 180)),
+                    (W - ps2.Width) / 2, y + 18);
+            }
+            y += barcodeHeight + 6;
+
+            // ── Separator Line ───────────────────────
+            using (Pen sep = new Pen(Color.FromArgb(200, 200, 200), 1))
+                g.DrawLine(sep, 8, y, W - 8, y);
+            y += 5;
+
+            // ── Price (left) + Product (right) ───────
+            string priceStr = "PKR  " + price;
+            g.DrawString(priceStr, priceFont, Brushes.Black, 10, y);
+            SizeF prds = g.MeasureString(product, productFont);
+            g.DrawString(product, productFont, Brushes.Black, W - prds.Width - 10, y + 1);
+        }
+
+        // ── Generate ─────────────────────────────────────────────
+        private void BtnGenerate_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtBarcode.Text))
+            {
+                ShowMsg("Please enter a Barcode / SKU value.", false);
+                return;
+            }
+
+            var writer = new BarcodeWriter
+            {
+                Format = BarcodeFormat.CODE_128,
+                Options = new ZXing.Common.EncodingOptions
+                {
+                    Width = 800, // ✅ 500 tha — 23 chars ke liye 1200 chahiye
+                    Height = 70,
+                    Margin = 2,    // ✅ 0 tha — thoda margin do scanner ke liye
+                    PureBarcode = true
+                }
+            };
+
+            barcodeImage = writer.Write(txtBarcode.Text);
+            //picBarcode.Image = barcodeImage;
+            previewPanel.Invalidate();
+            ShowMsg("Barcode generated!", true);
+        }
+
+        // ── Print ────────────────────────────────────────────────
+        private void BtnPrint_Click(object sender, EventArgs e)
+        {
+            if (barcodeImage == null) { ShowMsg("Generate barcode first.", false); return; }
+            if (!int.TryParse(txtQty.Text.Trim(), out int qty) || qty < 1)
+            { ShowMsg("Enter valid quantity (min 1).", false); return; }
+
+            SetupPrintDoc(qty);
+            using (PrintDialog pd = new PrintDialog())
+            {
+                pd.Document = printDoc;
+                pd.UseEXDialog = true;
+                if (pd.ShowDialog() == DialogResult.OK)
+                {
+                    printDoc.Print();
+                    ShowMsg(qty + " label" + (qty == 1 ? "" : "s") + " sent to printer!", true);
+                }
+            }
+        }
+
+        // ── Preview ──────────────────────────────────────────────
+        private void BtnPreview_Click(object sender, EventArgs e)
+        {
+            if (barcodeImage == null) { ShowMsg("Generate barcode first.", false); return; }
+            if (!int.TryParse(txtQty.Text.Trim(), out int qty) || qty < 1) qty = 1;
+
+            SetupPrintDoc(qty);
+            PrintPreviewDialog prev = new PrintPreviewDialog
+            {
+                Document = printDoc,
+                Width = 700,
+                Height = 520,
+                Text = "Print Preview  -  " + qty + " cop" + (qty == 1 ? "y" : "ies")
+            };
+            prev.ShowDialog();
+        }
+
+        // ── Shared print setup ───────────────────────────────────
+        private void SetupPrintDoc(int qty)
+        {
+            printDoc = new PrintDocument();
+
+            // ✅ Image 3 se exact match — 4.2" x 1"
+            PaperSize ps = new PaperSize("LabelSize", 420, 100);
+            printDoc.DefaultPageSettings.PaperSize = ps;
+            printDoc.DefaultPageSettings.Margins = new Margins(0, 0, 0, 0); // ✅ Zero margin
+
+            int copies = qty, currentCopy = 0;
+            printDoc.PrintPage += (s, ev) =>
+            {
+                PrintLabelPage(ev);
+                currentCopy++;
+                ev.HasMorePages = currentCopy < copies;
+            };
+        }
+
+        // ── Actual print layout (1.5x1.2 inch) ──────────────────
+        private void PrintLabelPage(PrintPageEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            Font brandFont = new Font("Arial", 10f, FontStyle.Bold);
+            Font skuFont = new Font("Arial", 6f, FontStyle.Bold);
+            Font priceFont = new Font("Arial", 7f, FontStyle.Bold);
+            Font productFont = new Font("Arial", 6.5f, FontStyle.Bold);
+
+            string brand = txtBrand.Text.ToUpper();
+            string sku = txtBarcode.Text;
+            string price = "PKR " + txtPrice.Text;
+            string product = txtProduct.Text.ToUpper();
+
+            int totalW = 420; // 4.2 inch
+            int LW = 205; // Left label width  ~2.1"
+            int RX = 215; // Right label start (5px gap center)
+            int RW = 205; // Right label width ~2.1"
+
+            // ════════════════════════════
+            //  LEFT LABEL
+            // ════════════════════════════
+            DrawSingleLabel(g, brand, sku, price, product,
+                brandFont, skuFont, priceFont, productFont,
+                startX: 2, labelW: LW);
+
+            // ── Center Divider ──────────
+            using (Pen div = new Pen(Color.FromArgb(160, 160, 160), 0.5f))
+                g.DrawLine(div, 212, 2, 212, 97);
+
+            // ════════════════════════════
+            //  RIGHT LABEL
+            // ════════════════════════════
+            DrawSingleLabel(g, brand, sku, price, product,
+                brandFont, skuFont, priceFont, productFont,
+                startX: RX, labelW: RW);
+        }
+
+        // ── Reusable Single Label Draw ───────────────────────────
+        private void DrawSingleLabel(Graphics g,
+            string brand, string sku, string price, string product,
+            Font brandFont, Font skuFont, Font priceFont, Font productFont,
+            int startX, int labelW)
+        {
+            int y = 17; // Top margin
+
+            // Brand — centered
+            SizeF bs = g.MeasureString(brand, brandFont);
+            g.DrawString(brand, brandFont, Brushes.Black,
+                startX + (labelW - bs.Width) / 2, y);
+            y += (int)bs.Height + 1;
+
+            // SKU — centered
+            SizeF ss = g.MeasureString(sku, skuFont);
+            g.DrawString(sku, skuFont, Brushes.Black,
+                startX + (labelW - ss.Width) / 2, y);
+            y += (int)ss.Height + 2;
+
+            // Barcode
+            if (barcodeImage != null)
+            {
+                g.DrawImage(barcodeImage,
+                    new Rectangle(startX + 3, y, labelW - 6, 34));
+                y += 37;
+            }
+
+            // Separator Line
+            using (Pen sep = new Pen(Color.FromArgb(140, 140, 140), 0.5f))
+                g.DrawLine(sep, startX + 3, y, startX + labelW - 3, y);
+            y += 3;
+
+            // Price Left + Product Right
+            g.DrawString(price, priceFont, Brushes.Black, startX + 4, y);
+            SizeF prs = g.MeasureString(product, productFont);
+            g.DrawString(product, productFont, Brushes.Black,
+                startX + labelW - prs.Width - 17, y + 1);
+        }
+
+        private void ShowMsg(string msg, bool success)
+        {
+            MessageBox.Show(msg, success ? "Done" : "Notice",
+                MessageBoxButtons.OK,
+                success ? MessageBoxIcon.Information : MessageBoxIcon.Warning);
+        }
+    }
+}
