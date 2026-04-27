@@ -91,17 +91,31 @@ namespace NormalAccountProject.Controllers
 
                 while (await reader.ReadAsync())
                 {
-                    // ✅ MenuType bhi read karo
+                    // ✅ FIX: GetOrdinal crash se bachne ke liye try/catch
                     int menuType = 0;
-                    if (reader.GetOrdinal("MenuType") >= 0 &&
-                        reader["MenuType"] != DBNull.Value)
-                        menuType = Convert.ToInt32(reader["MenuType"]);
+                    int menuTypeOrdinal = -1;
+                    try { menuTypeOrdinal = reader.GetOrdinal("MenuType"); } catch { }
+                    if (menuTypeOrdinal >= 0 && !reader.IsDBNull(menuTypeOrdinal))
+                        menuType = reader.GetInt32(menuTypeOrdinal);
+
+                    // ✅ FIX: Empty/null MenuUrl wale items skip karo
+                    string menuUrl = reader["MenuUrl"] != DBNull.Value
+                        ? reader["MenuUrl"].ToString()
+                        : "";
+
+                    if (string.IsNullOrWhiteSpace(menuUrl)) continue;
+
+                    string menuName = reader["MenuName"] != DBNull.Value
+                        ? reader["MenuName"].ToString()
+                        : "";
+
+                    if (string.IsNullOrWhiteSpace(menuName)) continue;
 
                     menuItems.Add(new
                     {
                         menuId = reader["MenuId"] != DBNull.Value ? Convert.ToInt32(reader["MenuId"]) : 0,
-                        menuName = reader["MenuName"] != DBNull.Value ? reader["MenuName"].ToString() : "",
-                        menuUrl = reader["MenuUrl"] != DBNull.Value ? reader["MenuUrl"].ToString() : "#",
+                        menuName = menuName,
+                        menuUrl = menuUrl,
                         menuIcon = reader["MenuIcon"] != DBNull.Value ? reader["MenuIcon"].ToString() : "fas fa-circle",
                         menuType = menuType   // 0 = Direct, 1 = Setup, 2 = Transaction
                     });
