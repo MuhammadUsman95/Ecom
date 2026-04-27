@@ -15,7 +15,7 @@
         transition: box-shadow 0.25s, transform 0.2s;
         display: flex;
         flex-direction: column;
-        height: 310px; /* FIX 4: Height kam ki — 360 → 310 */
+        height: 310px;
     }
 
         .order-card:hover {
@@ -33,7 +33,6 @@
         flex-shrink: 0;
     }
 
-    /* FIX 6: Order No styling — "Order No :" text, light black color */
     .order-no-badge {
         font-size: 13px;
         font-weight: 600;
@@ -121,7 +120,6 @@
         line-height: 1.6;
     }
 
-    /* FIX 2 & 3: Phone & WhatsApp clickable links */
     .contact-link {
         color: #7a8499;
         text-decoration: none;
@@ -269,7 +267,6 @@
             background: #fff;
         }
 
-        /* FIX 1: Disabled state properly styled */
         .status-select-input:disabled {
             background: #f0f0f0;
             color: #aaa;
@@ -296,15 +293,12 @@
             transform: scale(1.02);
         }
 
-        /* FIX 1: Disabled button properly styled */
         .update-btn:disabled {
             background: #a8c4f0;
             cursor: not-allowed;
             transform: none;
             opacity: 0.7;
         }
-
-    /* FIX 5: finalized-section removed — no longer needed */
 
     /* ── Summary Cards ── */
     .summary-card {
@@ -353,7 +347,6 @@
         line-height: 1.2;
     }
 
-    /* ── Summary Card Bounce Animation ── */
     @@keyframes summaryPop {
         0% {
             transform: scale(1);
@@ -409,7 +402,6 @@
             transform: scale(1.03);
         }
 
-    /* ── Auto-refresh countdown badge ── */
     .refresh-badge {
         font-size: 11px;
         color: #9aa3b5;
@@ -486,11 +478,8 @@
             display: none;
         }
     }
-    /* ══════════════════════════════════════════
-           PAGE LAYOUT — Fixed top + scroll cards + fixed footer
-           ══════════════════════════════════════════ */
 
-    /* ── Page wrapper — fills remaining space after admin navbar ── */
+    /* ══ PAGE LAYOUT ══ */
     .om-page-wrapper {
         position: fixed;
         top: 0;
@@ -501,10 +490,8 @@
         flex-direction: column;
         background: #f4f6fb;
         z-index: 5;
-        /* JS will set top dynamically based on navbar height */
     }
 
-    /* ── Fixed Top Panel ── */
     .om-fixed-top {
         flex-shrink: 0;
         background: #f4f6fb;
@@ -516,7 +503,6 @@
         padding: 6px 10px 5px 10px;
     }
 
-    /* Title row inside fixed top */
     .om-title-row {
         display: flex;
         align-items: center;
@@ -531,7 +517,6 @@
         margin: 0;
     }
 
-    /* ── Scrollable Cards Area ── */
     .om-scroll-area {
         flex: 1;
         overflow-y: auto;
@@ -557,7 +542,6 @@
                 background: #1a73e8;
             }
 
-    /* ── Fixed Footer ── */
     .om-fixed-footer {
         flex-shrink: 0;
         background: #fff;
@@ -573,7 +557,6 @@
             color: #555;
         }
 
-    /* ── Mobile tweaks ── */
     @@media (max-width: 575px) {
         .om-top-inner {
             padding: 5px 8px 4px 8px;
@@ -608,7 +591,6 @@
             display: none;
         }
     }
-
 </style>
 
 <div class="om-page-wrapper">
@@ -617,13 +599,11 @@
     <div class="om-fixed-top">
         <div class="om-top-inner">
 
-            <!-- Title Row -->
             <div class="om-title-row">
                 <h2 class="om-title">Order Management</h2>
                 <small class="text-muted">Total: <strong id="totalCount">0</strong></small>
             </div>
 
-            <!-- Summary Strip -->
             <div class="row g-2 mb-2">
                 <div class="col-3">
                     <div class="summary-card sc-pending">
@@ -647,7 +627,6 @@
                 </div>
             </div>
 
-            <!-- Search + Filter + Refresh -->
             <div class="search-section mb-0">
                 <div class="d-flex align-items-center gap-2">
                     <div style="min-width:0; flex:1;">
@@ -697,6 +676,11 @@
     let   countdownVal     = AUTO_REFRESH_SEC;
     let   countdownTimer   = null;
 
+    // ✅ FIX: Hardcoded API URLs because Url.Action doesn't work reliably
+    //         with attribute-routed [ApiController]. Route is now "api/OrderManagement/..."
+    const API_LOAD   = '/api/OrderManagement/nLoadGridViewData';
+    const API_UPDATE = '/api/OrderManagement/nUpdateOrderStatus';
+
     document.addEventListener("DOMContentLoaded", async function () {
         adjustLayout();
         window.addEventListener('resize', adjustLayout);
@@ -704,13 +688,12 @@
         startCountdown();
     });
 
-    // ─── Auto-detect navbar height and adjust wrapper top ────
     function adjustLayout() {
         const wrapper = document.querySelector('.om-page-wrapper');
         if (!wrapper) return;
 
-        // Common admin navbar selectors — try each until found
         const navSelectors = [
+            '.header-desktop', '.header-mobile',
             '.navbar', '.topbar', '.top-bar', '.header-bar',
             'nav.navbar', '.admin-header', '.page-header',
             '[class*="navbar"]', '[class*="topbar"]', '[class*="header"]'
@@ -725,8 +708,7 @@
             }
         }
 
-        // Also check left sidebar width for desktop
-        const sideSelectors = ['.sidebar', '.side-bar', '.left-sidebar', '[class*="sidebar"]'];
+        const sideSelectors = ['.menu-sidebar', '.sidebar', '.side-bar', '.left-sidebar', '[class*="sidebar"]'];
         let sideW = 0;
         for (const sel of sideSelectors) {
             const el = document.querySelector(sel);
@@ -736,11 +718,10 @@
             }
         }
 
-        wrapper.style.top  = (navH || 0) + 'px';
+        wrapper.style.top  = (navH  || 0) + 'px';
         wrapper.style.left = (sideW || 0) + 'px';
     }
 
-    // ─── Auto-refresh Countdown ───────────────────────────────
     function startCountdown() {
         clearInterval(countdownTimer);
         countdownVal = AUTO_REFRESH_SEC;
@@ -783,13 +764,12 @@
         }, 700);
     }
 
-    // ─── Load Data ────────────────────────────────────────────
     async function LoadGridViewData(showLoader = true) {
         const nInfoTab = { Userid: localStorage.getItem("userId") || "" };
         try {
             const response = await jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nLoadGridViewData", "OrderManagement")',
+                url: API_LOAD,          // ✅ Fixed URL
                 data: JSON.stringify(nInfoTab),
                 contentType: 'application/json'
             });
@@ -805,14 +785,12 @@
         }
     }
 
-    // ─── Render Cards ─────────────────────────────────────────
     function renderCards() {
         const q    = document.getElementById("searchInput").value.toLowerCase().trim();
         const fs   = document.getElementById("filterStatus").value;
         const grid = document.getElementById("ordersGrid");
         grid.innerHTML = "";
 
-        // ── Group by OrderNo ──
         const allGrouped = {};
         OrderList.forEach(row => {
             const key = row.OrderNo || row.orderNo || "";
@@ -836,7 +814,6 @@
             });
         });
 
-        // ── Summary counts ──
         const allOrders = Object.values(allGrouped);
         document.getElementById("totalCount").textContent   = allOrders.length;
         document.getElementById("cntPending").textContent   = allOrders.filter(o => o.OrderStatus === "Pending").length;
@@ -844,7 +821,6 @@
         document.getElementById("cntDelivered").textContent = allOrders.filter(o => o.OrderStatus === "Delivered").length;
         document.getElementById("cntCancelled").textContent = allOrders.filter(o => o.OrderStatus === "Cancelled").length;
 
-        // ── Filter ──
         const filtered = allOrders.filter(o => {
             const matchQ = !q || o.OrderNo.toLowerCase().includes(q) || o.CustomerName.toLowerCase().includes(q);
             const matchS = !fs || o.OrderStatus === fs;
@@ -856,7 +832,6 @@
             return;
         }
 
-        // ── Build cards ──
         filtered.forEach(order => {
             const total = order.Items.reduce((s, i) =>
                 s + (Number(i.Quantity) * Number(i.Rate) - Number(i.DiscountAmount)), 0);
@@ -875,8 +850,6 @@
                 `<option value="${s}" ${order.OrderStatus === s ? "selected" : ""}>${s}</option>`
             ).join("");
 
-            // FIX 5: Delivered/Cancelled orders bhi status update section show karein
-            // (finalized-section removed completely — Update button always visible)
             const statusUpdateHTML = `
                 <div class="status-update-section">
                     <select class="status-select-input" id="sel_${order.OrderNo}">
@@ -889,7 +862,6 @@
                     </button>
                 </div>`;
 
-            // FIX 2 & 3: Phone call link + WhatsApp link
             const cleanPhone = order.ContactNo.replace(/\D/g, '');
             const contactHTML = order.ContactNo ? `
                 <a href="tel:${order.ContactNo}" class="contact-link me-2" title="Call">
@@ -909,21 +881,17 @@
             col.className = "col-12 col-md-6 col-xl-4";
             col.innerHTML = `
                 <div class="order-card">
-
                     <div class="card-header-bar">
-                        <!-- FIX 6: "Order No :" label + value in black badge -->
                         <span class="order-no-badge">
                             Order No : <span class="order-no-value">${order.OrderNo}</span>
                         </span>
                         <span class="status-pill pill-${order.OrderStatus}">${order.OrderStatus}</span>
                     </div>
-
                     <div class="customer-section">
                         <div class="cust-avatar">${order.CustomerName ? order.CustomerName.charAt(0).toUpperCase() : '?'}</div>
                         <div style="overflow:hidden; width:100%;">
                             <div class="customer-name">${order.CustomerName}</div>
                             <div class="customer-meta">
-                                <!-- FIX 2 & 3: Phone + WhatsApp clickable -->
                                 <div class="d-flex align-items-center flex-wrap gap-1 mb-1">
                                     ${contactHTML}
                                 </div>
@@ -934,7 +902,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="items-table-wrapper">
                         <table class="items-table">
                             <thead>
@@ -948,21 +915,17 @@
                             <tbody>${itemRows}</tbody>
                         </table>
                     </div>
-
                     <div class="card-footer-bar">
                         <small style="color:#6c757d;">${order.Items.length} item(s)</small>
                         <span class="total-amount">Total: Rs ${total.toLocaleString()}</span>
                     </div>
-
                     ${statusUpdateHTML}
-
                 </div>`;
 
             grid.appendChild(col);
         });
     }
 
-    // ─── Summary Card Bounce ──────────────────────────────────
     function highlightSummaryCard(status) {
         const map = {
             "Pending"   : document.getElementById("cntPending")?.closest(".summary-card"),
@@ -978,17 +941,12 @@
         setTimeout(() => card.classList.remove("refreshed"), 500);
     }
 
-    // ─── Update Status ────────────────────────────────────────
     async function updateStatus(orderNo, btn) {
         const sel       = document.getElementById("sel_" + orderNo);
         const newStatus = sel.value;
 
-        if (!newStatus) {
-            toastr.warning("Please select a status.");
-            return;
-        }
+        if (!newStatus) { toastr.warning("Please select a status."); return; }
 
-        // FIX 1: Immediately disable both button and dropdown
         btn.disabled = true;
         sel.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Updating...';
@@ -998,7 +956,7 @@
 
             const response = await jQuery.ajax({
                 type: 'POST',
-                url: '@Url.Action("nUpdateOrderStatus", "OrderManagement")',
+                url: API_UPDATE,       // ✅ Fixed URL
                 data: JSON.stringify(payload),
                 contentType: 'application/json',
                 dataType: 'json',
@@ -1008,13 +966,8 @@
             if (response.statusId == 1) {
                 OrderList
                     .filter(x => String(x.OrderNo || x.orderNo) === String(orderNo))
-                    .forEach(x => {
-                        x.OrderStatus = newStatus;
-                        x.orderStatus = newStatus;
-                    });
+                    .forEach(x => { x.OrderStatus = newStatus; x.orderStatus = newStatus; });
 
-                // Reset PEHLE karo — renderCards() DOM destroy kar deti hai
-                // is liye btn/sel reset pehle, phir renderCards()
                 btn.disabled  = false;
                 sel.disabled  = false;
                 btn.innerHTML = '<i class="fas fa-check me-1"></i> Update';
@@ -1022,7 +975,6 @@
                 highlightSummaryCard(newStatus);
                 toastr.success(response.message || "Status updated.");
 
-                // Success ke baad auto refresh — fresh data server se load ho
                 setTimeout(() => {
                     const refreshBtn = document.querySelector('.refresh-btn');
                     if (refreshBtn) manualRefresh(refreshBtn);
@@ -1044,7 +996,6 @@
         }
     }
 
-    // ─── Listeners ───────────────────────────────────────────
     document.getElementById("searchInput").addEventListener("input", renderCards);
     document.getElementById("filterStatus").addEventListener("change", renderCards);
 </script>

@@ -19,10 +19,10 @@
     <link href="css/theme.css" rel="stylesheet" media="all">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
+    <!-- ✅ Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     <style>
-        /* ════════════════════════════════════════
-                   UNIFIED DESIGN TOKENS — Light Theme
-                ════════════════════════════════════════ */
         :root {
             --bg: #f4f4f4;
             --bg2: #ffffff;
@@ -75,7 +75,6 @@
             color: var(--text);
         }
 
-        /* ─── Scrollbar ─── */
         ::-webkit-scrollbar {
             width: 4px;
         }
@@ -89,9 +88,6 @@
             border-radius: 10px;
         }
 
-        /* ════════════════════════════
-                   SIDEBAR
-                ════════════════════════════ */
         .menu-sidebar {
             background: var(--surface);
             width: var(--sidebar-w);
@@ -298,9 +294,6 @@
                     text-align: center;
                 }
 
-        /* ════════════════════════════
-                   PAGE CONTAINER
-                ════════════════════════════ */
         .page-container {
             padding-left: var(--sidebar-w);
             min-height: 100vh;
@@ -309,9 +302,6 @@
             animation: fadeIn .4s ease .1s both;
         }
 
-        /* ════════════════════════════
-                   HEADER DESKTOP
-                ════════════════════════════ */
         .header-desktop {
             background: var(--surface);
             border-bottom: 1px solid var(--border2);
@@ -372,9 +362,6 @@
                 color: var(--accent);
             }
 
-        /* ═══════════════════════════════════
-                   ACCOUNT DROPDOWN (Styled)
-                ═══════════════════════════════════ */
         .account-wrap {
             position: relative;
         }
@@ -391,8 +378,7 @@
             background: var(--surface2);
         }
 
-            .account-item:hover,
-            .account-item.open {
+            .account-item:hover, .account-item.open {
                 background: var(--active-nav);
                 border-color: rgba(71,69,68,.22);
                 box-shadow: 0 2px 10px rgba(0,0,0,.06);
@@ -430,7 +416,6 @@
             transform: rotate(180deg);
         }
 
-        /* Dropdown panel */
         .account-dropdown {
             position: absolute;
             top: calc(100% + 10px);
@@ -561,9 +546,6 @@
                 text-align: center;
             }
 
-        /* ════════════════════════════
-                   MOBILE HEADER
-                ════════════════════════════ */
         .header-mobile {
             background: var(--surface);
             border-bottom: 1px solid var(--border2);
@@ -616,7 +598,6 @@
                 color: var(--accent);
             }
 
-        /* ─── Hamburger Button ─── */
         .hamburger-btn {
             padding: 0;
             background: var(--surface2);
@@ -639,8 +620,7 @@
             appearance: none;
         }
 
-            .hamburger-btn:hover,
-            .hamburger-btn:active {
+            .hamburger-btn:hover, .hamburger-btn:active {
                 background: var(--active-nav);
                 border-color: rgba(71,69,68,.2);
             }
@@ -679,7 +659,6 @@
             transform: translateY(-7px) rotate(-45deg);
         }
 
-        /* ─── Mobile Nav Panel ─── */
         .navbar-mobile {
             position: fixed;
             top: 56px;
@@ -814,9 +793,6 @@
                 visibility: visible;
             }
 
-        /* ════════════════════════════
-                   MAIN CONTENT
-                ════════════════════════════ */
         .main-content {
             overflow: visible !important;
             display: contents;
@@ -835,9 +811,6 @@
             animation: fadeIn .4s ease .2s forwards;
         }
 
-        /* ════════════════════════════
-                   ANIMATIONS
-                ════════════════════════════ */
         @@keyframes fadeIn {
             from {
                 opacity: 0
@@ -896,9 +869,6 @@
             }
         }
 
-        /* ════════════════════════════
-                   RESPONSIVE
-                ════════════════════════════ */
         @@media (max-width: 991px) {
             body {
                 padding-top: 56px;
@@ -938,22 +908,18 @@
 <body>
     <div class="page-wrapper">
 
-        <!-- ─── MOBILE HEADER ─── -->
         <header class="header-mobile d-block d-lg-none">
             <div class="header-mobile-inner">
                 <a class="mobile-logo" href="/Home">
                     <div class="mobile-logo-icon"><i class="fas fa-shopping-cart"></i></div>
-                    <div class="mobile-logo-text">Admin Panel <span>B17</span></div>
+                    <div class="mobile-logo-text">Admin Panel </div>
                 </a>
                 <button class="hamburger-btn" id="mobileMenuToggle" type="button" aria-label="Toggle menu" aria-expanded="false">
-                    <div class="hamburger-icon">
-                        <span></span><span></span><span></span>
-                    </div>
+                    <div class="hamburger-icon"><span></span><span></span><span></span></div>
                 </button>
             </div>
         </header>
 
-        <!-- Mobile nav & overlay OUTSIDE header (avoids d-lg-none clipping) -->
         <nav class="navbar-mobile" id="mobileMenu" aria-hidden="true">
             <ul class="navbar-mobile__list" id="mobileNavList">
                 <li><a href="#"><i class="fas fa-circle-notch fa-spin"></i>Loading...</a></li>
@@ -964,7 +930,6 @@
         </nav>
         <div class="mobile-overlay" id="mobileOverlay"></div>
 
-        <!-- ─── SIDEBAR ─── -->
         <aside class="menu-sidebar d-none d-lg-flex">
             <div class="sidebar-logo">
                 <div class="sidebar-logo-icon"><i class="fas fa-store"></i></div>
@@ -980,10 +945,7 @@
             </div>
         </aside>
 
-        <!-- ─── PAGE CONTAINER ─── -->
         <div class="page-container">
-
-            <!-- HEADER DESKTOP -->
             <header class="header-desktop d-none d-lg-flex">
                 <div class="header-wrap">
                     <div class="header-page-info">
@@ -1005,12 +967,8 @@
                                 </div>
                             </div>
                             <div class="dropdown-menu-items">
-                                <a href="#" class="dropdown-menu-item">
-                                    <i class="fas fa-gear"></i> Settings
-                                </a>
-                                <a href="#" class="dropdown-menu-item">
-                                    <i class="fas fa-circle-question"></i> Help & Support
-                                </a>
+                                <a href="#" class="dropdown-menu-item"><i class="fas fa-gear"></i> Settings</a>
+                                <a href="#" class="dropdown-menu-item"><i class="fas fa-circle-question"></i> Help & Support</a>
                             </div>
                             <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-logout" id="logoutBtnDropdown">
@@ -1021,15 +979,20 @@
                 </div>
             </header>
 
-            <!-- MAIN CONTENT -->
             <div class="main-content">
                 @RenderBody()
             </div>
-
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- ═══════════════════════════════════════════
+         SCRIPTS — SAHI ORDER:
+         1. vanilla-utils.js
+         2. Bootstrap
+         3. Baaki libraries
+         4. jQuery  ← sabse aakhir mein load (conflict fix)
+         5. Toastr  ← jQuery ke baad
+         ═══════════════════════════════════════════ -->
     <script src="js/vanilla-utils.js"></script>
     <script src="vendor/bootstrap-5.3.8.bundle.min.js"></script>
     <script src="vendor/perfect-scrollbar/perfect-scrollbar-1.5.6.min.js"></script>
@@ -1040,6 +1003,22 @@
     <script src="js/aos.js"></script>
     <script src="js/modern-plugins.js"></script>
     <script src="js/Layout.js"></script>
+
+    <!-- ✅ jQuery — SABSE AAKHIR mein (vanilla scripts ke baad, conflict nahi hoga) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- ✅ Toastr — jQuery ke baad -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- ✅ Toastr Config -->
+    <script>
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 3000
+        };
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
@@ -1070,9 +1049,8 @@
                 document.body.style.overflow = 'hidden';
             }
 
-            closeMobileMenu(); // bfcache reset
+            closeMobileMenu();
 
-            /* ── LOAD MENU ── */
             async function loadUserMenu() {
                 try {
                     const res  = await fetch(`/Login/GetMenu?userId=${encodeURIComponent(userId)}`);
@@ -1085,17 +1063,14 @@
                 }
             }
 
-            /* ── BUILD NAV ── */
             function buildNavItems(items) {
                 const desktopContainer = document.getElementById('desktopNavContainer');
                 const mobileUl         = document.getElementById('mobileNavList');
-
                 const groups = {
                     0: { label: 'Main Menu',   items: [] },
                     1: { label: 'Setup',       items: [] },
                     2: { label: 'Transaction', items: [] }
                 };
-
                 items.forEach(item => {
                     if (!item.menuName || !item.menuUrl || item.menuUrl === '#') return;
                     const t = item.menuType ?? 0;
@@ -1117,7 +1092,6 @@
                         lbl.textContent = group.label;
                         lbl.style.animationDelay = `${idx * 0.04}s`;
                         desktopContainer.appendChild(lbl);
-
                         const ul = document.createElement('ul');
                         ul.className = 'list-unstyled navbar__list';
                         group.items.forEach(item => {
@@ -1164,8 +1138,7 @@
 
             function setActiveNavItem() {
                 const path = window.location.pathname.toLowerCase();
-                document.querySelectorAll('.navbar__list li, .navbar-mobile__list li')
-                    .forEach(li => li.classList.remove('active'));
+                document.querySelectorAll('.navbar__list li, .navbar-mobile__list li').forEach(li => li.classList.remove('active'));
                 document.querySelectorAll('.navbar__list a, .navbar-mobile__list a').forEach(a => {
                     const href = a.getAttribute('href')?.toLowerCase();
                     if (href && href !== '#' && (path === href || path.startsWith(href + '/'))) {
@@ -1176,16 +1149,13 @@
                 });
             }
 
-            /* ── MOBILE TOGGLE ── */
             mobileToggle?.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 mobileMenu.classList.contains('show') ? closeMobileMenu() : openMobileMenu();
             });
-
             mobileOverlay?.addEventListener('click', closeMobileMenu);
             window.addEventListener('orientationchange', closeMobileMenu);
-
             mobileMenu?.addEventListener('click', function (e) {
                 const link = e.target.closest('a');
                 if (link && link.id !== 'mobileLogoutBtn') closeMobileMenu();
@@ -1193,7 +1163,6 @@
 
             await loadUserMenu();
 
-            /* ── ACCOUNT DROPDOWN ── */
             const accountToggle   = document.getElementById('accountToggle');
             const accountDropdown = document.getElementById('accountDropdown');
             if (accountToggle && accountDropdown) {
@@ -1209,7 +1178,6 @@
                 accountDropdown.addEventListener('click', e => e.stopPropagation());
             }
 
-            /* ── LOGOUT ── */
             function doLogout(e) {
                 e.preventDefault();
                 if (confirm('Are you sure you want to logout?')) {

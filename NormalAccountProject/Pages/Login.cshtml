@@ -9,6 +9,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -666,6 +667,178 @@
 
             to {
                 width: 0%;
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════
+                   ── Mobile Responsive ──────────────────────────────
+                   ══════════════════════════════════════════════════════ */
+
+        @@media (max-width: 480px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;
+                padding-top: 40px;
+                overflow-y: auto;
+            }
+
+            .login-container {
+                max-width: 100%;
+            }
+
+            .login-card {
+                border-radius: 16px;
+            }
+
+            .login-header {
+                padding: 28px 20px 20px;
+            }
+
+            .login-title {
+                font-size: 19px;
+            }
+
+            .login-logo img {
+                width: 120px;
+            }
+
+            .logo-skeleton {
+                width: 120px;
+                height: 42px;
+            }
+
+            .title-skeleton {
+                width: 150px;
+                height: 18px;
+            }
+
+            .login-form {
+                padding: 20px 18px 24px;
+            }
+
+            .form-group {
+                margin-bottom: 13px;
+            }
+
+            .form-input {
+                font-size: 13px;
+                padding: 20px 13px 6px 38px;
+            }
+
+            .float-label {
+                font-size: 12px;
+                left: 38px;
+            }
+
+            .input-icon {
+                font-size: 12px;
+                left: 12px;
+            }
+
+            .btn-login {
+                padding: 12px;
+                font-size: 13.5px;
+            }
+
+            .btn-login-wrap {
+                margin-top: 18px;
+            }
+
+            .login-footer {
+                font-size: 9.5px;
+                margin-top: 16px;
+                padding-top: 14px;
+            }
+            /* Toast full-width on mobile */
+            #toastContainer {
+                top: 12px;
+                right: 12px;
+                left: 12px;
+                align-items: stretch;
+            }
+
+            .toast-notify {
+                min-width: unset;
+                max-width: 100%;
+                width: 100%;
+                padding: 11px 12px 14px;
+            }
+
+            .toast-title {
+                font-size: 12px;
+            }
+
+            .toast-text {
+                font-size: 11px;
+            }
+            /* Hide heavy decorative elements on mobile */
+            .orb {
+                display: none;
+            }
+        }
+
+        @@media (max-width: 360px) {
+            body {
+                padding: 8px;
+                padding-top: 30px;
+            }
+
+            .login-header {
+                padding: 24px 16px 18px;
+            }
+
+            .login-form {
+                padding: 16px 14px 20px;
+            }
+
+            .login-title {
+                font-size: 17px;
+            }
+
+            .form-input {
+                font-size: 12.5px;
+            }
+        }
+
+        /* ── Landscape Mobile Fix ─────────────────────────── */
+        @@media (max-height: 600px) and (max-width: 768px) {
+            body {
+                align-items: flex-start;
+                padding: 10px;
+                overflow-y: auto;
+            }
+
+            .login-header {
+                padding: 20px 20px 16px;
+            }
+
+            .login-logo {
+                min-height: 40px;
+            }
+
+                .login-logo img {
+                    width: 100px;
+                }
+
+            .accent-bar {
+                margin-top: 10px;
+            }
+
+            .login-form {
+                padding: 16px 20px 20px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .btn-login-wrap {
+                margin-top: 14px;
+            }
+
+            .login-footer {
+                margin-top: 12px;
+                padding-top: 12px;
             }
         }
     </style>

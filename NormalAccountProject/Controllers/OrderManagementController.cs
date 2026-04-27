@@ -7,7 +7,9 @@ using System.Text.Json;
 
 namespace NormalAccountProject.Controllers
 {
-    [Route("[controller]")]
+    // ✅ FIX: Route changed from "[controller]" → "api/[controller]"
+    // Reason: "/OrderManagement" was conflicting with Razor Page @page "/OrderManagement"
+    [Route("api/[controller]")]
     [ApiController]
     public class OrderManagementController : Controller
     {
